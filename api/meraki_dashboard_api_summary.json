@@ -1,0 +1,53 @@
+{
+  "info": {
+    "name": "Meraki Dashboard API",
+    "version": "v1.63.0",
+    "description": "Cisco Meraki Dashboard API",
+    "baseUrl": "https://api.meraki.com/api/v1"
+  },
+  "endpoints_summary": {
+    "total_endpoints": 1000,
+    "authentication": "API Key",
+    "categories": [
+      "Organizations",
+      "Networks", 
+      "Devices",
+      "Switch",
+      "Wireless",
+      "Appliance",
+      "Camera",
+      "Cellgate",
+      "Insight",
+      "Licensing",
+      "Organizations"
+    ]
+  },
+  "sample_endpoints": [
+    {
+      "method": "GET",
+      "path": "/organizations",
+      "description": "List the organizations that the user has privileges on"
+    },
+    {
+      "method": "GET", 
+      "path": "/organizations/{organizationId}/networks",
+      "description": "List the networks that the user has privileges on in an organization"
+    },
+    {
+      "method": "GET",
+      "path": "/networks/{networkId}/devices",
+      "description": "List the devices in a network"
+    },
+    {
+      "method": "GET",
+      "path": "/devices/{serial}",
+      "description": "Return a single device"
+    },
+    {
+      "method": "PUT",
+      "path": "/devices/{serial}",
+      "description": "Update the attributes of a device"
+    }
+  ],
+  "note": "This is a summary of the full Meraki Dashboard API v1.63.0 collection with 1000+ endpoints"
+}

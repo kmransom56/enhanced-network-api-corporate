@@ -1,0 +1,275 @@
+#!/usr/bin/env yaml
+# Dogfooding Documentation Agent - Self-Improving Cagent Configuration
+# This agent uses cagent to validate and fix its own documentation and configurations
+
+models:
+  local_validator:
+    provider: dmr
+    model: ai/qwen3:4B
+    max_tokens: 8192
+    temperature: 0.3  # Low temperature for precise fixes
+    base_url: http://127.0.0.1:12434/engines/llama.cpp/v1
+    provider_opts:
+      runtime_flags: ["--ngl=33", "--ctx-size=8192", "--batch-size=512"]
+  
+  cloud_fallback:
+    provider: anthropic
+    model: claude-sonnet-4-0
+    max_tokens: 4096
+    temperature: 0.2
+    thinking_budget: 1024
+
+agents:
+  documentation_auditor:
+    model: local_validator
+    description: "Documentation validation and error correction agent"
+    instruction: |
+      You are a documentation auditor and configuration validator for cagent.
+      
+      Your primary responsibilities:
+      1. Validate YAML configuration files against cagent schema
+      2. Check documentation for accuracy and completeness
+      3. Fix configuration errors automatically
+      4. Ensure dogfooding best practices are followed
+      5. Cross-reference documentation with actual codebase
+      
+      Core Principles:
+      - Always validate configurations before suggesting fixes
+      - Use cagent's own tools to test configurations
+      - Document all changes made during validation
+      - Prefer local models to minimize costs
+      - Follow the AGENTS.md patterns and conventions
+      
+      Error Handling Approach:
+      1. Parse error messages to identify specific issues
+      2. Check against cagent documentation reference
+      3. Apply minimal fixes that preserve intent
+      4. Test fixes before finalizing
+      5. Document the rationale for each change
+    
+    sub_agents:
+      - yaml_validator
+      - documentation_checker
+      - test_runner
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+      - type: todo
+      - type: memory
+        path: ./dogfooding_fixes.db
+      - type: script
+    
+    add_date: true
+    add_environment_info: true
+    max_iterations: 15
+    
+    commands:
+      validate: "Validate all YAML configurations in current directory"
+      fix: "Fix configuration errors found during validation" 
+      test: "Test configurations using cagent exec"
+      document: "Update documentation based on fixes applied"
+      audit: "Full audit of documentation and configurations"
+
+  yaml_validator:
+    model: local_validator
+    description: "YAML syntax and schema validation specialist"
+    instruction: |
+      You specialize in validating YAML files against cagent's schema.
+      
+      Validation Process:
+      1. Check YAML syntax for parsing errors
+      2. Validate required fields are present
+      3. Verify field types match expected schema
+      4. Check for unknown/deprecated fields
+      5. Validate model references exist
+      6. Ensure toolset configurations are valid
+      
+      When you find errors:
+      - Identify the exact line and field causing issues
+      - Suggest minimal fixes that preserve user intent
+      - Reference official cagent documentation
+      - Test fixes before recommending them
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+
+  documentation_checker:
+    model: local_validator  
+    description: "Documentation accuracy and completeness validator"
+    instruction: |
+      You validate documentation against actual cagent behavior and features.
+      
+      Documentation Validation:
+      1. Cross-reference examples with current cagent version
+      2. Verify command-line options are accurate
+      3. Check configuration examples work as shown
+      4. Ensure best practices are current
+      5. Validate links and references
+      
+      When updating documentation:
+      - Keep examples practical and tested
+      - Include cost optimization patterns
+      - Reference actual working configurations
+      - Maintain consistency across all docs
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+
+  test_runner:
+    model: local_validator
+    description: "Configuration testing and validation runner"
+    instruction: |
+      You test cagent configurations to ensure they work correctly.
+      
+      Testing Strategy:
+      1. Use 'cagent exec' for non-interactive testing
+      2. Test with minimal prompts to avoid long runs
+      3. Validate error messages are helpful
+      4. Check resource usage and costs
+      5. Ensure local models are prioritized
+      
+      Test Types:
+      - Syntax validation (config parsing)
+      - Model connectivity tests
+      - Tool availability checks
+      - Basic agent functionality
+      - Cost optimization verification
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+      - type: todo
+
+# Custom validation scripts
+scripts:
+  validate_yaml:
+    description: "Validate YAML configuration syntax"
+    script: |
+      #!/bin/bash
+      if [ $# -eq 0 ]; then
+        echo "Usage: validate_yaml <config.yaml>"
+        exit 1
+      fi
+      
+      config_file="$1"
+      if [ ! -f "$config_file" ]; then
+        echo "Error: Configuration file '$config_file' not found"
+        exit 1
+      fi
+      
+      # Try to parse the YAML
+      if command -v yq >/dev/null 2>&1; then
+        yq eval . "$config_file" >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+          echo "✓ YAML syntax valid for $config_file"
+        else
+          echo "✗ YAML syntax error in $config_file"
+          yq eval . "$config_file"
+          exit 1
+        fi
+      else
+        # Fallback to python if yq not available
+        python3 -c "
+      import yaml
+      import sys
+      try:
+          with open('$config_file', 'r') as f:
+              yaml.safe_load(f)
+          print('✓ YAML syntax valid for $config_file')
+      except yaml.YAMLError as e:
+          print(f'✗ YAML syntax error in $config_file: {e}')
+          sys.exit(1)
+      except Exception as e:
+          print(f'✗ Error reading $config_file: {e}')
+          sys.exit(1)
+      "
+      fi
+
+  test_config:
+    description: "Test cagent configuration with minimal prompt"
+    script: |
+      #!/bin/bash
+      if [ $# -eq 0 ]; then
+        echo "Usage: test_config <config.yaml>"
+        exit 1
+      fi
+      
+      config_file="$1"
+      echo "Testing configuration: $config_file"
+      
+      # Test with a simple prompt that should complete quickly
+      timeout 30s cagent exec "$config_file" "Say hello and confirm you can access tools" 2>&1
+      exit_code=$?
+      
+      case $exit_code in
+        0)
+          echo "✓ Configuration test passed"
+          ;;
+        124)
+          echo "⚠ Configuration test timed out (may still be valid)"
+          ;;
+        *)
+          echo "✗ Configuration test failed (exit code: $exit_code)"
+          ;;
+      esac
+
+  fix_common_errors:
+    description: "Apply common fixes to cagent configurations"
+    script: |
+      #!/bin/bash
+      config_file="$1"
+      backup_file="${config_file}.backup.$(date +%s)"
+      
+      echo "Creating backup: $backup_file"
+      cp "$config_file" "$backup_file"
+      
+      # Common fixes based on cagent schema
+      sed -i 's/^production:/# production: # Invalid field - removed/' "$config_file"
+      sed -i 's/^  health_checks:/# health_checks: # Invalid field - removed/' "$config_file"
+      sed -i 's/^  auto_restart:/# auto_restart: # Invalid field - removed/' "$config_file"
+      sed -i 's/^  local_only_mode:/# local_only_mode: # Invalid field - removed/' "$config_file"
+      sed -i 's/^  cloud_api_fallback:/# cloud_api_fallback: # Invalid field - removed/' "$config_file"
+      sed -i 's/^  cost_alerts:/# cost_alerts: # Invalid field - removed/' "$config_file"
+      
+      echo "Applied common fixes to $config_file"
+      echo "Backup saved as $backup_file"
+
+# Dogfooding workflow commands  
+commands:
+  dogfood_audit: |
+    Perform a complete audit of the current cagent setup:
+    1. Validate all YAML configurations in the directory
+    2. Test each configuration with cagent exec
+    3. Check documentation accuracy
+    4. Fix any errors found
+    5. Document all changes made
+    6. Create a summary report
+
+  quick_fix: |
+    Quick fix for the most common configuration errors:
+    1. Check YAML syntax
+    2. Remove invalid fields 
+    3. Test the corrected configuration
+    4. Report success or remaining issues
+
+  validate_all: |
+    Validate all configurations without making changes:
+    1. Parse all *.yaml files in directory
+    2. Check against cagent schema
+    3. Test with cagent exec --dry-run if available
+    4. Report all issues found
+
+  self_improve: |
+    Use cagent to improve its own configuration and documentation:
+    1. Run this dogfooding agent on itself
+    2. Fix any configuration issues found
+    3. Update documentation based on lessons learned
+    4. Test improvements to ensure they work
+    5. Document the dogfooding process

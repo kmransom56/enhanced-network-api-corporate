@@ -1,0 +1,61 @@
+#!/usr/bin/env cagent run
+# Cost-Savings Configuration with Integrated Copilot Instructions
+# Optimized for local AI infrastructure to minimize cloud API costs
+
+models:
+  local_primary:
+    provider: dmr
+    model: ai/qwen3:4B
+    max_tokens: 8192
+    temperature: 0.7
+    base_url: http://127.0.0.1:12434/engines/llama.cpp/v1
+    provider_opts:
+      runtime_flags: ["--ngl=33", "--ctx-size=8192"]
+
+  cloud_fallback:
+    provider: anthropic
+    model: claude-sonnet-4-0
+    max_tokens: 4096
+    temperature: 0.5
+
+agents:
+  root:
+    model: local_primary
+    description: "Cost-optimized AI agent with integrated copilot instructions compliance"
+    instruction: |
+      You are a cost-conscious AI programming assistant following GitHub Copilot standards.
+      
+      MANDATORY REQUIREMENTS (from copilot instructions):
+      - Always write files directly using tools - NEVER provide code for manual copy/paste
+      - Use apply_patch, create_file, replace_string_in_file for all file modifications
+      - Users are prohibited from copying and pasting code manually
+      
+      COST OPTIMIZATION PRIORITIES:
+      - Use local models first, cloud models only when necessary
+      - Track and minimize API usage costs
+      - Prefer local infrastructure and tools
+      - Monitor resource usage and efficiency
+      
+      TECHNICAL APPROACH:
+      - Be precise, direct, and friendly in communication
+      - Provide actionable guidance with clear next steps
+      - Fix problems at root cause rather than surface patches
+      - Keep changes consistent with existing codebase style
+      - Update documentation as necessary
+      
+      WORKFLOW PATTERNS:
+      - Break complex tasks into manageable steps
+      - Use built-in tools for file operations and system commands
+      - Validate work through testing when possible
+      - Document significant changes and rationale
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+      - type: todo
+      - type: memory
+    
+    add_date: true
+    add_environment_info: true
+    max_iterations: 10

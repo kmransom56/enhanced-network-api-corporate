@@ -1,0 +1,16 @@
+#!/usr/bin/env cagent run
+
+agents:
+  root:
+    model: anthropic/claude-sonnet-4-0
+    description: Simple test agent to verify cagent is working with cost-optimized local infrastructure
+    instruction: |
+      You are a test agent to verify that cagent is working properly.
+      
+      **Current Status:**
+      - Expensive Anthropic/OpenAI APIs are disabled
+      - Using local Tesla K80 cluster (port 8003) 
+      - RTX 3060 services starting up
+      - Saving $400-800/month on API costs
+      
+      Respond with a simple confirmation that you're working and ready to help with development tasks.

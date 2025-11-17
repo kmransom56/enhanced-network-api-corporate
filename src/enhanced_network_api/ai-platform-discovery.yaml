@@ -1,0 +1,511 @@
+#!/usr/bin/env cagent run
+# Comprehensive AI Research Platform Discovery Agent
+# Maps ports, Docker containers, and provides unified platform access
+
+models:
+  local_discovery:
+    provider: dmr
+    model: ai/qwen3:4B
+    max_tokens: 8192
+    temperature: 0.3
+    base_url: http://127.0.0.1:12434/engines/llama.cpp/v1
+    provider_opts:
+      runtime_flags: ["--ngl=33", "--ctx-size=8192"]
+
+agents:
+  platform_discoverer:
+    model: local_discovery
+    description: "Comprehensive AI Research Platform service discovery and interaction agent"
+    instruction: |
+      You are a comprehensive AI Research Platform discovery agent that maps the entire ecosystem.
+      
+      DISCOVERY SCOPE:
+      - Network port scanning (3000-12000)
+      - Docker container analysis
+      - Service API exploration
+      - Container interconnection mapping
+      - Platform capability cataloging
+      
+      IDENTIFIED INFRASTRUCTURE:
+      **Core AI Platform Services:**
+      - Chat Copilot (port 3000, multiple containers)
+      - Open WebUI (port 8080)  
+      - Device Automation Platform (port 8000)
+      - Job Search Agent (ports 11050-11051)
+      - Unified Web Platform (port 8888)
+      - GenAI Stack (ports 8501-8505)
+      
+      **Databases & Storage:**
+      - PostgreSQL clusters (ports 5432-5436)
+      - Redis clusters (ports 6379-6384)
+      - Neo4j graph databases (port 7474, 7687)
+      - Qdrant vector database (port 6333-6334)
+      
+      **Development & Automation:**
+      - n8n workflow automation (port 5678)
+      - VSCode server instances
+      - Grafana monitoring (ports 3000-3001, 11072)
+      - Prometheus monitoring
+      
+      **Specialized AI Services:**
+      - vLLM reasoning engine
+      - Sequential thinking MCP
+      - Playwright automation
+      - Perplexica search
+      - AutoGen Studio
+      - Meraki connector
+      
+      **MCP Ecosystem:**
+      - Multiple MCP servers
+      - Filesystem MCP
+      - Playwright MCP  
+      - Sequential thinking MCP
+      
+      INTERACTION APPROACH:
+      - Always scan both ports and containers
+      - Map container-to-port relationships
+      - Identify service dependencies
+      - Provide unified access interface
+      - Monitor health across entire ecosystem
+    
+    toolsets:
+      - type: shell
+      - type: filesystem
+      - type: think
+      - type: memory
+    
+    commands:
+      discover: "Complete platform discovery - ports, containers, and services"
+      map: "Create platform architecture map"
+      health: "Check health of all platform services"
+      interact: "Guide interaction with specific service: ${env.SERVICE_NAME}"
+
+# Comprehensive discovery scripts
+scripts:
+  platform_discovery:
+    description: "Complete AI Research Platform discovery"
+    script: |
+      #!/bin/bash
+      echo "🔍 Comprehensive AI Research Platform Discovery Starting..."
+      
+      # Create discovery directory
+      mkdir -p platform_discovery
+      cd platform_discovery
+      
+      echo "📡 Phase 1: Network Port Scanning (3000-12000)"
+      nmap -p 3000-12000 localhost --open -T4 | grep -E "(^[0-9]+/|Nmap scan report)" > port_scan.txt
+      
+      echo "🐳 Phase 2: Docker Container Analysis"
+      docker ps --format "{{.Names}}|{{.Ports}}|{{.Status}}|{{.Image}}|{{.Networks}}" > containers.txt
+      docker network ls --format "{{.Name}}|{{.Driver}}|{{.Scope}}" > networks.txt
+      
+      echo "🔗 Phase 3: Container-Port Mapping"
+      python3 << 'PYTHON'
+      import subprocess
+      import json
+      import re
+      from datetime import datetime
+      
+      # Parse port scan results
+      ports = {}
+      with open('port_scan.txt', 'r') as f:
+          for line in f:
+              if '/tcp' in line and 'open' in line:
+                  port = line.split('/')[0].strip()
+                  ports[port] = {'status': 'open', 'protocol': 'tcp'}
+      
+      # Parse container information
+      containers = {}
+      with open('containers.txt', 'r') as f:
+          for line in f:
+              if '|' in line:
+                  parts = line.strip().split('|')
+                  if len(parts) >= 4:
+                      name = parts[0]
+                      ports_info = parts[1]
+                      status = parts[2] 
+                      image = parts[3]
+                      networks = parts[4] if len(parts) > 4 else ''
+                      
+                      # Extract port mappings
+                      port_mappings = []
+                      if ports_info:
+                          # Parse Docker port format: 0.0.0.0:8080->80/tcp
+                          port_matches = re.findall(r'(\d+\.\d+\.\d+\.\d+:)?(\d+)->(\d+)/(tcp|udp)', ports_info)
+                          for match in port_matches:
+                              external_port = match[1]
+                              internal_port = match[2]
+                              protocol = match[3]
+                              port_mappings.append({
+                                  'external': external_port,
+                                  'internal': internal_port,
+                                  'protocol': protocol
+                              })
+                      
+                      containers[name] = {
+                          'ports': port_mappings,
+                          'status': status,
+                          'image': image,
+                          'networks': networks
+                      }
+      
+      # Create unified platform map
+      platform_map = {
+          'discovery_time': datetime.now().isoformat(),
+          'discovered_ports': ports,
+          'docker_containers': containers,
+          'service_mapping': {},
+          'categories': {
+              'ai_interfaces': [],
+              'databases': [],
+              'monitoring': [],
+              'automation': [],
+              'mcp_services': [],
+              'development': []
+          }
+      }
+      
+      # Categorize services
+      for container_name, info in containers.items():
+          # Extract external ports for mapping
+          external_ports = [p['external'] for p in info['ports']]
+          
+          # Categorize based on name and image
+          if any(term in container_name.lower() for term in ['chat', 'copilot', 'webui', 'frontend']):
+              platform_map['categories']['ai_interfaces'].append(container_name)
+          elif any(term in container_name.lower() for term in ['postgres', 'redis', 'neo4j', 'qdrant']):
+              platform_map['categories']['databases'].append(container_name)
+          elif any(term in container_name.lower() for term in ['grafana', 'prometheus', 'monitor']):
+              platform_map['categories']['monitoring'].append(container_name)
+          elif any(term in container_name.lower() for term in ['n8n', 'autogen', 'workflow']):
+              platform_map['categories']['automation'].append(container_name)
+          elif 'mcp' in container_name.lower():
+              platform_map['categories']['mcp_services'].append(container_name)
+          elif any(term in container_name.lower() for term in ['vscode', 'code-server', 'dev']):
+              platform_map['categories']['development'].append(container_name)
+          
+          # Map containers to discovered ports
+          for ext_port in external_ports:
+              if ext_port in ports:
+                  platform_map['service_mapping'][ext_port] = {
+                      'container': container_name,
+                      'image': info['image'],
+                      'status': info['status']
+                  }
+      
+      # Save comprehensive map
+      with open('platform_map.json', 'w') as f:
+          json.dump(platform_map, f, indent=2)
+      
+      print(f"✅ Discovered {len(containers)} containers and {len(ports)} open ports")
+      print(f"📊 Service categories:")
+      for category, services in platform_map['categories'].items():
+          print(f"  {category}: {len(services)} services")
+      PYTHON
+      
+      echo "📋 Phase 4: Service Health Check"
+      python3 << 'PYTHON'
+      import json
+      import subprocess
+      
+      with open('platform_map.json', 'r') as f:
+          platform_map = json.load(f)
+      
+      health_results = {}
+      
+      # Check health of mapped services
+      for port, service_info in platform_map['service_mapping'].items():
+          try:
+              # Try common health endpoints
+              health_endpoints = [
+                  f"http://localhost:{port}/health",
+                  f"http://localhost:{port}/api/health", 
+                  f"http://localhost:{port}/status",
+                  f"http://localhost:{port}"
+              ]
+              
+              container_name = service_info['container']
+              health_results[container_name] = {'port': port, 'accessible': False}
+              
+              for endpoint in health_endpoints:
+                  try:
+                      result = subprocess.run(
+                          ['curl', '-s', '-m', '3', endpoint],
+                          capture_output=True,
+                          timeout=5
+                      )
+                      if result.returncode == 0:
+                          health_results[container_name]['accessible'] = True
+                          health_results[container_name]['endpoint'] = endpoint
+                          break
+                  except:
+                      continue
+                      
+          except Exception as e:
+              health_results[container_name] = {'error': str(e)}
+      
+      # Save health results
+      with open('health_check.json', 'w') as f:
+          json.dump(health_results, f, indent=2)
+      
+      accessible_count = sum(1 for h in health_results.values() if h.get('accessible', False))
+      print(f"🏥 Health check complete: {accessible_count}/{len(health_results)} services accessible")
+      PYTHON
+      
+      echo "🎉 Discovery Complete! Results saved in platform_discovery/"
+      echo "📁 Generated files:"
+      echo "  - platform_map.json (complete service map)"
+      echo "  - health_check.json (service health status)"
+      echo "  - port_scan.txt (raw port scan)"
+      echo "  - containers.txt (Docker container info)"
+      
+  create_platform_launcher:
+    description: "Create comprehensive platform launcher"
+    script: |
+      #!/bin/bash
+      echo "🚀 Creating AI Research Platform Launcher..."
+      
+      cat > ai-platform << 'LAUNCHER'
+      #!/bin/bash
+      # AI Research Platform - Universal Access Point
+      # Your comprehensive entry point to the entire AI ecosystem
+      
+      set -e
+      
+      # Colors
+      RED='\033[0;31m'
+      GREEN='\033[0;32m'
+      YELLOW='\033[1;33m'
+      BLUE='\033[0;34m'
+      PURPLE='\033[0;35m'
+      CYAN='\033[0;36m'
+      BOLD='\033[1m'
+      NC='\033[0m'
+      
+      DISCOVERY_DIR="platform_discovery"
+      
+      show_banner() {
+          echo -e "${PURPLE}${BOLD}"
+          echo "╔════════════════════════════════════════════════════════════════╗"
+          echo "║                  🤖 AI Research Platform                       ║"
+          echo "║                  Universal Access Point                        ║"
+          echo "║                                                                ║"
+          echo "║  Comprehensive discovery, monitoring, and interaction          ║"
+          echo "╚════════════════════════════════════════════════════════════════╝"
+          echo -e "${NC}"
+      }
+      
+      show_platform_overview() {
+          if [ ! -f "$DISCOVERY_DIR/platform_map.json" ]; then
+              echo -e "${YELLOW}⚠️  Platform not discovered yet. Run: $0 discover${NC}"
+              return
+          fi
+          
+          echo -e "${CYAN}🌐 Platform Overview:${NC}"
+          python3 << 'PYTHON'
+      import json
+      import os
+      
+      if not os.path.exists("platform_discovery/platform_map.json"):
+          print("❌ Platform map not found")
+          exit(1)
+          
+      with open("platform_discovery/platform_map.json", 'r') as f:
+          platform = json.load(f)
+      
+      print(f"📅 Last Discovery: {platform.get('discovery_time', 'Unknown')}")
+      print(f"🔌 Open Ports: {len(platform.get('discovered_ports', {}))}")
+      print(f"🐳 Containers: {len(platform.get('docker_containers', {}))}")
+      print()
+      
+      categories = platform.get('categories', {})
+      for category, services in categories.items():
+          if services:
+              icon = {'ai_interfaces': '🤖', 'databases': '🗄️', 'monitoring': '📊', 
+                     'automation': '⚙️', 'mcp_services': '🔧', 'development': '💻'}.get(category, '📦')
+              print(f"{icon} {category.replace('_', ' ').title()}: {len(services)} services")
+      PYTHON
+      }
+      
+      list_services() {
+          if [ ! -f "$DISCOVERY_DIR/platform_map.json" ]; then
+              echo -e "${RED}❌ Platform not discovered. Run: $0 discover${NC}"
+              return
+          fi
+          
+          echo -e "${GREEN}📋 Available Services:${NC}"
+          python3 << 'PYTHON'
+      import json
+      
+      with open("platform_discovery/platform_map.json", 'r') as f:
+          platform = json.load(f)
+      
+      with open("platform_discovery/health_check.json", 'r') as f:
+          health = json.load(f)
+      
+      service_mapping = platform.get('service_mapping', {})
+      categories = platform.get('categories', {})
+      
+      print()
+      service_number = 1
+      
+      for category, services in categories.items():
+          if services:
+              category_name = category.replace('_', ' ').title()
+              icon = {'ai_interfaces': '🤖', 'databases': '🗄️', 'monitoring': '📊', 
+                     'automation': '⚙️', 'mcp_services': '🔧', 'development': '💻'}.get(category, '📦')
+              
+              print(f"\n{icon} {category_name}:")
+              for service in services:
+                  # Find port for this service
+                  port = None
+                  for p, info in service_mapping.items():
+                      if info['container'] == service:
+                          port = p
+                          break
+                  
+                  status_icon = '✅' if health.get(service, {}).get('accessible', False) else '❌'
+                  
+                  if port:
+                      print(f"  {service_number:2d}. {status_icon} {service}")
+                      print(f"      🔗 http://localhost:{port}")
+                  else:
+                      print(f"  {service_number:2d}. {status_icon} {service} (internal)")
+                  
+                  service_number += 1
+      PYTHON
+      }
+      
+      open_service() {
+          local service_number="$1"
+          
+          if [ ! -f "$DISCOVERY_DIR/platform_map.json" ]; then
+              echo -e "${RED}❌ Platform not discovered. Run: $0 discover${NC}"
+              return
+          fi
+          
+          python3 << PYTHON
+      import json
+      import webbrowser
+      import sys
+      
+      service_num = int("$service_number")
+      
+      with open("platform_discovery/platform_map.json", 'r') as f:
+          platform = json.load(f)
+      
+      service_mapping = platform.get('service_mapping', {})
+      categories = platform.get('categories', {})
+      
+      # Build ordered service list
+      services_with_ports = []
+      for category, services in categories.items():
+          for service in services:
+              port = None
+              for p, info in service_mapping.items():
+                  if info['container'] == service:
+                      port = p
+                      break
+              if port:
+                  services_with_ports.append((service, port))
+      
+      if 1 <= service_num <= len(services_with_ports):
+          service_name, port = services_with_ports[service_num - 1]
+          url = f"http://localhost:{port}"
+          print(f"🚀 Opening {service_name} at {url}")
+          webbrowser.open(url)
+      else:
+          print("❌ Invalid service number")
+          sys.exit(1)
+      PYTHON
+      }
+      
+      run_discovery() {
+          echo -e "${BLUE}🔍 Starting comprehensive platform discovery...${NC}"
+          cagent exec ai-platform-discovery.yaml "Run complete platform discovery including port scanning and Docker container analysis"
+      }
+      
+      health_check() {
+          if [ ! -f "$DISCOVERY_DIR/platform_map.json" ]; then
+              echo -e "${RED}❌ Platform not discovered. Run: $0 discover${NC}"
+              return
+          fi
+          
+          echo -e "${BLUE}🏥 Platform Health Check:${NC}"
+          cagent exec ai-platform-discovery.yaml "Check health status of all platform services and containers"
+      }
+      
+      interactive_mode() {
+          echo -e "${GREEN}🤖 Starting interactive platform agent...${NC}"
+          cagent run ai-platform-discovery.yaml
+      }
+      
+      show_help() {
+          echo -e "${YELLOW}Usage: $0 [COMMAND] [OPTIONS]${NC}"
+          echo ""
+          echo "Commands:"
+          echo "  discover              Scan and catalog entire platform (ports + containers)"
+          echo "  overview              Show platform summary"
+          echo "  services, list        List all discovered services"
+          echo "  open <number>         Open service by number in browser"
+          echo "  health               Check health of all services"
+          echo "  chat                 Interactive platform agent session"
+          echo "  help                 Show this help message"
+          echo ""
+          echo "Examples:"
+          echo "  $0 discover                    # Full platform discovery"
+          echo "  $0 overview                    # Platform summary"
+          echo "  $0 services                    # List all services"
+          echo "  $0 open 5                      # Open 5th service"
+          echo "  $0 health                      # Health check all"
+          echo "  $0 chat                        # Interactive mode"
+      }
+      
+      # Main command processing
+      case "${1:-overview}" in
+          discover)
+              run_discovery
+              ;;
+          overview)
+              show_banner
+              show_platform_overview
+              ;;
+          services|list)
+              list_services
+              ;;
+          open)
+              if [ -z "$2" ]; then
+                  echo -e "${RED}❌ Please specify service number${NC}"
+                  list_services
+              else
+                  open_service "$2"
+              fi
+              ;;
+          health)
+              health_check
+              ;;
+          chat)
+              interactive_mode
+              ;;
+          help|--help|-h)
+              show_banner
+              show_help
+              ;;
+          *)
+              show_banner
+              show_platform_overview
+              echo ""
+              echo -e "${YELLOW}💡 Tip: Use '$0 help' for all available commands${NC}"
+              ;;
+      esac
+      LAUNCHER
+      
+      chmod +x ai-platform
+      
+      echo "✅ Universal launcher created: ./ai-platform"
+      echo ""
+      echo "Quick start:"
+      echo "  ./ai-platform discover    # Discover all services"
+      echo "  ./ai-platform overview    # Show platform summary"
+      echo "  ./ai-platform services    # List all services"
+      echo "  ./ai-platform chat        # Interactive mode"

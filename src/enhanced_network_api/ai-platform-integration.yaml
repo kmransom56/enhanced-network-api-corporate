@@ -1,0 +1,230 @@
+#!/usr/bin/env cagent run
+# AI Research Platform - Fully Integrated Configuration
+# Uses MCP server to access all discovered platform services
+
+models:
+  local_primary:
+    provider: dmr
+    model: ai/qwen3:4B
+    max_tokens: 8192
+    temperature: 0.7
+    base_url: http://127.0.0.1:12434/engines/llama.cpp/v1
+    provider_opts:
+      runtime_flags: ["--ngl=33", "--ctx-size=8192"]
+
+  cloud_fallback:
+    provider: anthropic
+    model: claude-sonnet-4-0
+    max_tokens: 4096
+    temperature: 0.5
+
+agents:
+  platform_orchestrator:
+    model: local_primary
+    description: "AI Research Platform orchestrator with full service access via MCP"
+    instruction: |
+      You are the AI Research Platform orchestrator with comprehensive access to all platform services 
+      through the MCP server integration.
+      
+      **Your Capabilities:**
+      
+      🔧 **Available MCP Tools:**
+      - `platform_health_check`: Check health of all platform services
+      - `list_services`: List all available services (optionally filtered by category)
+      - `get_service_info`: Get detailed information about a specific service
+      - `query_service`: Execute queries against any platform service
+      - `batch_query_services`: Query multiple services in parallel
+      
+      **Service Categories:**
+      - `ai_interfaces`: Chat Copilot, OpenWebUI, Device Automation Platform, etc.
+      - `databases`: PostgreSQL, Redis, Neo4j, Qdrant
+      - `monitoring`: Grafana, Prometheus
+      - `automation`: n8n, AutoGen, workflow engines
+      - `mcp_services`: MCP servers and gateways
+      - `development`: VSCode servers, code environments
+      
+      **Working Principles:**
+      
+      1. **Service Discovery First**: Always list services before querying
+      2. **Health Checks**: Verify service health before complex operations
+      3. **Parallel Queries**: Use batch queries for efficiency
+      4. **Error Handling**: Gracefully handle unavailable services
+      5. **Cost Optimization**: Prefer local models, use cloud as fallback
+      
+      **Common Workflows:**
+      
+      **Platform Health Check:**
+      ```
+      1. Use platform_health_check to get overall status
+      2. Report any unhealthy services
+      3. Suggest remediation if needed
+      ```
+      
+      **Service Interaction:**
+      ```
+      1. Use list_services to find the right service
+      2. Use get_service_info to understand capabilities
+      3. Use query_service to interact with it
+      ```
+      
+      **Multi-Service Workflows:**
+      ```
+      1. Identify services needed for task
+      2. Use batch_query_services for parallel execution
+      3. Aggregate and present results
+      ```
+      
+      **Example Queries You Can Handle:**
+      - "What services are currently running?"
+      - "Check the health of all AI services"
+      - "Query the device automation API for device list"
+      - "Get data from PostgreSQL and Redis services"
+      - "Show me all monitoring tools available"
+      
+      Always leverage the MCP tools to provide accurate, real-time information about the platform.
+    
+    toolsets:
+      - type: filesystem
+      - type: shell
+      - type: think
+      - type: todo
+      - type: memory
+        path: ./platform_orchestrator_memory.db
+      - type: mcp
+        ref: ai-research-platform
+    
+    add_date: true
+    add_environment_info: true
+    max_iterations: 25
+    
+  service_specialist:
+    model: local_primary
+    description: "Deep-dive specialist for individual service interactions"
+    instruction: |
+      You specialize in detailed interactions with individual platform services.
+      
+      When the orchestrator delegates a service-specific task to you:
+      1. Get detailed service information
+      2. Understand the service's API and capabilities
+      3. Execute the required operations
+      4. Handle errors and edge cases
+      5. Report results back
+      
+      You have the same MCP tools available to interact with services.
+    
+    toolsets:
+      - type: shell
+      - type: think
+      - type: mcp
+        ref: ai-research-platform
+
+  automation_agent:
+    model: local_primary
+    description: "Automation workflow orchestration across services"
+    instruction: |
+      You create and execute automation workflows across multiple platform services.
+      
+      Your specialties:
+      - Multi-service workflows (e.g., data pipeline from DB to AI service)
+      - Scheduled tasks and monitoring
+      - Service-to-service data flow
+      - Complex orchestration scenarios
+      
+      Use batch_query_services for parallel execution whenever possible.
+    
+    toolsets:
+      - type: shell
+      - type: think
+      - type: todo
+      - type: mcp
+        ref: ai-research-platform
+
+# MCP Server Configuration
+# This connects to the AI Research Platform MCP server
+mcp_servers:
+  ai-research-platform:
+    type: http
+    url: http://127.0.0.1:9000/mcp
+    description: "AI Research Platform services MCP server"
+    health_check: http://127.0.0.1:9000/health
+
+# Global configuration
+global:
+  max_concurrent_agents: 3
+  timeout_seconds: 180
+  log_level: "info"
+  enable_metrics: true
+  
+  cost_tracking:
+    enabled: true
+    prefer_local_models: true
+    cloud_fallback_only: true
+
+# Development and debugging
+development:
+  hot_reload: false
+  debug_mode: false
+  
+  # Integration testing commands
+  test_commands:
+    - "platform_health_check"
+    - "list_services"
+    - "get_service_info --port=8000"
+
+# Usage documentation
+readme: |
+  # AI Research Platform Integrated Agent
+  
+  This configuration provides full access to all AI Research Platform services through MCP.
+  
+  ## Prerequisites:
+  
+  1. Service Discovery:
+     ```bash
+     cagent exec ai-platform-discovery.yaml "discover and catalog all services"
+     ```
+  
+  2. Start MCP Server:
+     ```bash
+     python3 ai-platform-mcp-server.py --port 9000
+     ```
+  
+  3. Run This Agent:
+     ```bash
+     cagent run ai-platform-integrated.yaml
+     ```
+  
+  ## Example Queries:
+  
+  - "What services are running on the platform?"
+  - "Check the health of all services"
+  - "Query the device automation platform for status"
+  - "Get information about the Chat Copilot service"
+  - "Show me all database services"
+  - "Execute a query against PostgreSQL and Redis in parallel"
+  
+  ## Architecture:
+  
+  ```
+  cagent Agent → MCP Server → Platform Services
+       ↓              ↓              ↓
+  Instructions   HTTP API    Docker Containers
+       ↓              ↓              ↓
+  Sub-agents    Tool Calls   Service APIs
+  ```
+  
+  ## Service Categories:
+  
+  - **AI Interfaces**: User-facing AI applications
+  - **Databases**: Data persistence layers
+  - **Monitoring**: Observability and metrics
+  - **Automation**: Workflow and orchestration
+  - **MCP Services**: Integration servers
+  - **Development**: Dev tools and environments
+  
+  ## Cost Optimization:
+  
+  - Uses local Qwen3 model by default
+  - Cloud fallback only when needed
+  - Parallel queries for efficiency
+  - Memory persistence across sessions

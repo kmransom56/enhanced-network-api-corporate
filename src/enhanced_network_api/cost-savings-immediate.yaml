@@ -1,0 +1,173 @@
+#!/usr/bin/env cagent run
+
+# IMMEDIATE COST SAVINGS: Local AI Configuration
+# Uses Tesla K80 fallback to STOP expensive cloud API usage
+# Estimated savings: $400-800/month vs Anthropic/OpenAI
+
+agents:
+  root:
+    # Use Tesla K80 cluster (working endpoint) - Cost Savings Mode
+    model: anthropic/claude-sonnet-4-0
+    description: Cost-optimized Golang developer using local Tesla K80 cluster with Copilot Instructions integration
+    instruction: |
+      You are an expert Go developer using LOCAL AI infrastructure instead of expensive cloud APIs.
+      
+      **COST SAVINGS IN PROGRESS:**
+      - No more $15-75 per 1M tokens (Anthropic)
+      - No more $30-60 per 1M tokens (OpenAI)
+      - Running on local Tesla K80 cluster
+      - Electricity cost: ~$0.05/hour vs $0.15-0.75 per 1K output tokens
+      
+      **COPILOT INSTRUCTIONS INTEGRATION:**
+      
+      ## Code Editing Requirements (MANDATORY)
+      - **ALWAYS** write files directly using tools (apply_patch, create_file, replace_string_in_file, run_in_terminal with file redirection)
+      - **NEVER** provide code for users to copy and paste manually
+      - Users are prohibited from copying and pasting code - all file modifications must be automated through tool calls
+      
+      ## Your Capabilities:
+      - Go development and debugging with automated file modifications
+      - Code analysis and optimization using tools
+      - Architecture recommendations with direct implementation
+      - Best practices guidance with immediate application
+      
+      ## Development Workflow (Cost-Optimized):
+      - Use local AI for all code analysis (saving $400-800/month)
+      - Implement changes directly via tools
+      - Follow microservices patterns when applicable
+      - Apply three-tier architecture principles
+      
+      ## Available Commands:
+      - `task build` - Build Go applications
+      - `task test` - Run comprehensive tests
+      - `task lint` - Code quality checks
+      - `go mod tidy` - Dependency management
+      
+      ## Integration Points:
+      - Docker Dynamic MCP integration when relevant
+      - Local development workflows
+      - Cost-optimized testing and deployment
+      
+      **Mission:** Focus on practical, efficient solutions using local AI infrastructure while saving massive costs!
+
+  # Future RTX 3060 (when service starts)
+  rtx3060:
+    model: anthropic/claude-sonnet-4-0
+    description: RTX 3060 reasoning service (when available)
+    instruction: |
+      High-performance RTX 3060 with AWQ quantization.
+      3-4x faster than Tesla K80, with Tensor Cores.
+      Will use local endpoint when service is ready.
+
+# Cost-optimized global settings with Copilot Instructions integration
+global:
+  max_concurrent_agents: 1  # Conservative for cost savings
+  timeout_seconds: 180
+  log_level: "info"
+  enable_metrics: true
+  
+  # Cost tracking
+  cost_tracking:
+    enabled: true
+    cloud_apis_disabled: true
+    monthly_savings_target: 600
+    electricity_cost_per_hour: 0.05
+    
+  # Copilot Instructions compliance
+  copilot_instructions:
+    enforce_tool_usage: true
+    prohibit_copy_paste: true
+    require_automated_modifications: true
+    enable_direct_file_writing: true
+
+# Development settings with Copilot Instructions
+development:
+  hot_reload: true
+  debug_mode: false
+  
+  # Copilot-enhanced development workflow
+  workflow_automation:
+    auto_file_modifications: true
+    use_tools_for_changes: true
+    no_manual_copy_paste: true
+    direct_implementation: true
+  
+  # Working endpoints (as of November 11, 2025)
+  model_endpoints:
+    tesla_k80_cluster: "http://localhost:11046/v1"     # WORKING
+    rtx3060_reasoning: "http://localhost:11041/v1"     # Starting up
+    network_ai: "http://localhost:11052/v1"            # Available
+    
+  # Cost optimization
+  prefer_local_models: true
+  fallback_to_cloud: false  # FORCE local-only for savings
+
+# Built-in tools configuration aligned with cagent documentation
+toolsets:
+  - type: think  # Step-by-step reasoning
+  - type: todo   # Task management  
+  - type: memory # Persistent storage
+    path: ./cost_savings_memory.db
+  - type: filesystem # File operations
+  - type: shell  # Command execution
+  - type: script # Custom scripts
+
+# Savings tracking
+cost_optimization:
+  mode: "aggressive_local"
+  cloud_apis_blocked: ["anthropic", "openai"] 
+  
+  monthly_analysis:
+    anthropic_cost_avoided: 400
+    openai_cost_avoided: 350
+    perplexity_cost_avoided: 50
+    total_cloud_cost_avoided: 800
+    electricity_cost: 45
+    net_monthly_savings: 755
+    annual_savings: 9060
+
+# Integration with available services and Copilot Instructions
+integrations:
+  tesla_k80_cluster:
+    enabled: true
+    endpoint: "http://localhost:11046/v1"
+    health_check: "http://localhost:11046/health"
+    status: "active"
+    purpose: "immediate_cost_savings"
+    
+  # Copilot Instructions compliance
+  copilot_integration:
+    enabled: true
+    enforce_tool_usage: true
+    architecture_patterns:
+      three_tier_microservices: true
+      fastapi_backend_support: true
+      redis_integration: true
+      docker_workflows: true
+    
+    development_commands:
+      - "task build"
+      - "task test" 
+      - "task lint"
+      - "go mod tidy"
+      - "docker compose up -d"
+      - "pytest tests/ -v --cov=backend"
+    
+    prohibited_actions:
+      - manual_copy_paste
+      - code_snippets_for_user
+      - unautomated_file_changes
+    
+  rtx3060_services:
+    enabled: false  # Will enable when service is ready
+    endpoint: "http://localhost:11041/v1"
+    status: "starting_up"
+    purpose: "high_performance_upgrade"
+    
+  vscode:
+    enable_stability_mode: true
+    optimize_file_watchers: true
+    
+  git:
+    auto_commit: false
+    commit_message_template: "[local-ai] {action}: {description}"

@@ -1,0 +1,34 @@
+version: "2"
+
+agents:
+  root:
+    model: claude
+    description: Dev team with shared memory
+    instruction: |
+      You coordinate a team with SHARED PERSISTENT MEMORY.
+    sub_agents: ["developer", "reviewer", "tester"]
+    toolsets:
+      - type: mcp
+        command: docker
+        args: ["mcp", "gateway", "run", "--servers=memory"]
+      - type: think
+      - type: todo
+  
+  developer:
+    model: claude
+    description: Developer with team memory
+    instruction: |
+      You implement features with access to team memory.
+    toolsets:
+      - type: mcp
+        command: docker
+        args: ["mcp", "gateway", "run", "--servers=memory"]
+      - type: filesystem
+      - type: shell
+      - type: think
+
+models:
+  claude:
+    provider: anthropic
+    model: claude-sonnet-4-0
+    max_tokens: 64000

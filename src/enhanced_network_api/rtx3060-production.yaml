@@ -1,0 +1,177 @@
+#!/usr/bin/env cagent run
+
+# RTX 3060 Production Configuration for cagent
+# Cost-optimized local AI using dual RTX 3060 (24GB total VRAM)
+# Savings: $300-650/month vs Anthropic/OpenAI APIs
+
+agents:
+  root:
+    # Primary RTX 3060 Reasoning Service (Mistral-7B AWQ)
+    model: openai/rtx3060-reasoning
+    model_config:
+      base_url: "http://localhost:11041/v1"
+      token_key: VLLM_PRIMARY_API_KEY
+      model: "TheBloke/Mistral-7B-Instruct-v0.2-AWQ"
+    description: Expert Golang developer using RTX 3060 reasoning service (GPU 0)
+    instruction: |
+      You are an expert developer powered by RTX 3060 GPU with Tensor Cores and AWQ quantization.
+      
+      **Hardware Advantages:**
+      - RTX 3060 Ampere architecture (2021)
+      - 3-4x faster than Tesla K80
+      - Tensor Cores for accelerated AI operations
+      - AWQ quantization for efficient memory usage
+      - 43% less power consumption
+      
+      **Your Role:**
+      You excel at code analysis, debugging, and development tasks using modern AI acceleration.
+      Focus on Go development, code optimization, and best practices.
+      
+      **Commands you can use:**
+      - `task build` - Build Go applications
+      - `task test` - Run comprehensive tests
+      - `task lint` - Code quality checks
+      - `go mod tidy` - Dependency management
+      
+      Always provide practical, actionable solutions with proper error handling.
+
+  # Coding specialist using RTX 3060 coding service
+  coder:
+    model: openai/rtx3060-coding
+    model_config:
+      base_url: "http://localhost:11003/v1"  # Will use when coding service is available
+      token_key: VLLM_CODER_API_KEY
+      model: "TheBloke/deepseek-coder-6.7B-instruct-AWQ"
+    description: Specialized coding assistant using RTX 3060 coding service (GPU 1)
+    instruction: |
+      You are a specialized coding assistant running on RTX 3060 with DeepSeek-Coder.
+      Focus on code generation, optimization, and debugging.
+      Leverage AWQ quantization for fast, efficient inference.
+
+  # Fallback to secondary server (Tesla K80)
+  k80_secondary:
+    model: openai/tesla-k80-fallback
+    model_config:
+      base_url: "http://localhost:11046/v1"  # Tesla K80 secondary server
+      token_key: VLLM_DEEPSEEK_API_KEY
+      model: "llama2:7b"
+    description: Fallback agent using Tesla K80 cluster for batch processing
+    instruction: |
+      You are a fallback agent using Tesla K80 cluster on secondary server.
+      Handle batch processing, large model inference, and backup tasks.
+      Use when primary RTX 3060 services are unavailable.
+
+# Global configuration optimized for RTX 3060
+global:
+  max_concurrent_agents: 2
+  timeout_seconds: 120      # Faster with RTX 3060
+  log_level: "info"
+  enable_metrics: true
+  auto_save_interval: 30
+  
+  # RTX 3060 optimizations
+  gpu_memory_fraction: 0.85
+  enable_tensor_cores: true
+  enable_awq_quantization: true
+  mixed_precision: true
+  
+  # Cost tracking (vs cloud APIs)
+  cost_tracking:
+    enabled: true
+    local_cost_per_hour: 0.05  # Electricity cost
+    cloud_api_savings: 650     # Monthly savings vs Anthropic
+    
+# Development environment
+development:
+  hot_reload: true
+  debug_mode: false
+  test_automation: true
+  
+  # Active endpoints
+  model_endpoints:
+    rtx3060_reasoning: "http://localhost:11041/v1"    # Active
+    rtx3060_coding: "http://localhost:11003/v1"       # To be started
+    tesla_k80_secondary: "http://localhost:11046/v1"  # Active fallback
+    network_ai: "http://localhost:11052/v1"           # General purpose
+    
+  # Hardware monitoring
+  gpu_monitoring:
+    enabled: true
+    check_interval: 30
+    temperature_limit: 83     # RTX 3060 thermal limit
+    memory_limit: 0.9
+    power_limit: 170          # RTX 3060 TGP
+
+# HA configuration  
+production:
+  health_checks: true
+  auto_restart: true
+  auto_failover: true
+  
+  # Primary RTX 3060 server
+  primary_server:
+    host: "localhost"
+    gpus: "2x RTX 3060 (24GB total)"
+    services:
+      reasoning: "localhost:8005"
+      coding: "localhost:8002"
+    performance_tier: "high"
+    
+  # Secondary Tesla K80 server  
+  secondary_server:
+    host: "localhost"  # Same machine, different service
+    gpus: "4x Tesla K80 (via port 8003)"
+    services:
+      fallback: "localhost:8003" 
+    performance_tier: "batch"
+    
+  scaling:
+    min_replicas: 1
+    max_replicas: 2
+    target_gpu_utilization: 75
+
+# Cost optimization settings
+cost_optimization:
+  prefer_local_models: true
+  cloud_api_fallback: false  # Force local-only to save money
+  monthly_budget_limit: 50   # Only electricity costs
+  track_token_usage: true
+  
+  # Estimated monthly savings
+  savings_analysis:
+    anthropic_cost_avoided: 300
+    openai_cost_avoided: 350  
+    total_monthly_savings: 650
+    electricity_cost: 45
+    net_monthly_savings: 605
+
+# Integration settings
+integrations:
+  rtx3060_services:
+    enabled: true
+    reasoning_endpoint: "http://localhost:11041/v1"
+    health_check: "http://localhost:11041/health"
+    gpu_type: "RTX 3060"
+    quantization: "AWQ"
+    features: ["tensor_cores", "flash_attention", "awq_quantization"]
+    
+  tesla_k80_fallback:
+    enabled: true
+    endpoint: "http://localhost:11046/v1"
+    gpu_type: "Tesla K80"
+    use_case: "batch_processing"
+    
+  vscode:
+    enable_stability_mode: true
+    optimize_file_watchers: true
+    gpu_acceleration: true
+    
+  git:
+    auto_commit: false
+    commit_message_template: "[cagent-rtx3060] {action}: {description}"
+    
+  monitoring:
+    prometheus: true
+    gpu_metrics: true
+    cost_tracking: true
+    performance_comparison: true  # vs cloud APIs

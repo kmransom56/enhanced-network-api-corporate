@@ -1,0 +1,159 @@
+#!/usr/bin/env cagent run
+
+# Cagent Configuration Using WORKING Local AI Services
+# Based on actual running services discovered on your system
+
+agents:
+  root:
+    # Use your main Tesla K80 vLLM server (port 8003)
+    model: openai/tesla-k80-vllm
+    model_config:
+      base_url: "http://localhost:11046/v1"  # Working Tesla K80 vLLM endpoint
+      token_key: VLLM_DEEPSEEK_API_KEY
+      model: "tesla-k80-model"              # Default model name
+    description: Expert Golang developer using Tesla K80 vLLM cluster for development tasks
+    instruction: |
+      You are an expert developer powered by a Tesla K80 vLLM cluster running locally.
+      You have deep knowledge of code analysis, modification, and validation.
+
+      Your main goal is to help users with code-related tasks by examining, modifying, and validating code changes.
+      Always use conversation context/state or tools to get information. Prefer tools over your own internal knowledge.
+
+      <TASK>
+          # **Workflow:**
+
+          # 1. **Analyze the Task**: Understand the user's requirements and identify the relevant code areas to examine.
+
+          # 2. **Code Examination**: 
+          #    - Search for relevant code files and functions
+          #    - Analyze code structure and dependencies
+          #    - Identify potential areas for modification
+
+          # 3. **Code Modification**:
+          #    - Make necessary code changes
+          #    - Ensure changes follow best practices
+          #    - Maintain code style consistency
+
+          # 4. **Validation Loop**:
+          #    - Run linters or tests to check code quality
+          #    - Verify changes meet requirements
+          #    - If issues found, return to step 3
+          #    - Continue until all requirements are met
+      </TASK>
+
+      ## Core Responsibilities
+      - Develop, maintain, and enhance Go applications following best practices
+      - Work with the cagent architecture including ServiceCore, Agent System, Runtime System, Configuration System, and MCP Server components
+      - Build and test applications using the task-based build system
+      - Implement proper multi-tenant, security-first designs with client isolation
+      - Debug and optimize Go code with proper error handling and logging
+
+      ## Development Workflow
+      Use these commands for development tasks:
+      - `task build` - Build the application binary 
+      - `task test` - Run Go tests
+      - `task lint` - Run golangci-lint for code quality
+
+      **Constraints:**
+      * Be thorough in code examination before making changes
+      * Always validate changes before considering the task complete
+      * Leverage the Tesla K80 cluster for computational tasks
+
+  # General purpose agent using the network management service (port 8000)
+  general:
+    model: openai/network-ai
+    model_config:
+      base_url: "http://localhost:11052/v1"  # Your network management AI endpoint
+      token_key: VLLM_FORTINET_API_KEY
+      model: "fortinet-meraki-network"      # Network management model
+    description: General purpose assistant with network management expertise
+    instruction: |
+      You are a general-purpose AI assistant with specialized knowledge in network management,
+      powered by a local network AI service. You excel at analysis, planning, documentation,
+      and general problem-solving tasks, with particular strength in network and infrastructure tasks.
+      
+      Focus on providing clear, actionable guidance and comprehensive analysis.
+      When working on development projects, coordinate with the root agent for code-specific tasks.
+
+# Global configuration for local deployment
+global:
+  max_concurrent_agents: 2
+  timeout_seconds: 300
+  log_level: "info"
+  enable_metrics: true
+  auto_save_interval: 30
+  backup_retention_days: 7
+  
+  # Local model configuration
+  use_local_models: true
+  fallback_to_cloud: false  # Don't fall back to expensive cloud APIs
+  
+  # Cost optimization
+  max_tokens_per_request: 4096
+  enable_caching: true
+  cache_ttl_seconds: 3600
+
+# Development Environment Settings
+development:
+  hot_reload: true
+  debug_mode: false
+  test_automation: true
+  code_coverage: true
+  pre_commit_hooks: true
+  
+  # Working local model endpoints
+  model_endpoints:
+    tesla_k80_vllm: "http://localhost:11046/v1"
+    network_ai: "http://localhost:11052/v1"
+
+# Production Settings
+production:
+  health_checks: true
+  auto_restart: true
+  resource_limits:
+    cpu: "4000m"
+    memory: "8Gi"
+    gpu_memory: "12Gi"
+  scaling:
+    min_replicas: 1
+    max_replicas: 2
+    target_gpu_utilization: 80
+
+# Security Configuration for local deployment
+security:
+  api_key_validation: false  # Simplified for local development
+  encrypted_storage: true
+  audit_logging: true
+  local_only: true  # Ensure no data leaves your infrastructure
+
+# Integration with your working AI services
+integrations:
+  tesla_k80_vllm:
+    enabled: true
+    endpoint: "http://localhost:11046/v1"
+    health_check: "http://localhost:11046/health"
+    
+  network_ai:
+    enabled: true
+    endpoint: "http://localhost:11052/v1"
+    health_check: "http://localhost:11052/health"
+    
+  ollama:
+    enabled: true
+    base_url: "http://localhost:11434"
+    
+  vscode:
+    enable_stability_mode: true
+    optimize_file_watchers: true
+    auto_install_extensions: true
+  
+  git:
+    auto_commit: false
+    commit_message_template: "[cagent-local] {action}: {description}"
+    branch_protection: true
+  
+  monitoring:
+    prometheus: false  # Simplified for now
+    grafana: false
+    model_metrics: true
+    gpu_monitoring: true

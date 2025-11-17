@@ -1,0 +1,204 @@
+#!/usr/bin/env cagent run
+
+# Cagent Configuration for RTX 3060 HA Primary Server
+# Optimized for dual RTX 3060 (24GB total VRAM) vs Tesla K80 secondary server
+
+agents:
+  root:
+    # Use the RTX 3060 optimized vLLM endpoint
+    model: openai/rtx3060-primary
+    model_config:
+      base_url: "http://localhost:11046/v1"  # RTX 3060 vLLM endpoint
+      token_key: VLLM_DEEPSEEK_API_KEY
+      model: "mistral-7b-instruct"          # Optimized model for RTX 3060
+    description: Expert Golang developer using RTX 3060 vLLM cluster (Primary HA Server)
+    instruction: |
+      You are an expert developer powered by dual RTX 3060 GPUs (24GB VRAM) running on the PRIMARY server 
+      of a High Availability pair. The secondary server uses Tesla K80s.
+
+      Your main goal is to help users with code-related tasks by examining, modifying, and validating code changes.
+      You have access to modern AI acceleration features including:
+      - Tensor Cores for faster AI operations
+      - FP16/INT8 inference capabilities  
+      - Flash Attention support
+      - CUDA 12.x compatibility
+
+      <TASK>
+          # **Workflow:**
+          # 1. **Analyze the Task**: Understand requirements using modern AI capabilities
+          # 2. **Code Examination**: Use advanced pattern recognition for code analysis
+          # 3. **Code Modification**: Apply best practices with AI-assisted optimization
+          # 4. **Validation Loop**: Leverage fast inference for thorough testing
+      </TASK>
+
+      ## Core Responsibilities
+      - Develop, maintain, and enhance Go applications following best practices
+      - Work with the cagent architecture leveraging RTX 3060 performance advantages
+      - Build and test applications using accelerated compilation
+      - Implement proper multi-tenant, security-first designs
+      - Debug and optimize code with AI-enhanced analysis
+
+      ## Development Workflow
+      Use these commands for development tasks:
+      - `task build` - Build the application binary 
+      - `task test` - Run Go tests with parallel execution
+      - `task lint` - Run golangci-lint for code quality
+
+      **Hardware Advantages:**
+      * RTX 3060 Ampere architecture (7 years newer than Tesla K80)
+      * Tensor Cores for 4-5x faster AI operations
+      * Modern CUDA 12.x support
+      * Better power efficiency (170W vs 300W per card)
+
+  # Coding specialist using optimized RTX 3060 models
+  coder:
+    model: openai/rtx3060-coder
+    model_config:
+      base_url: "http://localhost:11003/v1"  # Coding-optimized endpoint
+      token_key: VLLM_CODER_API_KEY
+      model: "codellama-optimized"
+    description: Specialized coding assistant optimized for RTX 3060 architecture
+    instruction: |
+      You are a specialized coding assistant running on RTX 3060 GPUs with Tensor Cores.
+      Focus on code generation, debugging, and optimization tasks.
+      Leverage the modern Ampere architecture for fast inference and pattern recognition.
+
+    # Fallback to Tesla K80 secondary server (if needed)
+    k80_fallback:
+      model: openai/tesla-k80-secondary
+      model_config:
+        base_url: "http://192.168.0.2:11046/v1"
+        token_key: VLLM_DEEPSEEK_API_KEY
+        model: "tesla-k80-model"
+    description: Fallback agent using Tesla K80 cluster on secondary HA server
+    instruction: |
+      You are a fallback agent running on the Tesla K80 secondary server.
+      Use when primary RTX 3060 server is overloaded or for batch processing tasks
+      that benefit from the higher total VRAM (72GB vs 24GB).
+
+# Global configuration optimized for RTX 3060
+global:
+  max_concurrent_agents: 2  # Limited by 24GB total VRAM
+  timeout_seconds: 180      # Faster with RTX 3060
+  log_level: "info"
+  enable_metrics: true
+  auto_save_interval: 30
+  backup_retention_days: 7
+  
+  # Hardware-specific optimizations
+  gpu_memory_fraction: 0.9  # RTX 3060 can use more memory efficiently
+  enable_tensor_cores: true  # RTX 3060 Tensor Core optimization
+  enable_flash_attention: true  # Ampere architecture feature
+  mixed_precision: true      # FP16 inference support
+  
+  # HA configuration
+  primary_server: "192.168.0.1"
+  secondary_server: "192.168.0.2"
+  failover_enabled: true
+  sync_with_secondary: true
+
+# Development Environment Settings
+development:
+  hot_reload: true
+  debug_mode: false
+  test_automation: true
+  code_coverage: true
+  pre_commit_hooks: true
+  
+  # RTX 3060 optimized endpoints
+  model_endpoints:
+    primary_rtx3060: "http://localhost:11046/v1"
+    coding_rtx3060: "http://localhost:11003/v1" 
+    network_ai: "http://localhost:11052/v1"
+    k80_secondary: "http://192.168.0.2:8003/v1"
+  
+  # Hardware monitoring
+  gpu_monitoring:
+    enabled: true
+    check_interval: 30
+    temperature_limit: 83  # RTX 3060 thermal limit
+    memory_limit: 0.95     # 95% of 12GB per GPU
+
+# Production Settings for HA pair
+production:
+  health_checks: true
+  auto_restart: true
+  auto_failover: true
+  
+  # Resource limits optimized for RTX 3060
+  resource_limits:
+    gpu_memory: "22Gi"      # 22GB of 24GB available
+    cpu: "16000m"           # Allow high CPU usage
+    memory: "32Gi"
+  
+  scaling:
+    min_replicas: 1
+    max_replicas: 2         # Limited by dual RTX 3060 setup
+    target_gpu_utilization: 75
+
+# HA Pair Integration
+ha_configuration:
+  cluster_mode: "active-passive"
+  primary_server:
+    host: "192.168.0.1"
+    gpus: "2x RTX 3060 (24GB total)"
+    role: "primary"
+    performance_tier: "high"
+    
+  secondary_server:
+    host: "192.168.0.2" 
+    gpus: "4x Tesla K80 (72GB total)"
+    role: "secondary"
+    performance_tier: "batch"
+    
+  failover:
+    enabled: true
+    health_check_interval: 15
+    failover_timeout: 60
+    auto_recovery: true
+
+# Security Configuration
+security:
+  api_key_validation: false  # Simplified for local HA network
+  encrypted_storage: true
+  audit_logging: true
+  local_network_only: true
+  allowed_ips: ["192.168.0.1", "192.168.0.2"]
+
+# Integration with RTX 3060 optimized services
+integrations:
+  rtx3060_vllm:
+    enabled: true
+    endpoint: "http://localhost:11046/v1"
+    health_check: "http://localhost:11046/health"
+    gpu_type: "RTX 3060"
+    features: ["tensor_cores", "flash_attention", "fp16"]
+    
+  tesla_k80_backup:
+    enabled: true
+    endpoint: "http://192.168.0.2:8003/v1"
+    gpu_type: "Tesla K80"
+    use_case: "batch_processing"
+    
+  ollama:
+    enabled: true
+    base_url: "http://localhost:11434"
+    
+  vscode:
+    enable_stability_mode: true
+    optimize_file_watchers: true
+    auto_install_extensions: true
+    gpu_acceleration: true  # RTX 3060 benefits
+  
+  git:
+    auto_commit: false
+    commit_message_template: "[cagent-rtx3060] {action}: {description}"
+    branch_protection: true
+  
+  monitoring:
+    prometheus: true
+    grafana: true
+    gpu_metrics: true
+    ha_monitoring: true
+    temperature_alerts: true
+    memory_alerts: true
