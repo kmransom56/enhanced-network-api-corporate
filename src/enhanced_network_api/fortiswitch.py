@@ -13,7 +13,7 @@ class FortiSwitchModule:
         }]
         return self.session.post("get", params)
 
-    def get_managed_switches(self, adom="root", fortigate_name):
+    def get_managed_switches(self, fortigate_name, adom="root"):
         """Retrieves switches managed by a specific FortiGate."""
         params = [{
             "url": f"/pm/config/adom/{adom}/device/{fortigate_name}/switch-controller/managed-switch"

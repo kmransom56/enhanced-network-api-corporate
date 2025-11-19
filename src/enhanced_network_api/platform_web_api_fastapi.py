@@ -5,7 +5,8 @@ Provides web-accessible endpoints for platform discovery and interaction
 """
 
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import subprocess
 import json
@@ -21,6 +22,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount the static directory
+app.mount("/static", StaticFiles(directory="src/enhanced_network_api/static"), name="static")
 
 DISCOVERY_DIR = "/home/keith/cagent/platform_discovery"
 
@@ -190,19 +194,5 @@ async def open_service(service_id: int):
 
 @app.get("/")
 async def dashboard():
-    # Minimal HTML dashboard for standalone access
-    html = """
-    <!DOCTYPE html>
-    <html lang=\"en\">
-    <head>
-        <meta charset=\"UTF-8\">
-        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-        <title>🤖 AI Research Platform Dashboard</title>
-    </head>
-    <body>
-        <h1>🤖 AI Research Platform Dashboard</h1>
-        <p>API endpoints are available.</p>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=html)
+    return FileResponse(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'index.html'))
+

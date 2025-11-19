@@ -19,18 +19,26 @@ Transform your network API development with **real API documentation** and **cor
 
 ## 🚀 Quick Start
 
-### Standard Corporate Network
+### Backend Development with FastAPI
+
+This project uses FastAPI for backend development and `uv` for Python package management.
+
 ```bash
 # Clone and install
 git clone https://github.com/your-username/enhanced-network-api-corporate.git
 cd enhanced-network-api-corporate
-pip install -r requirements.txt
+
+# Create a virtual environment and install dependencies with uv
+python3 -m venv .venv
+source .venv/bin/activate
+pip install uv
+uv pip install -r requirements.txt uvicorn
 
 # Auto-configure for corporate environment
 python -m enhanced_network_api.corporate_environment_detector --detect --auto-configure
 
-# Start the enhanced API agent
-python -m enhanced_network_api.enhanced_network_api_agent
+# Start the FastAPI server
+uvicorn src.enhanced_network_api.platform_web_api_fastapi:app --host 0.0.0.0 --port 8001
 ```
 
 ### Zscaler/SSL Interception Environment
