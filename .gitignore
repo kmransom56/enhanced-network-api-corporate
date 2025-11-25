@@ -1,6 +1,193 @@
+# Python
 .venv/
+venv/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# Environment files (keep templates)
+.env.template
+.env.example
+*.env.template
+*.env.example
+corporate.env.template
+
+# Logs
+*.log
+logs/
+*.log.*
+.platform-web-api-fastapi.log
+
+# Coverage and testing
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js (for frontend assets)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Build artifacts and static files
+build/
+dist/
+*.min.js
+*.min.css
+.app.min.js
+.style.min.css
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache and temporary files
+.cache/
+*.tmp
+*.temp
+.cache.py
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Security and sensitive data
+*.key
+*.pem
+*.crt
+*.p12
+secrets/
+credentials/
+
+# Project specific
+data/
+test_*.html
+test_*.json
+test_*.py
+test_raw_*.json
+test_scene_*.json
+debug_*.py
+legacy_archive/
+vss_extraction/
+.screenshots/
+test_screenshots/
+
+# 3D models and media files (keep source)
+*.obj
+*.stl
+*.3ds
+*.dae
+*.blend
+*.fbx
+static/3d-models/*.obj
+static/3d-models/*.stl
+
+# Generated topology files
+topology_*.json
+topology_*.html
+*.topology.json
+
+# MCP servers
+mcp_servers/*.log
+mcp_*.log
+
+# Docker
+.dockerignore
+
+# Coverage reports
+coverage/
+.coverage.*
+htmlcov/
+
+# Lock files (keep requirements.locked.txt)
+uv.lock
+poetry.lock
+
+# Development tools
+.pre-commit-config.yaml
+.flake8
+.pylintrc
