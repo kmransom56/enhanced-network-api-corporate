@@ -1134,11 +1134,19 @@ async def echarts_gl_test():
         missing_message="Test file not found. Check static files.",
     )
 
+@app.get("/iconlab", response_class=HTMLResponse)
+async def iconlab_portal():
+    """Serve the IconLab restaurant technology device recognition portal"""
+    return FileResponse(
+        PROJECT_ROOT / "iconlab.html",
+        media_type="text/html"
+    )
+
 @app.get("/", response_class=HTMLResponse)
 async def dashboard():
     """Serve the main visualization interface"""
     return _serve_static_html(
-        "babylon_test.html",
+        "babylon_topology.html",
         missing_title="Enhanced Network API",
         missing_message="Topology interface not found. Check static files.",
     )
