@@ -102,7 +102,15 @@ async def initialize_drawio_server():
 
 def _calltool_result_to_dict(result: CallToolResult) -> Dict[str, Any]:
     if result.isError:
-        raise HTTPException(status_code=500, detail="MCP tool reported error")
+        # Extract human-readable error text from the MCP result so callers see the real cause
+        message: Optional[str] = None
+        if result.content:
+            content = result.content[0]
+            if getattr(content, "type", None) == "text":
+                message = content.text
+        if not message:
+            message = "MCP tool reported an error"
+        raise HTTPException(status_code=500, detail=message)
     if result.content:
         content = result.content[0]
         if getattr(content, "type", None) == "text":

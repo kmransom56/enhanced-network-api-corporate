@@ -319,11 +319,15 @@ class FortiGateTopologyCollector:
     
     async def collect_topology(self) -> Dict[str, Any]:
         """Collect complete FortiGate topology"""
-        logger.info(f"🔍 Collecting FortiGate topology from {self.host}")
+        logger.info(f"f0df0d Collecting FortiGate topology from {self.host}")
         
         # Authenticate
         if not await self.authenticate():
-            return self.get_demo_topology()
+            # Do not return demo data here; surface a hard error so callers can react properly.
+            raise RuntimeError(
+                "FortiGate authentication failed: token and session methods exhausted. "
+                "Check FORTIGATE_TOKEN / FORTIGATE_PASSWORD and FORTIGATE_HOST(S)."
+            )
         
         # Collect all data
         system_status = await self.get_system_status()

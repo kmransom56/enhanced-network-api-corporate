@@ -417,6 +417,37 @@
             if (deviceCounter) deviceCounter.textContent = devices.length;
         }
 
+
+        function fitCameraToNodes(nodes) {
+            if (!camera || !nodes || !nodes.length) return;
+
+            let minX = Infinity, maxX = -Infinity;
+            let minZ = Infinity, maxZ = -Infinity;
+
+            nodes.forEach((n) => {
+                if (!n.position) return;
+                const x = typeof n.position.x === 'number' ? n.position.x : 0;
+                const z = typeof n.position.z === 'number' ? n.position.z : 0;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (z < minZ) minZ = z;
+                if (z > maxZ) maxZ = z;
+            });
+
+            if (!isFinite(minX) || !isFinite(maxX) || !isFinite(minZ) || !isFinite(maxZ)) {
+                return;
+            }
+
+            const centerX = (minX + maxX) / 2;
+            const centerZ = (minZ + maxZ) / 2;
+            const extent = Math.max(maxX - minX, maxZ - minZ, 10);
+            const radius = extent * 1.8;
+
+            camera.target = new BABYLON.Vector3(centerX, 0, centerZ);
+            camera.radius = radius;
+            camera.beta = Math.PI / 3; // Keep a comfortable tilt
+        }
+
         function showTooltip(deviceData, clientX, clientY) {
             if (!tooltipEl) return;
             const name = deviceData.name || 'Unknown Device';
@@ -543,6 +574,13 @@
             const vendor = deviceData.vendor || deviceData.device_vendor;
             if (vendor) html += `<div><span class="label">Vendor:</span><span class="value">${vendor}</span></div>`;
             if (deviceData.vlan) html += `<div><span class="label">VLAN:</span><span class="value">${deviceData.vlan}</span></div>`;
+            if (deviceData.modelPath) {
+                html += `<div><span class="label">3D Model:</span><span class="value">${deviceData.modelPath}</span></div>`;
+            }
+            const iconSvgPath = deviceData.iconSvgPath || deviceData.icon_svg;
+            if (iconSvgPath) {
+                html += `<div><span class="label">Icon SVG:</span><span class="value">${iconSvgPath}</span></div>`;
+            }
             html += `</div>`;
             html += `</div>`;
             deviceDetails.innerHTML = html;
@@ -572,6 +610,7 @@
                         device_vendor: m.vendor,
                         vendor: m.vendor,
                         model: m.model,
+                        icon_svg: m.icon_svg,
                         ip: m.ip,
                         mac: m.mac,
                         vlan: m.vlan,
@@ -593,6 +632,8 @@
                 });
 
                 await renderTopology({ nodes: nodes, links: links });
+                // Center and zoom camera so all nodes are comfortably in view
+                fitCameraToNodes(nodes);
                 updateStatus('Loaded');
             } catch (err) {
                 console.error('Failed to load lab topology:', err);
@@ -662,6 +703,75 @@
             });
         }
 
+        let labModelManifest = null;
+
+
+        async function loadLabModelManifest() {
+            if (labModelManifest) return labModelManifest;
+            try {
+                const resp = await fetch('/lab_3d_models/manifest.json');
+                if (!resp.ok) {
+                    throw new Error('HTTP ' + resp.status);
+                }
+                const data = await resp.json();
+                labModelManifest = data && Array.isArray(data.models) ? data : { models: [] };
+            } catch (e) {
+                console.log('Failed to load lab_3d_models manifest:', e);
+                labModelManifest = { models: [] };
+            }
+            return labModelManifest;
+        }
+
+
+        function selectModelFromManifest(nodeData, manifest) {
+            if (!manifest || !Array.isArray(manifest.models)) return null;
+
+            const dt = (nodeData.type || nodeData.device_type || '').toLowerCase();
+            let preferredCategories = [];
+            if (dt.includes('fortigate') || dt.includes('firewall') || dt.includes('gateway')) {
+                preferredCategories = ['firewall', 'security'];
+            } else if (dt.includes('fortiswitch') || dt === 'switch') {
+                preferredCategories = ['switch'];
+            } else if (dt.includes('fortiap') || dt.includes('access_point') || dt.includes('wifi') || dt === 'ap') {
+                preferredCategories = ['access_point'];
+            }
+
+            function matches(model) {
+                const cat = String(model.category || '').toLowerCase();
+                const name = String(model.name || '').toLowerCase();
+                const tags = (model.tags || []).map((t) => String(t).toLowerCase());
+
+                if (preferredCategories.length && preferredCategories.includes(cat)) {
+                    return true;
+                }
+
+                if (dt.includes('fortigate') && (name.includes('fortigate') || name.includes('fg'))) {
+                    return true;
+                }
+                if (dt.includes('fortiswitch') && (name.includes('fortiswitch') || name.includes('fs'))) {
+                    return true;
+                }
+                if (dt.includes('fortiap') && (name.includes('fortiap') || name === 'ap')) {
+                    return true;
+                }
+
+                if (tags.some((t) => t.includes('fortinet')) || name.includes('fortinet')) {
+                    return true;
+                }
+                return false;
+            }
+
+            const candidates = manifest.models.filter((m) => m.objPath);
+            for (const m of candidates) {
+                if (matches(m)) {
+                    const objRel = m.objPath;
+                    return '/lab_3d_models/' + objRel.replace(/^\/*/, '');
+                }
+            }
+            return null;
+        }
+
+
         async function loadDeviceModel(nodeData, position) {
             try {
                 // Map device types to fallback 3D models (used only when no model is provided)
@@ -674,13 +784,20 @@
 
                 const typeKey = (nodeData.type || '').toLowerCase();
 
+                const manifest = await loadLabModelManifest();
+                const manifestModel = selectModelFromManifest(nodeData, manifest);
+
                 // Candidate model paths, in order of preference:
-                // 1) model from API (lab-format `model` field, usually VSS-derived GLTF)
-                // 2) type-based fallback from modelMap
-                // 3) generic client model
+                // 1) model from API (lab-format `model` field, usually /lab_3d_models/...)
+                // 2) model chosen from lab_3d_models/manifest.json
+                // 3) type-based fallback from modelMap
+                // 4) generic client model
                 const candidates = [];
                 if (nodeData.model) {
                     candidates.push(nodeData.model);
+                }
+                if (manifestModel) {
+                    candidates.push(manifestModel);
                 }
                 if (modelMap[typeKey]) {
                     candidates.push(modelMap[typeKey]);
@@ -691,8 +808,7 @@
                     const candidate = candidates[i];
                     if (!candidate || typeof candidate !== 'string') continue;
 
-                    // If the path starts with '/', drop it for SceneLoader (rootUrl "" + relative path)
-                    const sceneFile = candidate.charAt(0) === '/' ? candidate.slice(1) : candidate;
+                    const sceneFile = candidate; // allow absolute paths like /lab_3d_models/models/...
                     try {
                         const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", sceneFile, scene);
                         if (result.meshes.length > 0) {
@@ -771,17 +887,17 @@
                     ? String(nodeData.vlan)
                     : '';
                 const dtWidth = 256;
-                const dtHeight = 96;
+                const dtHeight = 112;
                 const texture = new BABYLON.DynamicTexture(`${nodeData.id}_label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
                 texture.hasAlpha = true;
-                const font = "16px 'Segoe UI'";
+                const font = "20px 'Segoe UI'";
 
-                // Clear and draw name, IP, and VLAN/MAC details
-                let y = 24;
-                texture.drawText(nameText, null, y, font, "white", "transparent", true);
+                // High-contrast background for readability
+                let y = 34;
+                texture.drawText(nameText, null, y, font, "#ffffff", "rgba(10, 12, 30, 0.95)", true);
                 if (ipText) {
-                    y += 20;
-                    texture.drawText(ipText, null, y, font, "#9fb3ff", null, true);
+                    y += 24;
+                    texture.drawText(ipText, null, y, font, "#a8c5ff", null, true);
                 }
 
                 const detailParts = [];
@@ -793,8 +909,8 @@
                     detailParts.push(`MAC: ${macText}`);
                 }
                 if (detailParts.length > 0) {
-                    y += 20;
-                    texture.drawText(detailParts.join('  ·  '), null, y, font, "#c0c7ff", null, true);
+                    y += 24;
+                    texture.drawText(detailParts.join('  ·  '), null, y, font, "#d0d7ff", null, true);
                 }
 
                 const labelMat = new BABYLON.StandardMaterial(`${nodeData.id}_label_mat`, scene);
@@ -802,15 +918,12 @@
                 labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
                 labelMat.backFaceCulling = false;
 
-                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_label`, { width: 3, height: 0.8 }, scene);
-                labelPlane.position = new BABYLON.Vector3(
-                    mesh.position.x,
-                    mesh.position.y - 1.2,
-                    mesh.position.z
-                );
+                // Slightly larger plane and position just below the icon, above the ground
+                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_label`, { width: 3.2, height: 1.1 }, scene);
+                labelPlane.parent = mesh;
+                labelPlane.position = new BABYLON.Vector3(0, 0.5, 0);
                 labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
                 labelPlane.material = labelMat;
-                labelPlane.parent = mesh;
                 deviceLabels.push(labelPlane);
             } catch (e) {
                 console.log('Failed to create label for', nodeData && nodeData.name, e);
@@ -834,10 +947,10 @@
                 
                 // Create a small plane for 2D overlay
                 const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_overlay`, 
-                    { width: 2, height: 1.5 }, scene);
+                    { width: 3, height: 2 }, scene);
                 overlay.position = new BABYLON.Vector3(
                     mesh.position.x,
-                    mesh.position.y + 2,
+                    mesh.position.y + 2.5,
                     mesh.position.z
                 );
                 overlay.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
@@ -862,6 +975,12 @@
                 
                 // Parent overlay to mesh
                 overlay.parent = mesh;
+
+                // Track which SVG was actually used so we can display it in the UI
+                if (!mesh.metadata) {
+                    mesh.metadata = { ...nodeData };
+                }
+                mesh.metadata.iconSvgPath = svgPath;
                 
             } catch (error) {
                 console.log(`Failed to add SVG overlay for ${nodeData.name}:`, error);

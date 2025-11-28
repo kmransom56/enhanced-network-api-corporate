@@ -207,6 +207,15 @@ These populate:
 - `src/enhanced_network_api/static/fortinet-icons/`
 - `src/enhanced_network_api/static/model-specific-icons/`
 
+At the repository root, you also have two helper utilities:
+
+- `convert_vss_to_svg.py` — lower-level extractor for legacy `.vss` files that
+  pulls embedded graphics from the Visio OLE streams and wraps them into SVG
+  `<image>` elements. Useful when bootstrapping icons from new VSS sources.
+- `create_realistic_icons.py` — generates clean, vendor-styled SVG icons for
+  FortiGate/FortiSwitch/FortiAP and client devices (laptop/phone) into
+  `realistic_device_svgs/`, used as fallbacks by the viewers.
+
 ### 3. SVG → 3D Models
 
 Generate 3D models from SVG icons:

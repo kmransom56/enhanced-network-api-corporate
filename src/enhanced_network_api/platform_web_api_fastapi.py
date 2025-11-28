@@ -1583,7 +1583,17 @@ class FortinetMCPClient:
 
         data = resp.json()
         if data.get("isError"):
-            raise HTTPException(status_code=500, detail=data)
+            # Extract a human-readable error message from the MCP response
+            message: Optional[str] = None
+            content_list = data.get("content") or data.get("contents") or []
+            if isinstance(content_list, list) and content_list:
+                first = content_list[0]
+                if isinstance(first, dict) and "text" in first:
+                    message = str(first.get("text"))
+            if not message:
+                message = "MCP bridge reported an error while calling Fortinet tools"
+            # Use 502 Bad Gateway to clearly indicate bridge/collector-level failure
+            raise HTTPException(status_code=502, detail=message)
 
         content_list = data.get("content") or []
         if content_list and isinstance(content_list, list):
@@ -1662,11 +1672,6 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
     """
     nodes = scene.get("nodes") or []
     links = scene.get("links") or []
-
-    # Fallback to the in-memory sample scene if we somehow get an empty payload
-    if not nodes and not links:
-        nodes = _SAMPLE_SCENE.get("nodes", [])
-        links = _SAMPLE_SCENE.get("links", [])
 
     models: List[Dict[str, Any]] = []
     for idx, node in enumerate(nodes):
@@ -1748,6 +1753,7 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
 
         connections.append(conn)
 
+    # No demo/sample topology injection: if there is no data, return empty models/connections
     return {"models": models, "connections": connections}
 
 
@@ -1757,6 +1763,9 @@ async def get_topology_raw():
     try:
         data = await _call_fortinet_tool_async("discover_fortinet_topology")
         return JSONResponse(data)
+    except HTTPException as http_exc:
+        # Preserve detailed MCP/collector error information
+        raise http_exc
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Fortinet MCP bridge unavailable: {str(e)}")
 
@@ -1766,6 +1775,8 @@ async def get_topology_scene():
     """Return normalized 3D scene JSON sourced from the Fortinet MCP bridge."""
     try:
         topology = await _call_fortinet_tool_async("discover_fortinet_topology")
+    except HTTPException as http_exc:
+        raise http_exc
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Fortinet MCP bridge unavailable: {str(e)}")
 
@@ -1779,6 +1790,8 @@ async def get_topology_scene_enhanced():
     """Return enhanced 3D scene with device model matching and 3D model paths."""
     try:
         topology = await _call_fortinet_tool_async("discover_fortinet_topology")
+    except HTTPException as http_exc:
+        raise http_exc
     except Exception as e:
         raise HTTPException(status_code=503, detail=f"Fortinet MCP bridge unavailable: {str(e)}")
 

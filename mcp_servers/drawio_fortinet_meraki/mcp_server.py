@@ -504,11 +504,11 @@ class DrawIOMCPServer:
             device_types = arguments.get("device_types", [])
             
             if not self.fortigate_collector:
-                # Return demo data if no collector configured
-                demo_topology = self.get_demo_topology()
-                self.current_topology = demo_topology
+                # No collector configured: return an explicit error instead of demo data
+                error_text = "FortiGate collector is not configured; unable to collect topology (no demo fallback)."
                 return CallToolResult(
-                    content=[TextContent(type="text", text=json.dumps(demo_topology, indent=2))]
+                    content=[TextContent(type="text", text=error_text)],
+                    isError=True,
                 )
             
             # Collect real topology data from FortiGate
@@ -523,7 +523,7 @@ class DrawIOMCPServer:
                 topology['total_devices'] = len(topology['devices'])
             
             self.current_topology = topology
-            
+
             return CallToolResult(
                 content=[TextContent(type="text", text=json.dumps(topology, indent=2))]
             )
