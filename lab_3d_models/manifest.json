@@ -1,0 +1,257 @@
+{
+  "version": "1.0",
+  "models": [
+    {
+      "name": "shape_027__-3_",
+      "svgPath": "optimized_svgs/shape_027__-3_.svg",
+      "objPath": "models/shape_027__-3_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_007_c__f",
+      "svgPath": "optimized_svgs/shape_007_c__f.svg",
+      "objPath": "models/shape_007_c__f.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_001___PF",
+      "svgPath": "optimized_svgs/shape_001___PF.svg",
+      "objPath": "models/shape_001___PF.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_025_Soeo",
+      "svgPath": "optimized_svgs/shape_025_Soeo.svg",
+      "objPath": "models/shape_025_Soeo.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_024_.p__",
+      "svgPath": "optimized_svgs/shape_024_.p__.svg",
+      "objPath": "models/shape_024_.p__.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_017____3_E_W_i___",
+      "svgPath": "optimized_svgs/shape_017____3_E_W_i___.svg",
+      "objPath": "models/shape_017____3_E_W_i___.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_006_0b_b",
+      "svgPath": "optimized_svgs/shape_006_0b_b.svg",
+      "objPath": "models/shape_006_0b_b.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_003__v__",
+      "svgPath": "optimized_svgs/shape_003__v__.svg",
+      "objPath": "models/shape_003__v__.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_004_SE_W_7",
+      "svgPath": "optimized_svgs/shape_004_SE_W_7.svg",
+      "objPath": "models/shape_004_SE_W_7.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_016__OoO_",
+      "svgPath": "optimized_svgs/shape_016__OoO_.svg",
+      "objPath": "models/shape_016__OoO_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_020_7_joF__",
+      "svgPath": "optimized_svgs/shape_020_7_joF__.svg",
+      "objPath": "models/shape_020_7_joF__.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_015_T_g_n",
+      "svgPath": "optimized_svgs/shape_015_T_g_n.svg",
+      "objPath": "models/shape_015_T_g_n.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_011__I6N",
+      "svgPath": "optimized_svgs/shape_011__I6N.svg",
+      "objPath": "models/shape_011__I6N.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_012_8sWM_",
+      "svgPath": "optimized_svgs/shape_012_8sWM_.svg",
+      "objPath": "models/shape_012_8sWM_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_005__0bz",
+      "svgPath": "optimized_svgs/shape_005__0bz.svg",
+      "objPath": "models/shape_005__0bz.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_008_K___",
+      "svgPath": "optimized_svgs/shape_008_K___.svg",
+      "objPath": "models/shape_008_K___.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_002___D_H",
+      "svgPath": "optimized_svgs/shape_002___D_H.svg",
+      "objPath": "models/shape_002___D_H.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_009____6_",
+      "svgPath": "optimized_svgs/shape_009____6_.svg",
+      "objPath": "models/shape_009____6_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_013_Mp_1",
+      "svgPath": "optimized_svgs/shape_013_Mp_1.svg",
+      "objPath": "models/shape_013_Mp_1.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_014__AA_",
+      "svgPath": "optimized_svgs/shape_014__AA_.svg",
+      "objPath": "models/shape_014__AA_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_022_w_ej",
+      "svgPath": "optimized_svgs/shape_022_w_ej.svg",
+      "objPath": "models/shape_022_w_ej.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_018_OHh_eZi",
+      "svgPath": "optimized_svgs/shape_018_OHh_eZi.svg",
+      "objPath": "models/shape_018_OHh_eZi.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_026_____2_G",
+      "svgPath": "optimized_svgs/shape_026_____2_G.svg",
+      "objPath": "models/shape_026_____2_G.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_021_1vx4",
+      "svgPath": "optimized_svgs/shape_021_1vx4.svg",
+      "objPath": "models/shape_021_1vx4.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "temp_FortiGate_Series_R22_2025Q2_generic",
+      "svgPath": "optimized_svgs/temp_FortiGate_Series_R22_2025Q2_generic.svg",
+      "objPath": "models/temp_FortiGate_Series_R22_2025Q2_generic.obj",
+      "category": "firewall",
+      "tags": [
+        "firewall"
+      ]
+    },
+    {
+      "name": "shape_010_yTsW",
+      "svgPath": "optimized_svgs/shape_010_yTsW.svg",
+      "objPath": "models/shape_010_yTsW.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_019__ro__P_b_t_",
+      "svgPath": "optimized_svgs/shape_019__ro__P_b_t_.svg",
+      "objPath": "models/shape_019__ro__P_b_t_.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "shape_023_Zt_t",
+      "svgPath": "optimized_svgs/shape_023_Zt_t.svg",
+      "objPath": "models/shape_023_Zt_t.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    }
+  ]
+}

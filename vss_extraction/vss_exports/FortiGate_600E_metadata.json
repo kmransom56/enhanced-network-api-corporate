@@ -1,0 +1,23 @@
+{
+  "device_name": "FortiGate_600E",
+  "extraction_method": "VSS-Simulation-Linux",
+  "extraction_date": "2025-11-21T14:43:38.765047",
+  "specifications": {
+    "type": "fortigate",
+    "description": "FortiGate 600E Next-Generation Firewall",
+    "dimensions": {
+      "width": 1.0,
+      "height": 0.5,
+      "depth": 0.8
+    },
+    "color": "#cc3333",
+    "features": [
+      "ports",
+      "leds",
+      "cooling_vents",
+      "power_supply"
+    ]
+  },
+  "file_format": "GLTF",
+  "ready_for_eraser_ai": true
+}

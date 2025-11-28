@@ -1,0 +1,23 @@
+{
+  "device_name": "FortiAP_432F",
+  "extraction_method": "VSS-Simulation-Linux",
+  "extraction_date": "2025-11-21T14:43:38.765437",
+  "specifications": {
+    "type": "fortiap",
+    "description": "FortiAP 432F Wireless Access Point",
+    "dimensions": {
+      "width": 0.2,
+      "height": 0.3,
+      "depth": 0.2
+    },
+    "color": "#3366cc",
+    "features": [
+      "antennas",
+      "leds",
+      "mounting_bracket",
+      "ethernet_ports"
+    ]
+  },
+  "file_format": "GLTF",
+  "ready_for_eraser_ai": true
+}

@@ -1,0 +1,14 @@
+{
+  "extraction_date": "2025-11-21T14:43:38.765481",
+  "method": "VSS-Simulation-Linux",
+  "total_devices": 3,
+  "devices_extracted": [
+    "FortiGate_600E",
+    "FortiSwitch_148E",
+    "FortiAP_432F"
+  ],
+  "output_directory": "vss_exports",
+  "file_format": "GLTF",
+  "next_step": "Eraser AI Processing",
+  "ready_for_eraser_ai": true
+}
