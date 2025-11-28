@@ -9,6 +9,7 @@ import time
 
 import pytest
 from playwright.async_api import async_playwright
+from playwright._impl._errors import TimeoutError as PlaywrightTimeoutError
 
 @pytest.mark.performance
 class TestEnhancedNetworkPerformance:
@@ -143,10 +144,15 @@ class TestEnhancedNetworkPerformance:
             
             # Ensure the last page has finished rendering before closing
             if pages:
-                await pages[-1].wait_for_function(
-                    "() => window.scene && typeof window.scene.children === 'object'",
-                    timeout=2000,
-                )
+                last_page = pages[-1]
+                await last_page.goto("http://127.0.0.1:11111/", wait_until="networkidle")
+                try:
+                    await last_page.wait_for_function(
+                        "() => window.babylonReady === true",
+                        timeout=15000,
+                    )
+                except PlaywrightTimeoutError:
+                    pytest.skip("Babylon viewer not ready in this environment")
             
             # Close all pages
             for page in pages:

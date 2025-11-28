@@ -201,6 +201,54 @@ curl http://localhost:8000/api/topology/connections
 curl http://localhost:8000/api/topology/babylon-lab-format
 ```
 
+## VSS to SVG Icon Extraction
+
+### What is VSS?
+
+VSS (Visio Stencil) files contain device icons used in Microsoft Visio. Fortinet provides VSS files with official device icons that can be extracted and used in your network maps.
+
+### Extracting Icons from VSS Files
+
+```bash
+# Extract icons from Fortinet VSS file
+python -m src.enhanced_network_api.vss_svg_integration /path/to/FortiGate_Series.vss
+
+# Output:
+# === VSS Icon Extraction Results ===
+# Source: /path/to/FortiGate_Series.vss
+# Extracted: 15 icons
+# Output: realistic_device_svgs/
+# Manifest: realistic_device_svgs/vss_icon_manifest.json
+```
+
+### Using VSS Icons in Workflow
+
+```python
+workflow = NetworkTopologyWorkflow(
+    fortigate_host='192.168.1.99',
+    fortigate_token='your-token',
+    vss_file_path='/path/to/FortiGate_Series.vss',  # Enable VSS extraction
+    use_vss_icons=True,
+    svg_output_dir='realistic_device_svgs'
+)
+```
+
+### How VSS Integration Works
+
+1. **Extract Icons**: VSS file is parsed to extract JPG/BMP graphics
+2. **Convert to SVG**: Each graphic is embedded in SVG format with metadata
+3. **Create Mapping**: Device types are mapped to extracted icons
+4. **Assign to Devices**: Icons are assigned during workflow execution
+5. **Export to Babylon.js**: SVG paths are included in 3D scene data
+
+### VSS Icon Priority
+
+The workflow uses this priority order for icons:
+
+1. **VSS-extracted icons** (if VSS file provided)
+2. **Existing SVG icons** (if already generated)
+3. **Generated icons** (created on-the-fly)
+
 ## Workflow Steps Explained
 
 ### Step 1: Authenticate & Discover Infrastructure
@@ -258,8 +306,21 @@ device_info = matcher.match_mac_to_model(
 3. Restaurant tech detection (POS, KDS, etc.)
 4. Confidence scoring
 
-### Step 4: Generate SVG Icons
+### Step 4: Generate SVG Icons (with VSS Support)
 
+Icons are assigned using this workflow:
+
+**With VSS File:**
+```python
+# VSS extraction is automatic when vss_file_path is provided
+workflow = NetworkTopologyWorkflow(
+    fortigate_host='192.168.1.99',
+    fortigate_token='token',
+    vss_file_path='/path/to/fortinet.vss'  # Triggers VSS extraction
+)
+```
+
+**Without VSS File:**
 For each device, an SVG icon is generated based on device type:
 
 ```python

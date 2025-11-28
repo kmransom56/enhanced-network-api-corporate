@@ -23,6 +23,7 @@ from .fortiswitch import FortiSwitchModule
 from .fortiap import FortiAPModule
 from .device_mac_matcher import DeviceModelMatcher, DeviceInfo, OUILookup, DeviceClassifier
 from .device_collector import DeviceCollector
+from .vss_svg_integration import extract_and_integrate_vss_icons
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -103,6 +104,8 @@ class NetworkTopologyWorkflow:
         oui_database_path: Optional[str] = None,
         model_library_path: Optional[str] = None,
         svg_output_dir: str = 'realistic_device_svgs',
+        vss_file_path: Optional[str] = None,
+        use_vss_icons: bool = True,
         verify_ssl: bool = False
     ):
         self.fortigate_host = fortigate_host
@@ -135,7 +138,13 @@ class NetworkTopologyWorkflow:
         self.svg_output_dir = Path(svg_output_dir)
         self.svg_output_dir.mkdir(parents=True, exist_ok=True)
         
+        # VSS icon extraction configuration
+        self.vss_file_path = vss_file_path
+        self.use_vss_icons = use_vss_icons and vss_file_path is not None
+        
         log.info(f"Initialized NetworkTopologyWorkflow for {fortigate_host}")
+        if self.use_vss_icons:
+            log.info(f"VSS icon extraction enabled: {vss_file_path}")
     
     async def execute_workflow(self) -> Dict[str, Any]:
         """
@@ -325,24 +334,51 @@ class NetworkTopologyWorkflow:
         log.info(f"✓ Identified {identified_count} devices")
     
     async def step5_generate_svg_icons(self):
-        """Step 5: Generate or assign SVG icons for each device"""
+        """Step 5: Generate or assign SVG icons for each device (with VSS support)"""
         log.info("Step 5: Generating SVG icons...")
         
-        svg_count = 0
+        # If VSS file provided, extract icons first
+        if self.use_vss_icons:
+            log.info("Extracting icons from VSS file...")
+            try:
+                device_dicts = [d.to_dict() for d in self.devices]
+                updated_devices, vss_info = extract_and_integrate_vss_icons(
+                    vss_path=self.vss_file_path,
+                    device_list=device_dicts,
+                    output_dir=str(self.svg_output_dir)
+                )
+                
+                # Update device objects with VSS icons
+                for i, device_dict in enumerate(updated_devices):
+                    if i < len(self.devices):
+                        self.devices[i].icon_svg = device_dict.get('icon_svg')
+                        if 'icon_source' in device_dict:
+                            if not self.devices[i].metadata:
+                                self.devices[i].metadata = {}
+                            self.devices[i].metadata['icon_source'] = device_dict['icon_source']
+                
+                log.info(f"✓ VSS extraction complete: {vss_info.get('icon_count', 0)} icons")
+            except Exception as e:
+                log.warning(f"VSS extraction failed, falling back to generated icons: {e}")
+                self.use_vss_icons = False
         
+        # Generate/assign icons for devices without VSS icons
+        svg_count = 0
         for device in self.devices:
-            # Generate SVG path based on device type
-            svg_filename = self._generate_svg_filename(device)
-            svg_path = self.svg_output_dir / svg_filename
+            if not device.icon_svg:
+                # Generate SVG path based on device type
+                svg_filename = self._generate_svg_filename(device)
+                svg_path = self.svg_output_dir / svg_filename
+                
+                # Check if SVG already exists, if not create it
+                if not svg_path.exists():
+                    svg_content = self._create_device_svg(device)
+                    svg_path.write_text(svg_content, encoding='utf-8')
+                    log.debug(f"Created SVG: {svg_path}")
+                
+                # Assign SVG path to device
+                device.icon_svg = f"/realistic_device_svgs/{svg_filename}"
             
-            # Check if SVG already exists, if not create it
-            if not svg_path.exists():
-                svg_content = self._create_device_svg(device)
-                svg_path.write_text(svg_content, encoding='utf-8')
-                log.debug(f"Created SVG: {svg_path}")
-            
-            # Assign SVG path to device
-            device.icon_svg = f"/realistic_device_svgs/{svg_filename}"
             svg_count += 1
         
         log.info(f"✓ Generated/assigned {svg_count} SVG icons")

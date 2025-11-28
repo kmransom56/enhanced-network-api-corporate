@@ -11,15 +11,15 @@ help: ## Show this help message
 
 # Installation
 install: ## Install production dependencies
-	pip install -r requirements.txt
+	uv pip install -r requirements.txt
 
 install-dev: ## Install development dependencies
-	pip install -r requirements-test.txt
-	pip install -e .
+	uv pip install -r requirements-test.txt
+	uv pip install -e .
 	pre-commit install
 
 install-test: ## Install test dependencies only
-	pip install pytest pytest-asyncio pytest-cov pytest-html pytest-xdist pytest-retry pytest-timeout
+	uv pip install pytest pytest-asyncio pytest-cov pytest-html pytest-xdist pytest-retry pytest-timeout
 
 # Testing
 test: ## Run all tests
@@ -218,7 +218,7 @@ load-test: ## Run load tests
 	@if command -v locust > /dev/null; then \
 		locust -f tests/performance/locustfile.py --headless --users 10 --spawn-rate 2 --run-time 30s --host http://127.0.0.1:11111; \
 	else \
-		echo "Locust not installed. Install with: pip install locust"; \
+		echo "Locust not installed. Install with: uv pip install locust"; \
 	fi
 
 benchmark: ## Run performance benchmarks
