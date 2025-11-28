@@ -169,6 +169,110 @@ python -m enhanced_network_api.corporate_network_helper --bypass-firewall
 - [**Air-Gapped Deployment**](docs/AIR_GAPPED_DEPLOYMENT.md) - Offline installation guide
 - [**Examples**](examples/) - Sample applications and use cases
 
+## 🛠️ Developer Workflow: Regenerating Assets After Clone
+
+Most large or generated assets (3D models, extracted icons, PDFs, reports) are **not** tracked in Git.
+After cloning the repository, run the following scripts (from the repo root) to rebuild everything you
+need for the 3D viewers, DrawIO integration, and docs search.
+
+### 1. FortiGate Documentation (for `/docs/search` and `/docs/qa`)
+
+```bash
+cd scripts
+python scrape_fortigate_docs.py
+```
+
+This populates `docs/fortigate-api/` so the `/docs/search` and `/docs/qa` endpoints work.
+
+### 2. Visio / VSS Icon Extraction
+
+Extract Fortinet icons from Visio/VSS sources and vendor icon packs:
+
+```bash
+cd scripts
+
+# Extract shapes/icons from Visio / VSS files into intermediate SVGs/PNGs
+python visio_extract.py
+
+# Extract Fortinet icon library into static/fortinet-icons-extracted/
+python extract_fortinet_icons.py
+
+# Build model-specific icons (e.g. FortiGate_600E.svg, FortiSwitch_148E.svg)
+python create_model_specific_icons.py
+```
+
+These populate:
+
+- `src/enhanced_network_api/static/fortinet-icons-extracted/`
+- `src/enhanced_network_api/static/fortinet-icons/`
+- `src/enhanced_network_api/static/model-specific-icons/`
+
+### 3. SVG → 3D Models
+
+Generate 3D models from SVG icons:
+
+```bash
+cd scripts
+
+# High-level wrapper around SVG→3D generation (uses svg_to_3d.py under the hood)
+python create_3d_models.py
+```
+
+If you want **true extruded geometry** for icons (requires Blender installed and available):
+
+```bash
+# Batch extrude SVGs into real 3D meshes using Blender
+python blender_batch_extrude.py
+```
+
+For a guided, end-to-end VSS → SVG → 3D process, see:
+
+```bash
+python vss_model_extraction_guide.py
+```
+
+These populate or refresh:
+
+- `lab_3d_models/`
+- `static/3d-models/`
+- Other 3D assets used by the Babylon viewers.
+
+### 4. Topology Artifacts & DrawIO Previews
+
+Generate sample topology artifacts and DrawIO diagrams:
+
+```bash
+cd scripts
+
+# Create topology JSON/GraphML/DrawIO artifacts from sample or live data
+python generate_topology_artifacts.py
+
+# Use the DrawIO MCP server to generate preview diagrams
+python generate_drawio_preview.py
+
+# Trigger DrawIO export workflows (e.g. batch diagram generation)
+python trigger_drawio_export.py
+```
+
+These scripts produce or refresh:
+
+- `data/generated/**`
+- DrawIO `.drawio` files used for documentation and previews.
+
+### 5. Optional: Quick Health & Config Checks
+
+Before running the full stack in a new environment:
+
+```bash
+cd scripts
+
+# Validate configuration files and environment
+python validate-config.py
+
+# Run a basic health check against the running API once it’s up
+python health-check.py
+```
+
 ## 🏗️ Architecture
 
 ```
