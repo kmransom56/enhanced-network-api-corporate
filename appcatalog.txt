@@ -1,0 +1,2945 @@
+.
+├── api
+│   ├── FORTIMANAGER_API_SUMMARY.md
+│   └── meraki_dashboard_api_summary.json
+├── appcatalog.txt
+├── CONTRIBUTING.md
+├── convert_vss_to_svg.py
+├── corporate.env.template
+├── coverage.xml
+├── create_realistic_icons.py
+├── data
+│   ├── generated
+│   │   ├── combined_topology.graphml
+│   │   ├── combined_topology.json
+│   │   └── live
+│   │       ├── fortigate_live.drawio
+│   │       ├── fortigate_live.graphml
+│   │       └── fortigate_live.json
+│   ├── live
+│   └── models
+│       └── model_library.json
+├── docker-compose.corporate.yml
+├── Dockerfile
+├── docs
+│   ├── AIR_GAPPED_DEPLOYMENT.md
+│   ├── AUTOMATED_TOPOLOGY_DIAGRAMS.md
+│   ├── Efficiency Roadmap.md
+│   ├── fortigate-api
+│   │   └── en
+│   │       └── latest
+│   │           ├── fortigateapi
+│   │           │   ├── cmdb
+│   │           │   │   ├── alertemail
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── antivirus
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── heuristic.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   ├── quarantine.html
+│   │           │   │   │   └── settings.html
+│   │           │   │   ├── application
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── custom.html
+│   │           │   │   │   ├── group.html
+│   │           │   │   │   ├── list.html
+│   │           │   │   │   ├── name.html
+│   │           │   │   │   └── rule_settings.html
+│   │           │   │   ├── authentication
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── rule.html
+│   │           │   │   │   ├── scheme.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── certificate
+│   │           │   │   │   ├── ca.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── crl.html
+│   │           │   │   │   ├── local.html
+│   │           │   │   │   └── remote.html
+│   │           │   │   ├── _contents.html
+│   │           │   │   ├── credential_store
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── domain_controller.html
+│   │           │   │   ├── dlp
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filepattern.html
+│   │           │   │   │   ├── fp_doc_source.html
+│   │           │   │   │   ├── sensitivity.html
+│   │           │   │   │   ├── sensor.html
+│   │           │   │   │   └── settings.html
+│   │           │   │   ├── dnsfilter
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── domain_filter.html
+│   │           │   │   │   └── profile.html
+│   │           │   │   ├── emailfilter
+│   │           │   │   │   ├── bwl.html
+│   │           │   │   │   ├── bword.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── dnsbl.html
+│   │           │   │   │   ├── fortishield.html
+│   │           │   │   │   ├── iptrust.html
+│   │           │   │   │   ├── mheader.html
+│   │           │   │   │   ├── options.html
+│   │           │   │   │   └── profile.html
+│   │           │   │   ├── endpoint_control
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── fctems.html
+│   │           │   │   ├── extender_controller
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── dataplan.html
+│   │           │   │   │   └── extender.html
+│   │           │   │   ├── file_filter
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── profile.html
+│   │           │   │   ├── firewall
+│   │           │   │   │   ├── acl6.html
+│   │           │   │   │   ├── acl.html
+│   │           │   │   │   ├── address6.html
+│   │           │   │   │   ├── address6_template.html
+│   │           │   │   │   ├── address.html
+│   │           │   │   │   ├── addrgrp6.html
+│   │           │   │   │   ├── addrgrp.html
+│   │           │   │   │   ├── auth_portal.html
+│   │           │   │   │   ├── central_snat_map.html
+│   │           │   │   │   ├── city.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── country.html
+│   │           │   │   │   ├── decrypted_traffic_mirror.html
+│   │           │   │   │   ├── dnstranslation.html
+│   │           │   │   │   ├── dos_policy6.html
+│   │           │   │   │   ├── dos_policy.html
+│   │           │   │   │   ├── identity_based_route.html
+│   │           │   │   │   ├── interface_policy6.html
+│   │           │   │   │   ├── interface_policy.html
+│   │           │   │   │   ├── internet_service_addition.html
+│   │           │   │   │   ├── internet_service_append.html
+│   │           │   │   │   ├── internet_service_botnet.html
+│   │           │   │   │   ├── internet_service_custom_group.html
+│   │           │   │   │   ├── internet_service_custom.html
+│   │           │   │   │   ├── internet_service_definition.html
+│   │           │   │   │   ├── internet_service_extension.html
+│   │           │   │   │   ├── internet_service_group.html
+│   │           │   │   │   ├── internet_service.html
+│   │           │   │   │   ├── internet_service_ipbl_reason.html
+│   │           │   │   │   ├── internet_service_ipbl_vendor.html
+│   │           │   │   │   ├── internet_service_list.html
+│   │           │   │   │   ├── internet_service_name.html
+│   │           │   │   │   ├── internet_service_owner.html
+│   │           │   │   │   ├── internet_service_reputation.html
+│   │           │   │   │   ├── internet_service_sld.html
+│   │           │   │   │   ├── ippool6.html
+│   │           │   │   │   ├── ippool.html
+│   │           │   │   │   ├── ip_translation.html
+│   │           │   │   │   ├── ldb_monitor.html
+│   │           │   │   │   ├── local_in_policy6.html
+│   │           │   │   │   ├── local_in_policy.html
+│   │           │   │   │   ├── multicast_address6.html
+│   │           │   │   │   ├── multicast_address.html
+│   │           │   │   │   ├── multicast_policy6.html
+│   │           │   │   │   ├── multicast_policy.html
+│   │           │   │   │   ├── policy46.html
+│   │           │   │   │   ├── policy64.html
+│   │           │   │   │   ├── policy.html
+│   │           │   │   │   ├── profile_group.html
+│   │           │   │   │   ├── profile_protocol_options.html
+│   │           │   │   │   ├── proxy_address.html
+│   │           │   │   │   ├── proxy_addrgrp.html
+│   │           │   │   │   ├── proxy_policy.html
+│   │           │   │   │   ├── region.html
+│   │           │   │   │   ├── security_policy.html
+│   │           │   │   │   ├── shaping_policy.html
+│   │           │   │   │   ├── shaping_profile.html
+│   │           │   │   │   ├── sniffer.html
+│   │           │   │   │   ├── ssl_server.html
+│   │           │   │   │   ├── ssl_ssh_profile.html
+│   │           │   │   │   ├── traffic_class.html
+│   │           │   │   │   ├── ttl_policy.html
+│   │           │   │   │   ├── vendor_mac.html
+│   │           │   │   │   ├── vendor_mac_summary.html
+│   │           │   │   │   ├── vip46.html
+│   │           │   │   │   ├── vip64.html
+│   │           │   │   │   ├── vip6.html
+│   │           │   │   │   ├── vipgrp46.html
+│   │           │   │   │   ├── vipgrp64.html
+│   │           │   │   │   ├── vipgrp6.html
+│   │           │   │   │   ├── vipgrp.html
+│   │           │   │   │   └── vip.html
+│   │           │   │   ├── firewall_ipmacbinding
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   └── table.html
+│   │           │   │   ├── firewall_schedule
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── group.html
+│   │           │   │   │   ├── onetime.html
+│   │           │   │   │   └── recurring.html
+│   │           │   │   ├── firewall_service
+│   │           │   │   │   ├── category.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── custom.html
+│   │           │   │   │   └── group.html
+│   │           │   │   ├── firewall_shaper
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── per_ip_shaper.html
+│   │           │   │   │   └── traffic_shaper.html
+│   │           │   │   ├── firewall_ssh
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── host_key.html
+│   │           │   │   │   ├── local_ca.html
+│   │           │   │   │   ├── local_key.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── firewall_ssl
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── firewall_wildcard_fqdn
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── custom.html
+│   │           │   │   │   └── group.html
+│   │           │   │   ├── ftp_proxy
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── explicit.html
+│   │           │   │   ├── icap
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   └── server.html
+│   │           │   │   ├── ips
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── custom.html
+│   │           │   │   │   ├── decoder.html
+│   │           │   │   │   ├── global_.html
+│   │           │   │   │   ├── rule.html
+│   │           │   │   │   ├── rule_settings.html
+│   │           │   │   │   ├── sensor.html
+│   │           │   │   │   ├── settings.html
+│   │           │   │   │   └── view_map.html
+│   │           │   │   ├── log
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── custom_field.html
+│   │           │   │   │   ├── eventfilter.html
+│   │           │   │   │   ├── gui_display.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   └── threat_weight.html
+│   │           │   │   ├── log_disk
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_fortianalyzer
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_fortianalyzer2
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_fortianalyzer3
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_fortianalyzer_cloud
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_fortiguard
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_memory
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── global_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_null_device
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_syslogd
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_syslogd2
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_syslogd3
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_syslogd4
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   ├── override_filter.html
+│   │           │   │   │   ├── override_setting.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── log_webtrends
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── filter.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── report
+│   │           │   │   │   ├── chart.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── dataset.html
+│   │           │   │   │   ├── layout.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   ├── style.html
+│   │           │   │   │   └── theme.html
+│   │           │   │   ├── router
+│   │           │   │   │   ├── access_list6.html
+│   │           │   │   │   ├── access_list.html
+│   │           │   │   │   ├── aspath_list.html
+│   │           │   │   │   ├── auth_path.html
+│   │           │   │   │   ├── bfd6.html
+│   │           │   │   │   ├── bfd.html
+│   │           │   │   │   ├── bgp.html
+│   │           │   │   │   ├── community_list.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── isis.html
+│   │           │   │   │   ├── key_chain.html
+│   │           │   │   │   ├── multicast6.html
+│   │           │   │   │   ├── multicast_flow.html
+│   │           │   │   │   ├── multicast.html
+│   │           │   │   │   ├── ospf6.html
+│   │           │   │   │   ├── ospf.html
+│   │           │   │   │   ├── policy6.html
+│   │           │   │   │   ├── policy.html
+│   │           │   │   │   ├── prefix_list6.html
+│   │           │   │   │   ├── prefix_list.html
+│   │           │   │   │   ├── rip.html
+│   │           │   │   │   ├── ripng.html
+│   │           │   │   │   ├── route_map.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   ├── static6.html
+│   │           │   │   │   └── static.html
+│   │           │   │   ├── ssh_filter
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── profile.html
+│   │           │   │   ├── switch_controller
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── global_.html
+│   │           │   │   │   ├── lldp_profile.html
+│   │           │   │   │   ├── lldp_settings.html
+│   │           │   │   │   ├── location.html
+│   │           │   │   │   ├── mac_policy.html
+│   │           │   │   │   ├── managed_switch.html
+│   │           │   │   │   ├── nac_device.html
+│   │           │   │   │   ├── nac_settings.html
+│   │           │   │   │   ├── port_policy.html
+│   │           │   │   │   ├── snmp_community.html
+│   │           │   │   │   ├── stp_instance.html
+│   │           │   │   │   ├── stp_settings.html
+│   │           │   │   │   ├── switch_group.html
+│   │           │   │   │   ├── system.html
+│   │           │   │   │   └── vlan_policy.html
+│   │           │   │   ├── switch_controller_auto_config
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── default.html
+│   │           │   │   ├── switch_controller_initial_config
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── template.html
+│   │           │   │   │   └── vlans.html
+│   │           │   │   ├── switch_controller_security_policy
+│   │           │   │   │   └── _contents.html
+│   │           │   │   ├── system
+│   │           │   │   │   ├── accprofile.html
+│   │           │   │   │   ├── admin.html
+│   │           │   │   │   ├── alarm.html
+│   │           │   │   │   ├── api_user.html
+│   │           │   │   │   ├── arp_table.html
+│   │           │   │   │   ├── auto_install.html
+│   │           │   │   │   ├── automation_action.html
+│   │           │   │   │   ├── automation_destination.html
+│   │           │   │   │   ├── automation_stitch.html
+│   │           │   │   │   ├── automation_trigger.html
+│   │           │   │   │   ├── auto_script.html
+│   │           │   │   │   ├── central_management.html
+│   │           │   │   │   ├── cluster_sync.html
+│   │           │   │   │   ├── console.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── csf.html
+│   │           │   │   │   ├── custom_language.html
+│   │           │   │   │   ├── ddns.html
+│   │           │   │   │   ├── dedicated_mgmt.html
+│   │           │   │   │   ├── dns_database.html
+│   │           │   │   │   ├── dns.html
+│   │           │   │   │   ├── dns_server.html
+│   │           │   │   │   ├── dscp_based_priority.html
+│   │           │   │   │   ├── email_server.html
+│   │           │   │   │   ├── external_resource.html
+│   │           │   │   │   ├── fips_cc.html
+│   │           │   │   │   ├── fortiguard.html
+│   │           │   │   │   ├── fortimanager.html
+│   │           │   │   │   ├── fortisandbox.html
+│   │           │   │   │   ├── fsso_polling.html
+│   │           │   │   │   ├── ftm_push.html
+│   │           │   │   │   ├── geneve.html
+│   │           │   │   │   ├── geoip_country.html
+│   │           │   │   │   ├── geoip_override.html
+│   │           │   │   │   ├── global_.html
+│   │           │   │   │   ├── gre_tunnel.html
+│   │           │   │   │   ├── ha.html
+│   │           │   │   │   ├── ha_monitor.html
+│   │           │   │   │   ├── interface.html
+│   │           │   │   │   ├── ipip_tunnel.html
+│   │           │   │   │   ├── ipsec_aggregate.html
+│   │           │   │   │   ├── ips.html
+│   │           │   │   │   ├── ips_urlfilter_dns6.html
+│   │           │   │   │   ├── ips_urlfilter_dns.html
+│   │           │   │   │   ├── ipv6_neighbor_cache.html
+│   │           │   │   │   ├── ipv6_tunnel.html
+│   │           │   │   │   ├── link_monitor.html
+│   │           │   │   │   ├── lte_modem.html
+│   │           │   │   │   ├── mac_address_table.html
+│   │           │   │   │   ├── mobile_tunnel.html
+│   │           │   │   │   ├── modem.html
+│   │           │   │   │   ├── nat64.html
+│   │           │   │   │   ├── nd_proxy.html
+│   │           │   │   │   ├── netflow.html
+│   │           │   │   │   ├── network_visibility.html
+│   │           │   │   │   ├── npu.html
+│   │           │   │   │   ├── ntp.html
+│   │           │   │   │   ├── object_tagging.html
+│   │           │   │   │   ├── password_policy_guest_admin.html
+│   │           │   │   │   ├── password_policy.html
+│   │           │   │   │   ├── physical_switch.html
+│   │           │   │   │   ├── pppoe_interface.html
+│   │           │   │   │   ├── probe_response.html
+│   │           │   │   │   ├── proxy_arp.html
+│   │           │   │   │   ├── ptp.html
+│   │           │   │   │   ├── replacemsg_group.html
+│   │           │   │   │   ├── replacemsg_image.html
+│   │           │   │   │   ├── resource_limits.html
+│   │           │   │   │   ├── saml.html
+│   │           │   │   │   ├── sdn_connector.html
+│   │           │   │   │   ├── sdwan.html
+│   │           │   │   │   ├── session_helper.html
+│   │           │   │   │   ├── session_ttl.html
+│   │           │   │   │   ├── settings.html
+│   │           │   │   │   ├── sflow.html
+│   │           │   │   │   ├── sit_tunnel.html
+│   │           │   │   │   ├── sms_server.html
+│   │           │   │   │   ├── speed_test_server.html
+│   │           │   │   │   ├── sso_admin.html
+│   │           │   │   │   ├── standalone_cluster.html
+│   │           │   │   │   ├── storage.html
+│   │           │   │   │   ├── stp.html
+│   │           │   │   │   ├── switch_interface.html
+│   │           │   │   │   ├── tos_based_priority.html
+│   │           │   │   │   ├── vdom_dns.html
+│   │           │   │   │   ├── vdom_exception.html
+│   │           │   │   │   ├── vdom.html
+│   │           │   │   │   ├── vdom_link.html
+│   │           │   │   │   ├── vdom_netflow.html
+│   │           │   │   │   ├── vdom_property.html
+│   │           │   │   │   ├── vdom_radius_server.html
+│   │           │   │   │   ├── vdom_sflow.html
+│   │           │   │   │   ├── virtual_switch.html
+│   │           │   │   │   ├── virtual_wire_pair.html
+│   │           │   │   │   ├── vne_tunnel.html
+│   │           │   │   │   ├── vxlan.html
+│   │           │   │   │   ├── wccp.html
+│   │           │   │   │   └── zone.html
+│   │           │   │   ├── system_3g_modem
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── custom.html
+│   │           │   │   ├── system_autoupdate
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── push_update.html
+│   │           │   │   │   ├── schedule.html
+│   │           │   │   │   └── tunneling.html
+│   │           │   │   ├── system_dhcp
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── server.html
+│   │           │   │   ├── system_dhcp6
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── server.html
+│   │           │   │   ├── system_lldp
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── network_policy.html
+│   │           │   │   ├── system_replacemsg
+│   │           │   │   │   ├── admin.html
+│   │           │   │   │   ├── alertmail.html
+│   │           │   │   │   ├── auth.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── fortiguard_wf.html
+│   │           │   │   │   ├── ftp.html
+│   │           │   │   │   ├── http.html
+│   │           │   │   │   ├── icap.html
+│   │           │   │   │   ├── mail.html
+│   │           │   │   │   ├── nac_quar.html
+│   │           │   │   │   ├── spam.html
+│   │           │   │   │   ├── sslvpn.html
+│   │           │   │   │   ├── traffic_quota.html
+│   │           │   │   │   ├── utm.html
+│   │           │   │   │   └── webproxy.html
+│   │           │   │   ├── system_snmp
+│   │           │   │   │   ├── community.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── sysinfo.html
+│   │           │   │   │   └── user.html
+│   │           │   │   ├── user
+│   │           │   │   │   ├── adgrp.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── domain_controller.html
+│   │           │   │   │   ├── exchange.html
+│   │           │   │   │   ├── fortitoken.html
+│   │           │   │   │   ├── fsso.html
+│   │           │   │   │   ├── fsso_polling.html
+│   │           │   │   │   ├── group.html
+│   │           │   │   │   ├── krb_keytab.html
+│   │           │   │   │   ├── ldap.html
+│   │           │   │   │   ├── local.html
+│   │           │   │   │   ├── nac_policy.html
+│   │           │   │   │   ├── password_policy.html
+│   │           │   │   │   ├── peergrp.html
+│   │           │   │   │   ├── peer.html
+│   │           │   │   │   ├── pop3.html
+│   │           │   │   │   ├── quarantine.html
+│   │           │   │   │   ├── radius.html
+│   │           │   │   │   ├── saml.html
+│   │           │   │   │   ├── security_exempt_list.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   └── tacacs.html
+│   │           │   │   ├── voip
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── profile.html
+│   │           │   │   ├── vpn
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── l2tp.html
+│   │           │   │   │   ├── ocvpn.html
+│   │           │   │   │   └── pptp.html
+│   │           │   │   ├── vpn_certificate
+│   │           │   │   │   ├── ca.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── crl.html
+│   │           │   │   │   ├── local.html
+│   │           │   │   │   ├── ocsp_server.html
+│   │           │   │   │   ├── remote.html
+│   │           │   │   │   └── setting.html
+│   │           │   │   ├── vpn_ipsec
+│   │           │   │   │   ├── concentrator.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── forticlient.html
+│   │           │   │   │   ├── manualkey.html
+│   │           │   │   │   ├── manualkey_interface.html
+│   │           │   │   │   ├── phase1.html
+│   │           │   │   │   ├── phase1_interface.html
+│   │           │   │   │   ├── phase2.html
+│   │           │   │   │   └── phase2_interface.html
+│   │           │   │   ├── vpn_ssl
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   └── settings.html
+│   │           │   │   ├── vpn_ssl_web
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── host_check_software.html
+│   │           │   │   │   ├── portal.html
+│   │           │   │   │   ├── realm.html
+│   │           │   │   │   ├── user_bookmark.html
+│   │           │   │   │   └── user_group_bookmark.html
+│   │           │   │   ├── waf
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── main_class.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   └── signature.html
+│   │           │   │   ├── wanopt
+│   │           │   │   │   ├── auth_group.html
+│   │           │   │   │   ├── cache_service.html
+│   │           │   │   │   ├── content_delivery_network_rule.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── peer.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   ├── remote_storage.html
+│   │           │   │   │   ├── settings.html
+│   │           │   │   │   └── webcache.html
+│   │           │   │   ├── webfilter
+│   │           │   │   │   ├── content_header.html
+│   │           │   │   │   ├── content.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── fortiguard.html
+│   │           │   │   │   ├── ftgd_local_cat.html
+│   │           │   │   │   ├── ftgd_local_rating.html
+│   │           │   │   │   ├── ips_urlfilter_cache_setting.html
+│   │           │   │   │   ├── ips_urlfilter_setting6.html
+│   │           │   │   │   ├── ips_urlfilter_setting.html
+│   │           │   │   │   ├── override.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   ├── search_engine.html
+│   │           │   │   │   └── urlfilter.html
+│   │           │   │   ├── web_proxy
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── debug_url.html
+│   │           │   │   │   ├── explicit.html
+│   │           │   │   │   ├── forward_server_group.html
+│   │           │   │   │   ├── forward_server.html
+│   │           │   │   │   ├── global_.html
+│   │           │   │   │   ├── profile.html
+│   │           │   │   │   ├── url_match.html
+│   │           │   │   │   └── wisp.html
+│   │           │   │   ├── wireless_controller
+│   │           │   │   │   ├── access_control_list.html
+│   │           │   │   │   ├── address.html
+│   │           │   │   │   ├── addrgrp.html
+│   │           │   │   │   ├── apcfg_profile.html
+│   │           │   │   │   ├── ap_status.html
+│   │           │   │   │   ├── arrp_profile.html
+│   │           │   │   │   ├── ble_profile.html
+│   │           │   │   │   ├── bonjour_profile.html
+│   │           │   │   │   ├── _contents.html
+│   │           │   │   │   ├── global_.html
+│   │           │   │   │   ├── inter_controller.html
+│   │           │   │   │   ├── log.html
+│   │           │   │   │   ├── mpsk_profile.html
+│   │           │   │   │   ├── qos_profile.html
+│   │           │   │   │   ├── region.html
+│   │           │   │   │   ├── setting.html
+│   │           │   │   │   ├── snmp.html
+│   │           │   │   │   ├── timers.html
+│   │           │   │   │   ├── utm_profile.html
+│   │           │   │   │   ├── vap_group.html
+│   │           │   │   │   ├── vap.html
+│   │           │   │   │   ├── wag_profile.html
+│   │           │   │   │   ├── wids_profile.html
+│   │           │   │   │   ├── wtp_group.html
+│   │           │   │   │   ├── wtp.html
+│   │           │   │   │   └── wtp_profile.html
+│   │           │   │   └── wireless_controller_hotspot20
+│   │           │   │       ├── anqp_3gpp_cellular.html
+│   │           │   │       ├── anqp_ip_address_type.html
+│   │           │   │       ├── anqp_nai_realm.html
+│   │           │   │       ├── anqp_network_auth_type.html
+│   │           │   │       ├── anqp_roaming_consortium.html
+│   │           │   │       ├── anqp_venue_name.html
+│   │           │   │       ├── _contents.html
+│   │           │   │       ├── h2qp_conn_capability.html
+│   │           │   │       ├── h2qp_operator_name.html
+│   │           │   │       ├── h2qp_osu_provider.html
+│   │           │   │       ├── h2qp_wan_metric.html
+│   │           │   │       ├── hs_profile.html
+│   │           │   │       ├── icon.html
+│   │           │   │       └── qos_map.html
+│   │           │   ├── CmdbS.html
+│   │           │   ├── _contents.html
+│   │           │   ├── FortiGateAPI.html
+│   │           │   ├── FortiGate.html
+│   │           │   ├── log
+│   │           │   │   └── _contents.html
+│   │           │   ├── LogS.html
+│   │           │   ├── monitor
+│   │           │   │   └── _contents.html
+│   │           │   └── MonitorS.html
+│   │           ├── genindex.html
+│   │           ├── index.html
+│   │           ├── rest_api
+│   │           │   ├── 6.4.14
+│   │           │   │   ├── cmdb
+│   │           │   │   │   ├── alertemail.html
+│   │           │   │   │   ├── antivirus.html
+│   │           │   │   │   ├── application.html
+│   │           │   │   │   ├── authentication.html
+│   │           │   │   │   ├── certificate.html
+│   │           │   │   │   ├── credential-store.html
+│   │           │   │   │   ├── dlp.html
+│   │           │   │   │   ├── dnsfilter.html
+│   │           │   │   │   ├── emailfilter.html
+│   │           │   │   │   ├── endpoint-control.html
+│   │           │   │   │   ├── extender-controller.html
+│   │           │   │   │   ├── file-filter.html
+│   │           │   │   │   ├── firewall.html
+│   │           │   │   │   ├── ftp-proxy.html
+│   │           │   │   │   ├── icap.html
+│   │           │   │   │   ├── ips.html
+│   │           │   │   │   ├── log.html
+│   │           │   │   │   ├── report.html
+│   │           │   │   │   ├── router.html
+│   │           │   │   │   ├── ssh-filter.html
+│   │           │   │   │   ├── switch-controller.html
+│   │           │   │   │   ├── system.html
+│   │           │   │   │   ├── user.html
+│   │           │   │   │   ├── voip.html
+│   │           │   │   │   ├── vpn.html
+│   │           │   │   │   ├── waf.html
+│   │           │   │   │   ├── wanopt.html
+│   │           │   │   │   ├── webfilter.html
+│   │           │   │   │   ├── web-proxy.html
+│   │           │   │   │   └── wireless-controller.html
+│   │           │   │   ├── cmdb.html
+│   │           │   │   ├── log.html
+│   │           │   │   └── monitor.html
+│   │           │   └── _contents.html
+│   │           └── search.html
+│   ├── FortiOS-7.6.4-Administration_Guide.pdf
+│   ├── FortiOS 7.6 FortiOS 7.6.4 Monitor API wifi.json
+│   ├── Help on class FortiManager in module.md
+│   ├── Help on class FortiOSAPI in module fortios.md
+│   ├── iconlab.md
+│   └── SSL_CONFIGURATION.md
+├── extracted_graphics
+│   ├── graphic_b'BMP'_158490.bin
+│   ├── graphic_b'BMP'_291672.bin
+│   ├── graphic_b'BMP'_310229.bin
+│   ├── graphic_b'EMF'_10788.bin
+│   ├── graphic_b'EMF'_23607.bin
+│   ├── graphic_b'EMF'_80.bin
+│   ├── graphic_b'JPG'_173925.bin
+│   ├── graphic_b'JPG'_188848.bin
+│   └── graphic_b'JPG'_78470.bin
+├── extracted_icons
+│   ├── lab_vss_svgs
+│   │   ├── shape_001___PF.svg
+│   │   ├── shape_002___D_H.svg
+│   │   ├── shape_003__v__.svg
+│   │   ├── shape_004_SE_W_7.svg
+│   │   ├── shape_005__0bz.svg
+│   │   ├── shape_006_0b_b.svg
+│   │   ├── shape_007_c__f.svg
+│   │   ├── shape_008_K___.svg
+│   │   ├── shape_009____6_.svg
+│   │   ├── shape_010_yTsW.svg
+│   │   ├── shape_011__I6N.svg
+│   │   ├── shape_012_8sWM_.svg
+│   │   ├── shape_013_Mp_1.svg
+│   │   ├── shape_014__AA_.svg
+│   │   ├── shape_015_T_g_n.svg
+│   │   ├── shape_016__OoO_.svg
+│   │   ├── shape_017____3_E_W_i___.svg
+│   │   ├── shape_018_OHh_eZi.svg
+│   │   ├── shape_019__ro__P_b_t_.svg
+│   │   ├── shape_020_7_joF__.svg
+│   │   ├── shape_021_1vx4.svg
+│   │   ├── shape_022_w_ej.svg
+│   │   ├── shape_023_Zt_t.svg
+│   │   ├── shape_024_.p__.svg
+│   │   ├── shape_025_Soeo.svg
+│   │   ├── shape_026_____2_G.svg
+│   │   ├── shape_027__-3_.svg
+│   │   └── temp_FortiGate_Series_R22_2025Q2_generic.svg
+│   ├── metadata
+│   └── svg
+├── FINAL_TEST_REPORT.md
+├── GEMINI.md
+├── GITHUB_CREATION_CHECKLIST.md
+├── GITHUB_SETUP_GUIDE.md
+├── htmlcov
+│   ├── class_index.html
+│   ├── coverage_html_cb_bcae5fc4.js
+│   ├── favicon_32_cb_58284776.png
+│   ├── function_index.html
+│   ├── index.html
+│   ├── keybd_closed_cb_ce680311.png
+│   ├── status.json
+│   ├── style_cb_8432e98f.css
+│   ├── z_1876abc6b3862d1f_config_manager_py.html
+│   ├── z_1876abc6b3862d1f___init___py.html
+│   ├── z_1876abc6b3862d1f_mcp_base_py.html
+│   ├── z_19f93bb391b4734b_fortinet_llm_py.html
+│   ├── z_19f93bb391b4734b___init___py.html
+│   ├── z_19f93bb391b4734b_meraki_mcp_py.html
+│   ├── z_19f93bb391b4734b_smart_analysis_py.html
+│   ├── z_1f346fd0001373e2_ai-platform-mcp-server_py.html
+│   ├── z_1f346fd0001373e2_ai-platform-tools-generator_py.html
+│   ├── z_1f346fd0001373e2_air_gapped_deployment_py.html
+│   ├── z_1f346fd0001373e2_api_documentation_loader_py.html
+│   ├── z_1f346fd0001373e2_certificate_discovery_py.html
+│   ├── z_1f346fd0001373e2_comprehensive_sdk_generator_py.html
+│   ├── z_1f346fd0001373e2_config_py.html
+│   ├── z_1f346fd0001373e2_corporate_deployment_packager_py.html
+│   ├── z_1f346fd0001373e2_corporate_environment_detector_py.html
+│   ├── z_1f346fd0001373e2_corporate_installer_py.html
+│   ├── z_1f346fd0001373e2_corporate_network_app_generator_py.html
+│   ├── z_1f346fd0001373e2_corporate_network_helper_py.html
+│   ├── z_1f346fd0001373e2_device_collector_py.html
+│   ├── z_1f346fd0001373e2_device_retrieval_py.html
+│   ├── z_1f346fd0001373e2_enhanced_firewall_demo_py.html
+│   ├── z_1f346fd0001373e2_enhanced_network_app_generator_py.html
+│   ├── z_1f346fd0001373e2_firewall_policy_py.html
+│   ├── z_1f346fd0001373e2_fortiap_py.html
+│   ├── z_1f346fd0001373e2_fortimanager_auth_py.html
+│   ├── z_1f346fd0001373e2_fortiswitch_py.html
+│   ├── z_1f346fd0001373e2_health_monitor_py.html
+│   ├── z_1f346fd0001373e2___init___py.html
+│   ├── z_1f346fd0001373e2_network_api_parser_extended_py.html
+│   ├── z_1f346fd0001373e2_network_api_parser_py.html
+│   ├── z_1f346fd0001373e2_network_app_generator_py.html
+│   ├── z_1f346fd0001373e2_platform_web_api_fastapi_py.html
+│   ├── z_1f346fd0001373e2_platform_web_api_py.html
+│   ├── z_1f346fd0001373e2_ssl_helper_py.html
+│   ├── z_1f346fd0001373e2_test-integration_py.html
+│   ├── z_1f346fd0001373e2_validate_corporate_network_compatibility_py.html
+│   ├── z_1f346fd0001373e2_webfilters_py.html
+│   └── z_2f1a78274fc505f7___init___py.html
+├── iconlab.html
+├── lab_3d_models
+│   ├── models
+│   │   ├── shape_001___PF.obj
+│   │   ├── shape_002___D_H.obj
+│   │   ├── shape_003__v__.obj
+│   │   ├── shape_004_SE_W_7.obj
+│   │   ├── shape_005__0bz.obj
+│   │   ├── shape_006_0b_b.obj
+│   │   ├── shape_007_c__f.obj
+│   │   ├── shape_008_K___.obj
+│   │   ├── shape_009____6_.obj
+│   │   ├── shape_010_yTsW.obj
+│   │   ├── shape_011__I6N.obj
+│   │   ├── shape_012_8sWM_.obj
+│   │   ├── shape_013_Mp_1.obj
+│   │   ├── shape_014__AA_.obj
+│   │   ├── shape_015_T_g_n.obj
+│   │   ├── shape_016__OoO_.obj
+│   │   ├── shape_017____3_E_W_i___.obj
+│   │   ├── shape_018_OHh_eZi.obj
+│   │   ├── shape_019__ro__P_b_t_.obj
+│   │   ├── shape_020_7_joF__.obj
+│   │   ├── shape_021_1vx4.obj
+│   │   ├── shape_022_w_ej.obj
+│   │   ├── shape_023_Zt_t.obj
+│   │   ├── shape_024_.p__.obj
+│   │   ├── shape_025_Soeo.obj
+│   │   ├── shape_026_____2_G.obj
+│   │   ├── shape_027__-3_.obj
+│   │   └── temp_FortiGate_Series_R22_2025Q2_generic.obj
+│   └── optimized_svgs
+│       ├── shape_001___PF.svg
+│       ├── shape_002___D_H.svg
+│       ├── shape_003__v__.svg
+│       ├── shape_004_SE_W_7.svg
+│       ├── shape_005__0bz.svg
+│       ├── shape_006_0b_b.svg
+│       ├── shape_007_c__f.svg
+│       ├── shape_008_K___.svg
+│       ├── shape_009____6_.svg
+│       ├── shape_010_yTsW.svg
+│       ├── shape_012_8sWM_.svg
+│       ├── shape_013_Mp_1.svg
+│       ├── shape_014__AA_.svg
+│       ├── shape_016__OoO_.svg
+│       ├── shape_017____3_E_W_i___.svg
+│       ├── shape_018_OHh_eZi.svg
+│       ├── shape_019__ro__P_b_t_.svg
+│       ├── shape_020_7_joF__.svg
+│       ├── shape_021_1vx4.svg
+│       ├── shape_022_w_ej.svg
+│       ├── shape_023_Zt_t.svg
+│       ├── shape_024_.p__.svg
+│       ├── shape_025_Soeo.svg
+│       ├── shape_026_____2_G.svg
+│       ├── shape_027__-3_.svg
+│       └── temp_FortiGate_Series_R22_2025Q2_generic.svg
+├── legacy_archive
+│   ├── 2D_SVG_INTEGRATION_COMPLETE.md
+│   ├── alternative_ap_discovery.json
+│   ├── alternative_api_discovery.py
+│   ├── AUTHENTICATION_SERIAL_FIXES_COMPLETE.md
+│   ├── bearer_token_discovery.py
+│   ├── BLANK_SCREEN_TROUBLESHOOTING.md
+│   ├── complete_fortigate_discovery.json
+│   ├── complete_fortigate_discovery.py
+│   ├── complete_topology.json
+│   ├── comprehensive_api_tester.py
+│   ├── config_validator.py
+│   ├── Creating Network Topology Diagrams from FortiManager and Meraki API Data Sources.md
+│   ├── CSS_LINT_FIXES_COMPLETE.md
+│   ├── deep_fortigate_explorer.py
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── DEPLOYMENT.md
+│   ├── deploy_sealed.py
+│   ├── DEVELOPMENT_WORKFLOW.md
+│   ├── DRIFT_PROTECTION_GUIDE.md
+│   ├── eraser_ai_processed
+│   │   ├── backup
+│   │   ├── deploy_models_linux.py
+│   │   ├── deploy_models.py
+│   │   ├── eraser_ai_input
+│   │   ├── eraser_ai_output
+│   │   │   ├── FortiAP_432F_enhanced.gltf
+│   │   │   ├── FortiAP_432F_enhanced_metadata.json
+│   │   │   ├── FortiGate_600E_enhanced.gltf
+│   │   │   ├── FortiGate_600E_enhanced_metadata.json
+│   │   │   ├── FortiSwitch_148E_enhanced.gltf
+│   │   │   ├── FortiSwitch_148E_enhanced_metadata.json
+│   │   │   └── processing_report.json
+│   │   ├── eraser_ai_processing_linux.py
+│   │   ├── eraser_ai_processing.ps1
+│   │   ├── linux_workflow_summary.json
+│   │   ├── MODEL_REPLACEMENT_GUIDE.md
+│   │   ├── validate_models.py
+│   │   ├── VSS_ERASER_AI_COMPLETE_GUIDE.md
+│   │   └── workflow_execution_summary.json
+│   ├── examples
+│   │   ├── airgapped_example.py
+│   │   ├── corporate_firewall_example.py
+│   │   ├── device_collection_example.py
+│   │   └── policy_and_device_example.py
+│   ├── EXECUTE_NOW.md
+│   ├── fmg_client_test.py
+│   ├── fortigate_api_discovery.json
+│   ├── fortigate_bearer_discovery.json
+│   ├── fortigate_jsonrpc_discovery.json
+│   ├── fortigate_session_discovery.json
+│   ├── FORTiOS_ICONS_COMPLETE.md
+│   ├── getdevicesfortigate.py
+│   ├── GETUNIQUEID_ERROR_FIXED.md
+│   ├── GETUNIQUEID_ERROR_FIXES_COMPLETE.md
+│   ├── gui_api_capture.py
+│   ├── gui_device_discovery.json
+│   ├── gui_page_analysis.py
+│   ├── IDE_LINT_STATUS_REPORT.md
+│   ├── JAVASCRIPT_LINT_FIXES_COMPLETE.md
+│   ├── jsonrpc_device_discovery.py
+│   ├── license_feature_check.py
+│   ├── LINT_FIXES_COMPLETE.md
+│   ├── LINUX_WORKFLOW_COMPLETE.md
+│   ├── MODEL_SPECIFIC_ICONS_COMPLETE.md
+│   ├── NETWORK_TOPOLOGY_FIXES_COMPLETE.md
+│   ├── playwright_device_finder.py
+│   ├── PRODUCTION_TOPOLOGY_SYSTEM_COMPLETE.md
+│   ├── README_CORPORATE.md
+│   ├── README.md
+│   ├── REAL_DATA_UPDATES_COMPLETE.md
+│   ├── reports
+│   │   └── test-report.html
+│   ├── RESTORATION_SUMMARY.md
+│   ├── run_complete_workflow.py
+│   ├── run_linux_workflow.py
+│   ├── session_auth_discovery.py
+│   ├── startapp.sh
+│   ├── startup_health_check.py
+│   ├── TOPOLOGY_FILE_INVENTORY.md
+│   ├── validate_js.py
+│   ├── VSS_ERASER_AI_COMPLETE.md
+│   ├── VSS_ERASER_AI_QUICK_START.md
+│   └── VSS_ERASER_AI_WORKFLOW.md
+├── LICENSE
+├── Makefile
+├── mcp_bridge.py
+├── mcp_config.json
+├── mcp_perplexity_server.py
+├── mcp_sequential_thinking_server.py
+├── mcp_servers
+│   └── drawio_fortinet_meraki
+│       ├── api_documentation.py
+│       ├── COMPLETE_API_SPECIFICATION.md
+│       ├── demo_workflow.py
+│       ├── fortigate_collector.py
+│       ├── FORTIGATE_SETUP_GUIDE.md
+│       ├── fortigate_topology_export.json
+│       ├── fortigate_topology_test.drawio
+│       ├── fortinet_integrated.drawio
+│       ├── fortinet_integration.py
+│       ├── fortinet_scene.json
+│       ├── INTEGRATION_GUIDE.md
+│       ├── INTEGRATION_MAP_2D_3D.md
+│       ├── INTELLIGENT_API_GUIDE.md
+│       ├── mcp_config.json
+│       ├── mcp_server.py
+│       ├── meraki_api__log__2025-11-22_11-49-36.log
+│       ├── meraki_api__log__2025-11-22_11-50-39.log
+│       ├── network_topology.csv
+│       ├── network_topology_force-directed.drawio
+│       ├── network_topology_hierarchical.drawio
+│       ├── network_topology.json
+│       ├── output
+│       │   ├── demo_topology.drawio
+│       │   ├── fortigate_live.drawio
+│       │   └── fortigate_live_preview.html
+│       ├── __pycache__
+│       │   ├── api_documentation.cpython-312.pyc
+│       │   ├── fortigate_collector.cpython-312.pyc
+│       │   ├── fortinet_integration.cpython-312.pyc
+│       │   ├── mcp_server.cpython-312.pyc
+│       │   ├── mcp_server.cpython-313.pyc
+│       │   └── test_mcp_server.cpython-312-pytest-8.4.2.pyc
+│       ├── README.md
+│       ├── requirements.txt
+│       ├── screenshots
+│       │   ├── 3d_topology_ui.png
+│       │   ├── 3d_topology_working-2025-11-22T18-16-35-755Z.png
+│       │   ├── 3d_topology_working.png
+│       │   ├── application_working.png
+│       │   ├── README.md
+│       │   ├── simple_topology_test.png
+│       │   └── topology_loaded.png
+│       ├── setup.py
+│       ├── start_server.py
+│       ├── test_fortigate_mcp.py
+│       ├── TESTING_SUMMARY.md
+│       ├── test_intelligent_api.py
+│       ├── test_mcp_server.py
+│       ├── test_output.log
+│       ├── test_results.log
+│       ├── topology_update_1.drawio
+│       ├── topology_update_2.drawio
+│       ├── topology_update_3.drawio
+│       └── topology_update_4.drawio
+├── mcp_topology_server.py
+├── platform_web_api_fastapi.log
+├── pre_commit_hook.py
+├── __pycache__
+│   ├── mcp_bridge.cpython-312.pyc
+│   └── mcp_topology_server.cpython-312.pyc
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── REAL_DATA_TEST_REPORT.md
+├── real_fortinet_svgs
+├── realistic_3d_models
+│   ├── babylon-icon-loader.js
+│   ├── manifest.json
+│   ├── models
+│   │   ├── FortiAP.obj
+│   │   ├── FortiGate.obj
+│   │   ├── FortiSwitch.obj
+│   │   ├── Laptop.obj
+│   │   └── Smartphone.obj
+│   └── optimized_svgs
+│       ├── FortiAP.svg
+│       ├── FortiGate.svg
+│       ├── FortiSwitch.svg
+│       ├── Laptop.svg
+│       └── Smartphone.svg
+├── realistic_device_svgs
+│   ├── FortiAP.svg
+│   ├── FortiGate.svg
+│   ├── FortiSwitch.svg
+│   ├── Laptop.svg
+│   └── Smartphone.svg
+├── real_vss_graphics
+├── reports
+│   └── test-report.html
+├── requirements.locked.txt
+├── requirements-test.txt
+├── requirements.txt
+├── robust_gui_explorer.py
+├── scripts
+│   ├── blender_batch_extrude.py
+│   ├── build-release.sh
+│   ├── build_static_assets.py
+│   ├── create_3d_models.py
+│   ├── create_model_specific_icons.py
+│   ├── deploy.sh
+│   ├── device_model_matcher.py
+│   ├── extract_fortinet_icons.py
+│   ├── generate_drawio_preview.py
+│   ├── generate_topology_artifacts.py
+│   ├── health-check.py
+│   ├── oui_builder.py
+│   ├── pre-deploy-check.sh
+│   ├── quick-test.sh
+│   ├── scrape_fortigate_docs.py
+│   ├── start_fortinet_stack.sh
+│   ├── start_platform_stack.sh
+│   ├── test_current_3d_system.py
+│   ├── tmux_fortinet_stack.sh
+│   ├── trigger_drawio_export.py
+│   ├── validate-config.py
+│   ├── visio_extract.py
+│   └── vss_model_extraction_guide.py
+├── setup.py
+├── {src
+│   └── enhanced_network_api,tests,docs,examples,scripts,api,.github
+├── src
+│   ├── enhanced_network_api
+│   │   ├── ai-platform-discovery.yaml
+│   │   ├── ai-platform-integration.yaml
+│   │   ├── ai-platform-mcp-server.py
+│   │   ├── ai-platform-tools-generator.py
+│   │   ├── air_gapped_deployment.py
+│   │   ├── api
+│   │   │   ├── endpoints
+│   │   │   │   ├── fortinet_llm.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── meraki_mcp.py
+│   │   │   │   ├── __pycache__
+│   │   │   │   │   ├── fortinet_llm.cpython-312.pyc
+│   │   │   │   │   ├── __init__.cpython-312.pyc
+│   │   │   │   │   ├── meraki_mcp.cpython-312.pyc
+│   │   │   │   │   └── smart_analysis.cpython-312.pyc
+│   │   │   │   └── smart_analysis.py
+│   │   │   ├── __init__.py
+│   │   │   └── __pycache__
+│   │   │       └── __init__.cpython-312.pyc
+│   │   ├── api_documentation_loader.py
+│   │   ├── app
+│   │   │   ├── babylon_exporter.py
+│   │   │   ├── fortigate.py
+│   │   │   ├── icon_generator.py
+│   │   │   ├── __init__.py
+│   │   │   └── main.py
+│   │   ├── cagent-dev.yaml
+│   │   ├── certificate_discovery.py
+│   │   ├── comprehensive_sdk_generator.py
+│   │   ├── config.py
+│   │   ├── corporate_deployment_packager.py
+│   │   ├── corporate_environment_detector.py
+│   │   ├── corporate_installer.py
+│   │   ├── corporate_network_app_generator.py
+│   │   ├── corporate_network_helper.py
+│   │   ├── cost-savings-clean.yaml
+│   │   ├── cost-savings-fixed.yaml
+│   │   ├── cost-savings-immediate.yaml
+│   │   ├── demo_restaurant_devices.py
+│   │   ├── device_3d_mapping.json
+│   │   ├── device_collector.py
+│   │   ├── device_mac_matcher.py
+│   │   ├── device_retrieval.py
+│   │   ├── docker-compose.yaml
+│   │   ├── dogfooding-documentation-agent.yaml
+│   │   ├── enhanced_firewall_demo.py
+│   │   ├── enhanced_network_api_agent.yaml
+│   │   ├── enhanced_network_app_generator.py
+│   │   ├── firewall_policy.py
+│   │   ├── fortiap.py
+│   │   ├── fortigate_docs_search.py
+│   │   ├── fortigate_topology_drawio.py
+│   │   ├── fortimanager_auth.py
+│   │   ├── fortiswitch.py
+│   │   ├── golang-cagent-dev-memory.yaml
+│   │   ├── golang-cagent-dev.yaml
+│   │   ├── golang-developer-working.yaml
+│   │   ├── golang_developer.yaml
+│   │   ├── golang-dev-team-memory.yaml
+│   │   ├── golang-dev-team.yaml
+│   │   ├── golang-multi-agent.yaml
+│   │   ├── golang-vscode-safe.yaml
+│   │   ├── health_monitor.py
+│   │   ├── import_pyfortimanager.py
+│   │   ├── index.html
+│   │   ├── __init__.py
+│   │   ├── local-ai-config.yaml
+│   │   ├── network_api_agent.yaml
+│   │   ├── network-api-parser-agent.yaml
+│   │   ├── network_api_parser_extended.py
+│   │   ├── network_api_parser.py
+│   │   ├── network_app_generator.py
+│   │   ├── platform_web_api_fastapi.py
+│   │   ├── platform_web_api.py
+│   │   ├── __pycache__
+│   │   │   ├── config.cpython-312.pyc
+│   │   │   ├── device_collector.cpython-312.pyc
+│   │   │   ├── device_mac_matcher.cpython-312.pyc
+│   │   │   ├── device_retrieval.cpython-312.pyc
+│   │   │   ├── firewall_policy.cpython-312.pyc
+│   │   │   ├── fortiap.cpython-312.pyc
+│   │   │   ├── fortigate_docs_search.cpython-312.pyc
+│   │   │   ├── fortigate_topology_drawio.cpython-312.pyc
+│   │   │   ├── fortimanager_auth.cpython-312.pyc
+│   │   │   ├── fortiswitch.cpython-312.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── platform_web_api_fastapi.cpython-312.pyc
+│   │   │   ├── restaurant_icon_downloader.cpython-312.pyc
+│   │   │   ├── svg_to_3d.cpython-312.pyc
+│   │   │   ├── visio_icon_extractor.cpython-312.pyc
+│   │   │   ├── vss_to_svg.cpython-312.pyc
+│   │   │   └── webfilters.cpython-312.pyc
+│   │   ├── restaurant_device_demo_results.json
+│   │   ├── restaurant_icon_downloader.py
+│   │   ├── restaurant_icons
+│   │   │   ├── icon_mapping.json
+│   │   │   ├── png
+│   │   │   └── svg
+│   │   │       ├── clover_pos.svg
+│   │   │       ├── digital_menu.svg
+│   │   │       ├── kitchen_display.svg
+│   │   │       ├── kitchen_printer.svg
+│   │   │       ├── micros_pos.svg
+│   │   │       ├── ncr_pos.svg
+│   │   │       ├── payment_terminal.svg
+│   │   │       ├── pos_register.svg
+│   │   │       ├── pos_tablet.svg
+│   │   │       ├── square_pos.svg
+│   │   │       └── toast_pos.svg
+│   │   ├── rtx3060-ha-config.yaml
+│   │   ├── rtx3060-production.yaml
+│   │   ├── shared
+│   │   │   ├── config_manager.py
+│   │   │   ├── __init__.py
+│   │   │   ├── mcp_base.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── config_manager.cpython-312.pyc
+│   │   │   │   ├── __init__.cpython-312.pyc
+│   │   │   │   ├── mcp_base.cpython-312.pyc
+│   │   │   │   └── topology_workflow.cpython-312.pyc
+│   │   │   └── topology_workflow.py
+│   │   ├── simple-test.yaml
+│   │   ├── ssl_helper.py
+│   │   ├── static
+│   │   │   ├── 2d_topology_enhanced.css
+│   │   │   ├── 2d_topology_enhanced.html
+│   │   │   ├── 3d-models
+│   │   │   │   ├── backup
+│   │   │   │   │   ├── FortiGate_backup_20251121_144338.glb
+│   │   │   │   │   ├── FortiGate_backup_20251121_144338.gltf
+│   │   │   │   │   ├── FortiGate_backup_20251121_144411.glb
+│   │   │   │   │   ├── FortiGate_backup_20251121_144411.gltf
+│   │   │   │   │   ├── FortiGate_backup_20251121_144417.glb
+│   │   │   │   │   ├── FortiGate_backup_20251121_144417.gltf
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144338.glb
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144338.gltf
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144411.glb
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144411.gltf
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144417.glb
+│   │   │   │   │   ├── FortinetAP_backup_20251121_144417.gltf
+│   │   │   │   │   ├── FortiSwitch_backup_20251121_144338.glb
+│   │   │   │   │   ├── FortiSwitch_backup_20251121_144338.gltf
+│   │   │   │   │   ├── FortiSwitch_backup_20251121_144411.glb
+│   │   │   │   │   ├── FortiSwitch_backup_20251121_144411.gltf
+│   │   │   │   │   ├── FortiSwitch_backup_20251121_144417.glb
+│   │   │   │   │   └── FortiSwitch_backup_20251121_144417.gltf
+│   │   │   │   ├── deployment_report.json
+│   │   │   │   ├── FortiGate.glb
+│   │   │   │   ├── FortiGate.gltf
+│   │   │   │   ├── FortinetAP.glb
+│   │   │   │   ├── FortinetAP.gltf
+│   │   │   │   ├── FortiSwitch.glb
+│   │   │   │   └── FortiSwitch.gltf
+│   │   │   ├── app.js
+│   │   │   ├── app.min.js
+│   │   │   ├── automated_topology.html
+│   │   │   ├── babylon_debug.html
+│   │   │   ├── babylon_lab_view.html
+│   │   │   ├── babylon_test_debug.html
+│   │   │   ├── babylon_test_legacy.html
+│   │   │   ├── babylon_topology.css
+│   │   │   ├── babylon_topology.html
+│   │   │   ├── d3_simple_test.html
+│   │   │   ├── demo_topology.js
+│   │   │   ├── DrawIO Integration with Model Context Pr.md
+│   │   │   ├── echarts_gl_demo.html
+│   │   │   ├── echarts_gl_test.css
+│   │   │   ├── fortinet-icons
+│   │   │   │   ├── Android.svg
+│   │   │   │   ├── Apple.svg
+│   │   │   │   ├── Client.svg
+│   │   │   │   ├── FortiAP_Series_R8_2025Q2.svg
+│   │   │   │   ├── FortiAP.svg
+│   │   │   │   ├── FortiGate_Series_R22_2025Q2.svg
+│   │   │   │   ├── FortiGate.svg
+│   │   │   │   ├── FortiSwitch_Series_R14_2025Q2.svg
+│   │   │   │   ├── FortiSwitch.svg
+│   │   │   │   ├── Gaming.svg
+│   │   │   │   ├── Linux.svg
+│   │   │   │   └── Windows.svg
+│   │   │   ├── fortinet-icons-extracted
+│   │   │   │   ├── 1u.svg
+│   │   │   │   ├── 2FA.svg
+│   │   │   │   ├── 2FA-white.svg
+│   │   │   │   ├── 2u.svg
+│   │   │   │   ├── 3cx-Supply-Chain.svg
+│   │   │   │   ├── 3cx-Supply-Chain-white.svg
+│   │   │   │   ├── 3u.svg
+│   │   │   │   ├── 5G-LTE-Firewall.svg
+│   │   │   │   ├── 5G-LTE-Firewall-white.svg
+│   │   │   │   ├── 5G-LTE.svg
+│   │   │   │   ├── 5G-LTE-white.svg
+│   │   │   │   ├── 5G.svg
+│   │   │   │   ├── 5G-white.svg
+│   │   │   │   ├── 5u.svg
+│   │   │   │   ├── 6u.svg
+│   │   │   │   ├── 8u.svg
+│   │   │   │   ├── Accelerated-Implementation.svg
+│   │   │   │   ├── Accelerated-Implementation-white.svg
+│   │   │   │   ├── Account.svg
+│   │   │   │   ├── account-takeover.svg
+│   │   │   │   ├── account-takeover-white.svg
+│   │   │   │   ├── Account-white.svg
+│   │   │   │   ├── Active-Exploitation-Camera-System.svg
+│   │   │   │   ├── Active-Exploitation-Camera-System-white.svg
+│   │   │   │   ├── Adaptive-threat-hunting.svg
+│   │   │   │   ├── Adaptive-threat-hunting-white.svg
+│   │   │   │   ├── Adobe-ColdFusion-Access.svg
+│   │   │   │   ├── Adobe-ColdFusion-Access-white.svg
+│   │   │   │   ├── Adobe-ColdFusion-Deserialization.svg
+│   │   │   │   ├── Adobe-ColdFusion-Deserialization-white.svg
+│   │   │   │   ├── Adult-Content.svg
+│   │   │   │   ├── Adult-Content-white.svg
+│   │   │   │   ├── advanced-email-security.svg
+│   │   │   │   ├── advanced-email-security-white.svg
+│   │   │   │   ├── Advanced-protection.svg
+│   │   │   │   ├── Advanced-protection-white.svg
+│   │   │   │   ├── Advanced-Threat-Protection.svg
+│   │   │   │   ├── Advanced-Threat-Protection-white.svg
+│   │   │   │   ├── Advanced-Threat.svg
+│   │   │   │   ├── Advanced-Threat-white.svg
+│   │   │   │   ├── Aerospace.svg
+│   │   │   │   ├── Aerospace-white.svg
+│   │   │   │   ├── agentless.svg
+│   │   │   │   ├── agentless-white.svg
+│   │   │   │   ├── Agreement.svg
+│   │   │   │   ├── Agreement-white.svg
+│   │   │   │   ├── Agriculture.svg
+│   │   │   │   ├── Agriculture-white.svg
+│   │   │   │   ├── AI-app-detection.svg
+│   │   │   │   ├── AI-app-detection-white.svg
+│   │   │   │   ├── AI-application-detection-and-control.svg
+│   │   │   │   ├── AI-application-detection-and-control-white.svg
+│   │   │   │   ├── AI-Enabled-Analytics.svg
+│   │   │   │   ├── AI-Enabled-Analytics-white.svg
+│   │   │   │   ├── AI-Network-Engines.svg
+│   │   │   │   ├── AI-Network-Engines-white.svg
+│   │   │   │   ├── Airport.svg
+│   │   │   │   ├── Airport-white.svg
+│   │   │   │   ├── AI-Security-Engines.svg
+│   │   │   │   ├── AI-Security-Engines-white.svg
+│   │   │   │   ├── AI-Threat-Attacks.svg
+│   │   │   │   ├── AI-Threat-Attacks-white.svg
+│   │   │   │   ├── ai-threat-hunter.svg
+│   │   │   │   ├── ai-threat-hunter-white.svg
+│   │   │   │   ├── Akira-Ransomware.svg
+│   │   │   │   ├── Akira-Ransomware-white.svg
+│   │   │   │   ├── AMP.svg
+│   │   │   │   ├── AMP-white.svg
+│   │   │   │   ├── Analyzing-Emotet-Activity.svg
+│   │   │   │   ├── Analyzing-Emotet-Activity-white.svg
+│   │   │   │   ├── Androxgh0st.svg
+│   │   │   │   ├── Androxgh0st-white.svg
+│   │   │   │   ├── Anonymous-Hacker-Group.svg
+│   │   │   │   ├── Anonymous-Hacker-Group-white.svg
+│   │   │   │   ├── Anti-Flood-Attack-Protection.svg
+│   │   │   │   ├── Anti-Flood-Attack-Protection-white.svg
+│   │   │   │   ├── Antispam.svg
+│   │   │   │   ├── Antispam-white.svg
+│   │   │   │   ├── Apache-RocketMQ.svg
+│   │   │   │   ├── Apache-RocketMQ-white.svg
+│   │   │   │   ├── API-Security.svg
+│   │   │   │   ├── API-Security-white.svg
+│   │   │   │   ├── API.svg
+│   │   │   │   ├── API-white.svg
+│   │   │   │   ├── Appliance.svg
+│   │   │   │   ├── Appliance-white.svg
+│   │   │   │   ├── Application-Control.svg
+│   │   │   │   ├── Application-Control-white.svg
+│   │   │   │   ├── Application-Enhancement.svg
+│   │   │   │   ├── Application-Enhancement-white.svg
+│   │   │   │   ├── Application-Gear.svg
+│   │   │   │   ├── Application-Gear-white.svg
+│   │   │   │   ├── Application-Security.svg
+│   │   │   │   ├── Application-Security-white.svg
+│   │   │   │   ├── Application-Shield.svg
+│   │   │   │   ├── Application-Shield-white.svg
+│   │   │   │   ├── Application.svg
+│   │   │   │   ├── Application-white.svg
+│   │   │   │   ├── Artificial-Intelligence.svg
+│   │   │   │   ├── Artificial-Intelligence-white.svg
+│   │   │   │   ├── Artificial-Neural-Network-Deep-Learning.svg
+│   │   │   │   ├── Artificial-Neural-Network-Deep-Learning-white.svg
+│   │   │   │   ├── ASIC.svg
+│   │   │   │   ├── ASIC-white.svg
+│   │   │   │   ├── Asset-Discovery.svg
+│   │   │   │   ├── Asset-Discovery-white.svg
+│   │   │   │   ├── Asset-Management.svg
+│   │   │   │   ├── Asset-Management-white.svg
+│   │   │   │   ├── ATM.svg
+│   │   │   │   ├── ATM-white.svg
+│   │   │   │   ├── ATP-Firewall.svg
+│   │   │   │   ├── ATP-Firewall-white.svg
+│   │   │   │   ├── Attack-Surface-Security-Service.svg
+│   │   │   │   ├── Attack-Surface-Security-Service-white.svg
+│   │   │   │   ├── Authentication-Bypass.svg
+│   │   │   │   ├── Authentication-Bypass-white.svg
+│   │   │   │   ├── Auto-configuration.svg
+│   │   │   │   ├── Auto-configuration-white.svg
+│   │   │   │   ├── Automate-and-Autonomous.svg
+│   │   │   │   ├── Automate-and-Autonomous-white.svg
+│   │   │   │   ├── Automated-alert-triage.svg
+│   │   │   │   ├── Automated-alert-triage-white.svg
+│   │   │   │   ├── Automation-Action.svg
+│   │   │   │   ├── Automation-Action-white.svg
+│   │   │   │   ├── AvosLocker.svg
+│   │   │   │   ├── AvosLocker-white.svg
+│   │   │   │   ├── AV.svg
+│   │   │   │   ├── AV-white.svg
+│   │   │   │   ├── Azure-vWAN.svg
+│   │   │   │   ├── Azure-vWAN-white.svg
+│   │   │   │   ├── balance.svg
+│   │   │   │   ├── balance-white.svg
+│   │   │   │   ├── Bank.svg
+│   │   │   │   ├── Bank-white.svg
+│   │   │   │   ├── Bell.svg
+│   │   │   │   ├── Bell-white.svg
+│   │   │   │   ├── Better-Application-Experience.svg
+│   │   │   │   ├── Better-Application-Experience-white.svg
+│   │   │   │   ├── Bitcoin-Mining.svg
+│   │   │   │   ├── Bitcoin-Mining-white.svg
+│   │   │   │   ├── Black-Basta.svg
+│   │   │   │   ├── Black-Basta-white.svg
+│   │   │   │   ├── Blackbyte-Ransomware.svg
+│   │   │   │   ├── Blackbyte-Ransomware-white.svg
+│   │   │   │   ├── BlackCat.svg
+│   │   │   │   ├── BlackCat-white.svg
+│   │   │   │   ├── blog.svg
+│   │   │   │   ├── blog-white.svg
+│   │   │   │   ├── Blood-bag.svg
+│   │   │   │   ├── Blood-bag-white.svg
+│   │   │   │   ├── bluetooth.svg
+│   │   │   │   ├── bluetooth-white.svg
+│   │   │   │   ├── Bot-blue.svg
+│   │   │   │   ├── Botnet-white.svg
+│   │   │   │   ├── Bottlenecking.svg
+│   │   │   │   ├── Bottlenecking-white.svg
+│   │   │   │   ├── Branch-Office.svg
+│   │   │   │   ├── Branch-Office-white.svg
+│   │   │   │   ├── Broken-Troubleshooting.svg
+│   │   │   │   ├── Broken-Troubleshooting-white.svg
+│   │   │   │   ├── browser-extension-risks.svg
+│   │   │   │   ├── browser-extension-risk.svg
+│   │   │   │   ├── browser-extension-risks-white.svg
+│   │   │   │   ├── browser-extension-risk-white.svg
+│   │   │   │   ├── browser-security.svg
+│   │   │   │   ├── browser-security-white.svg
+│   │   │   │   ├── Business-Continuity.svg
+│   │   │   │   ├── Business-Continuity-white.svg
+│   │   │   │   ├── Bus.svg
+│   │   │   │   ├── Bus-white.svg
+│   │   │   │   ├── C2.svg
+│   │   │   │   ├── C2-white.svg
+│   │   │   │   ├── calendar.svg
+│   │   │   │   ├── calendar-white.svg
+│   │   │   │   ├── Camera.svg
+│   │   │   │   ├── Camera-white.svg
+│   │   │   │   ├── Carrier-Class-Firewall.svg
+│   │   │   │   ├── Carrier-Class-Firewall-white.svg
+│   │   │   │   ├── Carrier.svg
+│   │   │   │   ├── Carrier-white.svg
+│   │   │   │   ├── Car.svg
+│   │   │   │   ├── Car-white.svg
+│   │   │   │   ├── CASB-Firewall.svg
+│   │   │   │   ├── CASB-Firewall-white.svg
+│   │   │   │   ├── CASB.svg
+│   │   │   │   ├── CASB-white.svg
+│   │   │   │   ├── CA-Server.svg
+│   │   │   │   ├── CA-Server-white.svg
+│   │   │   │   ├── CDR.svg
+│   │   │   │   ├── CDR-white.svg
+│   │   │   │   ├── Central-Management.svg
+│   │   │   │   ├── Central-Management-white.svg
+│   │   │   │   ├── cert.svg
+│   │   │   │   ├── cert-white.svg
+│   │   │   │   ├── cFOS.svg
+│   │   │   │   ├── cFOS-white.svg
+│   │   │   │   ├── Chemical.svg
+│   │   │   │   ├── Chemical-white.svg
+│   │   │   │   ├── Church.svg
+│   │   │   │   ├── Church-white.svg
+│   │   │   │   ├── CIEM.svg
+│   │   │   │   ├── CIEM-white.svg
+│   │   │   │   ├── Click-Protect.svg
+│   │   │   │   ├── Click-Protect-white.svg
+│   │   │   │   ├── Client-Security.svg
+│   │   │   │   ├── Client-Security-white.svg
+│   │   │   │   ├── Cloud-Application-Security.svg
+│   │   │   │   ├── Cloud-Application-Security-white.svg
+│   │   │   │   ├── Cloud-Based-Operational-Service.svg
+│   │   │   │   ├── Cloud-Based-Operational-Service-white.svg
+│   │   │   │   ├── cloud-consulting.svg
+│   │   │   │   ├── cloud-consulting-white.svg
+│   │   │   │   ├── Cloud-CSPs.svg
+│   │   │   │   ├── Cloud-CSPs-white.svg
+│   │   │   │   ├── Cloud-Fabric-Ecosystem.svg
+│   │   │   │   ├── Cloud-Fabric-Ecosystem-white.svg
+│   │   │   │   ├── Cloud-Firewall.svg
+│   │   │   │   ├── Cloud-Firewall-white.svg
+│   │   │   │   ├── cloud-health-check.svg
+│   │   │   │   ├── cloud-health-check-white.svg
+│   │   │   │   ├── Cloud-Network-Security.svg
+│   │   │   │   ├── Cloud-Network-Security-white.svg
+│   │   │   │   ├── Cloud-on-ramp.svg
+│   │   │   │   ├── Cloud-on-ramp-white.svg
+│   │   │   │   ├── Cloud-Platform-Security.svg
+│   │   │   │   ├── Cloud-Platform-Security-white.svg
+│   │   │   │   ├── Cloud-P.svg
+│   │   │   │   ├── cloud-security-posture-assessment.svg
+│   │   │   │   ├── cloud-security-posture-assessment-white.svg
+│   │   │   │   ├── Cloud-Security.svg
+│   │   │   │   ├── Cloud-Security-white.svg
+│   │   │   │   ├── Cloud.svg
+│   │   │   │   ├── Cloud-Threat-Detection.svg
+│   │   │   │   ├── Cloud-Threat-Detection-white.svg
+│   │   │   │   ├── Cloud-Vulnerability.svg
+│   │   │   │   ├── Cloud-Vulnerability-white.svg
+│   │   │   │   ├── Cloud-white.svg
+│   │   │   │   ├── Cloud-Workload.svg
+│   │   │   │   ├── Cloud-Workload-white.svg
+│   │   │   │   ├── Code-Security.svg
+│   │   │   │   ├── Code-Security-white.svg
+│   │   │   │   ├── collaboration-security.svg
+│   │   │   │   ├── collaboration-security-white.svg
+│   │   │   │   ├── collaboration-tool.svg
+│   │   │   │   ├── collaboration-tool-white.svg
+│   │   │   │   ├── collaboration-workspace.svg
+│   │   │   │   ├── collaboration-workspace-white.svg
+│   │   │   │   ├── Colocation.svg
+│   │   │   │   ├── Colocation-white.svg
+│   │   │   │   ├── Communication-Security.svg
+│   │   │   │   ├── Communication-Security-white.svg
+│   │   │   │   ├── Compliance.svg
+│   │   │   │   ├── Compliance-white.svg
+│   │   │   │   ├── Connections-Per-Sec.svg
+│   │   │   │   ├── Connections-Per-Sec-white.svg
+│   │   │   │   ├── Connector.svg
+│   │   │   │   ├── Connector-white.svg
+│   │   │   │   ├── Consolidation.svg
+│   │   │   │   ├── Consolidation-white.svg
+│   │   │   │   ├── Construction.svg
+│   │   │   │   ├── Construction-white.svg
+│   │   │   │   ├── Container.svg
+│   │   │   │   ├── Content-Disarm-and-Reconstruction.svg
+│   │   │   │   ├── Content-Disarm-and-Reconstruction-white.svg
+│   │   │   │   ├── Content-Inspection.svg
+│   │   │   │   ├── Content-Inspection-white.svg
+│   │   │   │   ├── content.svg
+│   │   │   │   ├── content-white.svg
+│   │   │   │   ├── CONTI-Ransomware.svg
+│   │   │   │   ├── CONTI-Ransomware-white.svg
+│   │   │   │   ├── Controller.svg
+│   │   │   │   ├── Controller-white.svg
+│   │   │   │   ├── Convention-Center.svg
+│   │   │   │   ├── Convention-Center-white.svg
+│   │   │   │   ├── Convergence.svg
+│   │   │   │   ├── Convergence-white.svg
+│   │   │   │   ├── Cosmic-Energy.svg
+│   │   │   │   ├── Cosmic-Energy-white.svg
+│   │   │   │   ├── CP10.svg
+│   │   │   │   ├── CP10-white.svg
+│   │   │   │   ├── CP8.svg
+│   │   │   │   ├── CP8-white.svg
+│   │   │   │   ├── CP9.svg
+│   │   │   │   ├── CP9-white.svg
+│   │   │   │   ├── CPU-Chip.svg
+│   │   │   │   ├── CPU-Chip-white.svg
+│   │   │   │   ├── CPU.svg
+│   │   │   │   ├── CPU-white.svg
+│   │   │   │   ├── Credential-Stuffing-Service.svg
+│   │   │   │   ├── Credential-Stuffing-Service-white.svg
+│   │   │   │   ├── Credential-Stuffing-Shield.svg
+│   │   │   │   ├── Credential-Stuffing-Shield-white.svg
+│   │   │   │   ├── Critical-Asset.svg
+│   │   │   │   ├── Critical-Asset-white.svg
+│   │   │   │   ├── CSPM.svg
+│   │   │   │   ├── CSPM-white.svg
+│   │   │   │   ├── CTAP.svg
+│   │   │   │   ├── CTAP-white.svg
+│   │   │   │   ├── Cuba.svg
+│   │   │   │   ├── Cuba-white.svg
+│   │   │   │   ├── Customized-Care.svg
+│   │   │   │   ├── Customized-Care-white.svg
+│   │   │   │   ├── Customized.svg
+│   │   │   │   ├── Customized-white.svg
+│   │   │   │   ├── CWPP.svg
+│   │   │   │   ├── CWPP-white.svg
+│   │   │   │   ├── Dam.svg
+│   │   │   │   ├── Dam-white.svg
+│   │   │   │   ├── Darkside.svg
+│   │   │   │   ├── Darkside-white.svg
+│   │   │   │   ├── dart-board.svg
+│   │   │   │   ├── dart-board-white.svg
+│   │   │   │   ├── Database-Protection.svg
+│   │   │   │   ├── Database-Protection-white.svg
+│   │   │   │   ├── Data-Center-Building.svg
+│   │   │   │   ├── Data-Center-Building-white.svg
+│   │   │   │   ├── Data-Center-Firewall.svg
+│   │   │   │   ├── Data-Center-Firewall-white.svg
+│   │   │   │   ├── Data-Center-Rack.svg
+│   │   │   │   ├── Data-Center-Rack-white.svg
+│   │   │   │   ├── Data-Center.svg
+│   │   │   │   ├── Data-Center-white.svg
+│   │   │   │   ├── Data-Leak-Prevention.svg
+│   │   │   │   ├── Data-Leak-Prevention-white.svg
+│   │   │   │   ├── DDoS.svg
+│   │   │   │   ├── DDoS-white.svg
+│   │   │   │   ├── DearCry.svg
+│   │   │   │   ├── DearCry-white.svg
+│   │   │   │   ├── Desktop.svg
+│   │   │   │   ├── Desktop-white.svg
+│   │   │   │   ├── Detect.svg
+│   │   │   │   ├── Detect-white.svg
+│   │   │   │   ├── Device.svg
+│   │   │   │   ├── Device-white.svg
+│   │   │   │   ├── DevOps.svg
+│   │   │   │   ├── DevOps-white.svg
+│   │   │   │   ├── DevSec-Code-Security.svg
+│   │   │   │   ├── DevSec-Code-Security-white.svg
+│   │   │   │   ├── digital-sales.svg
+│   │   │   │   ├── digital-sales-white.svg
+│   │   │   │   ├── Distributed-Firewall.svg
+│   │   │   │   ├── Distributed-Firewall-white.svg
+│   │   │   │   ├── DLP.svg
+│   │   │   │   ├── DLP-white.svg
+│   │   │   │   ├── DNS.svg
+│   │   │   │   ├── DNS-white.svg
+│   │   │   │   ├── Domain-Reputation-Service-for-FortiDDoS.svg
+│   │   │   │   ├── Domain-Reputation-Service-for-FortiDDoS-white.svg
+│   │   │   │   ├── Doman-Reputation-Shield.svg
+│   │   │   │   ├── Doman-Reputation-Shield-white.svg
+│   │   │   │   ├── Doorhandle.svg
+│   │   │   │   ├── Doorhandle-white.svg
+│   │   │   │   ├── DP2.svg
+│   │   │   │   ├── DP2-white.svg
+│   │   │   │   ├── DP3.svg
+│   │   │   │   ├── DP3-white.svg
+│   │   │   │   ├── DP.svg
+│   │   │   │   ├── DP-white.svg
+│   │   │   │   ├── DPx.svg
+│   │   │   │   ├── DPx-white.svg
+│   │   │   │   ├── Drone.svg
+│   │   │   │   ├── Drone-white.svg
+│   │   │   │   ├── Dynamic-Application-Security-Testing.svg
+│   │   │   │   ├── Dynamic-Application-Security-Testing-white.svg
+│   │   │   │   ├── ebooks.svg
+│   │   │   │   ├── ebooks-white.svg
+│   │   │   │   ├── ELA.svg
+│   │   │   │   ├── ELA-white.svg
+│   │   │   │   ├── Elephant-Flow.svg
+│   │   │   │   ├── Elephant-Flow-white.svg
+│   │   │   │   ├── email-service-provider.svg
+│   │   │   │   ├── email-service-provider-white.svg
+│   │   │   │   ├── Endpoint-CVE.svg
+│   │   │   │   ├── Endpoint-CVE-white.svg
+│   │   │   │   ├── Energy-Utilities.svg
+│   │   │   │   ├── Energy-Utilities-white.svg
+│   │   │   │   ├── Enhanced-accuracy.svg
+│   │   │   │   ├── Enhanced-accuracy-white.svg
+│   │   │   │   ├── Enterprise-Protection.svg
+│   │   │   │   ├── Enterprise-Protection-white.svg
+│   │   │   │   ├── Enterprise.svg
+│   │   │   │   ├── Enterprise-white.svg
+│   │   │   │   ├── ENT-Firewall.svg
+│   │   │   │   ├── ENT-Firewall-white.svg
+│   │   │   │   ├── Equipment.svg
+│   │   │   │   ├── Equipment-white.svg
+│   │   │   │   ├── EVCS.svg
+│   │   │   │   ├── Evolve.svg
+│   │   │   │   ├── Evolve-white.svg
+│   │   │   │   ├── EVSE.svg
+│   │   │   │   ├── Expert-Systems.svg
+│   │   │   │   ├── Expert-Systems-white.svg
+│   │   │   │   ├── Extended-Fabric-Ecosystem.svg
+│   │   │   │   ├── Extended-Fabric-Ecosystem-white.svg
+│   │   │   │   ├── F5.svg
+│   │   │   │   ├── F5-white.svg
+│   │   │   │   ├── Fabric-API.svg
+│   │   │   │   ├── Fabric-API-white.svg
+│   │   │   │   ├── Fabric-Automation.svg
+│   │   │   │   ├── Fabric-Automation-white.svg
+│   │   │   │   ├── FAZ-Big-Data.svg
+│   │   │   │   ├── FAZ-Big-Data-white.svg
+│   │   │   │   ├── FAZ-Cloud.svg
+│   │   │   │   ├── FAZ-Cloud-white.svg
+│   │   │   │   ├── FAZ-Collector.svg
+│   │   │   │   ├── FAZ-Collector-white.svg
+│   │   │   │   ├── FAZ-Member.svg
+│   │   │   │   ├── FAZ-Member-white.svg
+│   │   │   │   ├── FAZ-Supervisor.svg
+│   │   │   │   ├── FAZ-Supervisor-white.svg
+│   │   │   │   ├── FEC.svg
+│   │   │   │   ├── FEC-white.svg
+│   │   │   │   ├── FGaaS-Cloud.svg
+│   │   │   │   ├── FGaaS-Cloud-white.svg
+│   │   │   │   ├── Finance.svg
+│   │   │   │   ├── Finance-white.svg
+│   │   │   │   ├── Firewall.svg
+│   │   │   │   ├── Firewall-white.svg
+│   │   │   │   ├── Flame.svg
+│   │   │   │   ├── Flame-white.svg
+│   │   │   │   ├── Flex-VM.svg
+│   │   │   │   ├── Flex-VM-white.svg
+│   │   │   │   ├── Flood-Attack.svg
+│   │   │   │   ├── Flood-Attack-white.svg
+│   │   │   │   ├── FMGaaS.svg
+│   │   │   │   ├── FMGaaS-white.svg
+│   │   │   │   ├── FMG-Cloud.svg
+│   │   │   │   ├── FMG-Cloud-white.svg
+│   │   │   │   ├── FNDN.svg
+│   │   │   │   ├── FNDN-white.svg
+│   │   │   │   ├── Follina.svg
+│   │   │   │   ├── Follina-white.svg
+│   │   │   │   ├── Food-Manufacturing.svg
+│   │   │   │   ├── Food-Manufacturing-white.svg
+│   │   │   │   ├── FortiADC.svg
+│   │   │   │   ├── FortiADC-WAF.svg
+│   │   │   │   ├── FortiADC-WAF-white.svg
+│   │   │   │   ├── FortiADC-white.svg
+│   │   │   │   ├── FortiAIOps.svg
+│   │   │   │   ├── FortiAIOps-white.svg
+│   │   │   │   ├── FortiAI-Protect.svg
+│   │   │   │   ├── FortiAI-Protect-white.svg
+│   │   │   │   ├── FortiAI-Secure-AI.svg
+│   │   │   │   ├── FortiAI-Secure-AI-white.svg
+│   │   │   │   ├── FortiAI.svg
+│   │   │   │   ├── FortiAI-white.svg
+│   │   │   │   ├── FortiAnalyzer-Cloud.svg
+│   │   │   │   ├── FortiAnalyzer-Cloud-white.svg
+│   │   │   │   ├── FortiAnalyzer.svg
+│   │   │   │   ├── FortiAnalyzer-white.svg
+│   │   │   │   ├── FortiAP.svg
+│   │   │   │   ├── FortiAP-white.svg
+│   │   │   │   ├── FortiAuthenticator-Cloud.svg
+│   │   │   │   ├── FortiAuthenticator-Cloud-white.svg
+│   │   │   │   ├── FortiAuthenticator.svg
+│   │   │   │   ├── FortiAuthenticator-white.svg
+│   │   │   │   ├── FortiBranchSASE-Ethernet.svg
+│   │   │   │   ├── FortiBranchSASE-Ethernet-white.svg
+│   │   │   │   ├── FortiBranchSASE.svg
+│   │   │   │   ├── FortiBranchSASE-white.svg
+│   │   │   │   ├── FortiBranchSASE-Wi-Fi.svg
+│   │   │   │   ├── FortiBranchSASE-Wi-Fi-white.svg
+│   │   │   │   ├── FortiCache.svg
+│   │   │   │   ├── FortiCache-white.svg
+│   │   │   │   ├── FortiCamera-Cloud.svg
+│   │   │   │   ├── FortiCamera-Cloud-white.svg
+│   │   │   │   ├── FortiCamera.svg
+│   │   │   │   ├── FortiCamera-white.svg
+│   │   │   │   ├── FortiCare.svg
+│   │   │   │   ├── FortiCare-white.svg
+│   │   │   │   ├── FortiCarrier.svg
+│   │   │   │   ├── FortiCarrier-white.svg
+│   │   │   │   ├── FortiCART.svg
+│   │   │   │   ├── FortiCART-white.svg
+│   │   │   │   ├── FortiCASB-Cloud.svg
+│   │   │   │   ├── FortiCASB-Cloud-white.svg
+│   │   │   │   ├── FortiCASB.svg
+│   │   │   │   ├── FortiCASB-white.svg
+│   │   │   │   ├── FortiCentral.svg
+│   │   │   │   ├── FortiCentral-white.svg
+│   │   │   │   ├── FortiClient-Antivirus.svg
+│   │   │   │   ├── FortiClient-Antivirus-white.svg
+│   │   │   │   ├── FortiClient-Application-Firewall.svg
+│   │   │   │   ├── FortiClient-Application-Firewall-white.svg
+│   │   │   │   ├── FortiClient-CASB.svg
+│   │   │   │   ├── FortiClient-CASB-white.svg
+│   │   │   │   ├── FortiClient-Cloud.svg
+│   │   │   │   ├── FortiClient-Cloud-white.svg
+│   │   │   │   ├── FortiClient-DEM.svg
+│   │   │   │   ├── FortiClient-DEM-white.svg
+│   │   │   │   ├── FortiClient-DLP.svg
+│   │   │   │   ├── FortiClient-DLP-white.svg
+│   │   │   │   ├── FortiClient-EDR-Connector.svg
+│   │   │   │   ├── FortiClient-EDR-Connector-white.svg
+│   │   │   │   ├── FortiClient-EDR.svg
+│   │   │   │   ├── FortiClient-EDR-white.svg
+│   │   │   │   ├── FortiClient-EMS.svg
+│   │   │   │   ├── FortiClient-EMS-white.svg
+│   │   │   │   ├── FortiClient-EPP.svg
+│   │   │   │   ├── FortiClient-EPP-white.svg
+│   │   │   │   ├── FortiClient-NAC.svg
+│   │   │   │   ├── FortiClient-NAC-white.svg
+│   │   │   │   ├── FortiClient-PAM.svg
+│   │   │   │   ├── FortiClient-PAM-white.svg
+│   │   │   │   ├── FortiClient-Sandbox.svg
+│   │   │   │   ├── FortiClient-Sandbox-white.svg
+│   │   │   │   ├── FortiClient-SASE.svg
+│   │   │   │   ├── FortiClient-SASE-white.svg
+│   │   │   │   ├── FortiClient-SSO-Mobility.svg
+│   │   │   │   ├── FortiClient-SSO-Mobility-white.svg
+│   │   │   │   ├── FortiClient.svg
+│   │   │   │   ├── FortiClient-VPN.svg
+│   │   │   │   ├── FortiClient-VPN-white.svg
+│   │   │   │   ├── FortiClient-Vulnerability-Scan.svg
+│   │   │   │   ├── FortiClient-Vulnerability-Scan-white.svg
+│   │   │   │   ├── FortiClient-Web-Filtering.svg
+│   │   │   │   ├── FortiClient-Web-Filtering-white.svg
+│   │   │   │   ├── FortiClient-white.svg
+│   │   │   │   ├── FortiClient-XDR.svg
+│   │   │   │   ├── FortiClient-XDR-white.svg
+│   │   │   │   ├── FortiClient-ZTNA.svg
+│   │   │   │   ├── FortiClient-ZTNA-white.svg
+│   │   │   │   ├── FortiCloud-Asset-Management.svg
+│   │   │   │   ├── FortiCloud-Asset-Management-white.svg
+│   │   │   │   ├── FortiCloud-Premium.svg
+│   │   │   │   ├── FortiCloud-Premium-white.svg
+│   │   │   │   ├── FortiCloud.svg
+│   │   │   │   ├── FortiCloud-white.svg
+│   │   │   │   ├── FortiCNAPP.svg
+│   │   │   │   ├── FortiCNAPP-white.svg
+│   │   │   │   ├── FortiCNP-Container-Guardian.svg
+│   │   │   │   ├── FortiCNP-Container-Guardian-white.svg
+│   │   │   │   ├── FortiCNP.svg
+│   │   │   │   ├── FortiCNP-white.svg
+│   │   │   │   ├── FortiConnect.svg
+│   │   │   │   ├── FortiConnect-white.svg
+│   │   │   │   ├── FortiConverter-Cloud.svg
+│   │   │   │   ├── FortiConverter-Cloud-white.svg
+│   │   │   │   ├── FortiConverter.svg
+│   │   │   │   ├── FortiConverter-white.svg
+│   │   │   │   ├── FortiCSP-Agent.svg
+│   │   │   │   ├── FortiCSP-Agent-white.svg
+│   │   │   │   ├── FortiCSP-Manager.svg
+│   │   │   │   ├── FortiCSP-Manager-white.svg
+│   │   │   │   ├── FortiCSP.svg
+│   │   │   │   ├── FortiCSP-white.svg
+│   │   │   │   ├── FortiCWP-Cloud.svg
+│   │   │   │   ├── FortiCWP-Cloud-white.svg
+│   │   │   │   ├── FortiDDoS.svg
+│   │   │   │   ├── FortiDDoS-white.svg
+│   │   │   │   ├── FortiDeceptor.svg
+│   │   │   │   ├── FortiDeceptor-white.svg
+│   │   │   │   ├── FortiDeploy.svg
+│   │   │   │   ├── FortiDeploy-white.svg
+│   │   │   │   ├── FortiDevSec-Cloud.svg
+│   │   │   │   ├── FortiDevSec-Cloud-white.svg
+│   │   │   │   ├── FortiDevSec.svg
+│   │   │   │   ├── FortiDevSec-white.svg
+│   │   │   │   ├── FortiDLP-cloud.svg
+│   │   │   │   ├── FortiDLP-cloud-white.svg
+│   │   │   │   ├── FortiDLP.svg
+│   │   │   │   ├── FortiDLP-white.svg
+│   │   │   │   ├── FortiEAP.svg
+│   │   │   │   ├── FortiEAP-white.svg
+│   │   │   │   ├── FortiEdge-Cloud.svg
+│   │   │   │   ├── FortiEdge-Cloud-white.svg
+│   │   │   │   ├── FortiEDR.svg
+│   │   │   │   ├── FortiEDR-white.svg
+│   │   │   │   ├── FortiEndpoint.svg
+│   │   │   │   ├── FortiEndpoint-white.svg
+│   │   │   │   ├── FortiExtender-Appliance.svg
+│   │   │   │   ├── FortiExtender-Appliance-white.svg
+│   │   │   │   ├── FortiExtender-LAN.svg
+│   │   │   │   ├── FortiExtender-LAN-white.svg
+│   │   │   │   ├── FortiExtender.svg
+│   │   │   │   ├── FortiExtender-Vehicle.svg
+│   │   │   │   ├── FortiExtender-white.svg
+│   │   │   │   ├── FortiFone.svg
+│   │   │   │   ├── FortiFone-white.svg
+│   │   │   │   ├── FortiGate-AI-powered-Security-Bundles.svg
+│   │   │   │   ├── FortiGate-AI-powered-Security-Bundles-white.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall-Console.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall-Console-white.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall-Service.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall-Service-white.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall.svg
+│   │   │   │   ├── FortiGate-Cloud-Native-Firewall-white.svg
+│   │   │   │   ├── FortiGate-Cloud.svg
+│   │   │   │   ├── FortiGate-Cloud-white.svg
+│   │   │   │   ├── FortiGate-Desktop.svg
+│   │   │   │   ├── FortiGate.svg
+│   │   │   │   ├── FortiGate-VM.svg
+│   │   │   │   ├── FortiGate-VM-white.svg
+│   │   │   │   ├── FortiGate-VMX-Service-Manager.svg
+│   │   │   │   ├── FortiGate-VMX-Service-Manager-white.svg
+│   │   │   │   ├── FortiGate-white.svg
+│   │   │   │   ├── FortiGSLB-Cloud.svg
+│   │   │   │   ├── FortiGSLB-Cloud-white.svg
+│   │   │   │   ├── FortiGSLB.svg
+│   │   │   │   ├── FortiGSLB-white.svg
+│   │   │   │   ├── FortiGuard-IR-Service.svg
+│   │   │   │   ├── FortiGuard-IR-Service-white.svg
+│   │   │   │   ├── FortiGuard-Labs.svg
+│   │   │   │   ├── FortiGuard-Labs-white.svg
+│   │   │   │   ├── FortiGuard-MDR-Service.svg
+│   │   │   │   ├── FortiGuard-MDR-Service-white.svg
+│   │   │   │   ├── FortiGuard-Service-Bundle.svg
+│   │   │   │   ├── FortiGuard-Service-Bundle-white.svg
+│   │   │   │   ├── FortiGuard.svg
+│   │   │   │   ├── FortiGuard-white.svg
+│   │   │   │   ├── FortiGuest.svg
+│   │   │   │   ├── FortiGuest-white.svg
+│   │   │   │   ├── FortiHSM.svg
+│   │   │   │   ├── FortiHSM-white.svg
+│   │   │   │   ├── FortiInsight-Cloud.svg
+│   │   │   │   ├── FortiInsight-Cloud-white.svg
+│   │   │   │   ├── FortiInsight.svg
+│   │   │   │   ├── FortiInsight-white.svg
+│   │   │   │   ├── FortiIsolator.svg
+│   │   │   │   ├── FortiIsolator-white.svg
+│   │   │   │   ├── FortiLink-NAC.svg
+│   │   │   │   ├── FortiLink-NAC-white.svg
+│   │   │   │   ├── FortiLink.svg
+│   │   │   │   ├── FortiLink-white.svg
+│   │   │   │   ├── fortimail-cloud-saas.svg
+│   │   │   │   ├── fortimail-cloud-saas-white.svg
+│   │   │   │   ├── FortiMail-Cloud.svg
+│   │   │   │   ├── FortiMail-Cloud-white.svg
+│   │   │   │   ├── FortiMail.svg
+│   │   │   │   ├── FortiMail-white.svg
+│   │   │   │   ├── fortimail-workspace-security.svg
+│   │   │   │   ├── fortimail-workspace-security-white.svg
+│   │   │   │   ├── FortiManager-Blue.svg
+│   │   │   │   ├── FortiManager-Cloud.svg
+│   │   │   │   ├── FortiManager-Cloud-white.svg
+│   │   │   │   ├── FortiManager-OT-Aware.svg
+│   │   │   │   ├── FortiManager-OT-Aware-white.svg
+│   │   │   │   ├── FortiManager-Red.svg
+│   │   │   │   ├── FortiManager.svg
+│   │   │   │   ├── FortiManager-white.svg
+│   │   │   │   ├── FortiMarketplace.svg
+│   │   │   │   ├── FortiMarketplace-white.svg
+│   │   │   │   ├── FortiMonitor-Cloud.svg
+│   │   │   │   ├── FortiMonitor-Cloud-white.svg
+│   │   │   │   ├── FortiMonitor.svg
+│   │   │   │   ├── FortiMonitor-white.svg
+│   │   │   │   ├── FortiNAC.svg
+│   │   │   │   ├── FortiNAC-white.svg
+│   │   │   │   ├── FortiNDR-Cloud.svg
+│   │   │   │   ├── FortiNDR-Cloud-white.svg
+│   │   │   │   ├── FortiNDR.svg
+│   │   │   │   ├── FortiNDR-white.svg
+│   │   │   │   ├── Fortinet-logomark-rgb-black.svg
+│   │   │   │   ├── Fortinet-logomark-rgb-red.svg
+│   │   │   │   ├── Fortinet-logomark-rgb-white.svg
+│   │   │   │   ├── Fortinet-logo-rgb-black-red.svg
+│   │   │   │   ├── Fortinet-logo-rgb-black.svg
+│   │   │   │   ├── Fortinet-logo-rgb-white-red.svg
+│   │   │   │   ├── Fortinet-logo-rgb-white.svg
+│   │   │   │   ├── Fortinet-Managed-Rules.svg
+│   │   │   │   ├── Fortinet-Managed-Rules-white.svg
+│   │   │   │   ├── Fortinet-SOCaaS-Cloud.svg
+│   │   │   │   ├── Fortinet-SOCaaS-Cloud-white.svg
+│   │   │   │   ├── FortiOS-76.svg
+│   │   │   │   ├── FortiOS-76-white.svg
+│   │   │   │   ├── FortiOS.svg
+│   │   │   │   ├── FortiOS-white.svg
+│   │   │   │   ├── FortiPAM-Cloud.svg
+│   │   │   │   ├── FortiPAM-Cloud-white.svg
+│   │   │   │   ├── FortiPAM.svg
+│   │   │   │   ├── FortiPAM-white.svg
+│   │   │   │   ├── FortiPenTest-Cloud.svg
+│   │   │   │   ├── FortiPenTest-Cloud-white.svg
+│   │   │   │   ├── FortiPen-Test.svg
+│   │   │   │   ├── FortiPen-Test-white.svg
+│   │   │   │   ├── FortiPhish.svg
+│   │   │   │   ├── FortiPhish-white.svg
+│   │   │   │   ├── FortiPortal.svg
+│   │   │   │   ├── FortiPortal-white.svg
+│   │   │   │   ├── FortiPresence.svg
+│   │   │   │   ├── FortiPresence-white.svg
+│   │   │   │   ├── FortiProxy.svg
+│   │   │   │   ├── FortiProxy-white.svg
+│   │   │   │   ├── FortiRecon.svg
+│   │   │   │   ├── FortiRecon-white.svg
+│   │   │   │   ├── FortiRecorder.svg
+│   │   │   │   ├── FortiRecorder-white.svg
+│   │   │   │   ├── FortiResponder-Service.svg
+│   │   │   │   ├── FortiResponder-Service-white.svg
+│   │   │   │   ├── FortiRugged-Extender.svg
+│   │   │   │   ├── FortiSandbox-Cloud.svg
+│   │   │   │   ├── FortiSandbox-Cloud-white.svg
+│   │   │   │   ├── FortiSandbox.svg
+│   │   │   │   ├── FortiSandbox-white.svg
+│   │   │   │   ├── FortiSASE-Cloud.svg
+│   │   │   │   ├── FortiSASE-Cloud-white.svg
+│   │   │   │   ├── FortiSASE-Network.svg
+│   │   │   │   ├── FortiSASE-Network-white.svg
+│   │   │   │   ├── FortiSASE-SIA-Cloud.svg
+│   │   │   │   ├── FortiSASE-SIA-Cloud-white.svg
+│   │   │   │   ├── FortiSASE.svg
+│   │   │   │   ├── FortiSASE-Thin-Edge.svg
+│   │   │   │   ├── FortiSASE-Thin-Edge-white.svg
+│   │   │   │   ├── FortiSASE-white.svg
+│   │   │   │   ├── fortiscanner-cloud-icon.svg
+│   │   │   │   ├── FortiScanner-Cloud-white.svg
+│   │   │   │   ├── FortiScanner.svg
+│   │   │   │   ├── FortiScanner-white.svg
+│   │   │   │   ├── FortiSentry.svg
+│   │   │   │   ├── FortiSentry-white.svg
+│   │   │   │   ├── FortiShield-Bot-Mitigation.svg
+│   │   │   │   ├── FortiShield-Bot-Mitigation-white.svg
+│   │   │   │   ├── FortiSIEM-Cloud.svg
+│   │   │   │   ├── FortiSIEM-Cloud-white.svg
+│   │   │   │   ├── FortiSIEM.svg
+│   │   │   │   ├── FortiSIEM-white.svg
+│   │   │   │   ├── FortiSOAR-Cloud.svg
+│   │   │   │   ├── FortiSOAR-Cloud-white.svg
+│   │   │   │   ├── FortiSOAR.svg
+│   │   │   │   ├── FortiSOAR-white.svg
+│   │   │   │   ├── FortiSRA.svg
+│   │   │   │   ├── FortiSRA-white.svg
+│   │   │   │   ├── FortiSwitch-Manager.svg
+│   │   │   │   ├── FortiSwitch-Manager-white.svg
+│   │   │   │   ├── FortiSwitchNMS.svg
+│   │   │   │   ├── FortiSwitchNMS-white.svg
+│   │   │   │   ├── FortiSwitch-Rugged.svg
+│   │   │   │   ├── FortiSwitch-Rugged-white.svg
+│   │   │   │   ├── FortiSwitch.svg
+│   │   │   │   ├── FortiSwitch-white.svg
+│   │   │   │   ├── FortiTelemetry.svg
+│   │   │   │   ├── FortiTelemetry-white.svg
+│   │   │   │   ├── FortiTester.svg
+│   │   │   │   ├── FortiTester-white.svg
+│   │   │   │   ├── FortiTIP.svg
+│   │   │   │   ├── FortiTIP-white.svg
+│   │   │   │   ├── FortiToken-Cloud.svg
+│   │   │   │   ├── FortiToken-Cloud-white.svg
+│   │   │   │   ├── FortiToken.svg
+│   │   │   │   ├── FortiToken-white.svg
+│   │   │   │   ├── FortiTrust-Identity.svg
+│   │   │   │   ├── FortiTrust-Identity-white.svg
+│   │   │   │   ├── FortiTrust.svg
+│   │   │   │   ├── FortiTrust-white.svg
+│   │   │   │   ├── FortiView.svg
+│   │   │   │   ├── FortiView-white.svg
+│   │   │   │   ├── FortiVoice-Cloud.svg
+│   │   │   │   ├── FortiVoice-Cloud-white.svg
+│   │   │   │   ├── FortiVoice.svg
+│   │   │   │   ├── FortiVoice-white.svg
+│   │   │   │   ├── FortiWeb-Cloud.svg
+│   │   │   │   ├── FortiWeb-Cloud-white.svg
+│   │   │   │   ├── FortiWeb.svg
+│   │   │   │   ├── FortiWeb-white.svg
+│   │   │   │   ├── FortiWiFi.svg
+│   │   │   │   ├── FortiWiFi-white.svg
+│   │   │   │   ├── FortiXDR.svg
+│   │   │   │   ├── FortiXDR-white.svg
+│   │   │   │   ├── FOS-54.svg
+│   │   │   │   ├── FOS-54-white.svg
+│   │   │   │   ├── FOS-56.svg
+│   │   │   │   ├── FOS-56-white.svg
+│   │   │   │   ├── FOS-60.svg
+│   │   │   │   ├── FOS-60-white.svg
+│   │   │   │   ├── FOS-62.svg
+│   │   │   │   ├── FOS-62-white.svg
+│   │   │   │   ├── FOS-64.svg
+│   │   │   │   ├── FOS-64-white.svg
+│   │   │   │   ├── FOS-70.svg
+│   │   │   │   ├── FOS-70-white.svg
+│   │   │   │   ├── FOS-72.svg
+│   │   │   │   ├── FOS-72-white.svg
+│   │   │   │   ├── FOS-74.svg
+│   │   │   │   ├── FOS-74-white.svg
+│   │   │   │   ├── Four-Hour.svg
+│   │   │   │   ├── Four-Hour-white.svg
+│   │   │   │   ├── GenerativeAI.svg
+│   │   │   │   ├── GenerativeAI-white.svg
+│   │   │   │   ├── Generic-Known-Threat.svg
+│   │   │   │   ├── Generic-Known-Threat-white.svg
+│   │   │   │   ├── Generic-Unknown-Threat.svg
+│   │   │   │   ├── Generic-Unknown-Threat-white.svg
+│   │   │   │   ├── Generic-WiFi.svg
+│   │   │   │   ├── Generic-WiFi-white.svg
+│   │   │   │   ├── Gootloader.svg
+│   │   │   │   ├── Gootloader-white.svg
+│   │   │   │   ├── Government.svg
+│   │   │   │   ├── Government-white.svg
+│   │   │   │   ├── GPT.svg
+│   │   │   │   ├── GPT-white.svg
+│   │   │   │   ├── Guard-Miner.svg
+│   │   │   │   ├── Guard-Miner-white.svg
+│   │   │   │   ├── Guide.svg
+│   │   │   │   ├── Guide-white.svg
+│   │   │   │   ├── Hacker.svg
+│   │   │   │   ├── Hacker-white.svg
+│   │   │   │   ├── Hack-Tool.svg
+│   │   │   │   ├── Hack-Tool-white.svg
+│   │   │   │   ├── Hard-Drive.svg
+│   │   │   │   ├── Hard-Drive-white.svg
+│   │   │   │   ├── Headquarters.svg
+│   │   │   │   ├── Headquarters-white.svg
+│   │   │   │   ├── Healthcare-App.svg
+│   │   │   │   ├── Healthcare-App-white.svg
+│   │   │   │   ├── Healthcare.svg
+│   │   │   │   ├── Healthcare-white.svg
+│   │   │   │   ├── Heart-Bleed.svg
+│   │   │   │   ├── Heart-Bleed-white.svg
+│   │   │   │   ├── HelloKitty-Ransomware.svg
+│   │   │   │   ├── HelloKitty-Ransomware-white.svg
+│   │   │   │   ├── HermeticWiper.svg
+│   │   │   │   ├── HermeticWiper-white.svg
+│   │   │   │   ├── High-Availability.svg
+│   │   │   │   ├── High-Availability-white.svg
+│   │   │   │   ├── Higher-Education.svg
+│   │   │   │   ├── Higher-Education-white.svg
+│   │   │   │   ├── HIVE-Nightmare.svg
+│   │   │   │   ├── HIVE-Nightmare-white.svg
+│   │   │   │   ├── HMI.svg
+│   │   │   │   ├── HMI-white.svg
+│   │   │   │   ├── Hospitality.svg
+│   │   │   │   ├── Hospitality-white.svg
+│   │   │   │   ├── Hospital.svg
+│   │   │   │   ├── Hospital-white.svg
+│   │   │   │   ├── Hosted.svg
+│   │   │   │   ├── House.svg
+│   │   │   │   ├── House-white.svg
+│   │   │   │   ├── Hydro.svg
+│   │   │   │   ├── Hydro-white.svg
+│   │   │   │   ├── Hyperscale-Applications.svg
+│   │   │   │   ├── Hyperscale-Applications-white.svg
+│   │   │   │   ├── Hyperscale-Data-Center.svg
+│   │   │   │   ├── Hyperscale-Data-Center-white.svg
+│   │   │   │   ├── Hyperscale-Firewall.svg
+│   │   │   │   ├── Hyperscale-Firewall-white.svg
+│   │   │   │   ├── IaaS-Visibility.svg
+│   │   │   │   ├── IaaS-Visibility-white.svg
+│   │   │   │   ├── IaC-Security.svg
+│   │   │   │   ├── IaC-Security-white.svg
+│   │   │   │   ├── IAM.svg
+│   │   │   │   ├── IAM-white.svg
+│   │   │   │   ├── IBM-CEV.svg
+│   │   │   │   ├── IBM-CEV-white.svg
+│   │   │   │   ├── icedID.svg
+│   │   │   │   ├── icedID-white.svg
+│   │   │   │   ├── icon_mapping.json
+│   │   │   │   ├── Identity-Access.svg
+│   │   │   │   ├── Identity-Access-white.svg
+│   │   │   │   ├── IL-CASB.svg
+│   │   │   │   ├── IL-CASB-white.svg
+│   │   │   │   ├── IL-Sandbox.svg
+│   │   │   │   ├── IL-Sandbox-white.svg
+│   │   │   │   ├── Impersonation-Analysis.svg
+│   │   │   │   ├── Impersonation-Analysis-white.svg
+│   │   │   │   ├── Incident-Response-Service.svg
+│   │   │   │   ├── Incident-Response-Service-white.svg
+│   │   │   │   ├── Increasing-TCO.svg
+│   │   │   │   ├── Increasing-TCO-white.svg
+│   │   │   │   ├── Indicators-of-Compromise.svg
+│   │   │   │   ├── Indicators-of-Compromise-white.svg
+│   │   │   │   ├── Indoor-FAP-Antenna.svg
+│   │   │   │   ├── Indoor-FAP.svg
+│   │   │   │   ├── Industrial-Control.svg
+│   │   │   │   ├── Industrial-Control-white.svg
+│   │   │   │   ├── Industry-Events.svg
+│   │   │   │   ├── Industry-Events-white.svg
+│   │   │   │   ├── Industry-Response.svg
+│   │   │   │   ├── Industry-Response-white.svg
+│   │   │   │   ├── infographs.svg
+│   │   │   │   ├── infographs-white.svg
+│   │   │   │   ├── inside-game.svg
+│   │   │   │   ├── inside-game-white.svg
+│   │   │   │   ├── insider-threat.svg
+│   │   │   │   ├── insider-threat-white.svg
+│   │   │   │   ├── Insurance.svg
+│   │   │   │   ├── Insurance-white.svg
+│   │   │   │   ├── Internal-CSP.svg
+│   │   │   │   ├── Internal-CSP-white.svg
+│   │   │   │   ├── Internal-Segmentation-Firewall.svg
+│   │   │   │   ├── Internal-Segmentation-Firewall-white.svg
+│   │   │   │   ├── Investigate.svg
+│   │   │   │   ├── Investigate-white.svg
+│   │   │   │   ├── IoC.svg
+│   │   │   │   ├── IoC-white.svg
+│   │   │   │   ├── IoT.svg
+│   │   │   │   ├── IoT-white.svg
+│   │   │   │   ├── IP-Address-Management.svg
+│   │   │   │   ├── IP-Address-Management-white.svg
+│   │   │   │   ├── IP-Reputation-Shield.svg
+│   │   │   │   ├── IP-Reputation-Shield-white.svg
+│   │   │   │   ├── IP-Reputation.svg
+│   │   │   │   ├── IP-Reputation-white.svg
+│   │   │   │   ├── IPsec-VPN.svg
+│   │   │   │   ├── IPsec-VPN-white.svg
+│   │   │   │   ├── IPS-firewall.svg
+│   │   │   │   ├── IPS-Firewall-white.svg
+│   │   │   │   ├── IPS.svg
+│   │   │   │   ├── IPS-white.svg
+│   │   │   │   ├── ITSM.svg
+│   │   │   │   ├── ITSM-white.svg
+│   │   │   │   ├── Ivanti-Endpoint-Manager-Mobile.svg
+│   │   │   │   ├── Ivanti-Endpoint-Manager-Mobile-white.svg
+│   │   │   │   ├── K-12.svg
+│   │   │   │   ├── K-12-white.svg
+│   │   │   │   ├── KASEYA-VSA.svg
+│   │   │   │   ├── KASEYA-VSA-white.svg
+│   │   │   │   ├── Keycard.svg
+│   │   │   │   ├── Keycard-white.svg
+│   │   │   │   ├── Kiosk.svg
+│   │   │   │   ├── Kiosk-white.svg
+│   │   │   │   ├── KSPM.svg
+│   │   │   │   ├── KSPM-white.svg
+│   │   │   │   ├── Kubernetes.svg
+│   │   │   │   ├── Kubernetes-white.svg
+│   │   │   │   ├── LAN-Edge-Firewall.svg
+│   │   │   │   ├── LAN-Edge-Firewall-white.svg
+│   │   │   │   ├── LAN-WAN-optimization.svg
+│   │   │   │   ├── LAN-WAN-optimization-white.svg
+│   │   │   │   ├── Laptop.svg
+│   │   │   │   ├── Laptop-white.svg
+│   │   │   │   ├── LDAP-AD-Server.svg
+│   │   │   │   ├── LDAP-AD-Server-white.svg
+│   │   │   │   ├── Lemon-Duck.svg
+│   │   │   │   ├── Lemon-Duck-white.svg
+│   │   │   │   ├── Lightbulb.svg
+│   │   │   │   ├── Lightbulb-white.svg
+│   │   │   │   ├── Link-Archer.svg
+│   │   │   │   ├── Link-Archer-white.svg
+│   │   │   │   ├── LockBit-Ransomware.svg
+│   │   │   │   ├── LockBit-Ransomware-white.svg
+│   │   │   │   ├── Log4j.svg
+│   │   │   │   ├── Log4j-white.svg
+│   │   │   │   ├── LokiBot-Infostealer.svg
+│   │   │   │   ├── LokiBot-Infostealer-white.svg
+│   │   │   │   ├── Lower-TCO.svg
+│   │   │   │   ├── Lower-TCO-white.svg
+│   │   │   │   ├── Low-Latency-Firewall.svg
+│   │   │   │   ├── Low-Latency-Firewall-white.svg
+│   │   │   │   ├── Low-Latency.svg
+│   │   │   │   ├── Low-Latency-white.svg
+│   │   │   │   ├── Machine-Learning-Poisoning.svg
+│   │   │   │   ├── Machine-Learning-Poisoning-white.svg
+│   │   │   │   ├── Machine-Learning.svg
+│   │   │   │   ├── Machine-Learning-white.svg
+│   │   │   │   ├── Machine-to-Machine.svg
+│   │   │   │   ├── Machine-to-Machine-white.svg
+│   │   │   │   ├── Malicious-App.svg
+│   │   │   │   ├── Malicious-App-white.svg
+│   │   │   │   ├── Malicious-Code.svg
+│   │   │   │   ├── Malicious-Code-white.svg
+│   │   │   │   ├── Malicious-URL.svg
+│   │   │   │   ├── Malicious-URL-white.svg
+│   │   │   │   ├── Malware.svg
+│   │   │   │   ├── Malware-white.svg
+│   │   │   │   ├── Managed-Detection-and-Response.svg
+│   │   │   │   ├── Managed-Detection-and-Response-white.svg
+│   │   │   │   ├── Managed-FortiGate-Service.svg
+│   │   │   │   ├── Managed-FortiGate-Service-white.svg
+│   │   │   │   ├── managed-incident.svg
+│   │   │   │   ├── managed-incident-white.svg
+│   │   │   │   ├── Managed-IPS.svg
+│   │   │   │   ├── Managed-IPS-white.svg
+│   │   │   │   ├── Management-Tuning.svg
+│   │   │   │   ├── Management-Tuning-white.svg
+│   │   │   │   ├── Manufacturing.svg
+│   │   │   │   ├── Manufacturing-white.svg
+│   │   │   │   ├── Many-Point-Products.svg
+│   │   │   │   ├── Many-Point-Products-white.svg
+│   │   │   │   ├── Maritime.svg
+│   │   │   │   ├── Maritime-white.svg
+│   │   │   │   ├── marketing-pipeline.svg
+│   │   │   │   ├── marketing-pipeline-white.svg
+│   │   │   │   ├── marketing-priority.svg
+│   │   │   │   ├── marketing-priority-white.svg
+│   │   │   │   ├── Mature-AI.svg
+│   │   │   │   ├── Mature-AI-white.svg
+│   │   │   │   ├── Medium-Business.svg
+│   │   │   │   ├── Medium-Business-white.svg
+│   │   │   │   ├── MicroBackdoor-Remote-Access.svg
+│   │   │   │   ├── MicroBackdoor-Remote-Access-white.svg
+│   │   │   │   ├── microsoft-sharepoint-vulnerability-teal.svg
+│   │   │   │   ├── microsoft-sharepoint-vulnerability-white.svg
+│   │   │   │   ├── Mid-Enterprise.svg
+│   │   │   │   ├── Mid-Enterprise-white.svg
+│   │   │   │   ├── Migrate.svg
+│   │   │   │   ├── Migrate-white.svg
+│   │   │   │   ├── Mobile-CSP.svg
+│   │   │   │   ├── Mobile-CSP-white.svg
+│   │   │   │   ├── Mobile.svg
+│   │   │   │   ├── Mobile-white.svg
+│   │   │   │   ├── Monitoring.svg
+│   │   │   │   ├── Monitoring-white.svg
+│   │   │   │   ├── Mortal-Kombat.svg
+│   │   │   │   ├── Mortal-Kombat-white.svg
+│   │   │   │   ├── MOVEit.svg
+│   │   │   │   ├── MOVEit-white.svg
+│   │   │   │   ├── Msdt-Follina.svg
+│   │   │   │   ├── Msdt-Follina-white.svg
+│   │   │   │   ├── MSHTML-Vulnerability.svg
+│   │   │   │   ├── MSHTML-Vulnerability-white.svg
+│   │   │   │   ├── MSSPs.svg
+│   │   │   │   ├── MSSPs-white.svg
+│   │   │   │   ├── Multi-Cloud-Policy.svg
+│   │   │   │   ├── Multi-Cloud-Policy-white.svg
+│   │   │   │   ├── Multi-User.svg
+│   │   │   │   ├── Multi-User-white.svg
+│   │   │   │   ├── Natural-Language-Processing.svg
+│   │   │   │   ├── Natural-Language-Processing-white.svg
+│   │   │   │   ├── NDR.svg
+│   │   │   │   ├── NDR-white.svg
+│   │   │   │   ├── Near-zero-false-positive.svg
+│   │   │   │   ├── Near-zero-false-positive-white.svg
+│   │   │   │   ├── Needs-Update.svg
+│   │   │   │   ├── Needs-Update-white.svg
+│   │   │   │   ├── Network-CSPs.svg
+│   │   │   │   ├── Network-CSPs-white.svg
+│   │   │   │   ├── Network-Security.svg
+│   │   │   │   ├── Network-Security-white.svg
+│   │   │   │   ├── Next-Generation-Firewall.svg
+│   │   │   │   ├── Next-Generation-Firewall-white.svg
+│   │   │   │   ├── Next-Generation.svg
+│   │   │   │   ├── Next-Generation-white.svg
+│   │   │   │   ├── NGFW-with-Services.svg
+│   │   │   │   ├── NGFW-with-Services-white.svg
+│   │   │   │   ├── NLP-Machine-Translation.svg
+│   │   │   │   ├── NLP-Machine-Translation-white.svg
+│   │   │   │   ├── NLP-Text-Generation.svg
+│   │   │   │   ├── NLP-Text-Generation-white.svg
+│   │   │   │   ├── NOC-SOC-1.svg
+│   │   │   │   ├── NOC-SOC-1-white.svg
+│   │   │   │   ├── NOC-SOC-2.svg
+│   │   │   │   ├── NOC-SOC-2-white.svg
+│   │   │   │   ├── NOC-SOC-3.svg
+│   │   │   │   ├── NOC-SOC-3-white.svg
+│   │   │   │   ├── NOC-SOC-Service.svg
+│   │   │   │   ├── NOC-SOC-Service-white.svg
+│   │   │   │   ├── NP6.svg
+│   │   │   │   ├── NP6-white.svg
+│   │   │   │   ├── NP7.svg
+│   │   │   │   ├── NP7-white.svg
+│   │   │   │   ├── OCVPN-Portal-Cloud.svg
+│   │   │   │   ├── OCVPN-Portal-Cloud-white.svg
+│   │   │   │   ├── Oil-Can.svg
+│   │   │   │   ├── Oil-Can-white.svg
+│   │   │   │   ├── Oil-Rig.svg
+│   │   │   │   ├── Oil-Rig-white.svg
+│   │   │   │   ├── Oil.svg
+│   │   │   │   ├── Oil-white.svg
+│   │   │   │   ├── On-Prem.svg
+│   │   │   │   ├── On-Prem-white.svg
+│   │   │   │   ├── Open-Ports.svg
+│   │   │   │   ├── Open-Ports-white.svg
+│   │   │   │   ├── Operational-Efficiency.svg
+│   │   │   │   ├── Operational-Efficiency-white.svg
+│   │   │   │   ├── Optimization.svg
+│   │   │   │   ├── Optimization-white.svg
+│   │   │   │   ├── Orchestration.svg
+│   │   │   │   ├── Orchestration-white.svg
+│   │   │   │   ├── OS-Fingerprinting.svg
+│   │   │   │   ├── OS-Fingerprinting-white.svg
+│   │   │   │   ├── OT-Engineer.svg
+│   │   │   │   ├── OT-Engineer-white.svg
+│   │   │   │   ├── OT-People.svg
+│   │   │   │   ├── OT-People-white.svg
+│   │   │   │   ├── OT.svg
+│   │   │   │   ├── OT-white.svg
+│   │   │   │   ├── Outbreak-Detection.svg
+│   │   │   │   ├── Outbreak-Detection-white.svg
+│   │   │   │   ├── Outdoor-FAP.svg
+│   │   │   │   ├── Overlay-as-a-service.svg
+│   │   │   │   ├── Overlay-as-a-service-white.svg
+│   │   │   │   ├── Overlay-Controller-VPN-Cloud.svg
+│   │   │   │   ├── Overlay-Controller-VPN-Cloud-white.svg
+│   │   │   │   ├── Overlay-Controller-VPN.svg
+│   │   │   │   ├── Overlay-Controller-VPN-white.svg
+│   │   │   │   ├── Overwhelmed-NOC-SOC.svg
+│   │   │   │   ├── Overwhelmed-NOC-SOC-white.svg
+│   │   │   │   ├── packet-duplication.svg
+│   │   │   │   ├── packet-duplication-white.svg
+│   │   │   │   ├── PaperCut-MF.svg
+│   │   │   │   ├── PaperCut-MF-white.svg
+│   │   │   │   ├── Partner-CSP.svg
+│   │   │   │   ├── Partner-CSP-white.svg
+│   │   │   │   ├── Partnerships.svg
+│   │   │   │   ├── Partnerships-white.svg
+│   │   │   │   ├── Penetration-Testing.svg
+│   │   │   │   ├── Penetration-Testing-white.svg
+│   │   │   │   ├── Pharma.svg
+│   │   │   │   ├── Pharma-white.svg
+│   │   │   │   ├── Phishing.svg
+│   │   │   │   ├── Phishing-white.svg
+│   │   │   │   ├── Phone.svg
+│   │   │   │   ├── Phone-white.svg
+│   │   │   │   ├── PIN-Entry.svg
+│   │   │   │   ├── PIN-Entry-white.svg
+│   │   │   │   ├── PIN-Pad.svg
+│   │   │   │   ├── PIN-Pad-white.svg
+│   │   │   │   ├── Plane.svg
+│   │   │   │   ├── Plane-white.svg
+│   │   │   │   ├── Planning.svg
+│   │   │   │   ├── Planning-white.svg
+│   │   │   │   ├── platform-AI-Driven-Technologies.svg
+│   │   │   │   ├── platform-AI-Driven-Technologies-white.svg
+│   │   │   │   ├── platform-Ecosystem.svg
+│   │   │   │   ├── platform-Ecosystems-white.svg
+│   │   │   │   ├── platform-FortiCloud.svg
+│   │   │   │   ├── platform-FortiCloud-white.svg
+│   │   │   │   ├── platform-FortiPoints.svg
+│   │   │   │   ├── platform-FortiPoints-white.svg
+│   │   │   │   ├── platform-OT-Security.svg
+│   │   │   │   ├── platform-OT-Security-white.svg
+│   │   │   │   ├── playbook.svg
+│   │   │   │   ├── playbook-white.svg
+│   │   │   │   ├── playing-field.svg
+│   │   │   │   ├── playing-field-white.svg
+│   │   │   │   ├── PLC.svg
+│   │   │   │   ├── PLC-white.svg
+│   │   │   │   ├── Podcast.svg
+│   │   │   │   ├── Podcast-white.svg
+│   │   │   │   ├── point-of-click.svg
+│   │   │   │   ├── point-of-click-white.svg
+│   │   │   │   ├── Point-of-Sale.svg
+│   │   │   │   ├── Point-of-Sale-white.svg
+│   │   │   │   ├── Policy-creation.svg
+│   │   │   │   ├── Policy-creation-white.svg
+│   │   │   │   ├── POS-Machine.svg
+│   │   │   │   ├── POS-Machine-white.svg
+│   │   │   │   ├── Power-Plant.svg
+│   │   │   │   ├── Power-Plant-white.svg
+│   │   │   │   ├── Power.svg
+│   │   │   │   ├── Power-white.svg
+│   │   │   │   ├── Predictive-and-adaptive.svg
+│   │   │   │   ├── Predictive-and-adaptive-white.svg
+│   │   │   │   ├── Prestige.svg
+│   │   │   │   ├── Prestige-white.svg
+│   │   │   │   ├── Printer.svg
+│   │   │   │   ├── Printer-white.svg
+│   │   │   │   ├── Print-Nightmare.svg
+│   │   │   │   ├── Print-Nightmare-white.svg
+│   │   │   │   ├── Print-Spooler.svg
+│   │   │   │   ├── Print-Spooler-white.svg
+│   │   │   │   ├── Prioritize-and-reduce-risk.svg
+│   │   │   │   ├── Prioritize-and-reduce-risk-white.svg
+│   │   │   │   ├── Professional-Service.svg
+│   │   │   │   ├── Professional-Service-white.svg
+│   │   │   │   ├── Providers.svg
+│   │   │   │   ├── Providers-white.svg
+│   │   │   │   ├── Proxy-Execution.svg
+│   │   │   │   ├── Proxy-Execution-white.svg
+│   │   │   │   ├── PSIRT-issues.svg
+│   │   │   │   ├── PSIRT-issues-white.svg
+│   │   │   │   ├── Quantum-Safe.svg
+│   │   │   │   ├── Quantum-Safe-white.svg
+│   │   │   │   ├── quishing.svg
+│   │   │   │   ├── quishing-white.svg
+│   │   │   │   ├── Ransomware.svg
+│   │   │   │   ├── Ransomware-white.svg
+│   │   │   │   ├── Raspberry-Robin.svg
+│   │   │   │   ├── Raspberry-Robin-white.svg
+│   │   │   │   ├── RCE-Microsoft-Vulnerability.svg
+│   │   │   │   ├── RCE-Microsoft-Vulnerability-white.svg
+│   │   │   │   ├── Real-time-insights.svg
+│   │   │   │   ├── Real-time-insights-white.svg
+│   │   │   │   ├── Redis.svg
+│   │   │   │   ├── Redis-white.svg
+│   │   │   │   ├── RedLine.svg
+│   │   │   │   ├── RedLine-white.svg
+│   │   │   │   ├── Reduce-Risk.svg
+│   │   │   │   ├── Reduce-Risk-white.svg
+│   │   │   │   ├── Refrigerator.svg
+│   │   │   │   ├── Refrigerator-white.svg
+│   │   │   │   ├── Remote-Access.svg
+│   │   │   │   ├── Remote-Access-white.svg
+│   │   │   │   ├── Remote-FAP.svg
+│   │   │   │   ├── Residential.svg
+│   │   │   │   ├── Residential-white.svg
+│   │   │   │   ├── Respond.svg
+│   │   │   │   ├── Respond-white.svg
+│   │   │   │   ├── Retail-Food.svg
+│   │   │   │   ├── Retail-Food-white.svg
+│   │   │   │   ├── Retail-Large.svg
+│   │   │   │   ├── Retail-Large-white.svg
+│   │   │   │   ├── Retail-Small.svg
+│   │   │   │   ├── Retail-Small-white.svg
+│   │   │   │   ├── Retail.svg
+│   │   │   │   ├── Retail-white.svg
+│   │   │   │   ├── REvil-Ransomware.svg
+│   │   │   │   ├── REvil-Ransomware-white.svg
+│   │   │   │   ├── Rhysida-Ransomware.svg
+│   │   │   │   ├── Rhysida-Ransomware-white.svg
+│   │   │   │   ├── Risk-Management.svg
+│   │   │   │   ├── Risk-Management-white.svg
+│   │   │   │   ├── RMA-2.svg
+│   │   │   │   ├── RMA-2-white.svg
+│   │   │   │   ├── Robotic-arm.svg
+│   │   │   │   ├── Robotic-arm-white.svg
+│   │   │   │   ├── Robotics.svg
+│   │   │   │   ├── Robotics-white.svg
+│   │   │   │   ├── ROI-assets.svg
+│   │   │   │   ├── ROI-assets-white.svg
+│   │   │   │   ├── Roomba.svg
+│   │   │   │   ├── Roomba-white.svg
+│   │   │   │   ├── Root-cause-tracing.svg
+│   │   │   │   ├── Root-cause-tracing-white.svg
+│   │   │   │   ├── Router-Firewall.svg
+│   │   │   │   ├── Router-Firewall-white.svg
+│   │   │   │   ├── Router-Malware.svg
+│   │   │   │   ├── Router-Malware-white.svg
+│   │   │   │   ├── Router.svg
+│   │   │   │   ├── Router-white.svg
+│   │   │   │   ├── Rugged-Firewall.svg
+│   │   │   │   ├── Rugged-Firewall-white.svg
+│   │   │   │   ├── Ruggedized-NGFW.svg
+│   │   │   │   ├── Ruggedized-NGFW-white.svg
+│   │   │   │   ├── Ruggedized-Switch.svg
+│   │   │   │   ├── Ruggedized-Switch-white.svg
+│   │   │   │   ├── Rugged-Outdoor-FAP.svg
+│   │   │   │   ├── Rugged.svg
+│   │   │   │   ├── Rugged-white.svg
+│   │   │   │   ├── safe-browser.svg
+│   │   │   │   ├── safe-browser-white.svg
+│   │   │   │   ├── Safe.svg
+│   │   │   │   ├── Safe-white.svg
+│   │   │   │   ├── Sandbox-Cloud.svg
+│   │   │   │   ├── Sandbox-Cloud-white.svg
+│   │   │   │   ├── Sandbox.svg
+│   │   │   │   ├── Sandbox-white.svg
+│   │   │   │   ├── SASE.svg
+│   │   │   │   ├── SASE-white.svg
+│   │   │   │   ├── School.svg
+│   │   │   │   ├── School-white.svg
+│   │   │   │   ├── SD-Branch-Firewall.svg
+│   │   │   │   ├── SD-Branch-Firewall-white.svg
+│   │   │   │   ├── SD-Branch.svg
+│   │   │   │   ├── SD-Branch-white.svg
+│   │   │   │   ├── SDN.svg
+│   │   │   │   ├── SDN-white.svg
+│   │   │   │   ├── SD-WAN-Monitoring.svg
+│   │   │   │   ├── SD-WAN-Monitoring-white.svg
+│   │   │   │   ├── SD-WAN-Orchestrator-Service.svg
+│   │   │   │   ├── SD-WAN-Orchestrator-Service-white.svg
+│   │   │   │   ├── SD-WAN-Orchestrator.svg
+│   │   │   │   ├── SD-WAN-Orchestrator-white.svg
+│   │   │   │   ├── SD-WAN.svg
+│   │   │   │   ├── SD-WAN-white.svg
+│   │   │   │   ├── Secure-Email.svg
+│   │   │   │   ├── Secure-Email-white.svg
+│   │   │   │   ├── Secure-Equipment.svg
+│   │   │   │   ├── Secure-Equipment-white.svg
+│   │   │   │   ├── Secure-Gen-AI.svg
+│   │   │   │   ├── Secure-Gen-AI-white.svg
+│   │   │   │   ├── Secure-local-internet-breakout.svg
+│   │   │   │   ├── Secure-local-internet-breakout-white.svg
+│   │   │   │   ├── Secure-Networking.svg
+│   │   │   │   ├── Secure-Networking-white.svg
+│   │   │   │   ├── Secure-RMA.svg
+│   │   │   │   ├── Secure-RMA-white.svg
+│   │   │   │   ├── Secure-SD-WAN.svg
+│   │   │   │   ├── Secure-SD-WAN-white.svg
+│   │   │   │   ├── Secure-VPN-Tunnel.svg
+│   │   │   │   ├── Secure-VPN-Tunnel-white.svg
+│   │   │   │   ├── Secure-Web-Gateway-2.svg
+│   │   │   │   ├── Secure-Web-Gateway-2-white.svg
+│   │   │   │   ├── Secure-Web-Gateway.svg
+│   │   │   │   ├── Secure-Web-Gateway-white.svg
+│   │   │   │   ├── security-awareness-and-training.svg
+│   │   │   │   ├── security-awareness-and-training-white.svg
+│   │   │   │   ├── Security-Fabric.svg
+│   │   │   │   ├── Security-Fabric-white.svg
+│   │   │   │   ├── Security-Monitoring.svg
+│   │   │   │   ├── Security-Monitoring-white.svg
+│   │   │   │   ├── Security-Operations.svg
+│   │   │   │   ├── Security-Operations-white.svg
+│   │   │   │   ├── Security-Profiles.svg
+│   │   │   │   ├── Security-Profiles-white.svg
+│   │   │   │   ├── Segmentation.svg
+│   │   │   │   ├── Segmentation-white.svg
+│   │   │   │   ├── Serverless.svg
+│   │   │   │   ├── Serverless-white.svg
+│   │   │   │   ├── Server-Load-Balancing.svg
+│   │   │   │   ├── Server-Load-Balancing-white.svg
+│   │   │   │   ├── Service-Provider-SP.svg
+│   │   │   │   ├── Service-Provider-SP-white.svg
+│   │   │   │   ├── Service-Provider.svg
+│   │   │   │   ├── Service-Provider-white.svg
+│   │   │   │   ├── ship.svg
+│   │   │   │   ├── ship-white.svg
+│   │   │   │   ├── Single-Pane.svg
+│   │   │   │   ├── Single-Pane-white.svg
+│   │   │   │   ├── Single-User.svg
+│   │   │   │   ├── Single-User-white.svg
+│   │   │   │   ├── Small-Business.svg
+│   │   │   │   ├── Small-Business-white.svg
+│   │   │   │   ├── SMB-Firewall.svg
+│   │   │   │   ├── SMB-Firewall-white.svg
+│   │   │   │   ├── Smokestack.svg
+│   │   │   │   ├── Smokestack-white.svg
+│   │   │   │   ├── Snake-Malware.svg
+│   │   │   │   ├── Snake-Malware-white.svg
+│   │   │   │   ├── SOCaaS.svg
+│   │   │   │   ├── SOCaaS-white.svg
+│   │   │   │   ├── social-engineering.svg
+│   │   │   │   ├── social-engineering-white.svg
+│   │   │   │   ├── Software-Composition-Analysis.svg
+│   │   │   │   ├── Software-Composition-Analysis-white.svg
+│   │   │   │   ├── Software.svg
+│   │   │   │   ├── Solarview-Compact-Command.svg
+│   │   │   │   ├── Solarview-Compact-Command-white.svg
+│   │   │   │   ├── SP2.svg
+│   │   │   │   ├── SP2-white.svg
+│   │   │   │   ├── SP3.svg
+│   │   │   │   ├── SP3-white.svg
+│   │   │   │   ├── SP4.svg
+│   │   │   │   ├── SP4-white.svg
+│   │   │   │   ├── SP5.svg
+│   │   │   │   ├── SP5-white.svg
+│   │   │   │   ├── spam.svg
+│   │   │   │   ├── spam-white.svg
+│   │   │   │   ├── SPA.svg
+│   │   │   │   ├── SPA-white.svg
+│   │   │   │   ├── Speaker.svg
+│   │   │   │   ├── Speaker-white.svg
+│   │   │   │   ├── Speech.svg
+│   │   │   │   ├── Speech-to-Text.svg
+│   │   │   │   ├── Speech-to-Text-white.svg
+│   │   │   │   ├── Speech-white.svg
+│   │   │   │   ├── Spook.svg
+│   │   │   │   ├── Spook-white.svg
+│   │   │   │   ├── SpringShell.svg
+│   │   │   │   ├── SpringShell-white.svg
+│   │   │   │   ├── SSL-Certificate.svg
+│   │   │   │   ├── SSL-Certificate-white.svg
+│   │   │   │   ├── SSL-Inspection-Firewall.svg
+│   │   │   │   ├── SSL-Inspection-Firewall-white.svg
+│   │   │   │   ├── SSL-Inspection.svg
+│   │   │   │   ├── SSL-Inspection-white.svg
+│   │   │   │   ├── SSL-VPN-Firewall.svg
+│   │   │   │   ├── SSL-VPN-Firewall-white.svg
+│   │   │   │   ├── SSL-VPN.svg
+│   │   │   │   ├── SSLVPN-Tunnel.svg
+│   │   │   │   ├── SSLVPN-Tunnel-white.svg
+│   │   │   │   ├── SSL-VPN-white.svg
+│   │   │   │   ├── SSO-Identity.svg
+│   │   │   │   ├── SSO-Identity-white.svg
+│   │   │   │   ├── Stadium.svg
+│   │   │   │   ├── Stadium-white.svg
+│   │   │   │   ├── Static-Application-Security-Testing.svg
+│   │   │   │   ├── Static-Application-Security-Testing-white.svg
+│   │   │   │   ├── Steering-Policies.svg
+│   │   │   │   ├── Steering-Policies-white.svg
+│   │   │   │   ├── stream.svg
+│   │   │   │   ├── stream-white.svg
+│   │   │   │   ├── Sunburst.svg
+│   │   │   │   ├── Sunburst-white.svg
+│   │   │   │   ├── Supervised-ML.svg
+│   │   │   │   ├── Supervised-ML-white.svg
+│   │   │   │   ├── Supply-Chain.svg
+│   │   │   │   ├── Supply-Chain-white.svg
+│   │   │   │   ├── Support.svg
+│   │   │   │   ├── Support-white.svg
+│   │   │   │   ├── Surveillance-Camera.svg
+│   │   │   │   ├── Surveillance-Camera-white.svg
+│   │   │   │   ├── Switching.svg
+│   │   │   │   ├── Switching-white.svg
+│   │   │   │   ├── Tablet.svg
+│   │   │   │   ├── Tablet-white.svg
+│   │   │   │   ├── Tesla-malware-attack.svg
+│   │   │   │   ├── Tesla-malware-attack-white.svg
+│   │   │   │   ├── Text-to-Speech.svg
+│   │   │   │   ├── Text-to-Speech-white.svg
+│   │   │   │   ├── Theme-Park.svg
+│   │   │   │   ├── Theme-Park-white.svg
+│   │   │   │   ├── Thermostat.svg
+│   │   │   │   ├── Thermostat-white.svg
+│   │   │   │   ├── ThinkPHP-RCE.svg
+│   │   │   │   ├── ThinkPHP-RCE-white.svg
+│   │   │   │   ├── Threat-Detection-and-Response.svg
+│   │   │   │   ├── Threat-Detection-and-Response-white.svg
+│   │   │   │   ├── Threat-Feeds.svg
+│   │   │   │   ├── Threat-Feeds-white.svg
+│   │   │   │   ├── Tools.svg
+│   │   │   │   ├── Tools-white.svg
+│   │   │   │   ├── TP2.svg
+│   │   │   │   ├── TP2-white.svg
+│   │   │   │   ├── Traffic-Shaping.svg
+│   │   │   │   ├── Traffic-Shaping-white.svg
+│   │   │   │   ├── Train.svg
+│   │   │   │   ├── Train-white.svg
+│   │   │   │   ├── Troubleshooting.svg
+│   │   │   │   ├── Troubleshooting-white.svg
+│   │   │   │   ├── Truck.svg
+│   │   │   │   ├── Truck-white.svg
+│   │   │   │   ├── Unauthorized-Access.svg
+│   │   │   │   ├── Unauthorized-Access-white.svg
+│   │   │   │   ├── Underlay-monitoring-performance.svg
+│   │   │   │   ├── Underlay-monitoring-performance-white.svg
+│   │   │   │   ├── Unified-Application-Protection.svg
+│   │   │   │   ├── Unified-Application-Protection-white.svg
+│   │   │   │   ├── Unified-SASE.svg
+│   │   │   │   ├── Unified-SASE-white.svg
+│   │   │   │   ├── Unified-Threat-Protection.svg
+│   │   │   │   ├── Unified-Threat-Protection-white.svg
+│   │   │   │   ├── University.svg
+│   │   │   │   ├── University-white.svg
+│   │   │   │   ├── Unsecure-Equipment.svg
+│   │   │   │   ├── Unsecure-Equipment-white.svg
+│   │   │   │   ├── Unsupervised-ML.svg
+│   │   │   │   ├── Unsupervised-ML-white.svg
+│   │   │   │   ├── Updated.svg
+│   │   │   │   ├── Updated-white.svg
+│   │   │   │   ├── up-sell.svg
+│   │   │   │   ├── up-sell-white.svg
+│   │   │   │   ├── URL.svg
+│   │   │   │   ├── URL-white.svg
+│   │   │   │   ├── UTP-Firewall.svg
+│   │   │   │   ├── UTP-Firewall-white.svg
+│   │   │   │   ├── VDOM.svg
+│   │   │   │   ├── VDOM-white.svg
+│   │   │   │   ├── Video-Filtering.svg
+│   │   │   │   ├── Video-Filtering-white.svg
+│   │   │   │   ├── Virtual-Firewall.svg
+│   │   │   │   ├── Virtual-Firewall-white.svg
+│   │   │   │   ├── Virtual-Patching.svg
+│   │   │   │   ├── Virtual-Patching-white.svg
+│   │   │   │   ├── Virtual-Security-Analyst.svg
+│   │   │   │   ├── Virtual-Security-Analyst-white.svg
+│   │   │   │   ├── Virtual.svg
+│   │   │   │   ├── Virtual-white.svg
+│   │   │   │   ├── Virus-Outbreak-Service.svg
+│   │   │   │   ├── Virus-Outbreak-Service-white.svg
+│   │   │   │   ├── Vision-Image-Recognition.svg
+│   │   │   │   ├── Vision-Image-Recognition-white.svg
+│   │   │   │   ├── Vision.svg
+│   │   │   │   ├── Vision-white.svg
+│   │   │   │   ├── VLAN.svg
+│   │   │   │   ├── VLAN-white.svg
+│   │   │   │   ├── VM2-Sandbox.svg
+│   │   │   │   ├── VM2-Sandbox-white.svg
+│   │   │   │   ├── VM.svg
+│   │   │   │   ├── VMware-Command-Injection-Vulnerability.svg
+│   │   │   │   ├── VMware-Command-Injection-Vulnerability-white.svg
+│   │   │   │   ├── VPN-Firewall.svg
+│   │   │   │   ├── VPN-Firewall-white.svg
+│   │   │   │   ├── VPN.svg
+│   │   │   │   ├── VPN-Tunnel.svg
+│   │   │   │   ├── VPN-Tunnel-white.svg
+│   │   │   │   ├── VPN-white.svg
+│   │   │   │   ├── VR.svg
+│   │   │   │   ├── VR-white.svg
+│   │   │   │   ├── vSPU.svg
+│   │   │   │   ├── vSPU-white.svg
+│   │   │   │   ├── Vulnerabilities-in-AI.svg
+│   │   │   │   ├── Vulnerabilities-in-AI-white.svg
+│   │   │   │   ├── Vulnerability-Assessment.svg
+│   │   │   │   ├── Vulnerability-Assessment-white.svg
+│   │   │   │   ├── Vulnerability-Management.svg
+│   │   │   │   ├── Vulnerability-Management-white.svg
+│   │   │   │   ├── Vulnerability-Scan.svg
+│   │   │   │   ├── Vulnerability-Scan-white.svg
+│   │   │   │   ├── Vulnerability.svg
+│   │   │   │   ├── Vulnerability-white.svg
+│   │   │   │   ├── VXLAN-Firewall.svg
+│   │   │   │   ├── VXLAN-Firewall-white.svg
+│   │   │   │   ├── WAN-remediation.svg
+│   │   │   │   ├── WAN-remediation-white.svg
+│   │   │   │   ├── WAN.svg
+│   │   │   │   ├── WAN-white.svg
+│   │   │   │   ├── Waste-Water.svg
+│   │   │   │   ├── Waste-Water-white.svg
+│   │   │   │   ├── Watch.svg
+│   │   │   │   ├── Watch-white.svg
+│   │   │   │   ├── Water.svg
+│   │   │   │   ├── Water-white.svg
+│   │   │   │   ├── Weaponization-of-AI.svg
+│   │   │   │   ├── Weaponization-of-AI-white.svg
+│   │   │   │   ├── Web-Application-Firewall.svg
+│   │   │   │   ├── Web-Application-Firewall-white.svg
+│   │   │   │   ├── Web-Filtering.svg
+│   │   │   │   ├── Web-Filtering-white.svg
+│   │   │   │   ├── Web-Gateway-Generic.svg
+│   │   │   │   ├── Web-Gateway-Generic-white.svg
+│   │   │   │   ├── Windows-HTTP.svg
+│   │   │   │   ├── Windows-HTTP-white.svg
+│   │   │   │   ├── Wind-Turbines.svg
+│   │   │   │   ├── Wind-Turbines-white.svg
+│   │   │   │   ├── Wireless-PIN-Pad.svg
+│   │   │   │   ├── Wireless-PIN-Pad-white.svg
+│   │   │   │   ├── Wireless.svg
+│   │   │   │   ├── Wireless-white.svg
+│   │   │   │   ├── WOC.svg
+│   │   │   │   ├── WOC-white.svg
+│   │   │   │   ├── WooCommerce-Payments.svg
+│   │   │   │   ├── WooCommerce-Payments-white.svg
+│   │   │   │   ├── workspace-security.svg
+│   │   │   │   ├── workspace-security-white.svg
+│   │   │   │   ├── Worms.svg
+│   │   │   │   ├── Worms-white.svg
+│   │   │   │   ├── XDR.svg
+│   │   │   │   ├── XDR-white.svg
+│   │   │   │   ├── XP1.svg
+│   │   │   │   ├── XP1-white.svg
+│   │   │   │   ├── Zepplin.svg
+│   │   │   │   ├── Zepplin-white.svg
+│   │   │   │   ├── Zero-Day-Exploit.svg
+│   │   │   │   ├── Zero-Day-Exploit-white.svg
+│   │   │   │   ├── Zero-Day.svg
+│   │   │   │   ├── Zero-Day-white.svg
+│   │   │   │   ├── Zoho-RCE.svg
+│   │   │   │   ├── Zoho-RCE-white.svg
+│   │   │   │   ├── Zombie.svg
+│   │   │   │   ├── Zombie-white.svg
+│   │   │   │   ├── ZTA-white.svg
+│   │   │   │   ├── ZTNA-Firewall.svg
+│   │   │   │   ├── ZTNA-Firewall-white.svg
+│   │   │   │   ├── ZTNA.svg
+│   │   │   │   ├── ZTP.svg
+│   │   │   │   ├── ZTP-white.svg
+│   │   │   │   ├── Zyxell-Firewall.svg
+│   │   │   │   ├── Zyxell-Firewall-white.svg
+│   │   │   │   ├── Zyxel-Router-Command.svg
+│   │   │   │   └── Zyxel-Router-Command-white.svg
+│   │   │   ├── LLM_tools.md
+│   │   │   ├── model-specific-icons
+│   │   │   │   ├── FortiAP_432F.svg
+│   │   │   │   ├── FortiGate_600E.svg
+│   │   │   │   ├── FortiSwitch_148E.svg
+│   │   │   │   └── icon_mapping.json
+│   │   │   ├── network_topology_viewer.html
+│   │   │   ├── noc-styles.css
+│   │   │   ├── simple_scene_test.html
+│   │   │   ├── smart-tools.html
+│   │   │   ├── style.css
+│   │   │   ├── style.min.css
+│   │   │   ├── svg_topology_view.html
+│   │   │   ├── topology_2d_fallback.html
+│   │   │   ├── topology_debug.html
+│   │   │   ├── topology_simple.html
+│   │   │   ├── topology_working.html
+│   │   │   ├── troubleshooting.js
+│   │   │   ├── visualization.css
+│   │   │   ├── visualization.html
+│   │   │   └── webgl_probe.html
+│   │   ├── svg_to_3d.py
+│   │   ├── test-cost-savings.yaml
+│   │   ├── test_enhanced_api_integration.py
+│   │   ├── test-integration.py
+│   │   ├── validate_corporate_network_compatibility.py
+│   │   ├── visio_icon_extractor.py
+│   │   ├── vss_to_svg.py
+│   │   ├── webfilters.py
+│   │   └── working-local-ai-config.yaml
+│   └── enhanced_network_api.egg-info
+│       ├── dependency_links.txt
+│       ├── not-zip-safe
+│       ├── PKG-INFO
+│       ├── SOURCES.txt
+│       └── top_level.txt
+├── test_comprehensive_accuracy.py
+├── test_comprehensive_report.json
+├── test_extraction
+│   ├── real_FortiGate_Series_R22_2025Q2_generic.svg
+│   ├── real_shape_001___PF.svg
+│   ├── real_shape_002___D_H.svg
+│   ├── real_shape_003__v__.svg
+│   ├── real_shape_004_SE_W_7.svg
+│   ├── real_shape_005__0bz.svg
+│   ├── real_shape_006_0b_b.svg
+│   ├── real_shape_007_c__f.svg
+│   ├── real_shape_008_K___.svg
+│   ├── real_shape_009____6_.svg
+│   ├── real_shape_010_yTsW.svg
+│   ├── real_shape_011__I6N.svg
+│   ├── real_shape_012_8sWM_.svg
+│   ├── real_shape_013_Mp_1.svg
+│   ├── real_shape_014__AA_.svg
+│   ├── real_shape_015_T_g_n.svg
+│   ├── real_shape_016__OoO_.svg
+│   ├── real_shape_017____3_E_W_i___.svg
+│   ├── real_shape_018_OHh_eZi.svg
+│   ├── real_shape_019__ro__P_b_t_.svg
+│   ├── real_shape_020_7_joF__.svg
+│   ├── real_shape_021_1vx4.svg
+│   ├── real_shape_022_w_ej.svg
+│   ├── real_shape_023_Zt_t.svg
+│   ├── real_shape_024_.p__.svg
+│   ├── real_shape_025_Soeo.svg
+│   ├── real_shape_026_____2_G.svg
+│   └── real_shape_027__-3_.svg
+├── tests
+│   ├── check_actual_content.py
+│   ├── check_js_syntax.py
+│   ├── check_webgl_init.py
+│   ├── conftest.py
+│   ├── debug_3d_rendering.py
+│   ├── debug_app_js_loading.py
+│   ├── debug_blank_page.py
+│   ├── debug_demo_loading.py
+│   ├── debug_device_positions.py
+│   ├── debug_icon_loading.py
+│   ├── debug_init_app.py
+│   ├── debug_initialization.py
+│   ├── debug_js_errors.py
+│   ├── debug_rendering_pipeline.py
+│   ├── debug_webgl.py
+│   ├── __init__.py
+│   ├── playwright_performance_test.py
+│   ├── playwright_test_app.py
+│   ├── playwright_ui_test.py
+│   ├── __pycache__
+│   │   ├── conftest.cpython-312-pytest-8.4.2.pyc
+│   │   ├── conftest.cpython-312-pytest-9.0.1.pyc
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── playwright_performance_test.cpython-312.pyc
+│   │   ├── playwright_performance_test.cpython-312-pytest-8.4.2.pyc
+│   │   ├── playwright_test_app.cpython-312.pyc
+│   │   ├── playwright_ui_test.cpython-312-pytest-8.4.2.pyc
+│   │   ├── simple_visibility_test.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_3d_rendering_final.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_babylon.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_button_functionality.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_complete_ui_functionality.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_echarts_gl.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_mcp_integration.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_platform_services.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_platform_web_api_fastapi_unit.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_production_topology.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_real_button_functionality.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_self_healing.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_self_healing.cpython-312-pytest-9.0.1.pyc
+│   │   ├── test_simple_webgl.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_smoke.cpython-312-pytest-8.4.2.pyc
+│   │   ├── test_smoke.cpython-312-pytest-9.0.1.pyc
+│   │   └── test_topology_api.cpython-312-pytest-8.4.2.pyc
+│   ├── simple_visibility_test.py
+│   ├── test_3d_load.html
+│   ├── test_3d_rendering_final.py
+│   ├── test_babylon_basic.html
+│   ├── test_babylon.html
+│   ├── test_babylon.py
+│   ├── test_button_functionality.py
+│   ├── test_buttons.html
+│   ├── test_complete_topology.py
+│   ├── test_complete_ui_functionality.py
+│   ├── test_drift_protection.py
+│   ├── test_echarts_gl.py
+│   ├── test_fortigate_gui.py
+│   ├── test_fortigate_login_improved.py
+│   ├── test_fortiosapi.py
+│   ├── test_mac_api.py
+│   ├── test_mac_api_server.py
+│   ├── test_mcp_integration.py
+│   ├── test_platform_services.py
+│   ├── test_platform_web_api_fastapi_unit.py
+│   ├── test_production_topology.py
+│   ├── test_raw_topology.json
+│   ├── test_real_button_functionality.py
+│   ├── test_report.md
+│   ├── test_scene_topology.json
+│   ├── test_self_healing_demo.py
+│   ├── test_self_healing.py
+│   ├── test_simple_webgl.py
+│   ├── test_smoke.py
+│   ├── test_topology_api.py
+│   ├── test_workflow_validation.py
+│   └── verify_visual_output.py
+├── test_screenshots
+│   ├── 2d_topology_production.png
+│   ├── 3d_topology_production.png
+│   ├── after_button_click.png
+│   ├── after_demo_mode.png
+│   ├── after_demo.png
+│   ├── after_forced_render.png
+│   ├── after_fortinet_load.png
+│   ├── after_fortinet.png
+│   ├── api_docs.png
+│   ├── babylon_demo.png
+│   ├── babylon_fortinet.png
+│   ├── before_loading.png
+│   ├── blank_page_debug.png
+│   ├── debug_3d_state.png
+│   ├── device_positions_debug.png
+│   ├── echarts_gl_demo.png
+│   ├── echarts_gl_fortinet.png
+│   ├── final_3d_verification.png
+│   ├── final_content_check.png
+│   ├── final_ui_state.png
+│   ├── icon_loading_debug.png
+│   ├── initial_state.png
+│   ├── main_page.png
+│   ├── simple_webgl_test.png
+│   ├── webgl_debug.png
+│   └── webgl_manual_test.png
+├── Untitled-1
+├── uv.lock
+└── vss_extraction
+    ├── source_models
+    ├── vss_exports
+    │   ├── extraction_report.json
+    │   ├── FortiAP_432F.gltf
+    │   ├── FortiAP_432F_metadata.json
+    │   ├── FortiGate_600E.gltf
+    │   ├── FortiGate_600E_metadata.json
+    │   ├── FortiSwitch_148E.gltf
+    │   └── FortiSwitch_148E_metadata.json
+    ├── vss_extraction_linux.py
+    └── vss_extraction.ps1
+
+142 directories, 2801 files

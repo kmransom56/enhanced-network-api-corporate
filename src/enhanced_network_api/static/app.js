@@ -7,37 +7,247 @@ window.initApp = function() {
     console.warn('Dependencies not yet loaded, waiting...');
     return;
   }
+
+  console.log('Initializing 3D Network Topology Editor...');
   
-  if (!window.THREE) {
-    console.error('THREE.js not loaded');
+  // Check if canvas element exists
+  const canvas = document.getElementById('topology-canvas');
+  if (!canvas) {
+    console.error('Canvas element not found! Cannot initialize 3D scene.');
     return;
   }
   
-  console.log('Initializing 3D Network Topology Editor...');
-  // 1. Three.js setup
-  const canvas = document.getElementById('topo-canvas');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0e1116);
-  const camera = new THREE.PerspectiveCamera(60, 2, 0.1, 2000);
-  camera.position.set(0, 80, 150);
+  console.log('Canvas element found, proceeding with initialization...');
+  // Make scene, camera, renderer, etc. globally accessible
+  window.scene = new THREE.Scene();
+  window.camera = new THREE.PerspectiveCamera(60, 2, 0.1, 2000);
+  
+  // Create WebGL renderer with explicit context creation
+  try {
+    window.renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      antialias: true, 
+      alpha: false,
+      preserveDrawingBuffer: true,
+      powerPreference: "high-performance"
+    });
+    
+    console.log('WebGL renderer created successfully');
+  } catch (error) {
+    console.error('Failed to create WebGL renderer:', error);
+    
+    // Try fallback without antialiasing
+    try {
+      window.renderer = new THREE.WebGLRenderer({ 
+        canvas, 
+        antialias: false,
+        alpha: false,
+        preserveDrawingBuffer: true
+      });
+      console.log('WebGL renderer created with fallback settings');
+    } catch (fallbackError) {
+      console.error('WebGL completely failed:', fallbackError);
+      return;
+    }
+  }
+  
+  // Set renderer size and clear color
+  window.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  window.renderer.setClearColor(0x0e1116, 1.0); // Dark background
+  window.renderer.setPixelRatio(window.devicePixelRatio);
+  
+  // Verify WebGL context
+  const gl = window.renderer.getContext();
+  if (!gl) {
+    console.error('WebGL context not available');
+    return;
+  }
+  
+  console.log('WebGL context verified:', gl.getParameter(gl.VERSION));
+  window.controls = null;
+  window.yamlOut = document.getElementById('yaml-output');
+  window.meshes = {}; // name -> THREE.Mesh for tracking
+  window.topologyNodeMeta = {}; // name/id -> original topology node metadata
+
+  function getFortinetIconUrl(node) {
+    // Prefer model-specific icons from converted Visio stencils
+    if (!node || !node.type) return null;
+    
+    // Model-specific mapping for exact device models
+    const model = (node.model || '').toLowerCase();
+    if (node.type === 'fortigate') {
+      if (model.includes('60e') || model.includes('61e') || model.includes('61f')) {
+        return '/static/fortinet-icons/FortiGate_Series_R22_2025Q2.svg';
+      }
+      return '/static/fortinet-icons/FortiGate_Series_R22_2025Q2.svg';
+    }
+    if (node.type === 'fortiswitch') {
+      if (model.includes('124') && model.includes('poe')) {
+        return '/static/fortinet-icons/FortiSwitch_Series_R14_2025Q2.svg';
+      }
+      return '/static/fortinet-icons/FortiSwitch_Series_R14_2025Q2.svg';
+    }
+    if (node.type === 'fortiap') {
+      if (model.includes('231f')) {
+        return '/static/fortinet-icons/FortiAP_Series_R8_2025Q2.svg';
+      }
+      return '/static/fortinet-icons/FortiAP_Series_R8_2025Q2.svg';
+    }
+    
+    // Client device icons
+    if (node.type === 'windows') {
+      return '/static/fortinet-icons/Windows.svg';
+    }
+    if (node.type === 'android') {
+      return '/static/fortinet-icons/Android.svg';
+    }
+    if (node.type === 'apple') {
+      return '/static/fortinet-icons/Apple.svg';
+    }
+    if (node.type === 'linux') {
+      return '/static/fortinet-icons/Linux.svg';
+    }
+    if (node.type === 'gaming' || node.type === 'xbox' || node.type === 'playstation') {
+      return '/static/fortinet-icons/Gaming.svg';
+    }
+    
+    // Fallback to generic icons
+    switch (node.type) {
+      case 'fortigate':
+        return '/static/fortinet-icons/FortiGate.svg';
+      case 'fortiswitch':
+        return '/static/fortinet-icons/FortiSwitch.svg';
+      case 'fortiap':
+        return '/static/fortinet-icons/FortiAP.svg';
+      case 'client':
+        return '/static/fortinet-icons/Client.svg';
+      default:
+        return '/static/fortinet-icons/Client.svg';
+    }
+  }
+
+  function layoutHierarchical(gateways, switches, aps, meshByName, links) {
+    const layerZ = {
+      gateway: 60,
+      switch: 20,
+      ap: -20
+    };
+    const spacingX = 40;
+
+    // Simple mapping from device id to children based on links
+    const children = {};
+    links.forEach(link => {
+      if (!link.from || !link.to) return;
+      if (!children[link.from]) children[link.from] = [];
+      children[link.from].push(link.to);
+    });
+
+    function layoutRow(items, z, y) {
+      const count = items.length || 1;
+      const totalWidth = (count - 1) * spacingX;
+      items.forEach((item, idx) => {
+        const mesh = meshByName[item.name];
+        if (!mesh) return;
+        const x = idx * spacingX - totalWidth / 2;
+        mesh.position.set(x, y, z);
+      });
+    }
+
+    // Layout gateways
+    layoutRow(gateways, layerZ.gateway, 8);
+
+    // For each gateway, layout its switches clustered under it
+    switches.forEach((swWrap, idx) => {
+      const swMesh = meshByName[swWrap.name];
+      if (!swMesh) return;
+
+      // Find parent gateway from links (first gateway that links to this switch)
+      let parentGw = gateways.find(gw => (children[gw.name] || []).includes(swWrap.name));
+      if (!parentGw) {
+        parentGw = gateways[0];
+      }
+      const parentMesh = parentGw ? meshByName[parentGw.name] : null;
+      const baseX = parentMesh ? parentMesh.position.x : 0;
+      const baseZ = layerZ.switch;
+
+      // Spread switches around their parent gateway
+      const siblings = switches.filter(s => {
+        return (children[parentGw.name] || []).includes(s.name);
+      });
+      const indexInSiblings = siblings.findIndex(s => s.name === swWrap.name);
+      const count = siblings.length || 1;
+      const totalWidth = (count - 1) * spacingX;
+      const x = baseX + (indexInSiblings >= 0 ? indexInSiblings * spacingX - totalWidth / 2 : 0);
+
+      swMesh.position.set(x, 6, baseZ);
+    });
+
+    // Layout APs near their parent switch/gateway
+    aps.forEach(apWrap => {
+      const apMesh = meshByName[apWrap.name];
+      if (!apMesh) return;
+
+      // Parent is the device that has a link to this AP
+      let parentName = null;
+      links.forEach(link => {
+        if (link.to === apWrap.name && !parentName) {
+          parentName = link.from;
+        }
+      });
+      const parentMesh = parentName ? meshByName[parentName] : null;
+      const baseX = parentMesh ? parentMesh.position.x : 0;
+      const baseZ = parentMesh ? parentMesh.position.z : layerZ.ap;
+
+      // Slight fan-out around parent
+      const offsetX = (Math.random() - 0.5) * 20;
+      const offsetZ = 10;
+
+      apMesh.position.set(baseX + offsetX, 10, baseZ - offsetZ);
+    });
+  }
+
+  function updateDetailsPanel(mesh) {
+    if (!detailsPanelBody || !mesh || !mesh.userData) {
+      return;
+    }
+    const name = mesh.userData.name;
+    const meta = window.topologyNodeMeta[name] || mesh.userData.topology || {};
+
+    const fields = [
+      ['Name', name || meta.name],
+      ['Type', meta.type],
+      ['IP', meta.ip],
+      ['Model', meta.model],
+      ['Serial', meta.serial],
+      ['Status', meta.status],
+      ['Connected via', meta.connected_via]
+    ];
+
+    const html = fields
+      .filter(([_, v]) => v !== undefined && v !== null)
+      .map(([label, value]) => `<p><strong>${label}:</strong> ${value}</p>`)
+      .join('') || '<p>No details available.</p>';
+
+    detailsPanelBody.innerHTML = html;
+  }
+  
+  window.camera.position.set(0, 40, 50); // Much closer to devices
   
   // Enhanced lighting
-  scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+  window.scene.add(new THREE.AmbientLight(0xffffff, 0.85));
   const dir = new THREE.DirectionalLight(0xffffff, 0.6);
   dir.position.set(50, 100, 50);
-  scene.add(dir);
+  window.scene.add(dir);
   
   // Enhanced grid with color theming
   const grid = new THREE.GridHelper(200, 100, 0x30363d, 0x20262d);
-  scene.add(grid);
+  window.scene.add(grid);
   
   // Orbit controls (check if available)
-  let controls;
   if (THREE.OrbitControls) {
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
+    window.controls = new THREE.OrbitControls(window.camera, window.renderer.domElement);
+    window.controls.enableDamping = true;
+    window.controls.dampingFactor = 0.1;
   } else {
     console.warn('OrbitControls not loaded, using manual camera controls');
   }
@@ -62,21 +272,21 @@ window.initApp = function() {
   };
   
   const nodeGeometry = new THREE.BoxGeometry(8, 4, 8);
-  const meshes = {}; // name -> THREE.Mesh for tracking
+  // meshes and topologyNodeMeta are now global as window.meshes and window.topologyNodeMeta
 
   function resize() {
     const { width, height } = canvas.getBoundingClientRect();
-    renderer.setSize(width, height);
-    camera.aspect = width/height;
-    camera.updateProjectionMatrix();
+    window.renderer.setSize(width, height, false);
+    window.camera.aspect = width/height;
+    window.camera.updateProjectionMatrix();
   }
   window.addEventListener('resize', resize);
   resize();
 
   function animate() {
     requestAnimationFrame(animate);
-    if (controls) controls.update();
-    renderer.render(scene, camera);
+    if (window.controls) window.controls.update();
+    window.renderer.render(window.scene, window.camera);
   }
   animate();
   
@@ -85,22 +295,27 @@ window.initApp = function() {
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mouseup', onMouseUp);
   
+  const detailsPanelBody = document.getElementById('device-details-body');
+
   function onMouseDown(event) {
     event.preventDefault();
     const rect = canvas.getBoundingClientRect();
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children.filter(obj => obj.userData.draggable));
+    raycaster.setFromCamera(mouse, window.camera);
+    const intersects = raycaster.intersectObjects(window.scene.children.filter(obj => obj.userData.draggable));
     
     if (intersects.length > 0) {
-      dragging = intersects[0].object;
-      if (controls) controls.enabled = false;
+      const hit = intersects[0].object;
+      dragging = hit;
+      if (window.controls) window.controls.enabled = false;
       
       if (raycaster.ray.intersectPlane(plane, planeIntersect)) {
         offset.copy(planeIntersect).sub(dragging.position);
       }
+
+      updateDetailsPanel(hit);
     }
   }
   
@@ -111,7 +326,7 @@ window.initApp = function() {
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     
-    raycaster.setFromCamera(mouse, camera);
+    raycaster.setFromCamera(mouse, window.camera);
     
     if (raycaster.ray.intersectPlane(plane, planeIntersect)) {
       const target = new THREE.Vector3().copy(planeIntersect).sub(offset);
@@ -137,7 +352,7 @@ window.initApp = function() {
       updateYAML();
       
       dragging = null;
-      if (controls) controls.enabled = true;
+      if (window.controls) window.controls.enabled = true;
     }
   }
 
@@ -154,7 +369,7 @@ window.initApp = function() {
     const name = `${type}_${Date.now()}`; // Generate unique name
     const mesh = await createDeviceMesh(type, name);
     mesh.position.copy(pos);
-    scene.add(mesh);
+    window.scene.add(mesh);
     updateYAML();
   });
 
@@ -162,7 +377,7 @@ window.initApp = function() {
     const rect = canvas.getBoundingClientRect();
     const nx = ((x - rect.left)/rect.width)*2 - 1;
     const ny = -((y - rect.top)/rect.height)*2 + 1;
-    const vec = new THREE.Vector3(nx, ny, 0.5).unproject(camera);
+    const vec = new THREE.Vector3(nx, ny, 0.5).unproject(window.camera);
     vec.x = Math.round(vec.x/10)*10;
     vec.y = 5;
     vec.z = Math.round(vec.z/10)*10;
@@ -179,19 +394,21 @@ window.initApp = function() {
       name = ensureUniqueName(name);
     }
     
-    // attempt GLB
-    const glbUrl = `/models/${type}.glb`;
     let mesh;
     
     try {
-      const res = await fetch(glbUrl, { method: 'HEAD' });
-      if (res.ok) {
-        mesh = await loadGlbMesh(glbUrl, type);
+      // Try to load SVG icon as billboard first (real-world device icons)
+      const iconUrl = getFortinetIconUrl({ type: type });
+      if (iconUrl) {
+        console.log(`Loading SVG icon for ${type}: ${iconUrl}`);
+        mesh = await makeBillboard(iconUrl, type);
       } else {
-        mesh = await makeBillboard(`/billboards/${type}.jpg`, type);
+        // Fallback to generic device geometry
+        console.warn(`No icon found for ${type}, using geometry fallback`);
+        mesh = await createFallbackMesh(type);
       }
     } catch (error) {
-      console.warn(`Failed to load ${type} model:`, error);
+      console.warn(`Failed to load ${type} icon:`, error);
       mesh = await createFallbackMesh(type);
     }
     
@@ -212,7 +429,7 @@ window.initApp = function() {
     let counter = 1;
     let baseName = `${type}_${counter}`;
     
-    while (meshes[baseName]) {
+    while (window.meshes[baseName]) {
       counter++;
       baseName = `${type}_${counter}`;
     }
@@ -221,14 +438,14 @@ window.initApp = function() {
   }
   
   function ensureUniqueName(proposedName) {
-    if (!meshes[proposedName]) {
+    if (!window.meshes[proposedName]) {
       return proposedName;
     }
     
     let counter = 1;
     let uniqueName = `${proposedName}_${counter}`;
     
-    while (meshes[uniqueName]) {
+    while (window.meshes[uniqueName]) {
       counter++;
       uniqueName = `${proposedName}_${counter}`;
     }
@@ -237,20 +454,20 @@ window.initApp = function() {
   }
   
   function registerMesh(name, mesh) {
-    if (meshes[name]) {
+    if (window.meshes[name]) {
       console.warn(`Mesh name collision detected: ${name}. Removing old mesh.`);
-      const oldMesh = meshes[name];
-      scene.remove(oldMesh);
+      const oldMesh = window.meshes[name];
+      window.scene.remove(oldMesh);
       disposeMesh(oldMesh);
     }
     
-    meshes[name] = mesh;
+    window.meshes[name] = mesh;
     console.log(`Registered mesh: ${name} (${mesh.userData.type})`);
   }
   
   function unregisterMesh(name) {
-    if (meshes[name]) {
-      delete meshes[name];
+    if (window.meshes[name]) {
+      delete window.meshes[name];
       console.log(`Unregistered mesh: ${name}`);
     }
   }
@@ -307,12 +524,52 @@ window.initApp = function() {
   // billboard helper with type styling
   async function makeBillboard(url, type) {
     try {
-      const tex = await new THREE.TextureLoader().loadAsync(url);
-      const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
-      const geo = new THREE.PlaneGeometry(12, 8);
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.onBeforeRender = (_, __, camera) => mesh.quaternion.copy(camera.quaternion);
-      return mesh;
+      // For SVG files, we need to convert them to a format Three.js can use
+      if (url.endsWith('.svg')) {
+        // Load SVG as image, then convert to texture
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = url;
+        });
+        
+        // Create a canvas to draw the SVG
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 256;  // Reasonable size for device icons
+        canvas.height = 256;
+        
+        // Draw the image on canvas
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // Create texture from canvas
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.needsUpdate = true;
+        
+        const mat = new THREE.MeshBasicMaterial({ 
+          map: tex, 
+          transparent: true,
+          side: THREE.DoubleSide
+        });
+        
+        const geo = new THREE.PlaneGeometry(30, 20); // Much larger size for visibility
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.onBeforeRender = (_, __, camera) => mesh.quaternion.copy(camera.quaternion);
+        
+        console.log(`Successfully created SVG billboard for ${type}`);
+        return mesh;
+      } else {
+        // For non-SVG files (JPG, PNG), use the original method
+        const tex = await new THREE.TextureLoader().loadAsync(url);
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
+        const geo = new THREE.PlaneGeometry(30, 20); // Much larger size for visibility
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.onBeforeRender = (_, __, camera) => mesh.quaternion.copy(camera.quaternion);
+        return mesh;
+      }
     } catch (error) {
       console.warn('Billboard loading failed, using geometry fallback:', error);
       const material = materialByType[type] || materialByType.default;
@@ -321,10 +578,10 @@ window.initApp = function() {
   }
 
   // 4. YAML sync and parsing
-  const yamlOut = document.getElementById('yaml-output');
+  // yamlOut is now global as window.yamlOut
   
   function updateYAML() {
-    const nodes = scene.children
+    const nodes = window.scene.children
       .filter(o => o.position && o.userData.type)
       .map(o => ({
         name: o.userData.name || o.userData.type,
@@ -342,7 +599,7 @@ window.initApp = function() {
     };
     
     const yamlString = generateYAMLString(topology);
-    if (yamlOut) yamlOut.value = yamlString;
+    if (window.yamlOut) window.yamlOut.value = yamlString;
     
     // Auto-save to backend if configured
     if (window.autoSaveEnabled) {
@@ -626,7 +883,7 @@ window.initApp = function() {
         );
       }
       
-      scene.add(mesh);
+      window.scene.add(mesh);
     }
     
     // TODO: Load connections as lines/curves between nodes
@@ -638,20 +895,153 @@ window.initApp = function() {
     
     updateYAML();
   }
+
+  // 10. Fortinet topology loader (calls /api/topology/scene)
+  const btnLoadFortinet = document.getElementById('btn-load-fortinet-topology');
+  if (btnLoadFortinet) {
+    btnLoadFortinet.addEventListener('click', () => {
+      loadFortinetTopologyScene();
+    });
+  }
+
+  function frameSceneToMeshes(meshByName) {
+    const names = Object.keys(meshByName || {});
+    if (!names.length) return;
+
+    const box = new THREE.Box3();
+    names.forEach(name => {
+      const m = meshByName[name];
+      if (m) {
+        box.expandByObject(m);
+      }
+    });
+
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z) || 10;
+
+    const distance = maxDim * 3;
+    window.camera.position.set(center.x + distance, center.y + distance, center.z + distance);
+    window.camera.lookAt(center);
+    if (window.controls) {
+      window.controls.target.copy(center);
+      window.controls.update();
+    }
+  }
+
+  async function loadFortinetTopologyScene() {
+    try {
+      const resp = await fetch('/api/topology/scene');
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status}`);
+      }
+      const data = await resp.json();
+
+      clearScene();
+
+      const nodesData = data.nodes || [];
+      const linksData = data.links || [];
+
+      // Reset topology metadata cache
+      Object.keys(window.topologyNodeMeta).forEach(k => delete window.topologyNodeMeta[k]);
+
+      // Index nodes by id/name
+      nodesData.forEach((n, idx) => {
+        const name = n.id || n.name || `node_${idx}`;
+        window.topologyNodeMeta[name] = n;
+      });
+
+      const typeMap = {
+        fortigate: 'firewall',
+        fortiswitch: 'switch',
+        fortiap: 'access_point'
+      };
+
+      // Partition nodes by type for hierarchical layout
+      const gateways = [];
+      const switches = [];
+      const aps = [];
+
+      Object.entries(window.topologyNodeMeta).forEach(([name, n]) => {
+        if (n.type === 'fortigate') gateways.push({ name, node: n });
+        else if (n.type === 'fortiswitch') switches.push({ name, node: n });
+        else if (n.type === 'fortiap') aps.push({ name, node: n });
+      });
+
+      // Precreate meshes for all nodes with Fortinet icons
+      const meshByName = {};
+
+      async function createFortinetMesh(name, n) {
+        const devType = typeMap[n.type] || 'router';
+        const iconUrl = getFortinetIconUrl(n);
+
+        let mesh;
+        if (iconUrl) {
+          // Billboard from SVG icon
+          mesh = await makeBillboard(iconUrl, devType);
+          mesh.userData.type = devType;
+          mesh.userData.name = name;
+          mesh.userData.draggable = true;
+          mesh.userData.id = name;
+          mesh.name = name;
+          registerMesh(name, mesh);
+        } else {
+          mesh = await createDeviceMesh(devType, name);
+        }
+
+        // Attach original topology metadata for details panel
+        mesh.userData.topology = n;
+
+        window.scene.add(mesh);
+        meshByName[name] = mesh;
+        return mesh;
+      }
+
+      // Create all meshes
+      for (const { name, node } of gateways) {
+        await createFortinetMesh(name, node);
+      }
+      for (const { name, node } of switches) {
+        await createFortinetMesh(name, node);
+      }
+      for (const { name, node } of aps) {
+        await createFortinetMesh(name, node);
+      }
+
+      // Hierarchical layout: gateways back, switches middle, APs front
+      layoutHierarchical(gateways, switches, aps, meshByName, linksData);
+      frameSceneToMeshes(meshByName);
+
+      // Create connections based on links
+      linksData.forEach(link => {
+        const from = link.from;
+        const to = link.to;
+        const linkType = link.type || 'ethernet';
+        if (from && to) {
+          createConnection(from, to, linkType);
+        }
+      });
+
+      updateYAML();
+    } catch (err) {
+      console.error('Failed to load Fortinet topology scene:', err);
+      alert('Failed to load Fortinet topology from /api/topology/scene');
+    }
+  }
   
   function clearScene() {
     // Remove devices and connections
-    const objectsToRemove = scene.children.filter(obj => 
+    const objectsToRemove = window.scene.children.filter(obj => 
       obj.userData.type || obj.userData.connection
     );
     
     objectsToRemove.forEach(obj => {
-      scene.remove(obj);
+      window.scene.remove(obj);
       disposeMesh(obj);
     });
     
     // Clear mesh tracking
-    Object.keys(meshes).forEach(key => {
+    Object.keys(window.meshes).forEach(key => {
       unregisterMesh(key);
     });
     
@@ -906,8 +1296,8 @@ window.initApp = function() {
   const btnExportYaml = document.getElementById('btn-export-yaml');
   if (btnExportYaml) {
     btnExportYaml.addEventListener('click', () => {
-      const yamlContent = yamlOut?.value || generateYAMLString({
-        nodes: scene.children
+      const yamlContent = window.yamlOut?.value || generateYAMLString({
+        nodes: window.scene.children
           .filter(o => o.position && o.userData.type)
           .map(o => ({
             name: o.userData.name || o.userData.type,
@@ -927,9 +1317,9 @@ window.initApp = function() {
   }
   
   const btnLoadYamlFromInput = document.getElementById('btn-load-yaml');
-  if (btnLoadYamlFromInput && yamlOut) {
+  if (btnLoadYamlFromInput && window.yamlOut) {
     btnLoadYamlFromInput.addEventListener('click', async () => {
-      const yamlContent = yamlOut.value;
+      const yamlContent = window.yamlOut.value;
       if (yamlContent.trim()) {
         await parseYAMLToScene(yamlContent);
       } else {
@@ -957,7 +1347,7 @@ window.initApp = function() {
   }
   
   function autoLayoutDevices() {
-    const devices = scene.children.filter(obj => obj.userData.type);
+    const devices = window.scene.children.filter(obj => obj.userData.type);
     const gridSize = Math.ceil(Math.sqrt(devices.length));
     const spacing = 25;
     
@@ -972,6 +1362,9 @@ window.initApp = function() {
     
     updateYAML();
   }
+  
+  // Make autoLayoutDevices globally accessible
+  window.autoLayoutDevices = autoLayoutDevices;
 
   // helpers
   function download(blob, name) {
@@ -986,6 +1379,79 @@ window.initApp = function() {
     const data = canvas.toDataURL('image/jpeg', 0.8);
     document.getElementById('thumb-img').src = data;
   }
+  
+  // Make key functions globally accessible
+  window.createDeviceMesh = createDeviceMesh;
+  window.updateYAML = updateYAML;
+  window.clearScene = clearScene;
+  window.autoLayoutDevices = autoLayoutDevices;
+  
+  // Define loadFortinetTopologyScene inside initApp so it has access to all functions
+  window.loadFortinetTopologyScene = async function() {
+    console.log('Loading Fortinet topology scene...');
+    
+    try {
+      // Fetch the topology scene data
+      const response = await fetch('/api/topology/scene');
+      const data = await response.json();
+      
+      console.log('Topology scene data:', data);
+        
+        if (data.nodes && data.links) {
+          // Clear existing scene
+          clearScene();
+          
+          // Create devices from topology data
+          const devices = [];
+          
+          // Process nodes
+          data.nodes.forEach(node => {
+            const device = {
+              name: node.name || node.id,
+              type: node.type || 'unknown',
+              role: node.role || 'device',
+              ip: node.ip || '',
+              model: node.model || '',
+              status: node.status || 'unknown',
+              metadata: node.metadata || {}
+            };
+            devices.push(device);
+          });
+          
+          // Add devices to scene using Promise.all to handle async properly
+          await Promise.all(devices.map(async device => {
+            const mesh = await createDeviceMesh(device.type, device.name);
+            if (device.position) {
+              mesh.position.set(device.position.x, device.position.y, device.position.z);
+            }
+            window.scene.add(mesh);
+            return mesh;
+          }));
+          
+          // Auto-layout devices (inline function to avoid scope issues)
+          const devicesInScene = window.scene.children.filter(obj => obj.userData.type);
+          
+          // Position devices right in front of camera for visibility
+          devicesInScene.forEach((device, index) => {
+            // Position devices in a visible pattern right in front of camera
+            const x = (index % 3 - 1) * 35; // -35, 0, 35 pattern
+            const z = -20; // 20 units in front of camera
+            const y = 5; // at eye level
+            
+            device.position.set(x, y, z);
+          });
+          
+          // Update YAML output
+          updateYAML();
+          
+          console.log(`✅ Loaded ${devices.length} devices into scene`);
+        } else {
+          console.warn('Invalid topology data format:', data);
+        }
+      } catch (error) {
+        console.error('Failed to load Fortinet topology scene:', error);
+      }
+    };
 };
 
 // Fallback: initialize on DOMContentLoaded if dependencies are already loaded

@@ -1,0 +1,28 @@
+{
+  "deployment_date": "2025-11-21T14:44:17.468395",
+  "method": "Linux-Deployment-Script",
+  "total_models_deployed": 3,
+  "total_models_skipped": 0,
+  "deployed_models": [
+    {
+      "enhanced_name": "FortiGate_600E_enhanced.gltf",
+      "production_name": "FortiGate.glb",
+      "source_file": "eraser_ai_output/FortiGate_600E_enhanced.gltf"
+    },
+    {
+      "enhanced_name": "FortiSwitch_148E_enhanced.gltf",
+      "production_name": "FortiSwitch.glb",
+      "source_file": "eraser_ai_output/FortiSwitch_148E_enhanced.gltf"
+    },
+    {
+      "enhanced_name": "FortiAP_432F_enhanced.gltf",
+      "production_name": "FortinetAP.glb",
+      "source_file": "eraser_ai_output/FortiAP_432F_enhanced.gltf"
+    }
+  ],
+  "skipped_models": [],
+  "target_directory": "../src/enhanced_network_api/static/3d-models",
+  "backup_directory": "../src/enhanced_network_api/static/3d-models/backup",
+  "babylonjs_updated": true,
+  "production_ready": true
+}

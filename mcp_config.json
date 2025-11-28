@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "ai-platform": {
+      "command": "python",
+      "args": ["src/enhanced_network_api/ai-platform-mcp-server.py"],
+      "cwd": "/home/keith/enhanced-network-api-corporate",
+      "env": {
+        "PYTHONPATH": "/home/keith/enhanced-network-api-corporate/src"
+      }
+    },
+    "sequential-thinking": {
+      "command": "python",
+      "args": ["mcp_sequential_thinking_server.py"],
+      "cwd": "/home/keith/enhanced-network-api-corporate",
+      "env": {
+        "PYTHONPATH": "/home/keith/enhanced-network-api-corporate/src"
+      }
+    },
+    "perplexity": {
+      "command": "python",
+      "args": ["mcp_perplexity_server.py"],
+      "cwd": "/home/keith/enhanced-network-api-corporate",
+      "env": {
+        "PYTHONPATH": "/home/keith/enhanced-network-api-corporate/src"
+      }
+    },
+    "fortinet-topology": {
+      "command": "python",
+      "args": ["mcp_topology_server.py"],
+      "cwd": "/home/keith/enhanced-network-api-corporate",
+      "env": {
+        "PYTHONPATH": "/home/keith/enhanced-network-api-corporate/src",
+        "FORTIGATE_IP": "192.168.0.254",
+        "FORTIGATE_USER": "admin",
+        "FORTIGATE_TOKEN": "",
+        "FORTIGATE_PASSWORD": "",
+        "FORTIGATE_SERIAL": "FG600E321X5901234",
+        "FORTISWITCH_SERIAL": "FS148E321X5905678",
+        "FORTIAP_SERIAL": "FAP432F321X5909876"
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "id": "FortiGate-61F",
+      "name": "FW",
+      "type": "fortigate",
+      "ip": "192.168.0.254",
+      "status": "active",
+      "model": "FGT61F",
+      "serial": "FGT61FTK20020975",
+      "position": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "id": "SW",
+      "name": "CoreSwitch",
+      "type": "fortiswitch",
+      "ip": "10.255.1.2",
+      "status": "active",
+      "model": "FortiSwitch 124E-POE",
+      "serial": "S124EPTQ22000276",
+      "position": {
+        "x": -3,
+        "y": 1,
+        "z": 3
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "id": "AP",
+      "name": "AP",
+      "type": "fortiap",
+      "ip": "192.168.1.4",
+      "status": "active",
+      "model": "FAP-231F",
+      "serial": "FP231FTF20023043",
+      "position": {
+        "x": 3,
+        "y": 1,
+        "z": 3
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "fg-192.168.0.254",
+      "target": "sw-001",
+      "type": "physical",
+      "bandwidth": "1Gbps",
+      "status": "active"
+    },
+    {
+      "source": "sw-001",
+      "target": "ap-001",
+      "type": "physical",
+      "bandwidth": "1Gbps",
+      "status": "active"
+    }
+  ]
+}

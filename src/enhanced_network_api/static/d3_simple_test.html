@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Simple Test</title>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1f2e;
+            color: white;
+        }
+        
+        .node {
+            cursor: pointer;
+        }
+        
+        .node circle {
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        
+        .node rect {
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        
+        .link {
+            stroke: #58a6ff;
+            stroke-width: 2px;
+            opacity: 0.6;
+        }
+        
+        .label {
+            font-size: 12px;
+            fill: white;
+            text-anchor: middle;
+        }
+        
+        .status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 D3.js Network Topology Test</h1>
+    <div class="status" id="status">Initializing...</div>
+    <svg id="network" width="800" height="600"></svg>
+
+    <script>
+        // Test data
+        const testData = {
+            nodes: [
+                {id: "fg-192.168.0.254", name: "FortiGate", type: "fortigate"},
+                {id: "fs-192.168.0.10", name: "FortiSwitch", type: "fortiswitch"},
+                {id: "fap-192.168.0.20", name: "FortiAP", type: "fortiap"}
+            ],
+            links: [
+                {source: "fg-192.168.0.254", target: "fs-192.168.0.10"},
+                {source: "fs-192.168.0.10", target: "fap-192.168.0.20"}
+            ]
+        };
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+        }
+        
+        function init() {
+            console.log('🎨 Initializing D3.js test...');
+            updateStatus('Creating network...');
+            
+            const svg = d3.select('#network');
+            const width = +svg.attr('width');
+            const height = +svg.attr('height');
+            
+            const g = svg.append('g');
+            
+            // Create force simulation
+            const simulation = d3.forceSimulation(testData.nodes)
+                .force('link', d3.forceLink(testData.links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2));
+            
+            // Create links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(testData.links)
+                .enter()
+                .append('line')
+                .attr('class', 'link');
+            
+            // Create nodes
+            const node = g.append('g')
+                .selectAll('g')
+                .data(testData.nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+            
+            // Add shapes based on type
+            node.each(function(d) {
+                const group = d3.select(this);
+                
+                if (d.type === 'fortigate') {
+                    group.append('rect')
+                        .attr('x', -30)
+                        .attr('y', -30)
+                        .attr('width', 60)
+                        .attr('height', 60)
+                        .attr('fill', '#cc3333')
+                        .attr('rx', 4);
+                } else {
+                    group.append('circle')
+                        .attr('r', d.type === 'fortiswitch' ? 25 : 20)
+                        .attr('fill', d.type === 'fortiswitch' ? '#33cc66' : '#3399ff');
+                }
+                
+                // Add label
+                group.append('text')
+                    .attr('class', 'label')
+                    .attr('dy', d.type === 'fortigate' ? 40 : 35)
+                    .text(d.name);
+            });
+            
+            // Update positions on tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+                
+                node
+                    .attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+            
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+            
+            updateStatus('Network created successfully!');
+            console.log('✅ D3.js test completed successfully');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

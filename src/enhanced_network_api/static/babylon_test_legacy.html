@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babylon.js 3D Network Topology</title>
+    <link rel="stylesheet" href="/static/babylon_topology.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>🌐 Babylon.js 3D Network Topology</h1>
+            <button onclick="loadFortinetTopology()">🔥 Load Fortinet</button>
+            <button onclick="loadDemoTopology()">🎭 Demo Mode</button>
+            <button onclick="resetCamera()">🔄 Reset Camera</button>
+            <button onclick="toggleRotation()">🔄 Toggle Rotation</button>
+        </div>
+        
+        <canvas id="renderCanvas"></canvas>
+        
+        <div class="info">
+            <h3>Network Topology</h3>
+            <p>Devices: <span id="deviceCount">0</span></p>
+            <p>Connections: <span id="connectionCount">0</span></p>
+            <p>Library: Babylon.js</p>
+            <p>WebGL: <span id="webglStatus">Checking...</span></p>
+        </div>
+        
+        <div class="loading" id="loading">Loading Babylon.js...</div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <!-- Babylon.js Core -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <!-- Babylon.js Loaders for models -->
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+    <script>
+        let engine = null;
+        let scene = null;
+        let canvas = null;
+        let devices = [];
+        let connections = [];
+        let isRotating = true;
+
+        // Initialize Babylon.js
+        function initBabylon() {
+            try {
+                canvas = document.getElementById('renderCanvas');
+                engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+                
+                // Check WebGL support
+                const webglSupported = engine.webGLVersion > 0;
+                document.getElementById('webglStatus').textContent = webglSupported ? '✅ Supported' : '❌ Not Supported';
+                
+                if (!webglSupported) {
+                    showError('WebGL is not supported in this browser');
+                    return false;
+                }
+                
+                createScene();
+                setupCameraControls();
+                startRenderLoop();
+                
+                console.log('✅ Babylon.js initialized successfully');
+                hideLoading();
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Babylon.js initialization failed:', error);
+                showError('Babylon.js initialization failed: ' + error.message);
+                return false;
+            }
+        }
+
+        // Create the 3D scene
+        function createScene() {
+            scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color3(0.055, 0.067, 0.086); // #0e1116
+            
+            // Create camera
+            const camera = new BABYLON.ArcRotateCamera("camera", 
+                Math.PI / 4, // alpha
+                Math.PI / 3, // beta  
+                150, // radius
+                BABYLON.Vector3.Zero(), // target
+                scene);
+            camera.attachControl(canvas, true);
+            camera.wheelPrecision = 50;
+            
+            // Create lights
+            const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+            light1.intensity = 0.7;
+            
+            const light2 = new BABYLON.DirectionalLight("light2", new BABYLON.Vector3(-1, -2, -1), scene);
+            light2.intensity = 0.5;
+            
+            // Create ground
+            const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 200, height: 200}, scene);
+            const groundMaterial = new BABYLON.StandardMaterial("groundMat", scene);
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            ground.material = groundMaterial;
+            ground.position.y = -10;
+            
+            // Create grid lines on ground
+            createGrid();
+        }
+
+        // Create grid lines
+        function createGrid() {
+            const gridMaterial = new BABYLON.StandardMaterial("gridMat", scene);
+            gridMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+            gridMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            
+            const gridSize = 200;
+            const gridDivisions = 20;
+            const gridStep = gridSize / gridDivisions;
+            
+            for (let i = -gridDivisions/2; i <= gridDivisions/2; i++) {
+                // X-direction lines
+                const lineX = BABYLON.MeshBuilder.CreateBox("lineX" + i, {
+                    width: gridSize,
+                    height: 0.1,
+                    depth: 0.1
+                }, scene);
+                lineX.position.x = 0;
+                lineX.position.z = i * gridStep;
+                lineX.position.y = -9.9;
+                lineX.material = gridMaterial;
+                
+                // Z-direction lines
+                const lineZ = BABYLON.MeshBuilder.CreateBox("lineZ" + i, {
+                    width: 0.1,
+                    height: 0.1,
+                    depth: gridSize
+                }, scene);
+                lineZ.position.x = i * gridStep;
+                lineZ.position.z = 0;
+                lineZ.position.y = -9.9;
+                lineZ.material = gridMaterial;
+            }
+        }
+
+        // Setup camera controls
+        function setupCameraControls() {
+            // Camera is already set up in createScene
+        }
+
+        // Start render loop
+        function startRenderLoop() {
+            engine.runRenderLoop(() => {
+                if (isRotating && scene) {
+                    // Auto-rotate scene
+                    scene.activeCamera.alpha += 0.003;
+                }
+                scene.render();
+            });
+        }
+
+        // Device configurations with enhanced features for VSS + Eraser AI workflow
+        const deviceConfigs = {
+            'fortigate': { 
+                color: new BABYLON.Color3(1, 0.4, 0.4), 
+                size: 3, 
+                shape: 'box',
+                iconPath: '/static/fortinet-icons-extracted/FortiGate.svg',
+                modelPath: '/static/3d-models/FortiGate.glb', // Enhanced VSS + Eraser AI models
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortimanager': { 
+                color: new BABYLON.Color3(0.6, 0.4, 0.8), 
+                size: 2.8, 
+                shape: 'box',
+                iconPath: '/static/fortinet-icons-extracted/FortiManager.svg',
+                modelPath: '/static/3d-models/FortiGate.glb', // Use FortiGate model as fallback
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortianalyzer': { 
+                color: new BABYLON.Color3(0.9, 0.5, 0.1), 
+                size: 2.8, 
+                shape: 'box',
+                iconPath: '/static/fortinet-icons-extracted/FortiAnalyzer.svg',
+                modelPath: '/static/3d-models/FortiGate.glb', // Use FortiGate model as fallback
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiswitch': { 
+                color: new BABYLON.Color3(0.3, 0.8, 0.8), 
+                size: 2.5, 
+                shape: 'cylinder',
+                iconPath: '/static/fortinet-icons-extracted/FortiSwitch.svg',
+                modelPath: '/static/3d-models/FortiSwitch.glb',
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800',
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiap': { 
+                color: new BABYLON.Color3(0.3, 0.6, 0.9), 
+                size: 2, 
+                shape: 'cylinder',
+                iconPath: '/static/fortinet-icons-extracted/FortiAP.svg',
+                modelPath: '/static/3d-models/FortinetAP.glb',
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            };
+        
+        // Make deviceConfigs globally accessible for testing
+        window.deviceConfigs = deviceConfigs;
+
+        // Create device mesh with VSS + Eraser AI workflow support
+        function createDevice(deviceData, index) {
+            const config = deviceConfigs[deviceData.type] || deviceConfigs.default;
+            
+            let mesh;
+            
+            // Try to load VSS-extracted 3D model first
+            if (config.modelPath && deviceData.use3DModel) {
+                // This would load the VSS-extracted + Eraser AI rendered 3D model
+                mesh = load3DModel(config.modelPath, deviceData.id);
+            } else {
+                // Fallback to geometric shapes
+                switch (config.shape) {
+                    case 'cylinder':
+                        mesh = BABYLON.MeshBuilder.CreateCylinder(deviceData.id, {
+                            height: config.size * 2,
+                            diameter: config.size
+                        }, scene);
+                        break;
+                    case 'sphere':
+                        mesh = BABYLON.MeshBuilder.CreateSphere(deviceData.id, {
+                            diameter: config.size * 2
+                        }, scene);
+                        break;
+                    default:
+                        mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {
+                            size: config.size * 2
+                        }, scene);
+                }
+            }
+            
+            // Position devices in a circular layout
+            const angle = (index / 6) * Math.PI * 2;
+            const radius = 50;
+            mesh.position.x = Math.cos(angle) * radius;
+            mesh.position.z = Math.sin(angle) * radius;
+            mesh.position.y = config.size;
+            
+            // Create enhanced material with health-based coloring
+            const material = new BABYLON.StandardMaterial(deviceData.id + "_mat", scene);
+            const healthColor = getHealthColor(deviceData.health || 'good', config);
+            material.diffuseColor = healthColor.base;
+            material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+            material.emissiveColor = healthColor.emissive;
+            mesh.material = material;
+            
+            // Add health indicator glow
+            if (deviceData.health && deviceData.health !== 'good') {
+                addHealthGlow(mesh, deviceData.health, config);
+            }
+            
+            // Add device icon as decal (for VSS workflow)
+            if (config.iconPath && !deviceData.use3DModel) {
+                addDeviceIcon(mesh, config.iconPath, config.size);
+            }
+            
+            // Add metadata
+            mesh.metadata = {
+                type: deviceData.type,
+                name: deviceData.name,
+                ip: deviceData.ip,
+                health: deviceData.health || 'good',
+                status: deviceData.status || 'unknown',
+                modelPath: config.modelPath,
+                iconPath: config.iconPath
+            };
+            
+            // Make device interactive
+            mesh.actionManager = new BABYLON.ActionManager(scene);
+            mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+                BABYLON.ActionManager.OnPickTrigger,
+                function(evt) {
+                    const device = evt.source.metadata;
+                    console.log('Device clicked:', device);
+                    showDeviceInfo(device);
+                    highlightDevice(evt.source);
+                }
+            ));
+            
+            // Add hover effects
+            mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+                BABYLON.ActionManager.OnPointerOverTrigger,
+                function(evt) {
+                    const material = evt.source.material;
+                    material.emissiveColor = material.emissiveColor.scale(1.5);
+                }
+            ));
+            
+            mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+                BABYLON.ActionManager.OnPointerOutTrigger,
+                function(evt) {
+                    const device = evt.source.metadata;
+                    const config = deviceConfigs[device.type] || deviceConfigs.default;
+                    const healthColor = getHealthColor(device.health || 'good', config);
+                    evt.source.material.emissiveColor = healthColor.emissive;
+                }
+            ));
+            
+            return mesh;
+        }
+        
+        // Load 3D model from VSS + Eraser AI workflow
+        function load3DModel(modelPath, deviceId) {
+            // Placeholder for VSS-extracted 3D model loading
+            // This would integrate with your VSS extraction + Eraser AI rendering pipeline
+            console.log(`Loading 3D model: ${modelPath} for device: ${deviceId}`);
+            
+            // For now, create a placeholder mesh
+            const mesh = BABYLON.MeshBuilder.CreateBox(deviceId, {
+                size: 3
+            }, scene);
+            
+            // In production, this would:
+            // 1. Load the GLB/GLTF model from VSS extraction
+            // 2. Apply Eraser AI-generated textures and materials
+            // 3. Configure proper scaling and positioning
+            
+            return mesh;
+        }
+        
+        // Get health-based color
+        function getHealthColor(health, config) {
+            const healthColors = config.healthIndicators || {
+                good: '#4caf50',
+                warning: '#ff9800',
+                critical: '#f44336',
+                offline: '#9e9e9e'
+            };
+            
+            const colorHex = healthColors[health] || healthColors.good;
+            const color = BABYLON.Color3.FromHexString(colorHex);
+            
+            return {
+                base: color,
+                emissive: color.scale(0.3)
+            };
+        }
+        
+        // Add health glow effect
+        function addHealthGlow(mesh, health, config) {
+            const glowMaterial = new BABYLON.StandardMaterial(mesh.id + "_glow", scene);
+            const healthColor = getHealthColor(health, config);
+            glowMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            glowMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            glowMaterial.emissiveColor = healthColor.base.scale(0.8);
+            glowMaterial.alpha = 0.5;
+            
+            const glowMesh = BABYLON.MeshBuilder.CreateSphere(mesh.id + "_glow", {
+                diameter: mesh.getBoundingInfo().boundingBox.extendSizeWorld.scale(1.5).length()
+            }, scene);
+            glowMesh.material = glowMaterial;
+            glowMesh.position = mesh.position.clone();
+            glowMesh.parent = mesh;
+        }
+        
+        // Add device icon as decal
+        function addDeviceIcon(mesh, iconPath, size) {
+            // This would add the Fortinet SVG icon as a decal on the device
+            // For now, this is a placeholder for the VSS + Eraser AI workflow
+            console.log(`Adding device icon: ${iconPath} to mesh: ${mesh.id}`);
+        }
+
+        // Create connection line
+        function createConnection(fromDevice, toDevice) {
+            const line = BABYLON.MeshBuilder.CreateLines("connection", {
+                points: [fromDevice.position, toDevice.position]
+            }, scene);
+            
+            const lineMaterial = new BABYLON.StandardMaterial("lineMat", scene);
+            lineMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.6, 1);
+            lineMaterial.disableLighting = true;
+            line.color = new BABYLON.Color3(0.3, 0.6, 1);
+            line.material = lineMaterial;
+            
+            return line;
+        }
+
+        // Load Fortinet topology
+        async function loadFortinetTopology() {
+            try {
+                showLoading();
+                const response = await fetch('/api/topology/scene');
+                const data = await response.json();
+                
+                if (data.nodes && data.links) {
+                    renderTopology(data);
+                } else {
+                    showError('Invalid topology data received');
+                }
+            } catch (error) {
+                console.error('Failed to load Fortinet topology:', error);
+                showError('Failed to load topology data: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Load demo topology with production features
+            
+// Add health indicator glow
+if (deviceData.health && deviceData.health !== 'good') {
+    addHealthGlow(mesh, deviceData.health, config);
+}
+            
+// Add device icon as decal (for VSS workflow)
+if (config.iconPath && !deviceData.use3DModel) {
+    addDeviceIcon(mesh, config.iconPath, config.size);
+}
+
+        // Render topology
+        function renderTopology(data) {
+            clearScene();
+            
+            // Model-specific icon mapping
+            const modelSpecificIcons = {
+                'FortiGate_600E': '/static/model-specific-icons/FortiGate_600E.svg',
+                'FortiSwitch_148E': '/static/model-specific-icons/FortiSwitch_148E.svg',
+                'FortiAP_432F': '/static/model-specific-icons/FortiAP_432F.svg'
+            };
+
+            // Get model-specific icon or fallback
+            function getModelSpecificIcon(nodeData) {
+                if (nodeData.model && modelSpecificIcons[nodeData.model]) {
+                    console.log(` 3D Using model-specific icon: ${nodeData.model}`);
+                    return modelSpecificIcons[nodeData.model];
+                }
+                return null;
+            }
+
+            // Create devices with enhanced 3D models
+            data.nodes.forEach((node, index) => {
+                const device = createDevice(node, index);
+                devices.push(device);
+            });
+            
+            // Create connections
+            data.links.forEach(link => {
+                const fromDevice = devices.find(d => d.metadata.name === link.from || d.id === link.from);
+                const toDevice = devices.find(d => d.metadata.name === link.to || d.id === link.to);
+                
+                if (fromDevice && toDevice) {
+                    const connection = createConnection(fromDevice, toDevice);
+                    connections.push(connection);
+                }
+            });
+            
+            // Update info
+            document.getElementById('deviceCount').textContent = data.nodes.length;
+            document.getElementById('connectionCount').textContent = data.links.length;
+            
+            console.log(`✅ Rendered ${data.nodes.length} devices and ${data.links.length} connections`);
+        }
+
+        // Clear scene
+        function clearScene() {
+            // Remove devices
+            devices.forEach(device => {
+                device.dispose();
+            });
+            devices = [];
+            
+            // Remove connections
+            connections.forEach(connection => {
+                connection.dispose();
+            });
+            connections = [];
+        }
+
+        // Reset camera
+        function resetCamera() {
+            if (scene && scene.activeCamera) {
+                scene.activeCamera.alpha = Math.PI / 4;
+                scene.activeCamera.beta = Math.PI / 3;
+                scene.activeCamera.radius = 150;
+            }
+        }
+
+        // Toggle rotation
+        function toggleRotation() {
+            isRotating = !isRotating;
+        }
+
+        // Show device info with enhanced production details
+        function showDeviceInfo(device) {
+            const healthStatus = getHealthStatusDisplay(device.health || 'good');
+            const info = `
+                <div class="device-info-header">
+                    <div class="device-info-title">${device.name}</div>
+                    <div class="device-info-status ${device.health || 'good'}">● ${healthStatus.text}</div>
+                </div>
+                
+                <div class="device-info-section">
+                    <strong>Type:</strong> ${device.type}<br>
+                    <strong>IP:</strong> ${device.ip || 'N/A'}<br>
+                    <strong>Status:</strong> ${device.status || 'Unknown'}
+                </div>
+                
+                ${device.model ? `
+                <div class="device-info-section">
+                    <strong>Model:</strong> ${device.model}<br>
+                    ${device.serial ? `<strong>Serial:</strong> ${device.serial}<br>` : ''}
+                    ${device.firmware ? `<strong>Firmware:</strong> ${device.firmware}<br>` : ''}
+                </div>
+                ` : ''}
+                
+                ${getDeviceSpecificInfo(device)}
+                
+                <div class="device-info-actions">
+                    <button class="device-info-button" onclick="troubleshootDevice('${device.id}')">🔧 Troubleshoot</button>
+                    <button class="device-info-button logs" onclick="viewDeviceLogs('${device.id}')">📋 Logs</button>
+                </div>
+            `;
+            
+            // Create or update info panel
+            let infoPanel = document.getElementById('deviceInfo');
+            if (!infoPanel) {
+                infoPanel = document.createElement('div');
+                infoPanel.id = 'deviceInfo';
+                infoPanel.className = 'device-info';
+                document.body.appendChild(infoPanel);
+            }
+            infoPanel.innerHTML = info;
+        }
+        
+        // Get health status display
+        function getHealthStatusDisplay(health) {
+            const statusMap = {
+                'good': { text: 'Healthy', color: '#4caf50' },
+                'warning': { text: 'Warning', color: '#ff9800' },
+                'critical': { text: 'Critical', color: '#f44336' },
+                'offline': { text: 'Offline', color: '#9e9e9e' }
+            };
+            return statusMap[health] || statusMap['good'];
+        }
+        
+        // Get device-specific information
+        function getDeviceSpecificInfo(device) {
+            switch (device.type) {
+                case 'fortigate':
+                    return device.cpu ? `
+                        <div class="device-info-section">
+                            <strong>CPU:</strong> ${device.cpu}<br>
+                            <strong>Memory:</strong> ${device.memory}<br>
+                            <strong>Connections:</strong> ${device.connections || 'N/A'}
+                        </div>
+                    ` : '';
+                    
+                case 'fortiswitch':
+                    return device.ports ? `
+                        <div class="device-info-section">
+                            <strong>Ports:</strong> ${device.ports}<br>
+                            <strong>Uptime:</strong> ${device.uptime || 'N/A'}<br>
+                            ${device.temperature ? `<strong>Temperature:</strong> ${device.temperature}<br>` : ''}
+                        </div>
+                    ` : '';
+                    
+                case 'fortiap':
+                    return device.clients !== undefined ? `
+                        <div class="device-info-section">
+                            <strong>Clients:</strong> ${device.clients}<br>
+                            <strong>SSID:</strong> ${device.ssid || 'N/A'}<br>
+                            <strong>Channel:</strong> ${device.channel || 'N/A'}<br>
+                            ${device.lastSeen ? `<strong>Last Seen:</strong> ${device.lastSeen}<br>` : ''}
+                            ${device.issue ? `<strong>Issue:</strong> ${device.issue}<br>` : ''}
+                        </div>
+                    ` : '';
+                    
+                default:
+                    return '';
+            }
+        }
+        
+        // Highlight selected device
+        function highlightDevice(mesh) {
+            // Remove previous highlights
+            scene.meshes.forEach(m => {
+                if (m.material && m.material.emissiveColor) {
+                    const device = m.metadata;
+                    if (device) {
+                        const config = deviceConfigs[device.type] || deviceConfigs.default;
+                        const healthColor = getHealthColor(device.health || 'good', config);
+                        m.material.emissiveColor = healthColor.emissive;
+                    }
+                }
+            });
+            
+            // Highlight selected device
+            if (mesh.material && mesh.material.emissiveColor) {
+                mesh.material.emissiveColor = mesh.material.emissiveColor.scale(2);
+            }
+        }
+        
+        // Troubleshoot device
+        function troubleshootDevice(deviceId) {
+            const device = devices.find(d => d.metadata.id === deviceId);
+            if (device) {
+                console.log(`Troubleshooting device: ${device.metadata.name}`);
+                // This would integrate with your troubleshooting system
+                alert(`Troubleshooting ${device.metadata.name}...\n\nThis would integrate with your Fortinet LLM and MCP troubleshooting tools.`);
+            }
+        }
+        
+        // View device logs
+        function viewDeviceLogs(deviceId) {
+            const device = devices.find(d => d.metadata.id === deviceId);
+            if (device) {
+                console.log(`Viewing logs for device: ${device.metadata.name}`);
+                // This would integrate with your log analysis system
+                alert(`Viewing logs for ${device.metadata.name}...\n\nThis would integrate with your log analysis and smart analysis tools.`);
+            }
+        }
+
+        // Utility functions
+        function showLoading(message = 'Loading...') {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading').textContent = message;
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').textContent = message;
+            hideLoading();
+        }
+
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            if (engine) {
+                engine.resize();
+            }
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('🚀 Initializing Babylon.js 3D Network Topology...');
+            
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                const success = initBabylon();
+                if (success) {
+                    console.log('✅ Babylon.js 3D Network Topology ready!');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

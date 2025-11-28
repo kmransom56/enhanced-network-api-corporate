@@ -1,0 +1,15 @@
+# Placeholder for VSS-extracted + Eraser AI processed FortiSwitch 3D model
+# Replace this file with your actual GLB model from the VSS + Eraser AI workflow
+# 
+# Expected format: GLB (GLTF Binary) 3D model
+# Source: Visual Studio Subsystem (VSS) extraction
+# Processing: Eraser AI texture enhancement
+# Usage: Babylon.js 3D topology visualization
+#
+# Model specifications:
+# - Device: FortiSwitch Secure Access Switch
+# - Scale: Optimized for Babylon.js scene
+# - Materials: PBR with Eraser AI enhanced textures
+# - Animations: Optional (port status LEDs, etc.)
+#
+# Replace this placeholder with your actual GLB file to activate 3D models!

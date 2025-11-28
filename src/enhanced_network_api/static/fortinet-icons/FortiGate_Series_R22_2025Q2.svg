@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" width="0.85in" height="1.0999999in" viewBox="0 0 61.2 79.2">
+ <v:documentProperties>
+  <v:userDefs>
+   <v:ud v:nameU="msvConvertTheme" v:val="0"/>
+  </v:userDefs>
+ </v:documentProperties>
+ <g id="SFixTitle"/>
+ <g id="SContent">
+  <g>
+   <g/>
+   <g transform="matrix(0.1,0.0,0.0,-0.1,0.0,79.2)">
+    <g transform="matrix(1.0,0.0,0.0,1.0,0.0,363.0)" v:mID="1.0">
+     <title>Created with Evaluation version of Aspose.Diagram (c).</title>
+     <g transform="matrix(1.0,0.0,0.0,1.0,0.0,0.0)">
+      <text x="26.009995" y="-756.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">Create</text>
+      <text x="40.949993" y="-540.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">d with</text>
+      <text x="9.269989" y="-324.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">Evalua</text>
+      <text x="142.65001" y="-108.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">tion</text>
+      <text x="2.6999931" y="108.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">version</text>
+      <text x="231.03" y="324.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">of</text>
+      <text x="16.019989" y="540.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">Aspose</text>
+      <text x="44.28" y="756.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">.Diagr</text>
+      <text x="26.009995" y="972.0" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,87.0)">am (c).</text>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+ <style type="text/css"><![CDATA[ .TextStyle0 {font-family:C059;font-size:180.0px;} ]]></style>
+</svg>

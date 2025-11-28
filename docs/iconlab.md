@@ -872,7 +872,143 @@ Automation Pipeline:
    
 This integrated approach enables automatic generation of 3D network topology diagrams with accurate device representations matched from live network discovery data.
 
-Developer Workflow: Agent-Assisted Coding for Enhanced Network API
+## Enhanced Network API Integration
+
+The Enhanced Network API platform now provides integrated endpoints for VSS to SVG and SVG to 3D conversion, leveraging the 3D Network Topology Lab's conversion pipelines.
+
+### FastAPI Endpoints
+
+#### VSS to SVG Conversion
+
+```python
+# Endpoint: POST /api/icons/vss-to-svg-lab
+# Converts uploaded VSS/VSSX stencil to SVGs using the lab VSSConverter
+
+curl -F "file=@FortiGate_Series_R22_2025Q2.vss" \
+     -F "scale=1.0" \
+     http://localhost:11111/api/icons/vss-to-svg-lab
+```
+
+Response:
+```json
+{
+  "backend": "vss_extractor",
+  "svg_files": [
+    "extracted_icons/lab_vss_svgs/shape_001_FortiGate.svg",
+    "extracted_icons/lab_vss_svgs/shape_002_FortiSwitch.svg"
+  ],
+  "total": 2
+}
+```
+
+#### SVG to 3D Conversion
+
+```python
+# Endpoint: POST /api/icons/svg-to-3d-lab
+# Converts SVGs to 3D models using the lab SVGTo3DConverter
+
+curl -X POST http://localhost:11111/api/icons/svg-to-3d-lab \
+     -H "Content-Type: application/json" \
+     -d '{"input_dir": "extracted_icons/lab_vss_svgs", "output_dir": "lab_3d_models"}'
+```
+
+Response:
+```json
+{
+  "generated_models": [
+    "lab_3d_models/shape_001_FortiGate.obj",
+    "lab_3d_models/shape_002_FortiSwitch.obj"
+  ],
+  "total": 2
+}
+```
+
+### Lab Integration Code
+
+The integration uses the actual conversion classes from the 3D Network Topology Lab:
+
+```python
+# From vss_to_svg.py - VSSConverter class
+class VSSConverter:
+    """Converter for VSS (Visio Stencil) files to SVG format"""
+    
+    def __init__(self, backend: Optional[ConversionBackend] = None):
+        self.backend = backend or self._detect_backend()
+    
+    def convert_vss(
+        self, 
+        input_path: Path, 
+        output_dir: Path, 
+        scale: float = 1.0,
+        prefix: str = ""
+    ) -> List[Path]:
+        """Convert a VSS file to SVG format"""
+        # Implementation supports multiple backends:
+        # - vss_extractor (default, uses olefile)
+        # - libvisio2svg (CLI tool)
+        # - pywin32 (Windows Visio COM)
+        # - aspose (commercial library)
+```
+
+```python
+# From svg_to_3d.py - SVGTo3DConverter class
+class SVGTo3DConverter:
+    """Convert SVG files to 3D models for Babylon.js"""
+    
+    def __init__(self, input_dir: Path, output_dir: Path):
+        self.input_dir = Path(input_dir)
+        self.output_dir = Path(output_dir)
+    
+    def optimize_svg_for_3d(self, svg_path: Path) -> Path:
+        """Optimize SVG file for 3D conversion"""
+        # Removes unnecessary attributes, standardizes dimensions
+    
+    def svg_to_obj(self, svg_path: Path) -> Optional[Path]:
+        """Convert SVG to OBJ file using lightweight generation"""
+        # Creates rectangular prism OBJ models (no Blender required)
+```
+
+### 3D Lab Topology Integration
+
+The platform also includes a Babylon.js lab viewer that consumes topology data in the lab's JSON format:
+
+```python
+# Endpoint: GET /api/topology/babylon-lab-format
+# Returns topology in lab-style {"models", "connections"} format
+
+curl http://localhost:11111/api/topology/babylon-lab-format
+```
+
+Response format (matches 3d-network-topology-lab/babylon_topology.json):
+```json
+{
+  "models": [
+    {
+      "id": "fortigate-01",
+      "name": "FortiGate 60F",
+      "type": "firewall",
+      "model": "FortiGate-60F",
+      "position": {"x": 0, "y": 2, "z": 0},
+      "status": "online",
+      "ip": "192.168.1.1",
+      "mac": "90:6C:AC:12:34:56",
+      "vendor": "Fortinet"
+    }
+  ],
+  "connections": [
+    {
+      "from": "fortigate-01",
+      "to": "switch-01",
+      "status": "active",
+      "bandwidth": "1Gbps"
+    }
+  ]
+}
+```
+
+Access the 3D lab viewer at: `http://localhost:11111/3d-lab`
+
+## Developer Workflow: Agent-Assisted Coding for Enhanced Network API
 =================================================================
 
 To implement and evolve this pipeline inside the `enhanced-network-api-corporate` repository, use the cagent-based workflow script as a low-friction entry point:
@@ -967,3 +1103,182 @@ network:
 ```
 
 As long as the vLLM server is running on port `8000`, the **agent** and **research** subcommands will use this GPU-backed model for all Enhanced Network API coding and API research tasks.
+
+
+Methods to Convert Icons to SVG
+1. Vector Tracing with Potrace
+bash
+# Install potrace and ImageMagick
+sudo apt-get install potrace imagemagick
+
+# Convert PNG to bitmap, then trace to SVG
+convert -flatten input.png output.pbm
+potrace -s output.pbm -o output.svg
+rm output.pbm
+Advantage: Command-line automation, highly configurable tracing parameters
+
+Best for: Batch processing, server-side conversion
+
+2. Inkscape Command-Line Conversion
+bash
+# Modern Inkscape syntax
+inkscape "device.png" --export-type="svg" --export-filename="device.svg"
+Advantage: Superior trace quality, supports various image formats
+
+Best for: High-quality conversions, preserving details
+
+3. Cloud-Based API Services
+Cloudinary - Upload PNG, retrieve SVG via transformation URL
+
+javascript
+const cloudinary = require('cloudinary').v2;
+// Convert to SVG programmatically
+cloudinary.image('device-icon.png', { effect: 'vectorize' })
+Vector Magic API - Professional-grade tracing algorithm
+
+ConvertAPI - REST API for PNG to SVG conversion
+
+Advantage: No local dependencies, scalable, high-quality results
+
+4. Node.js Libraries
+javascript
+// Using svg-path-to-polygons for programmatic control
+const { pathParse } = require('svg-path-parse');
+const sharp = require('sharp');
+
+// Extract paths from existing SVG
+const pathData = pathParse(svgPathString).getSegments();
+svg-path-parser - Parse and manipulate SVG paths
+
+svg-path-parse - Normalize and transform SVG data
+
+Advantage: Full programmatic control, integrate into build pipeline
+
+5. Extract from Visio Stencils
+python
+# Visio .vsdx files are ZIP archives containing XML
+import zipfile
+import xml.etree.ElementTree as ET
+
+# Extract SVG-like data from Visio shapes
+with zipfile.ZipFile('cisco-icons.vsdx', 'r') as vsdx:
+    # Parse shape XML, extract path data
+    shape_xml = vsdx.read('visio/pages/page1.xml')
+Advantage: Access vendor-official vector data directly
+
+Best for: Cisco/Fortinet stencils already in Visio format
+
+5 Methods to Convert SVG to 3D for Babylon.js
+1. SVG Path Extrusion (ExtrudeShape)
+javascript
+// Parse SVG path to Babylon.js Path2
+const { parseSVG } = require('svg-path-parser');
+const svgPath = parseSVG('M10,10 L50,10 L50,50 L10,50 Z');
+
+// Convert to Babylon.js Vector3 points
+const points = svgPath.map(cmd => 
+  new BABYLON.Vector3(cmd.x, cmd.y, 0)
+);
+
+// Extrude the shape
+const shape = BABYLON.MeshBuilder.ExtrudeShape("device", {
+  shape: points,
+  path: [new BABYLON.Vector3(0, 0, 0), new BABYLON.Vector3(0, 0, depth)],
+  cap: BABYLON.Mesh.CAP_ALL
+}, scene);
+Advantage: Full control, lightweight, real-time manipulation
+
+Best for: Simple icons, logos, flat device representations
+
+2. CSG (Constructive Solid Geometry) Operations
+javascript
+// Create basic 3D primitives from SVG outlines
+const profile = BABYLON.MeshBuilder.CreatePolygon("profile", {
+  shape: svgPoints,
+  depth: 5
+}, scene);
+
+// Combine multiple CSG operations for complex shapes
+const csg1 = BABYLON.CSG.FromMesh(profile);
+const csg2 = BABYLON.CSG.FromMesh(cutout);
+const result = csg1.subtract(csg2);
+Advantage: Boolean operations, create complex geometries
+
+Best for: Router/switch chassis with ports and details
+
+3. AI-Powered 2D to 3D Generation
+Meshy AI - Upload SVG/PNG, get 3D model (GLB/OBJ)
+
+Spline AI - Image to 3D with text prompt guidance
+
+CSM.ai - Single image to voxel-based 3D model
+
+Alpha3D - Generate game-ready 3D assets from 2D images
+
+javascript
+// After AI generation, load into Babylon.js
+BABYLON.SceneLoader.ImportMesh("", "models/", "device.glb", scene, 
+  function (meshes) {
+    // Use generated 3D model
+  }
+);
+Advantage: Automatic depth perception, realistic 3D appearance
+
+Best for: Converting flat vendor icons to 3D representations
+
+4. Normal Map/Displacement from SVG
+javascript
+// Use SVG as albedo texture + generate normal map
+const material = new BABYLON.PBRMaterial("deviceMat", scene);
+
+// Convert SVG to texture
+const svgBlob = new Blob([svgString], {type: 'image/svg+xml'});
+const url = URL.createObjectURL(svgBlob);
+material.albedoTexture = new BABYLON.Texture(url, scene);
+
+// Apply to plane with slight extrusion
+const plane = BABYLON.MeshBuilder.CreatePlane("icon", {
+  width: 2, height: 2
+}, scene);
+plane.material = material;
+Advantage: Lightweight, billboard-style 3D effect
+
+Best for: Large network diagrams with many devices
+
+5. Hybrid SVG + Primitive Composition
+javascript
+// Combine extruded SVG front face with 3D primitives for depth
+const frontFace = extrudeSVGPath(svgData, 0.1); // Thin extrusion
+const body = BABYLON.MeshBuilder.CreateBox("body", {
+  width: iconWidth,
+  height: iconHeight, 
+  depth: deviceDepth
+}, scene);
+
+// Position front face slightly forward
+frontFace.position.z = deviceDepth / 2;
+
+// Parent both to create composite device
+frontFace.parent = body;
+Advantage: Balance between detail and performance
+
+Best for: Recognizable device icons with 3D depth
+
+Recommended Workflow for Your Application
+Given your Fortinet/Meraki API integration background, here's an optimal pipeline:
+
+javascript
+// 1. Fetch device data from API
+const devices = await fetchDevicesFromAPI(); // Meraki/Fortinet APIs
+
+// 2. Map to icon (MAC OUI or model number)
+const iconPath = mapDeviceToIcon(device.model, device.macAddress);
+
+// 3. Convert to SVG if needed (use Potrace CLI or Cloudinary API)
+const svgData = await convertToSVG(iconPath);
+
+// 4. Parse SVG path and extrude in Babylon.js
+const deviceMesh = createExtrudedDevice(svgData, scene);
+
+// 5. Position in 3D topology based on network hierarchy
+positionDeviceInTopology(deviceMesh, device.location);

@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Android Robot -->
+  <rect x="20" y="24" width="24" height="28" rx="8" fill="#3DDC84" stroke="#2ECC71" stroke-width="2"/>
+  <!-- Head -->
+  <rect x="24" y="12" width="16" height="16" rx="8" fill="#3DDC84" stroke="#2ECC71" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="28" cy="18" r="2" fill="#1A1A1A"/>
+  <circle cx="36" cy="18" r="2" fill="#1A1A1A"/>
+  <!-- Arms -->
+  <rect x="12" y="28" width="6" height="2" rx="1" fill="#3DDC84"/>
+  <rect x="46" y="28" width="6" height="2" rx="1" fill="#3DDC84"/>
+  <!-- Legs -->
+  <rect x="26" y="52" width="4" height="8" rx="2" fill="#3DDC84"/>
+  <rect x="34" y="52" width="4" height="8" rx="2" fill="#3DDC84"/>
+  <!-- Status indicator -->
+  <circle cx="56" cy="56" r="3" fill="#10B981"/>
+</svg>

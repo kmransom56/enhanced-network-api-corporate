@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Analysis Tools</title>
+    <link rel="stylesheet" href="/static/style.min.css">
+    <link rel="stylesheet" href="/static/visualization.css">
+    <style>
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tool-card {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .tool-card h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .results-panel {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result-section {
+            margin-bottom: 20px;
+        }
+        
+        .result-section h4 {
+            color: #28a745;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        
+        .risk-item {
+            background: rgba(220, 53, 69, 0.2);
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #dc3545;
+            border-radius: 4px;
+        }
+        
+        .risk-item.medium {
+            border-left-color: #ffc107;
+            background: rgba(255, 193, 7, 0.2);
+        }
+        
+        .risk-item.low {
+            border-left-color: #28a745;
+            background: rgba(40, 167, 69, 0.2);
+        }
+        
+        .step-item {
+            background: rgba(0, 123, 255, 0.2);
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #007bff;
+            border-radius: 4px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #007bff;
+        }
+        
+        .error {
+            background: rgba(220, 53, 69, 0.2);
+            color: #ff6b6b;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .top-nav {
+            background: rgba(10, 12, 26, 0.92);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .top-nav__inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(226, 232, 240, 0.9);
+        }
+        .top-nav__links {
+            display: flex;
+            gap: 18px;
+            font-size: 0.95rem;
+        }
+        .top-nav__links a {
+            color: inherit;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .top-nav__links a:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="top-nav__inner">
+            <strong>Enhanced Network API &mdash; Smart Tools</strong>
+            <nav class="top-nav__links">
+                <a href="/">Home</a>
+                <a href="/static/topology_working.html">3D Viewer</a>
+                <a href="/static/2d_topology_enhanced.html">2D Topology</a>
+                <a href="/docs/automated-topology">Workflow Guide</a>
+            </nav>
+        </div>
+    </div>
+    <div class="tools-container">
+        <!-- Automated Topology Workflow -->
+        <div class="tool-card">
+            <h3>🗺️ Automated Topology Builder</h3>
+            <p>Generate FortiManager and Meraki diagrams automatically using the documentation-driven workflow.</p>
+
+            <form id="automated-topology-form">
+                <div class="form-group">
+                    <label for="auto-fmg-json">FortiManager JSON path (optional)</label>
+                    <input type="text" id="auto-fmg-json" placeholder="/path/to/fortimanager.json">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-meraki-json">Meraki JSON path (optional)</label>
+                    <input type="text" id="auto-meraki-json" placeholder="/path/to/meraki.json">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-output-dir">Output directory (for saved artifacts)</label>
+                    <input type="text" id="auto-output-dir" value="data/generated">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-json">FortiGate JSON path (optional)</label>
+                    <input type="text" id="auto-fgt-json" placeholder="/path/to/fortigate.json">
+                </div>
+
+                <div class="form-group">
+                    <strong>FortiGate Credentials (optional)</strong>
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-host">FortiGate host (host or host:port)</label>
+                    <input type="text" id="auto-fgt-host" placeholder="192.168.0.254:10443">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-token">FortiGate API token</label>
+                    <input type="password" id="auto-fgt-token" placeholder="API token" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-wifi-host">FortiGate Wi-Fi host (optional)</label>
+                    <input type="text" id="auto-fgt-wifi-host" placeholder="fw.netintegrate.net:10443">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-wifi-token">FortiGate Wi-Fi token (optional)</label>
+                    <input type="password" id="auto-fgt-wifi-token" placeholder="Wi-Fi API token" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-user">FortiGate username (optional)</label>
+                    <input type="text" id="auto-fgt-user" placeholder="admin">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fgt-pass">FortiGate password (optional)</label>
+                    <input type="password" id="auto-fgt-pass" placeholder="••••••" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-fgt-verify">
+                        Verify SSL certificates
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-json-name">JSON output filename</label>
+                    <input type="text" id="auto-json-name" value="combined_topology.json">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-graphml-name">GraphML output filename</label>
+                    <input type="text" id="auto-graphml-name" value="combined_topology.graphml">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-drawio-name">DrawIO output filename (optional)</label>
+                    <input type="text" id="auto-drawio-name" placeholder="combined_topology.drawio">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-drawio-layout">DrawIO layout</label>
+                    <select id="auto-drawio-layout">
+                        <option value="hierarchical" selected>Hierarchical</option>
+                        <option value="circular">Circular</option>
+                        <option value="force-directed">Force Directed</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-drawio-group">Group devices by</label>
+                    <select id="auto-drawio-group">
+                        <option value="type" selected>Device Type</option>
+                        <option value="site">Site</option>
+                        <option value="vendor">Vendor</option>
+                        <option value="none">No Grouping</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-drawio-details" checked>
+                        Include device details in labels
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-drawio-color" checked>
+                        Color-code devices by type/status
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <strong>FortiManager Credentials (optional)</strong>
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fmg-host">FortiManager host</label>
+                    <input type="text" id="auto-fmg-host" placeholder="192.168.0.254">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fmg-user">FortiManager username</label>
+                    <input type="text" id="auto-fmg-user" placeholder="apiuser">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fmg-pass">FortiManager password</label>
+                    <input type="password" id="auto-fmg-pass" placeholder="••••••" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-fmg-adom">FortiManager ADOM</label>
+                    <input type="text" id="auto-fmg-adom" value="root">
+                </div>
+
+                <div class="form-group">
+                    <strong>Meraki Configuration (optional)</strong>
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-meraki-key">Meraki API key</label>
+                    <input type="password" id="auto-meraki-key" placeholder="API key" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-meraki-network">Meraki network ID</label>
+                    <input type="text" id="auto-meraki-network" placeholder="N_123456">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-meraki-org">Meraki organization ID (optional)</label>
+                    <input type="text" id="auto-meraki-org" placeholder="123456">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto-meraki-base-url">Meraki base URL</label>
+                    <input type="text" id="auto-meraki-base-url" value="https://api.meraki.com/api/v1">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-use-samples" checked>
+                        Use sample payloads when inputs are empty
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-write-files">
+                        Save JSON, GraphML, and DrawIO artifacts on the server
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="auto-refresh-topology" checked>
+                        Refresh MCP topology before exporting DrawIO
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn--primary">Generate Combined Topology</button>
+            </form>
+
+            <div class="action-group" style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+                <button type="button" class="btn btn--primary" id="auto-generate-drawio">Generate DrawIO Diagram</button>
+                <a class="btn btn--outline" href="/automated-topology">Workflow Guide</a>
+                <a class="btn btn--secondary" href="/docs/automated-topology" target="_blank">View Markdown</a>
+                <button type="button" class="btn btn--secondary" id="auto-load-artifacts">View Saved Artifacts</button>
+            </div>
+
+            <div id="auto-artifact-list" class="artifact-list"></div>
+        </div>
+
+        <!-- Policy Analysis Tool -->
+        <div class="tool-card">
+            <h3>🔍 Smart Policy Analysis</h3>
+            <p>Analyze firewall policies for security risks and best practice violations</p>
+            
+            <form id="policy-analysis-form">
+                <div class="form-group">
+                    <label for="policy-device-id">Device ID:</label>
+                    <input type="text" id="policy-device-id" value="fg-192.168.0.254" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="policy-device-type">Device Type:</label>
+                    <select id="policy-device-type" required>
+                        <option value="fortigate">FortiGate</option>
+                        <option value="meraki">Meraki</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="policy-type">Policy Type:</label>
+                    <select id="policy-type" required>
+                        <option value="firewall">Firewall Policies</option>
+                        <option value="nat">NAT Policies</option>
+                        <option value="vpn">VPN Policies</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="include-recommendations" checked>
+                        Include Recommendations
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn">Analyze Policies</button>
+            </form>
+        </div>
+
+        <!-- Change Plan Analysis Tool -->
+        <div class="tool-card">
+            <h3>📋 Change Plan Analysis</h3>
+            <p>Analyze planned changes with risk assessment and rollback steps</p>
+            
+            <form id="change-plan-form">
+                <div class="form-group">
+                    <label for="change-device-id">Device ID:</label>
+                    <input type="text" id="change-device-id" value="fg-192.168.0.254" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="change-device-type">Device Type:</label>
+                    <select id="change-device-type" required>
+                        <option value="fortigate">FortiGate</option>
+                        <option value="meraki">Meraki</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="change-type">Change Type:</label>
+                    <select id="change-type" required>
+                        <option value="cli">CLI Command</option>
+                        <option value="policy_diff">Policy Diff</option>
+                        <option value="config_snippet">Config Snippet</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="planned-change">Planned Change:</label>
+                    <textarea id="planned-change" placeholder="Enter your planned configuration change..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="include-rollback" checked>
+                        Include Rollback Steps
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn">Analyze Change</button>
+            </form>
+        </div>
+
+        <!-- Incident Triage Tool -->
+        <div class="tool-card">
+            <h3>🚨 Incident Triage Report</h3>
+            <p>Generate structured incident triage reports with evidence analysis</p>
+            
+            <form id="incident-triage-form">
+                <div class="form-group">
+                    <label for="incident-description">Incident Description:</label>
+                    <textarea id="incident-description" placeholder="Describe the incident..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="incident-device-id">Device ID (optional):</label>
+                    <input type="text" id="incident-device-id" placeholder="fg-192.168.0.254">
+                </div>
+                
+                <div class="form-group">
+                    <label for="incident-severity">Severity:</label>
+                    <select id="incident-severity" required>
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="log-snippets">Log Snippets (optional):</label>
+                    <textarea id="log-snippets" placeholder="Paste relevant log entries..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Generate Triage</button>
+            </form>
+        </div>
+
+        <!-- Runbook Generator Tool -->
+        <div class="tool-card">
+            <h3>📚 Runbook Generator</h3>
+            <p>Generate step-by-step runbooks for specific operational scenarios</p>
+            
+            <form id="runbook-form">
+                <div class="form-group">
+                    <label for="runbook-topic">Topic:</label>
+                    <input type="text" id="runbook-topic" placeholder="e.g., SSL VPN outage, Firewall policy update" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="runbook-device-type">Device Type:</label>
+                    <select id="runbook-device-type" required>
+                        <option value="fortigate">FortiGate</option>
+                        <option value="meraki">Meraki</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="include-verification" checked>
+                        Include Verification Steps
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="runbook-include-rollback" checked>
+                        Include Rollback Procedure
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn">Generate Runbook</button>
+            </form>
+        </div>
+
+        <!-- Config Drift Analysis Tool -->
+        <div class="tool-card">
+            <h3>⚖️ Config Drift Analysis</h3>
+            <p>Analyze configuration drift between devices or time periods</p>
+            
+            <form id="config-drift-form">
+                <div class="form-group">
+                    <label for="device1-id">Device 1 ID:</label>
+                    <input type="text" id="device1-id" placeholder="fg-192.168.0.254" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="device2-id">Device 2 ID:</label>
+                    <input type="text" id="device2-id" placeholder="fg-backup-192.168.0.254" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="drift-device-type">Device Type:</label>
+                    <select id="drift-device-type" required>
+                        <option value="fortigate">FortiGate</option>
+                        <option value="meraki">Meraki</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="snapshot-time1">Snapshot Time 1 (optional):</label>
+                    <input type="text" id="snapshot-time1" placeholder="2024-01-01T00:00:00Z">
+                </div>
+                
+                <div class="form-group">
+                    <label for="snapshot-time2">Snapshot Time 2 (optional):</label>
+                    <input type="text" id="snapshot-time2" placeholder="2024-01-02T00:00:00Z">
+                </div>
+                
+                <button type="submit" class="btn">Analyze Drift</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div id="results-panel" class="results-panel">
+        <h3>Analysis Results</h3>
+        <div id="results-content"></div>
+        <button class="btn" onclick="closeResults()">Close Results</button>
+    </div>
+
+    <script>
+        // Form submission handlers
+        document.getElementById('automated-topology-form').addEventListener('submit', handleAutomatedTopology);
+        document.getElementById('auto-generate-drawio').addEventListener('click', handleAutomatedDrawio);
+        document.getElementById('auto-load-artifacts').addEventListener('click', () => loadAutomatedArtifacts());
+        document.getElementById('policy-analysis-form').addEventListener('submit', handlePolicyAnalysis);
+        document.getElementById('change-plan-form').addEventListener('submit', handleChangePlanAnalysis);
+        document.getElementById('incident-triage-form').addEventListener('submit', handleIncidentTriage);
+        document.getElementById('runbook-form').addEventListener('submit', handleRunbookGeneration);
+        document.getElementById('config-drift-form').addEventListener('submit', handleConfigDriftAnalysis);
+
+        async function handleAutomatedTopology(event) {
+            event.preventDefault();
+
+            const formData = {
+                fortigate_json: readValue('auto-fgt-json'),
+                fortimanager_json: readValue('auto-fmg-json'),
+                meraki_json: readValue('auto-meraki-json'),
+                output_dir: readValue('auto-output-dir'),
+                json_name: readValue('auto-json-name'),
+                graphml_name: readValue('auto-graphml-name'),
+                drawio_name: readValue('auto-drawio-name'),
+                write_files: document.getElementById('auto-write-files').checked,
+                use_samples: document.getElementById('auto-use-samples').checked
+            };
+
+            const fortigateCreds = {
+                host: readValue('auto-fgt-host'),
+                token: readValue('auto-fgt-token'),
+                wifi_host: readValue('auto-fgt-wifi-host'),
+                wifi_token: readValue('auto-fgt-wifi-token'),
+                username: readValue('auto-fgt-user'),
+                password: readValue('auto-fgt-pass')
+            };
+            const fortigateVerify = document.getElementById('auto-fgt-verify').checked;
+            if (fortigateVerify) {
+                fortigateCreds.verify_ssl = true;
+            }
+            if (Object.values(fortigateCreds).some(value => value !== undefined)) {
+                formData.fortigate_credentials = fortigateCreds;
+            }
+
+            const fmCreds = {
+                host: readValue('auto-fmg-host'),
+                username: readValue('auto-fmg-user'),
+                password: readValue('auto-fmg-pass'),
+                adom: readValue('auto-fmg-adom')
+            };
+            if (Object.values(fmCreds).some(value => value !== undefined)) {
+                formData.fortimanager_credentials = fmCreds;
+            }
+
+            const merakiCreds = {
+                api_key: readValue('auto-meraki-key'),
+                network_id: readValue('auto-meraki-network'),
+                organization_id: readValue('auto-meraki-org'),
+                base_url: readValue('auto-meraki-base-url')
+            };
+            if (Object.values(merakiCreds).some(value => value !== undefined)) {
+                formData.meraki_credentials = merakiCreds;
+            }
+
+            const result = await callAPI('/api/topology/automated', formData, 'Automated Topology');
+            if (result) {
+                await loadAutomatedArtifacts();
+            }
+        }
+
+        async function handleAutomatedDrawio(event) {
+            event.preventDefault();
+
+            const payload = {
+                layout: document.getElementById('auto-drawio-layout').value,
+                group_by: document.getElementById('auto-drawio-group').value,
+                show_details: document.getElementById('auto-drawio-details').checked,
+                color_code: document.getElementById('auto-drawio-color').checked,
+                refresh_topology: document.getElementById('auto-refresh-topology').checked,
+                write_file: document.getElementById('auto-write-files').checked,
+            };
+
+            const drawioName = readValue('auto-drawio-name');
+            if (drawioName) {
+                payload.filename = drawioName;
+            }
+            const outputDir = readValue('auto-output-dir');
+            if (outputDir) {
+                payload.output_dir = outputDir;
+            }
+
+            const result = await callAPI('/api/topology/automated/drawio', payload, 'MCP DrawIO Export');
+            if (result && result.artifacts) {
+                await loadAutomatedArtifacts();
+            }
+        }
+
+        function readValue(elementId) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                return undefined;
+            }
+            const value = (element.value || '').trim();
+            return value ? value : undefined;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        async function handlePolicyAnalysis(event) {
+            event.preventDefault();
+            const formData = {
+                device_id: document.getElementById('policy-device-id').value,
+                device_type: document.getElementById('policy-device-type').value,
+                policy_type: document.getElementById('policy-type').value,
+                include_recommendations: document.getElementById('include-recommendations').checked
+            };
+
+            await callAPI('/api/smart-analysis/policy-analysis', formData, 'Policy Analysis');
+        }
+
+        async function handleChangePlanAnalysis(event) {
+            event.preventDefault();
+            const formData = {
+                device_id: document.getElementById('change-device-id').value,
+                device_type: document.getElementById('change-device-type').value,
+                planned_change: document.getElementById('planned-change').value,
+                change_type: document.getElementById('change-type').value,
+                include_rollback: document.getElementById('include-rollback').checked
+            };
+
+            await callAPI('/api/smart-analysis/change-plan-analysis', formData, 'Change Plan Analysis');
+        }
+
+        async function handleIncidentTriage(event) {
+            event.preventDefault();
+            const formData = {
+                incident_description: document.getElementById('incident-description').value,
+                device_id: document.getElementById('incident-device-id').value || null,
+                severity: document.getElementById('incident-severity').value,
+                log_snippets: document.getElementById('log-snippets').value.split('\n').filter(log => log.trim())
+            };
+
+            await callAPI('/api/smart-analysis/incident-triage', formData, 'Incident Triage');
+        }
+
+        async function handleRunbookGeneration(event) {
+            event.preventDefault();
+            const formData = {
+                topic: document.getElementById('runbook-topic').value,
+                device_type: document.getElementById('runbook-device-type').value,
+                include_verification: document.getElementById('include-verification').checked,
+                include_rollback: document.getElementById('runbook-include-rollback').checked
+            };
+
+            await callAPI('/api/smart-analysis/generate-runbook', formData, 'Runbook Generation');
+        }
+
+        async function handleConfigDriftAnalysis(event) {
+            event.preventDefault();
+            const formData = {
+                device1_id: document.getElementById('device1-id').value,
+                device2_id: document.getElementById('device2-id').value,
+                device_type: document.getElementById('drift-device-type').value,
+                snapshot_time1: document.getElementById('snapshot-time1').value || null,
+                snapshot_time2: document.getElementById('snapshot-time2').value || null
+            };
+
+            await callAPI('/api/smart-analysis/config-drift-analysis', formData, 'Config Drift Analysis');
+        }
+
+        async function callAPI(endpoint, data, analysisType) {
+            const resultsPanel = document.getElementById('results-panel');
+            const resultsContent = document.getElementById('results-content');
+            
+            // Show loading state
+            resultsPanel.style.display = 'block';
+            resultsContent.innerHTML = `<div class="loading">Running ${analysisType}...</div>`;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                displayResults(result, analysisType);
+                return result;
+
+            } catch (error) {
+                resultsContent.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+                return null;
+            }
+        }
+
+        async function loadAutomatedArtifacts() {
+            const container = document.getElementById('auto-artifact-list');
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = `<div class="loading">Loading artifacts...</div>`;
+            try {
+                const response = await fetch('/api/topology/automated/artifacts');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const payload = await response.json();
+                const artifacts = payload.artifacts || [];
+                if (!artifacts.length) {
+                    container.innerHTML = '<p>No saved artifacts yet.</p>';
+                    return;
+                }
+                const items = artifacts.map(entry => {
+                    const name = entry.name || extractFileName(entry.path);
+                    const url = `/api/topology/automated/artifacts/${encodeURIComponent(name)}`;
+                    const sizeKb = entry.size ? (entry.size / 1024).toFixed(1) : null;
+                    const sizeText = sizeKb ? ` <small>${sizeKb} KB</small>` : '';
+                    return `<li><a href="${url}" target="_blank" rel="noopener">${name}</a>${sizeText}</li>`;
+                }).join('');
+                container.innerHTML = `<ul>${items}</ul>`;
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(result, analysisType) {
+            const resultsContent = document.getElementById('results-content');
+            
+            let html = `<div class="result-section"><h4>${analysisType} Results</h4>`;
+            
+            switch (analysisType) {
+                case 'Policy Analysis':
+                    html += displayPolicyResults(result);
+                    break;
+                case 'Change Plan Analysis':
+                    html += displayChangePlanResults(result);
+                    break;
+                case 'Incident Triage':
+                    html += displayTriageResults(result);
+                    break;
+                case 'Runbook Generation':
+                    html += displayRunbookResults(result);
+                    break;
+                case 'Config Drift Analysis':
+                    html += displayDriftResults(result);
+                    break;
+                case 'Automated Topology':
+                    html += displayAutomatedTopologyResults(result);
+                    break;
+                case 'MCP DrawIO Export':
+                    html += displayDrawioResults(result);
+                    break;
+            }
+            
+            html += '</div>';
+            resultsContent.innerHTML = html;
+        }
+
+        function displayPolicyResults(result) {
+            let html = `
+                <p><strong>Device:</strong> ${result.device_id}</p>
+                <p><strong>Policy Count:</strong> ${result.policy_count}</p>
+                <p><strong>Policy Type:</strong> ${result.policy_type}</p>
+            `;
+            
+            if (result.risks && result.risks.length > 0) {
+                html += '<h5>Security Risks:</h5>';
+                result.risks.forEach(risk => {
+                    html += `
+                        <div class="risk-item ${risk.severity || 'medium'}">
+                            <strong>${risk.type || 'Risk'}:</strong> ${risk.description}
+                        </div>
+                    `;
+                });
+            }
+            
+            if (result.recommendations && result.recommendations.length > 0) {
+                html += '<h5>Recommendations:</h5>';
+                result.recommendations.forEach(rec => {
+                    html += `
+                        <div class="step-item">
+                            <strong>Action:</strong> ${rec.action}<br>
+                            <small>${rec.rationale}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            return html;
+        }
+
+        function displayAutomatedTopologyResults(result) {
+            const summary = result.summary || {};
+            const sources = result.sources || {};
+            let html = `
+                <p><strong>Nodes:</strong> ${summary.node_count ?? 0}</p>
+                <p><strong>Links:</strong> ${summary.link_count ?? 0}</p>
+                <p><strong>FortiManager devices:</strong> ${summary.fortimanager_device_count ?? 0}</p>
+                <p><strong>Meraki devices:</strong> ${summary.meraki_device_count ?? 0}</p>
+            `;
+
+            if (result.artifacts) {
+                html += '<h5>Saved Artifacts</h5><ul>';
+                for (const [key, path] of Object.entries(result.artifacts)) {
+                    if (!path) continue;
+                    const fileName = extractFileName(path);
+                    const label = key.replace('_path', '').replace(/_/g, ' ');
+                    const artifactUrl = `/api/topology/automated/artifacts/${encodeURIComponent(fileName)}`;
+                    html += `
+                        <li>
+                            <strong>${label}:</strong>
+                            <a href="${artifactUrl}" target="_blank" rel="noopener">${fileName}</a>
+                            <small><code>${path}</code></small>
+                        </li>
+                    `;
+                }
+                html += '</ul>';
+            }
+
+            if (Object.keys(sources).length > 0) {
+                html += '<h5>Source Information</h5><ul>';
+                for (const [key, info] of Object.entries(sources)) {
+                    html += `<li>${key}: ${info.source || 'unknown'} (devices: ${info.device_count ?? 0})</li>`;
+                }
+                html += '</ul>';
+            }
+
+            if (result.topology) {
+                const preview = JSON.stringify(result.topology, null, 2);
+                html += '<h5>Topology JSON Preview</h5>';
+                html += `<pre style="max-height: 320px; overflow:auto;">${preview}</pre>`;
+            }
+
+            return html;
+        }
+
+        function displayDrawioResults(result) {
+            const metadata = result.metadata || {};
+            const artifacts = result.artifacts || {};
+            const artifactPath = artifacts.drawio_path || null;
+            const fileName = artifactPath ? extractFileName(artifactPath) : (readValue('auto-drawio-name') || 'mcp_topology.drawio');
+            let html = `
+                <p><strong>Layout:</strong> ${escapeHtml(result.layout || 'hierarchical')}</p>
+                <p><strong>Group by:</strong> ${escapeHtml(result.group_by || 'type')}</p>
+                <p><strong>Details Enabled:</strong> ${result.show_details ? 'Yes' : 'No'}</p>
+                <p><strong>Color Coding:</strong> ${result.color_code ? 'Enabled' : 'Disabled'}</p>
+            `;
+
+            if (artifactPath) {
+                const downloadUrl = `/api/topology/automated/artifacts/${encodeURIComponent(extractFileName(artifactPath))}`;
+                html += `
+                    <h5>Saved Artifact</h5>
+                    <p>
+                        <a href="${downloadUrl}" target="_blank" rel="noopener">${escapeHtml(extractFileName(artifactPath))}</a><br>
+                        <small><code>${escapeHtml(artifactPath)}</code></small>
+                    </p>
+                `;
+            }
+
+            if (Object.keys(metadata).length > 0) {
+                html += '<h5>Metadata</h5><ul>';
+                for (const [key, value] of Object.entries(metadata)) {
+                    html += `<li><strong>${escapeHtml(key)}:</strong> ${escapeHtml(typeof value === 'string' ? value : JSON.stringify(value))}</li>`;
+                }
+                html += '</ul>';
+            }
+
+            if (result.diagram_xml) {
+                const encoded = encodeURIComponent(result.diagram_xml);
+                html += `
+                    <h5>Download</h5>
+                    <p><a href="data:application/xml;charset=utf-8,${encoded}" download="${escapeHtml(fileName)}">Download DrawIO XML</a></p>
+                    <h5>Diagram Preview</h5>
+                    <pre style="max-height: 320px; overflow:auto;">${escapeHtml(result.diagram_xml.slice(0, 4000))}${result.diagram_xml.length > 4000 ? '\n...' : ''}</pre>
+                `;
+            }
+
+            return html;
+        }
+
+        function displayChangePlanResults(result) {
+            let html = `
+                <p><strong>Device:</strong> ${result.device_id}</p>
+                <p><strong>Change Type:</strong> ${result.change_type}</p>
+                <p><strong>Planned Change:</strong></p>
+                <pre style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 4px;">${result.planned_change}</pre>
+            `;
+            
+            if (result.impact_analysis) {
+                html += '<h5>Impact Analysis:</h5>';
+                html += `<p>${JSON.stringify(result.impact_analysis, null, 2)}</p>`;
+            }
+            
+            if (result.risks && result.risks.length > 0) {
+                html += '<h5>Risks:</h5>';
+                result.risks.forEach(risk => {
+                    html += `
+                        <div class="risk-item ${risk.probability || 'medium'}">
+                            <strong>${risk.impact}:</strong> ${risk.mitigation}
+                        </div>
+                    `;
+                });
+            }
+            
+            if (result.rollback_steps && result.rollback_steps.length > 0) {
+                html += '<h5>Rollback Steps:</h5>';
+                result.rollback_steps.forEach((step, index) => {
+                    html += `
+                        <div class="step-item">
+                            <strong>Step ${index + 1}:</strong> ${step}
+                        </div>
+                    `;
+                });
+            }
+            
+            return html;
+        }
+
+        function displayTriageResults(result) {
+            let html = `
+                <p><strong>Incident ID:</strong> ${result.incident_id}</p>
+                <p><strong>Severity:</strong> ${result.severity}</p>
+                <p><strong>Device:</strong> ${result.device_id || 'Not specified'}</p>
+                <p><strong>Description:</strong> ${result.description}</p>
+            `;
+            
+            if (result.triage) {
+                const triage = result.triage;
+                html += `
+                    <h5>Triage Analysis:</h5>
+                    <p><strong>Probable Root Cause:</strong> ${triage.probable_root_cause}</p>
+                    <p><strong>Impact Assessment:</strong> ${triage.impact_assessment}</p>
+                `;
+                
+                if (triage.key_evidence && triage.key_evidence.length > 0) {
+                    html += '<h5>Key Evidence:</h5>';
+                    triage.key_evidence.forEach(evidence => {
+                        html += `<div class="step-item">${evidence}</div>`;
+                    });
+                }
+                
+                if (triage.next_steps && triage.next_steps.length > 0) {
+                    html += '<h5>Next Steps:</h5>';
+                    triage.next_steps.forEach(step => {
+                        html += `<div class="step-item">${step}</div>`;
+                    });
+                }
+            }
+            
+            return html;
+        }
+
+        function displayRunbookResults(result) {
+            let html = `
+                <p><strong>Title:</strong> ${result.title}</p>
+                <p><strong>Device Type:</strong> ${result.device_type}</p>
+                <p><strong>Topic:</strong> ${result.topic}</p>
+            `;
+            
+            if (result.sections) {
+                const sections = result.sections;
+                
+                if (sections.overview) {
+                    html += `<h5>Overview:</h5><p>${sections.overview}</p>`;
+                }
+                
+                if (sections.prerequisites && sections.prerequisites.length > 0) {
+                    html += '<h5>Prerequisites:</h5>';
+                    sections.prerequisites.forEach(prereq => {
+                        html += `<div class="step-item">${prereq}</div>`;
+                    });
+                }
+                
+                if (sections.step_by_step && sections.step_by_step.length > 0) {
+                    html += '<h5>Procedure:</h5>';
+                    sections.step_by_step.forEach(step => {
+                        html += `
+                            <div class="step-item">
+                                <strong>Step ${step.step}:</strong> ${step.action}<br>
+                                <small>Expected: ${step.expected_result}</small>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (sections.verification_commands && sections.verification_commands.length > 0) {
+                    html += '<h5>Verification:</h5>';
+                    sections.verification_commands.forEach(verify => {
+                        html += `
+                            <div class="step-item">
+                                <strong>Command:</strong> <code>${verify.command}</code><br>
+                                <small>Expected: ${verify.expected_output}</small>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            
+            return html;
+        }
+
+        function displayDriftResults(result) {
+            let html = `
+                <p><strong>Device 1:</strong> ${result.device1_id}</p>
+                <p><strong>Device 2:</strong> ${result.device2_id}</p>
+                <p><strong>Device Type:</strong> ${result.device_type}</p>
+                <p><strong>Drift Detected:</strong> ${result.drift_detected ? 'Yes' : 'No'}</p>
+                <p><strong>Changes Count:</strong> ${result.changes_count}</p>
+            `;
+            
+            if (result.drift_analysis) {
+                const analysis = result.drift_analysis;
+                html += `
+                    <h5>Drift Analysis:</h5>
+                    <p><strong>Summary:</strong> ${analysis.summary}</p>
+                    <p><strong>Impact Assessment:</strong> ${analysis.impact_assessment}</p>
+                `;
+                
+                if (analysis.security_implications && analysis.security_implications.length > 0) {
+                    html += '<h5>Security Implications:</h5>';
+                    analysis.security_implications.forEach(implication => {
+                        html += `<div class="risk-item medium">${implication}</div>`;
+                    });
+                }
+                
+                if (analysis.recommended_actions && analysis.recommended_actions.length > 0) {
+                    html += '<h5>Recommended Actions:</h5>';
+                    analysis.recommended_actions.forEach(action => {
+                        html += `<div class="step-item">${action}</div>`;
+                    });
+                }
+            }
+            
+            return html;
+        }
+
+        document.getElementById('results-panel').style.display = 'none';
+        loadAutomatedArtifacts();
+
+        function closeResults() {
+            document.getElementById('results-panel').style.display = 'none';
+        }
+
+        function extractFileName(path) {
+            if (!path) return '';
+            const parts = path.split(/[\\/]/);
+            return parts[parts.length - 1] || '';
+        }
+    </script>
+</body>
+</html>

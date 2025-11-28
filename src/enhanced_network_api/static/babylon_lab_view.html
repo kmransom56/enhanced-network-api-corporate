@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Network Topology Lab Viewer</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <style>
+        /* Reuse the same layout and styling as babylon_topology.html for consistency */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0e1116 0%, #1a1f2e 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: grid;
+            grid-template-rows: 60px 1fr 40px;
+            grid-template-columns: 0 1fr 0;
+            grid-template-areas:
+                "header header header"
+                "sidebar main details"
+                "status status status";
+        }
+
+        .top-toolbar {
+            grid-area: header;
+            background: rgba(30, 35, 50, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 0 15px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toolbar-group:last-child {
+            border-right: none;
+            margin-left: auto;
+        }
+
+        .toolbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #58a6ff;
+            margin-right: 20px;
+        }
+
+        .left-sidebar {
+            grid-area: sidebar;
+            background: rgba(30, 35, 50, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(88, 166, 255, 0.3);
+            width: 280px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .left-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            left: 10px;
+            top: 70px;
+            background: rgba(88, 166, 255, 0.2);
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            color: #58a6ff;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(88, 166, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .main-canvas {
+            grid-area: main;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+
+        #renderCanvas:active {
+            cursor: grabbing;
+        }
+
+        .details-panel {
+            grid-area: details;
+            background: rgba(30, 35, 50, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(88, 166, 255, 0.3);
+            width: 350px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .details-panel.open {
+            transform: translateX(0);
+        }
+
+        .status-bar {
+            grid-area: status;
+            background: rgba(20, 25, 40, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 30px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .status-value {
+            color: #58a6ff;
+            font-weight: 500;
+        }
+
+        .control-group {
+            margin: 20px 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.1));
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.3), rgba(88, 166, 255, 0.2));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.active {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.4), rgba(88, 166, 255, 0.3));
+            border-color: #58a6ff;
+        }
+
+        .data-source-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .data-source-buttons button {
+            flex: 1;
+            font-size: 12px;
+            padding: 6px 8px;
+        }
+
+        #deviceInfo {
+            padding: 20px;
+        }
+
+        #deviceInfo.hidden {
+            display: none;
+        }
+
+        .device-details {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .device-details h4 {
+            color: #58a6ff;
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .label {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .value {
+            color: #ffffff;
+            margin-left: 5px;
+        }
+
+        #loading, #error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(30, 35, 50, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .device-tooltip {
+            position: fixed;
+            padding: 8px 12px;
+            background: rgba(15, 20, 35, 0.95);
+            border-radius: 6px;
+            border: 1px solid rgba(88, 166, 255, 0.8);
+            color: #ffffff;
+            font-size: 12px;
+            pointer-events: none;
+            transform: translate(-50%, -120%);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            z-index: 2500;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1200px) {
+            .details-panel {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header header"
+                    "main main"
+                    "status status";
+            }
+
+            .left-sidebar, .details-panel {
+                position: fixed;
+                top: 60px;
+                height: calc(100vh - 100px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .details-panel {
+                right: 0;
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-toolbar">
+        <div class="toolbar-title">🧪 3D Network Topology Lab</div>
+        <div class="toolbar-group">
+            <button id="loadTopologyBtn">🌐 Load Lab Topology</button>
+            <button id="resetViewBtn">📷 Reset View</button>
+        </div>
+        <div class="toolbar-group">
+            <button id="autoRotateBtn">🔄 Auto-Rotate</button>
+            <button id="labelsBtn">🏷️ Labels</button>
+        </div>
+        <div class="toolbar-group">
+            <button id="exportDrawIOXmlBtn">🧾 Export DrawIO XML</button>
+            <button id="exportDrawIO3DSceneBtn">🎮 Export 3D JSON</button>
+        </div>
+        <div class="toolbar-group">
+            <span class="status-label">Status:</span>
+            <span id="statusText" class="status-value">Ready</span>
+        </div>
+    </header>
+
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+    <aside class="left-sidebar" id="leftSidebar">
+        <div class="control-group">
+            <h3>Data Source</h3>
+            <p style="font-size: 12px; color: rgba(255,255,255,0.7);">
+                Using <code>/api/topology/babylon-lab-format</code> from Enhanced Network API.
+            </p>
+        </div>
+    </aside>
+
+    <main class="main-canvas">
+        <canvas id="renderCanvas"></canvas>
+        <div id="loading" class="hidden">
+            <div>🔄 Loading topology...</div>
+        </div>
+        <div id="error" class="hidden">
+            <div>❌ <span id="errorMessage">Error loading topology</span></div>
+        </div>
+        <!-- Hover tooltip for device info -->
+        <div id="deviceTooltip" class="device-tooltip hidden"></div>
+    </main>
+
+    <aside class="details-panel" id="deviceInfo">
+        <div id="deviceDetails">
+            <div class="device-details">
+                <h4>📋 Device Details</h4>
+                <p>Select a device to view details...</p>
+            </div>
+        </div>
+    </aside>
+
+    <footer class="status-bar">
+        <div class="status-item">
+            <span class="status-label">🎯 FPS:</span>
+            <span id="fpsCounter" class="status-value">60</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">📦 Objects:</span>
+            <span id="objectCounter" class="status-value">0</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">🔗 Devices:</span>
+            <span id="deviceCounter" class="status-value">0</span>
+        </div>
+    </footer>
+
+    <script>
+        let engine, scene, camera;
+        let devices = [];
+        let links = [];
+        let autoRotate = false;
+        let tooltipEl = null;
+        let labelsVisible = true;
+        let deviceLabels = [];
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function updateStatus(status) {
+            document.getElementById('statusText').textContent = status;
+        }
+
+        function updateStats() {
+            if (!scene || !engine) return;
+            const fpsCounter = document.getElementById('fpsCounter');
+            const objectCounter = document.getElementById('objectCounter');
+            const deviceCounter = document.getElementById('deviceCounter');
+            if (fpsCounter) fpsCounter.textContent = Math.round(engine.getFps());
+            if (objectCounter) objectCounter.textContent = scene.meshes.length;
+            if (deviceCounter) deviceCounter.textContent = devices.length;
+        }
+
+        function showTooltip(deviceData, clientX, clientY) {
+            if (!tooltipEl) return;
+            const name = deviceData.name || 'Unknown Device';
+            const ip = deviceData.ip || 'N/A';
+            const type = deviceData.deviceType || deviceData.type || '';
+            const mac = deviceData.mac || '';
+            const vendor = deviceData.vendor || deviceData.device_vendor || '';
+            const vlan = deviceData.vlan || '';
+
+            let html = `<strong>${name}</strong>`;
+            if (ip) {
+                html += `<br>IP: ${ip}`;
+            }
+            if (type) {
+                html += `<br>Type: ${type}`;
+            }
+            if (vendor) {
+                html += `<br>Vendor: ${vendor}`;
+            }
+            if (mac) {
+                html += `<br>MAC: ${mac}`;
+            }
+            if (vlan) {
+                html += `<br>VLAN: ${vlan}`;
+            }
+            tooltipEl.innerHTML = html;
+            tooltipEl.style.left = clientX + 'px';
+            tooltipEl.style.top = clientY + 'px';
+            tooltipEl.classList.remove('hidden');
+        }
+
+        function hideTooltip() {
+            if (!tooltipEl) return;
+            tooltipEl.classList.add('hidden');
+        }
+
+        function initBabylon() {
+            const canvas = document.getElementById('renderCanvas');
+            engine = new BABYLON.Engine(canvas, true);
+            scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0.05, 0.05, 0.1, 1.0);
+
+            tooltipEl = document.getElementById('deviceTooltip');
+
+            camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI / 3, 30, BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvas, true);
+            camera.lowerRadiusLimit = 10;
+            camera.upperRadiusLimit = 100;
+
+            const light1 = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
+            light1.intensity = 0.7;
+
+            const light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(-1, -2, -1), scene);
+            light2.position = new BABYLON.Vector3(20, 40, 20);
+            light2.intensity = 0.5;
+
+            const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 40, height: 40 }, scene);
+            const groundMaterial = new BABYLON.StandardMaterial('groundMaterial', scene);
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
+            groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+            ground.material = groundMaterial;
+
+            scene.onPointerObservable.add((pointerInfo) => {
+                switch (pointerInfo.type) {
+                    case BABYLON.PointerEventTypes.POINTERPICK: {
+                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
+                            let pickedMesh = pointerInfo.pickInfo.pickedMesh;
+                            // If we picked an overlay/label, use the parent mesh metadata
+                            if (pickedMesh.parent && pickedMesh.parent.metadata) {
+                                pickedMesh = pickedMesh.parent;
+                            }
+                            if (pickedMesh.metadata) {
+                                showDeviceInfo(pickedMesh.metadata);
+                            }
+                        }
+                        break;
+                    }
+                    case BABYLON.PointerEventTypes.POINTERMOVE: {
+                        const evt = pointerInfo.event;
+                        if (!evt) break;
+                        let mesh = null;
+                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit) {
+                            mesh = pointerInfo.pickInfo.pickedMesh;
+                            if (mesh && mesh.parent && mesh.parent.metadata) {
+                                mesh = mesh.parent;
+                            }
+                        }
+                        if (mesh && mesh.metadata) {
+                            showTooltip(mesh.metadata, evt.clientX, evt.clientY);
+                        } else {
+                            hideTooltip();
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            });
+
+            engine.runRenderLoop(() => {
+                if (autoRotate && camera) {
+                    camera.alpha += 0.005;
+                }
+                scene.render();
+                updateStats();
+            });
+
+            window.addEventListener('resize', () => {
+                engine.resize();
+            });
+        }
+
+        function showDeviceInfo(deviceData) {
+            const deviceInfo = document.getElementById('deviceInfo');
+            const deviceDetails = document.getElementById('deviceDetails');
+            deviceInfo.classList.add('open');
+
+            let html = `<div class="device-details">`;
+            html += `<h4>📋 ${deviceData.name || 'Unknown Device'}</h4>`;
+            html += `<div style="margin-bottom: 15px;">`;
+            html += `<div><span class="label">Type:</span><span class="value">${deviceData.deviceType || deviceData.type || 'Unknown'}</span></div>`;
+            html += `<div><span class="label">IP:</span><span class="value">${deviceData.ip || 'N/A'}</span></div>`;
+            if (deviceData.mac) html += `<div><span class="label">MAC:</span><span class="value">${deviceData.mac}</span></div>`;
+            const vendor = deviceData.vendor || deviceData.device_vendor;
+            if (vendor) html += `<div><span class="label">Vendor:</span><span class="value">${vendor}</span></div>`;
+            if (deviceData.vlan) html += `<div><span class="label">VLAN:</span><span class="value">${deviceData.vlan}</span></div>`;
+            html += `</div>`;
+            html += `</div>`;
+            deviceDetails.innerHTML = html;
+        }
+
+        async function loadTopologyFromLab() {
+            updateStatus('Loading...');
+            showLoading();
+            try {
+                const resp = await fetch('/api/topology/babylon-lab-format');
+                if (!resp.ok) {
+                    const text = await resp.text();
+                    throw new Error('HTTP ' + resp.status + ': ' + text);
+                }
+                const lab = await resp.json();
+                console.log('Lab topology payload:', lab);
+
+                const models = lab.models || [];
+                const connections = lab.connections || [];
+
+                const nodes = models.map(function (m, idx) {
+                    return {
+                        id: m.id || ('node-' + idx),
+                        name: m.name,
+                        type: m.type,
+                        device_type: m.type,
+                        device_vendor: m.vendor,
+                        vendor: m.vendor,
+                        model: m.model,
+                        ip: m.ip,
+                        mac: m.mac,
+                        vlan: m.vlan,
+                        status: m.status || 'online',
+                        position: m.position || null
+                    };
+                });
+
+                const links = connections.map(function (c, idx) {
+                    return {
+                        id: c.id || ('link-' + idx),
+                        from: c.from,
+                        to: c.to,
+                        status: c.status,
+                        protocol: c.protocol,
+                        bandwidth: c.bandwidth,
+                        vlan: c.vlan
+                    };
+                });
+
+                await renderTopology({ nodes: nodes, links: links });
+                updateStatus('Loaded');
+            } catch (err) {
+                console.error('Failed to load lab topology:', err);
+                showError(err.message || String(err));
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function renderTopology(data) {
+            // Clear existing devices and links
+            devices.forEach(d => d.dispose && d.dispose());
+            devices = [];
+            links.forEach(l => l.dispose && l.dispose());
+            links = [];
+            deviceLabels = [];
+
+            // Render links first
+            data.links.forEach(function (linkData, index) {
+                const sourceNode = data.nodes.find(function (n) { return n.id === linkData.from; });
+                const targetNode = data.nodes.find(function (n) { return n.id === linkData.to; });
+                if (!sourceNode || !targetNode) return;
+
+                const sourcePos = new BABYLON.Vector3(
+                    (sourceNode.position && sourceNode.position.x) || 0,
+                    0.5,
+                    (sourceNode.position && sourceNode.position.z) || 0
+                );
+                const targetPos = new BABYLON.Vector3(
+                    (targetNode.position && targetNode.position.x) || 0,
+                    0.5,
+                    (targetNode.position && targetNode.position.z) || 0
+                );
+
+                const line = BABYLON.MeshBuilder.CreateLines(`link_${index}`, {
+                    points: [sourcePos, targetPos]
+                }, scene);
+                line.color = new BABYLON.Color3(0.7, 0.7, 0.7);
+                links.push(line);
+            });
+
+            // Render devices with actual 3D models and 2D SVG overlays
+            data.nodes.forEach(async function (nodeData, index) {
+                const hasPos = nodeData.position && typeof nodeData.position.x === 'number' && typeof nodeData.position.z === 'number';
+                const position = new BABYLON.Vector3(
+                    hasPos ? nodeData.position.x : (index % 5) * 4 - 8,
+                    hasPos && typeof nodeData.position.y === 'number' ? nodeData.position.y : 1,
+                    hasPos ? nodeData.position.z : Math.floor(index / 5) * 4 - 8
+                );
+
+                // Try to load actual 3D model first
+                let mesh = await loadDeviceModel(nodeData, position);
+
+                // Fallback to device-specific box if model loading fails
+                if (!mesh) {
+                    mesh = createDeviceBox(nodeData, position);
+                }
+
+                // Add 2D SVG overlay/sprite
+                await addSVGOverlay(nodeData, mesh);
+
+                // Add label with device name and IP under the icon
+                createDeviceLabel(nodeData, mesh);
+
+                devices.push(mesh);
+            });
+        }
+
+        async function loadDeviceModel(nodeData, position) {
+            try {
+                // Map device types to fallback 3D models (used only when no model is provided)
+                const modelMap = {
+                    'fortigate': '/realistic_3d_models/models/FortiGate.obj',
+                    'fortiswitch': '/realistic_3d_models/models/FortiSwitch.obj',
+                    'fortiap': '/realistic_3d_models/models/FortiAP.obj',
+                    'client': '/realistic_3d_models/models/Laptop.obj'
+                };
+
+                const typeKey = (nodeData.type || '').toLowerCase();
+
+                // Candidate model paths, in order of preference:
+                // 1) model from API (lab-format `model` field, usually VSS-derived GLTF)
+                // 2) type-based fallback from modelMap
+                // 3) generic client model
+                const candidates = [];
+                if (nodeData.model) {
+                    candidates.push(nodeData.model);
+                }
+                if (modelMap[typeKey]) {
+                    candidates.push(modelMap[typeKey]);
+                }
+                candidates.push(modelMap['client']);
+
+                for (let i = 0; i < candidates.length; i++) {
+                    const candidate = candidates[i];
+                    if (!candidate || typeof candidate !== 'string') continue;
+
+                    // If the path starts with '/', drop it for SceneLoader (rootUrl "" + relative path)
+                    const sceneFile = candidate.charAt(0) === '/' ? candidate.slice(1) : candidate;
+                    try {
+                        const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", sceneFile, scene);
+                        if (result.meshes.length > 0) {
+                            const mesh = result.meshes[0];
+                            mesh.position = position;
+
+                            // Scale the model appropriately (VSS-derived GLTFs and OBJs are small)
+                            mesh.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
+
+                            mesh.metadata = {
+                                ...nodeData,
+                                deviceType: nodeData.device_type || nodeData.type,
+                                modelPath: candidate,
+                                isRealisticModel: true
+                            };
+                            return mesh;
+                        }
+                    } catch (e) {
+                        console.log('Failed to load model for', nodeData.name, 'from', sceneFile, e);
+                        // Try next candidate
+                    }
+                }
+            } catch (error) {
+                console.log('Failed to load 3D model for', nodeData && nodeData.name, error);
+            }
+            return null;
+        }
+
+        function createDeviceBox(nodeData, position) {
+            // Create device-specific box based on type
+            let size = { width: 1.5, height: 1, depth: 0.5 };
+            let color = new BABYLON.Color3(0.3, 0.6, 0.9);
+
+            // Customize based on device type
+            switch (nodeData.type?.toLowerCase()) {
+                case 'fortigate':
+                    size = { width: 2, height: 1.5, depth: 0.8 };
+                    color = new BABYLON.Color3(0.8, 0.3, 0.3); // Red for firewall
+                    break;
+                case 'fortiswitch':
+                    size = { width: 3, height: 0.5, depth: 1 };
+                    color = new BABYLON.Color3(0.3, 0.8, 0.3); // Green for switch
+                    break;
+                case 'fortiap':
+                    size = { width: 0.8, height: 0.3, depth: 0.8 };
+                    color = new BABYLON.Color3(0.8, 0.8, 0.3); // Yellow for AP
+                    break;
+                case 'client':
+                    size = { width: 1, height: 0.8, depth: 0.6 };
+                    color = new BABYLON.Color3(0.6, 0.6, 0.6); // Gray for client
+                    break;
+            }
+
+            const mesh = BABYLON.MeshBuilder.CreateBox(nodeData.id, size, scene);
+            mesh.position = position;
+
+            const material = new BABYLON.StandardMaterial(`mat_${nodeData.id}`, scene);
+            material.diffuseColor = color;
+            material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+            mesh.material = material;
+
+            mesh.metadata = {
+                ...nodeData,
+                deviceType: nodeData.device_type || nodeData.type
+            };
+
+            return mesh;
+        }
+
+        function createDeviceLabel(nodeData, mesh) {
+            try {
+                const nameText = nodeData.name || 'Device';
+                const ipText = nodeData.ip || '';
+                const macText = nodeData.mac || '';
+                const vlanText = (nodeData.vlan !== undefined && nodeData.vlan !== null)
+                    ? String(nodeData.vlan)
+                    : '';
+                const dtWidth = 256;
+                const dtHeight = 96;
+                const texture = new BABYLON.DynamicTexture(`${nodeData.id}_label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
+                texture.hasAlpha = true;
+                const font = "16px 'Segoe UI'";
+
+                // Clear and draw name, IP, and VLAN/MAC details
+                let y = 24;
+                texture.drawText(nameText, null, y, font, "white", "transparent", true);
+                if (ipText) {
+                    y += 20;
+                    texture.drawText(ipText, null, y, font, "#9fb3ff", null, true);
+                }
+
+                const detailParts = [];
+                if (vlanText) {
+                    detailParts.push(`VLAN: ${vlanText}`);
+                }
+                if (macText) {
+                    // Use full MAC address in label
+                    detailParts.push(`MAC: ${macText}`);
+                }
+                if (detailParts.length > 0) {
+                    y += 20;
+                    texture.drawText(detailParts.join('  ·  '), null, y, font, "#c0c7ff", null, true);
+                }
+
+                const labelMat = new BABYLON.StandardMaterial(`${nodeData.id}_label_mat`, scene);
+                labelMat.diffuseTexture = texture;
+                labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+                labelMat.backFaceCulling = false;
+
+                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_label`, { width: 3, height: 0.8 }, scene);
+                labelPlane.position = new BABYLON.Vector3(
+                    mesh.position.x,
+                    mesh.position.y - 1.2,
+                    mesh.position.z
+                );
+                labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+                labelPlane.material = labelMat;
+                labelPlane.parent = mesh;
+                deviceLabels.push(labelPlane);
+            } catch (e) {
+                console.log('Failed to create label for', nodeData && nodeData.name, e);
+            }
+        }
+
+        async function addSVGOverlay(nodeData, mesh) {
+            try {
+                // Map device types to realistic SVG files (fallbacks)
+                const svgMap = {
+                    'fortigate': '/realistic_device_svgs/FortiGate.svg',
+                    'fortiswitch': '/realistic_device_svgs/FortiSwitch.svg',
+                    'fortiap': '/realistic_device_svgs/FortiAP.svg',
+                    'client': '/realistic_device_svgs/Laptop.svg'
+                };
+
+                const typeKey = (nodeData.type || '').toLowerCase();
+
+                // Prefer icon_svg from the API (VSS→SVG), fall back to type-based SVG
+                const svgPath = nodeData.icon_svg || svgMap[typeKey] || svgMap['client'];
+                
+                // Create a small plane for 2D overlay
+                const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_overlay`, 
+                    { width: 2, height: 1.5 }, scene);
+                overlay.position = new BABYLON.Vector3(
+                    mesh.position.x,
+                    mesh.position.y + 2,
+                    mesh.position.z
+                );
+                overlay.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+
+                // Create material with SVG texture
+                const overlayMaterial = new BABYLON.StandardMaterial(`${nodeData.id}_overlay_mat`, scene);
+                
+                // Try to load SVG as texture
+                try {
+                    const texture = new BABYLON.Texture(svgPath, scene);
+                    overlayMaterial.diffuseTexture = texture;
+                    overlayMaterial.emissiveColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+                    overlayMaterial.backFaceCulling = false;
+                } catch (e) {
+                    console.log(`Failed to load SVG texture for ${nodeData.name}:`, e);
+                    // Fallback to device-type color
+                    overlayMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
+                    overlayMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+                }
+                
+                overlay.material = overlayMaterial;
+                
+                // Parent overlay to mesh
+                overlay.parent = mesh;
+                
+            } catch (error) {
+                console.log(`Failed to add SVG overlay for ${nodeData.name}:`, error);
+            }
+        }
+
+        function initUI() {
+            document.getElementById('loadTopologyBtn').addEventListener('click', loadTopologyFromLab);
+
+            document.getElementById('autoRotateBtn').addEventListener('click', () => {
+                autoRotate = !autoRotate;
+                document.getElementById('autoRotateBtn').classList.toggle('active', autoRotate);
+            });
+
+            document.getElementById('resetViewBtn').addEventListener('click', () => {
+                if (camera) {
+                    camera.alpha = 0;
+                    camera.beta = Math.PI / 3;
+                    camera.radius = 30;
+                }
+            });
+
+            document.getElementById('labelsBtn').addEventListener('click', () => {
+                labelsVisible = !labelsVisible;
+                const btn = document.getElementById('labelsBtn');
+                btn.classList.toggle('active', labelsVisible);
+                deviceLabels.forEach(label => {
+                    if (label) label.isVisible = labelsVisible;
+                });
+            });
+
+            const exportDrawIOXmlBtn = document.getElementById('exportDrawIOXmlBtn');
+            const exportDrawIO3DSceneBtn = document.getElementById('exportDrawIO3DSceneBtn');
+            if (exportDrawIOXmlBtn) {
+                exportDrawIOXmlBtn.addEventListener('click', exportDrawIOXml);
+            }
+            if (exportDrawIO3DSceneBtn) {
+                exportDrawIO3DSceneBtn.addEventListener('click', exportDrawIO3DScene);
+            }
+
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const leftSidebar = document.getElementById('leftSidebar');
+            sidebarToggle.addEventListener('click', () => {
+                leftSidebar.classList.toggle('open');
+            });
+        }
+
+
+        async function exportDrawIOXml() {
+            try {
+                updateStatus('Exporting DrawIO XML...');
+                showLoading();
+                const resp = await fetch('/api/topology/drawio-xml', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ layout: 'hierarchical', group_by: 'type', show_details: true, color_code: true })
+                });
+                if (!resp.ok) {
+                    const text = await resp.text();
+                    throw new Error('HTTP ' + resp.status + ': ' + text);
+                }
+                const xmlText = await resp.text();
+                const blob = new Blob([xmlText], { type: 'application/xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fortinet_topology.drawio';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                updateStatus('DrawIO XML exported');
+            } catch (err) {
+                console.error('Failed to export DrawIO XML:', err);
+                showError(err.message || String(err));
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+
+        async function exportDrawIO3DScene() {
+            try {
+                updateStatus('Exporting 3D scene JSON...');
+                showLoading();
+                const resp = await fetch('/api/topology/drawio-3d-scene', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ layout: 'hierarchical', group_by: 'type', show_details: true, color_code: true })
+                });
+                if (!resp.ok) {
+                    const text = await resp.text();
+                    throw new Error('HTTP ' + resp.status + ': ' + text);
+                }
+                const sceneData = await resp.json();
+                const blob = new Blob([JSON.stringify(sceneData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fortinet_scene.json';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                updateStatus('3D scene JSON exported');
+            } catch (err) {
+                console.error('Failed to export 3D scene JSON:', err);
+                showError(err.message || String(err));
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initBabylon();
+            initUI();
+            // Automatically load the lab topology on page load so the canvas is never blank
+            loadTopologyFromLab();
+        });
+    </script>
+</body>
+</html>

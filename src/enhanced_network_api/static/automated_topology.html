@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automated Topology Workflow</title>
+    <link rel="stylesheet" href="/static/style.min.css" />
+    <link rel="stylesheet" href="/static/visualization.css" />
+    <style>
+        .workflow-container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 32px;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f0f4ff;
+        }
+
+        .workflow-container h1 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: #63b3ff;
+        }
+
+        .workflow-container section {
+            margin-bottom: 32px;
+        }
+
+        .workflow-container pre {
+            background: rgba(14, 21, 38, 0.9);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .workflow-container a {
+            color: #90d4ff;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <main class="workflow-container">
+        <h1>Automated Topology Workflow</h1>
+        <p>
+            Use this quick-start guide to automate FortiManager and Meraki topology diagram generation.
+            It complements the full documentation in
+            <code>docs/AUTOMATED_TOPOLOGY_DIAGRAMS.md</code>.
+        </p>
+
+        <section>
+            <h2>Pipeline Summary</h2>
+            <ol>
+                <li><strong>Collect</strong> topology snapshots from FortiManager JSON-RPC and Meraki REST APIs.</li>
+                <li><strong>Normalize</strong> the results into a shared node/link schema.</li>
+                <li><strong>Generate</strong> JSON + GraphML artifacts for DrawIO MCP, yEd/N2G, and the 3D scene endpoint.</li>
+                <li><strong>Automate</strong> regenerations via CI/CD or scheduled jobs to keep diagrams aligned with production.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Starter Script</h2>
+            <p>The repository includes a helper script that produces JSON and GraphML outputs:</p>
+            <pre><code>uv run python scripts/generate_topology_artifacts.py \
+  --fortimanager-json ./data/fortimanager_topology.json \
+  --meraki-json ./data/meraki_topology.json \
+  --output-dir ./data/generated</code></pre>
+            <p>
+                Provide live API access by setting <code>FORTIMANAGER_HOST</code>,
+                <code>FORTIMANAGER_TOKEN</code>, and <code>MERAKI_API_KEY</code>.
+                In offline mode the script falls back to bundled sample payloads so you can exercise the workflow without credentials.
+            </p>
+        </section>
+
+        <section>
+            <h2>Next Steps</h2>
+            <ul>
+                <li>Feed JSON output into the <code>/api/topology/scene</code> normalization path for 3D visualization.</li>
+                <li>Pass GraphML into DrawIO MCP or N2G to publish 2D diagrams automatically.</li>
+                <li>Connect the script to self-healing playbooks to regenerate documentation after each discovery run.</li>
+            </ul>
+        </section>
+
+        <div class="action-buttons">
+            <a class="btn btn--primary" href="/static/automated_topology.html">Refresh</a>
+            <a class="btn btn--outline" href="/docs/automated-topology">View Markdown</a>
+            <a class="btn btn--secondary" href="/smart-tools">Back to Smart Tools</a>
+        </div>
+    </main>
+</body>
+</html>

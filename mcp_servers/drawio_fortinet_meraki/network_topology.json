@@ -1,0 +1,11 @@
+{
+  "topology": {
+    "devices": [],
+    "links": [],
+    "timestamp": "2025-11-22T11:50:42.080441",
+    "total_devices": 0,
+    "total_links": 0
+  },
+  "export_timestamp": "2025-11-22T11:50:42.080946",
+  "export_format": "json"
+}

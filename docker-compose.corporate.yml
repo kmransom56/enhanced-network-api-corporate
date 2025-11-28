@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  enhanced-network-api:
+    build: .
+    container_name: enhanced-network-observability
+    ports:
+      - "8443:11111"  # Corporate-friendly port
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=11111
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql://appuser:${DB_PASSWORD}@postgres:5432/enhanced_network
+    volumes:
+      - ./corporate.env:/app/.env:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./troubleshooting_sessions:/app/troubleshooting_sessions
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - enhanced-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: enhanced-network-db
+    environment:
+      POSTGRES_DB: enhanced_network
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    restart: unless-stopped
+    networks:
+      - enhanced-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: enhanced-network-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - enhanced-network
+
+  # Nginx reverse proxy (optional, for SSL termination)
+  nginx:
+    image: nginx:alpine
+    container_name: enhanced-network-proxy
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - enhanced-network-api
+    restart: unless-stopped
+    networks:
+      - enhanced-network
+
+  # Grafana for additional monitoring dashboards (optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: enhanced-network-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    restart: unless-stopped
+    networks:
+      - enhanced-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  enhanced-network:
+    driver: bridge

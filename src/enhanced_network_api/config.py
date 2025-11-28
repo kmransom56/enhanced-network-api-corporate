@@ -8,6 +8,12 @@ class FortiManagerConfig:
         self.username = username
         self.password = password
 
+class FortiGateConfig:
+    """Configuration for a single FortiGate instance."""
+    def __init__(self, host, api_key):
+        self.host = host
+        self.api_key = api_key
+
 class MerakiConfig:
     """Configuration for the Meraki Dashboard API."""
     def __init__(self, api_key):
@@ -16,6 +22,10 @@ class MerakiConfig:
 class NetworkEnvironments:
     """Manages configurations for all network environments."""
     def __init__(self):
+        self.local_fortigate = FortiGateConfig(
+            host=f'{os.getenv("LOCAL_FG_HOST")}:{os.getenv("LOCAL_FG_PORT", 443)}',
+            api_key=os.getenv("LOCAL_FG_TOKEN")
+        )
         self.arbys = FortiManagerConfig(
             host=os.getenv("ARBYS_FM_HOST"),
             username=os.getenv("ARBYS_FM_USER"),

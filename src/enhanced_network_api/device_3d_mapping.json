@@ -1,0 +1,92 @@
+[
+  {
+    "mac_address": "F0:9F:C2:12:34:56",
+    "vendor": "Cisco Meraki",
+    "device_type": "Wireless Access Point",
+    "confidence": "high",
+    "model_path": "/static/3d-models/meraki_ap.obj",
+    "pos_system": null,
+    "details": {
+      "oui_info": {
+        "vendor": "Cisco Meraki",
+        "address": "San Francisco, CA"
+      },
+      "pos_system": null,
+      "random_mac": false,
+      "model_key": "Cisco Meraki Wireless Access Point",
+      "lookup_method": "local"
+    }
+  },
+  {
+    "mac_address": "90:6C:AC:98:76:54",
+    "vendor": "Fortinet",
+    "device_type": "Firewall/UTM",
+    "confidence": "high",
+    "model_path": "/static/3d-models/firewall.obj",
+    "pos_system": null,
+    "details": {
+      "oui_info": {
+        "vendor": "Fortinet",
+        "address": "Sunnyvale, CA"
+      },
+      "pos_system": null,
+      "random_mac": false,
+      "model_key": "Fortinet Firewall/UTM",
+      "lookup_method": "local"
+    }
+  },
+  {
+    "mac_address": "AC:BC:32:11:22:33",
+    "vendor": "Square (Block)",
+    "device_type": "POS Register/Cash Terminal",
+    "confidence": "high",
+    "model_path": "/static/3d-models/generic_pos.obj",
+    "pos_system": "Square (Block Inc)",
+    "details": {
+      "oui_info": {
+        "vendor": "Square (Block)",
+        "address": "San Francisco, CA"
+      },
+      "pos_system": "Square (Block Inc)",
+      "random_mac": false,
+      "model_key": "Square (Block) POS Register/Cash Terminal",
+      "lookup_method": "local"
+    }
+  },
+  {
+    "mac_address": "00:0C:F1:12:34:56",
+    "vendor": "Ingenico",
+    "device_type": "POS Terminal",
+    "confidence": "high",
+    "model_path": "/static/3d-models/pos_register.obj",
+    "pos_system": "Clover (Ingenico)",
+    "details": {
+      "oui_info": {
+        "vendor": "Ingenico",
+        "address": "Paris, France"
+      },
+      "pos_system": "Clover (Ingenico)",
+      "random_mac": false,
+      "model_key": "Ingenico POS Terminal",
+      "lookup_method": "local"
+    }
+  },
+  {
+    "mac_address": "B8:27:EB:98:76:54",
+    "vendor": "Raspberry Pi Foundation",
+    "device_type": "Kitchen Display Unit (KDS)",
+    "confidence": "high",
+    "model_path": "/static/3d-models/generic_device.obj",
+    "pos_system": "Toast",
+    "details": {
+      "oui_info": {
+        "vendor": "Raspberry Pi Foundation",
+        "address": "Cambridge, UK"
+      },
+      "pos_system": "Toast",
+      "random_mac": false,
+      "model_key": "Raspberry Pi Foundation Kitchen Display Unit (KDS)",
+      "lookup_method": "local"
+    }
+  }
+]

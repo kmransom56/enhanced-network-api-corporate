@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Windows Logo -->
+  <rect x="8" y="8" width="48" height="48" rx="4" fill="#0078D4" stroke="#005A9E" stroke-width="2"/>
+  <!-- Windows panes -->
+  <rect x="8" y="8" width="22" height="20" fill="#00BCF2"/>
+  <rect x="34" y="8" width="22" height="20" fill="#00D4F5"/>
+  <rect x="8" y="36" width="22" height="20" fill="#0099E5"/>
+  <rect x="34" y="36" width="22" height="20" fill="#0078D4"/>
+  <!-- Status indicator -->
+  <circle cx="56" cy="56" r="3" fill="#10B981"/>
+</svg>

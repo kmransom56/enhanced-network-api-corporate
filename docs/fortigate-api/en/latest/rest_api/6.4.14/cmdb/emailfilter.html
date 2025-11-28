@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FortiOS v6.4.14 cmdb emailfilter &mdash; fortigate-api 2.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=d7b522e2"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="FortiOS v6.4.14 cmdb endpoint-control" href="endpoint-control.html" />
+    <link rel="prev" title="FortiOS v6.4.14 cmdb dnsfilter" href="dnsfilter.html" /> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "rest_api/6.4.14/cmdb/emailfilter", "programming_language": "words", "project": "fortigate-api", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "", "version": "latest"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="fortigate-api" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/rest_api/6.4.14/cmdb/emailfilter.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            fortigate-api
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../fortigateapi/_contents.html">FortiGateAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fortigateapi/FortiGate.html">FortiGate</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../_contents.html">REST API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../cmdb.html">CMDB API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="alertemail.html">alertemail</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antivirus.html">antivirus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html">application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="authentication.html">authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="certificate.html">certificate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="credential-store.html">credential-store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dlp.html">dlp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dnsfilter.html">dnsfilter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">emailfilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="endpoint-control.html">endpoint-control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extender-controller.html">extender-controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="file-filter.html">file-filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="firewall.html">firewall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ftp-proxy.html">ftp-proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="icap.html">icap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ips.html">ips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="report.html">report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="router.html">router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh-filter.html">ssh-filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="switch-controller.html">switch-controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system.html">system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="voip.html">voip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vpn.html">vpn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="waf.html">waf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wanopt.html">wanopt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web-proxy.html">web-proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="webfilter.html">webfilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="wireless-controller.html">wireless-controller</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../log.html">Log API (not ready)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../monitor.html">Monitor API (not ready)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vladimirs-git/fortigate-api/tree/main/examples">Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fortigate-api</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../_contents.html">FortiOS REST API</a></li>
+          <li class="breadcrumb-item"><a href="../cmdb.html">FortiOS v6.4.14 cmdb</a></li>
+      <li class="breadcrumb-item active">FortiOS v6.4.14 cmdb emailfilter</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/vladimirs-git/fortigate-api/blob/main/docs/rest_api/6.4.14/cmdb/emailfilter.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fortios-v6-4-14-cmdb-emailfilter">
+<h1>FortiOS v6.4.14 cmdb emailfilter<a class="headerlink" href="#fortios-v6-4-14-cmdb-emailfilter" title="Permalink to this heading"></a></h1>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-bwl">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bwl</span></span><a class="headerlink" href="#get--emailfilter-bwl" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-bwl">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bwl</span></span><a class="headerlink" href="#post--emailfilter-bwl" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id1"><span class="problematic" id="id2">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-bwl-id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bwl/{id}</span></span><a class="headerlink" href="#delete--emailfilter-bwl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-bwl-id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bwl/{id}</span></span><a class="headerlink" href="#get--emailfilter-bwl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-bwl-id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bwl/{id}</span></span><a class="headerlink" href="#put--emailfilter-bwl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id3"><span class="problematic" id="id4">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-bword">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bword</span></span><a class="headerlink" href="#get--emailfilter-bword" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-bword">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bword</span></span><a class="headerlink" href="#post--emailfilter-bword" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id5"><span class="problematic" id="id6">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-bword-id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bword/{id}</span></span><a class="headerlink" href="#delete--emailfilter-bword-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-bword-id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bword/{id}</span></span><a class="headerlink" href="#get--emailfilter-bword-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-bword-id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/bword/{id}</span></span><a class="headerlink" href="#put--emailfilter-bword-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id7"><span class="problematic" id="id8">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-dnsbl">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/dnsbl</span></span><a class="headerlink" href="#get--emailfilter-dnsbl" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-dnsbl">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/dnsbl</span></span><a class="headerlink" href="#post--emailfilter-dnsbl" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id9"><span class="problematic" id="id10">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-dnsbl-id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/dnsbl/{id}</span></span><a class="headerlink" href="#delete--emailfilter-dnsbl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-dnsbl-id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/dnsbl/{id}</span></span><a class="headerlink" href="#get--emailfilter-dnsbl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-dnsbl-id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/dnsbl/{id}</span></span><a class="headerlink" href="#put--emailfilter-dnsbl-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id11"><span class="problematic" id="id12">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-fortishield">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/fortishield</span></span><a class="headerlink" href="#get--emailfilter-fortishield" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-fortishield">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/fortishield</span></span><a class="headerlink" href="#put--emailfilter-fortishield" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id13"><span class="problematic" id="id14">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-iptrust">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/iptrust</span></span><a class="headerlink" href="#get--emailfilter-iptrust" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-iptrust">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/iptrust</span></span><a class="headerlink" href="#post--emailfilter-iptrust" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id15"><span class="problematic" id="id16">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-iptrust-id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/iptrust/{id}</span></span><a class="headerlink" href="#delete--emailfilter-iptrust-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-iptrust-id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/iptrust/{id}</span></span><a class="headerlink" href="#get--emailfilter-iptrust-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-iptrust-id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/iptrust/{id}</span></span><a class="headerlink" href="#put--emailfilter-iptrust-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id17"><span class="problematic" id="id18">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-mheader">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/mheader</span></span><a class="headerlink" href="#get--emailfilter-mheader" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-mheader">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/mheader</span></span><a class="headerlink" href="#post--emailfilter-mheader" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id19"><span class="problematic" id="id20">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-mheader-id">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/mheader/{id}</span></span><a class="headerlink" href="#delete--emailfilter-mheader-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-mheader-id">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/mheader/{id}</span></span><a class="headerlink" href="#get--emailfilter-mheader-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-mheader-id">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/mheader/{id}</span></span><a class="headerlink" href="#put--emailfilter-mheader-id" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>integer</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id21"><span class="problematic" id="id22">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-options">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/options</span></span><a class="headerlink" href="#get--emailfilter-options" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-options">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/options</span></span><a class="headerlink" href="#put--emailfilter-options" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id23"><span class="problematic" id="id24">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-profile">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/profile</span></span><a class="headerlink" href="#get--emailfilter-profile" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select all entries in a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>start</strong> (<em>integer</em>) – Starting entry index.</p></li>
+<li><p><strong>count</strong> (<em>integer</em>) – Maximum number of entries to return.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>with_contents_hash</strong> (<em>boolean</em>) – Enable to include a checksum of each object’s contents.</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>filter</strong> (<em>array</em>) – Filtering multiple key/value pairs
+Operator     |   Description
+==     |   Case insensitive match with pattern.
+!=     |    Does not match with pattern (case insensitive).
+=&#64;     |    Pattern found in object value (case insensitive).
+!&#64;     |    ﻿Pattern not﻿ found in object value (case insensitive).
+&lt;=     |    Value must be less than or equal to ﻿pattern﻿.
+&lt;     |    Value must be less than pattern﻿.
+.&gt;=    |    Value must be greater than or equal to ﻿pattern﻿.
+.&gt;     |    Value must be greater than ﻿pattern﻿.
+Logical OR    |    Separate filters using commas ‘,’
+Logical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.
+Combining AND and OR    |    You can combine AND and OR filters together to create more complex filters.</p></li>
+<li><p><strong>key</strong> (<em>string</em>) – If present, objects will be filtered on property with this name.</p></li>
+<li><p><strong>pattern</strong> (<em>string</em>) – If present, objects will be filtered on property with this value.</p></li>
+<li><p><strong>scope</strong> (<em>string</em>) – Scope [global|vdom|both*]</p></li>
+<li><p><strong>exclude-default-values</strong> (<em>boolean</em>) – Exclude properties/objects with default value</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for entire CLI tree.
+meta: Return meta data for a specific object, table, or the entire CLI tree.
+schema: Return schema for entire CLI tree.</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--emailfilter-profile">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/profile</span></span><a class="headerlink" href="#post--emailfilter-profile" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Create object(s) in this table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_clone_: Clone this specific resource.
+When <em>action=clone</em> is set, the extra parameters <em>nkey</em> must be provided.
+__*Note:<a href="#id25"><span class="problematic" id="id26">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>nkey</strong> (<em>string</em>) – <blockquote>
+<div><p>If <em>action=clone</em>, use <em>nkey</em> to specify the ID for the new resource to be created.</p>
+</div></blockquote>
+<p>For example, to clone <cite>address1</cite> to <cite>address1_clone</cite>, use:
+__action=clone&amp;nkey=address1_clone__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>clone</em>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--emailfilter-profile-name">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/profile/{name}</span></span><a class="headerlink" href="#delete--emailfilter-profile-name" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Delete this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--emailfilter-profile-name">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/profile/{name}</span></span><a class="headerlink" href="#get--emailfilter-profile-name" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Select a specific entry from a CLI table.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>datasource</strong> (<em>boolean</em>) – Enable to include datasource information for each linked object.</p></li>
+<li><p><strong>with_meta</strong> (<em>boolean</em>) – Enable to include meta information about each object (type id, references, etc).</p></li>
+<li><p><strong>skip</strong> (<em>boolean</em>) – Enable to call CLI skip operator to hide skipped properties.</p></li>
+<li><p><strong>format</strong> (<em>array</em>) – List of property names to include in results, separated by | (i.e. policyid|srcintf).</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – default: Return the CLI default values for this object type.
+schema: Return the CLI schema for this object type.
+revision: Return the CMDB revision for this object type.
+transaction-list: List all configuration transaction(s).</p></li>
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--emailfilter-profile-name">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/emailfilter/profile/{name}</span></span><a class="headerlink" href="#put--emailfilter-profile-name" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Update this specific resource.</strong>
+** Access Group: utmgrp**</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – mkey</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vdom</strong> (<em>array</em>) – Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.
+The URL parameter is one of:
+vdom=root (Single VDOM)
+vdom=vdom1,vdom2 (Multiple VDOMs)
+vdom=* (All VDOMs)</p></li>
+<li><p><strong>action</strong> (<em>string</em>) – If supported, an action can be specified.
+_move_: Move this specific resource.
+When <em>action=move</em> is set, one of the extra parameters (<em>before</em>, <em>after</em>) must be provided.
+__*Note:<a href="#id27"><span class="problematic" id="id28">*</span></a>__ If this parameter is provided when not supported, the action will be ignored and an “invalid request” error will be returned.</p></li>
+<li><p><strong>before</strong> (<em>string</em>) – If <em>action=move</em>, use <em>before</em> to specify the ID of the resource that this resource will be moved before.
+For example, to move <cite>object 1</cite> to before <cite>object 2</cite>, use:
+__action=move&amp;before=2__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+<li><p><strong>after</strong> (<em>string</em>) – If <em>action=move</em>, use <em>after</em> to specify the ID of the resource that this resource will be moved after.
+For example, to move <cite>object 1</cite> to after <cite>object 3</cite>, use:
+__action=move&amp;after=3__
+__*Note:<em>__ This parameter can only be used when the *action</em> parameter is set to <em>move</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – OK: Request returns successful</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – Bad Request: Request cannot be processed by the API</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a></span> – Not Authorized: Request without successful login session</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – Forbidden: Request is missing CSRF token or administrator is missing access profile permissions.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a></span> – Resource Not Found: Unable to find the specified resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6">405 Method Not Allowed</a></span> – Method Not Allowed: Specified HTTP method is not allowed for this resource.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.14">413 Request Entity Too Large</a></span> – Request Entity Too Large: Request cannot be processed due to large entity</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.4">424 Failed Dependency</a></span> – Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc6585#section-4">429 Too Many Requests</a></span> – Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time.</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – Internal Server Error: Internal error when processing the request</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dnsfilter.html" class="btn btn-neutral float-left" title="FortiOS v6.4.14 cmdb dnsfilter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="endpoint-control.html" class="btn btn-neutral float-right" title="FortiOS v6.4.14 cmdb endpoint-control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Vladimirs Prusakovs.
+      <span class="commit">Revision <code>401b2c7b</code>.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

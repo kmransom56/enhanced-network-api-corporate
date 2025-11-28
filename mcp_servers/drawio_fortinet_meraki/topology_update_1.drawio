@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-11-22T11:51:06.135842" agent="5.0" etag="1763830266.135845" version="21.6.5" type="device">
+  <diagram name="Network Topology" id="topology">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+          <!-- Cells will be inserted here -->
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,266 @@
+{
+  "pos_register_pos_register": {
+    "name": "Pos Register",
+    "device_type": "pos_register",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/pos_register.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "pos_tablet_pos_tablet": {
+    "name": "Pos Tablet",
+    "device_type": "pos_tablet",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/pos_tablet.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "kitchen_display_kitchen_display": {
+    "name": "Kitchen Display",
+    "device_type": "kitchen_display",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/kitchen_display.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "digital_menu_digital_menu": {
+    "name": "Digital Menu",
+    "device_type": "digital_menu",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/digital_menu.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "kitchen_printer_kitchen_printer": {
+    "name": "Kitchen Printer",
+    "device_type": "kitchen_printer",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/kitchen_printer.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "payment_terminal_payment_terminal": {
+    "name": "Payment Terminal",
+    "device_type": "payment_terminal",
+    "pos_system": null,
+    "svg_path": "restaurant_icons/svg/payment_terminal.svg",
+    "png_path": null,
+    "source_url": "Generated Placeholder"
+  },
+  "pos_register_clover_pos": {
+    "name": "Clover POS",
+    "device_type": "pos_register",
+    "pos_system": "Clover",
+    "svg_path": "restaurant_icons/svg/clover_pos.svg",
+    "png_path": null,
+    "source_url": "Generated POS System Icon"
+  },
+  "pos_register_square_pos": {
+    "name": "Square POS",
+    "device_type": "pos_register",
+    "pos_system": "Square",
+    "svg_path": "restaurant_icons/svg/square_pos.svg",
+    "png_path": null,
+    "source_url": "Generated POS System Icon"
+  },
+  "pos_register_toast_pos": {
+    "name": "Toast POS",
+    "device_type": "pos_register",
+    "pos_system": "Toast",
+    "svg_path": "restaurant_icons/svg/toast_pos.svg",
+    "png_path": null,
+    "source_url": "Generated POS System Icon"
+  },
+  "pos_register_ncr_pos": {
+    "name": "NCR POS",
+    "device_type": "pos_register",
+    "pos_system": "NCR",
+    "svg_path": "restaurant_icons/svg/ncr_pos.svg",
+    "png_path": null,
+    "source_url": "Generated POS System Icon"
+  },
+  "pos_register_micros_pos": {
+    "name": "Micros POS",
+    "device_type": "pos_register",
+    "pos_system": "Micros",
+    "svg_path": "restaurant_icons/svg/micros_pos.svg",
+    "png_path": null,
+    "source_url": "Generated POS System Icon"
+  },
+  "pos_register_pos_register_icon": {
+    "name": "POS Register Icon",
+    "device_type": "pos_register",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_register_cash_register_icon": {
+    "name": "Cash Register Icon",
+    "device_type": "pos_register",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_register_pos_terminal_icon": {
+    "name": "POS Terminal Icon",
+    "device_type": "pos_register",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_register_checkout_icon": {
+    "name": "Checkout Icon",
+    "device_type": "pos_register",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_tablet_pos_tablet_icon": {
+    "name": "POS Tablet Icon",
+    "device_type": "pos_tablet",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_tablet_ipad_pos_icon": {
+    "name": "iPad POS Icon",
+    "device_type": "pos_tablet",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_tablet_tablet_ordering_icon": {
+    "name": "Tablet Ordering Icon",
+    "device_type": "pos_tablet",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "pos_tablet_mobile_pos_icon": {
+    "name": "Mobile POS Icon",
+    "device_type": "pos_tablet",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_display_kitchen_display_icon": {
+    "name": "Kitchen Display Icon",
+    "device_type": "kitchen_display",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_display_kds_icon": {
+    "name": "KDS Icon",
+    "device_type": "kitchen_display",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_display_kitchen_monitor_icon": {
+    "name": "Kitchen Monitor Icon",
+    "device_type": "kitchen_display",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_display_display_icon": {
+    "name": "Display Icon",
+    "device_type": "kitchen_display",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "digital_menu_digital_menu_icon": {
+    "name": "Digital Menu Icon",
+    "device_type": "digital_menu",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "digital_menu_menu_board_icon": {
+    "name": "Menu Board Icon",
+    "device_type": "digital_menu",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "digital_menu_digital_display_icon": {
+    "name": "Digital Display Icon",
+    "device_type": "digital_menu",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "digital_menu_menu_display_icon": {
+    "name": "Menu Display Icon",
+    "device_type": "digital_menu",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_printer_kitchen_printer_icon": {
+    "name": "Kitchen Printer Icon",
+    "device_type": "kitchen_printer",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_printer_receipt_printer_icon": {
+    "name": "Receipt Printer Icon",
+    "device_type": "kitchen_printer",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "kitchen_printer_thermal_printer_icon": {
+    "name": "Thermal Printer Icon",
+    "device_type": "kitchen_printer",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "payment_terminal_payment_terminal_icon": {
+    "name": "Payment Terminal Icon",
+    "device_type": "payment_terminal",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "payment_terminal_credit_card_terminal_icon": {
+    "name": "Credit Card Terminal Icon",
+    "device_type": "payment_terminal",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  },
+  "payment_terminal_payment_device_icon": {
+    "name": "Payment Device Icon",
+    "device_type": "payment_terminal",
+    "pos_system": null,
+    "svg_path": null,
+    "png_path": null,
+    "source_url": "https://icons8.com/icons/set/pos"
+  }
+}

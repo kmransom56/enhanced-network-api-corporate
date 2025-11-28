@@ -1,16 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-g">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Network API</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Enhanced Network API Portal</title>
+    <link rel="stylesheet" href="/static/style.min.css">
+    <style>
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            margin: 0;
+            background: radial-gradient(circle at top, #10172a 0%, #050814 55%, #03050c 100%);
+            color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        header {
+            background: rgba(3, 9, 26, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            font-size: 0.95rem;
+        }
+        .nav-links a {
+            opacity: 0.85;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a:focus {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+        main {
+            flex: 1 1 auto;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+            display: grid;
+            gap: 40px;
+        }
+        .hero {
+            display: grid;
+            gap: 24px;
+            background: rgba(15, 23, 42, 0.75);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: 0 20px 35px rgba(15, 23, 42, 0.45);
+        }
+        .hero h1 {
+            font-size: clamp(2.3rem, 4vw, 2.9rem);
+            margin: 0;
+        }
+        .hero p {
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: rgba(226, 232, 240, 0.88);
+        }
+        .cta-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .cta-buttons a {
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cta-buttons a.secondary {
+            background: rgba(30, 64, 175, 0.25);
+            box-shadow: none;
+        }
+        .cta-buttons a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(37, 99, 235, 0.45);
+        }
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 14px;
+            padding: 24px;
+            display: grid;
+            gap: 12px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover,
+        .card:focus-within {
+            transform: translateY(-3px);
+            border-color: rgba(96, 165, 250, 0.6);
+        }
+        .card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .card p {
+            margin: 0;
+            color: rgba(226, 232, 240, 0.78);
+            line-height: 1.5;
+        }
+        .card .card-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .link-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.18);
+            font-size: 0.85rem;
+            transition: background 0.2s ease;
+        }
+        .link-badge:hover {
+            background: rgba(37, 99, 235, 0.35);
+        }
+        footer {
+            padding: 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(148, 163, 184, 0.7);
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <h1>Enhanced Network API</h1>
-        <p>Welcome to the Enhanced Network API corporate application.</p>
-    </div>
-    <script src="/static/app.js"></script>
+    <header>
+        <div class="nav-container">
+            <strong>Enhanced Network API</strong>
+            <nav class="nav-links">
+                <a href="/smart-tools">Smart Tools</a>
+                <a href="/static/2d_topology_enhanced.html">2D Topology</a>
+                <a href="/static/topology_working.html">3D Viewer</a>
+                <a href="/docs/automated-topology">Workflow Guide</a>
+                <a href="/docs">API Docs</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <h1>Operational Hub for Fortinet &amp; Meraki Networks</h1>
+                <p>Launch topology visualizations, automate diagram generation, and verify platform health from a single entry point. Choose the view that fits your workflow and start diagnosing or exporting instantly.</p>
+            </div>
+            <div class="cta-buttons">
+                <a href="/static/babylon_topology.html">Open 3D Scene</a>
+                <a href="/static/2d_topology_enhanced.html" class="secondary">Open 2D Topology</a>
+                <a href="/smart-tools" class="secondary">Automated Workflows</a>
+            </div>
+        </section>
+
+        <section class="quick-links">
+            <a class="card" href="/smart-tools">
+                <h3>Smart Tools Dashboard</h3>
+                <p>Run automated discovery, export DrawIO diagrams, inspect artifacts, and drive remediation workflows with a single pane of glass.</p>
+                <div class="card-links">
+                    <span class="link-badge">Topology Automation</span>
+                    <span class="link-badge">DrawIO Exports</span>
+                </div>
+            </a>
+
+            <div class="card">
+                <h3>Visualization Library</h3>
+                <p>Switch between rich 3D insights and lightweight 2D diagnostics depending on the task at hand.</p>
+                <div class="card-links">
+                    <a class="link-badge" href="/static/babylon_topology.html">3D Babylon Scene</a>
+                    <a class="link-badge" href="/static/2d_topology_enhanced.html">Enhanced 2D View</a>
+                    <a class="link-badge" href="/static/topology_2d_fallback.html">Fallback 2D Canvas</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Reference &amp; Diagnostics</h3>
+                <p>Jump into operational docs, REST APIs, or health signals without leaving the console.</p>
+                <div class="card-links">
+                    <a class="link-badge" href="/docs/automated-topology">Automated Topology Guide</a>
+                    <a class="link-badge" href="/docs">Swagger API Explorer</a>
+                    <a class="link-badge" href="/health">Platform Health</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Enhanced Network API &bull; Fortinet + Meraki Automation Suite
+    </footer>
 </body>
 </html>

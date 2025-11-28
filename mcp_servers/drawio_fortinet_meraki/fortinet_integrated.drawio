@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="15937.668755749" agent="5.0">
+  <diagram name="Fortinet Network Topology" id="fortinet-topology">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="FortiGate\n192.168.0.254\nFG600E" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="CoreSwitch\n192.168.0.10\nFS-124E" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="100" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="WiFi-AP\n192.168.0.101\nFAP-421E" style="shape=ellipse;whiteSpace=wrap;html=1;fillColor=#f5a623;strokeColor=#B79500;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="port1\n1Gbps" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="port1\n1Gbps" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Operations Center - Fortinet Management</title>
+    <link rel="stylesheet" href="/static/noc-styles.css">
+</head>
+<body>
+    <div id="asset-panel">
+        <h3>🔥 Network Operations Center</h3>
+        
+        <h4>🚀 Enhanced Topology Visualizations</h4>
+        <div class="view-toggle">
+            <a href="/" class="btn" target="_blank">🏠 Network Operations Center</a>
+            <a href="/babylon-test" class="btn" target="_blank">🎮 Babylon.js 3D</a>
+            <a href="/2d-topology-enhanced" class="btn" target="_blank">🗺️ Enhanced 2D</a>
+            <a href="/echarts-gl-test" class="btn" target="_blank">📊 ECharts-GL 3D</a>
+            <a href="/smart-tools" class="btn" target="_blank">🧠 Smart Tools</a>
+        </div>
+        
+        <h4>Visualization Controls</h4>
+        <div class="view-toggle">
+            <button class="btn" onclick="setViewMode('2d')">2D View</button>
+            <button class="btn" onclick="setViewMode('3d')">3D View</button>
+        </div>
+        
+        <h4>Network Discovery</h4>
+        <button class="btn" onclick="loadFortinetTopology()">🔥 Load Fortinet</button>
+        <button class="btn" onclick="loadFortinetTopologyWithDemo()">🎭 Demo Mode</button>
+        <button class="btn" onclick="loadMerakiTopology()">📡 Load Meraki</button>
+        <button class="btn" onclick="loadCombinedTopology()">🔄 Load Combined</button>
+        <button class="btn danger" onclick="clearTopology()">🗑️ Clear</button>
+        
+        <h4>Display Options</h4>
+        <button class="btn" onclick="toggleDeviceLabels()">🏷️ Toggle Labels</button>
+        <button class="btn" onclick="toggleConnections()">🔗 Toggle Links</button>
+        <button class="btn" onclick="toggleHealthStatus()">💚 Health Status</button>
+        
+        <div id="selected-device" class="hidden">
+            <h4>📋 Selected Device</h4>
+            <div id="device-details"></div>
+            <button class="btn success" onclick="startTroubleshooting()">🔧 Troubleshoot</button>
+        </div>
+    </div>
+
+    <div id="main">
+        <div id="canvas-container">
+            <canvas id="topology-canvas"></canvas>
+        </div>
+        
+        <div id="troubleshooting-panel" class="hidden">
+            <h3>🔧 Troubleshooting Session</h3>
+            <div id="troubleshooting-content"></div>
+            <button class="btn" onclick="closeTroubleshooting()">Close</button>
+        </div>
+    </div>
+
+    <!-- Three.js and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+    <script src="/static/app.min.js"></script>
+    <script src="/static/demo_topology.js"></script>
+    
+    <script>
+        // Mark dependencies as loaded
+        window.dependenciesLoaded = true;
+        // Visualization state
+        let currentViewMode = '3d';
+        let selectedDevice = null;
+        let topologyData = null;
+
+        // Initialize visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeVisualization();
+            // Auto-load Fortinet topology after a short delay
+            setTimeout(() => {
+                loadFortinetTopology();
+            }, 1000);
+        });
+
+        // Topology loading functions
+        async function loadFortinetTopology() {
+            try {
+                console.log('Loading Fortinet topology...');
+                const response = await fetch('/api/topology/scene');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                
+                console.log('Fortinet topology loaded:', data);
+                topologyData = data;
+                
+                // Use app.js function if available, otherwise basic display
+                if (window.loadFortinetTopologyScene) {
+                    window.loadFortinetTopologyScene();
+                } else {
+                    // Fallback: display basic topology info
+                    displayTopologyInfo(data);
+                }
+                
+                // Show success message
+                showNotification('✅ Fortinet topology loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to load Fortinet topology:', error);
+                showNotification('❌ Failed to load Fortinet topology: ' + error.message, 'error');
+            }
+        }
+
+        async function loadFortinetTopologyWithDemo() {
+            try {
+                console.log('Loading Fortinet topology with demo data...');
+                // Load demo topology
+                if (window.loadDemoTopology) {
+                    window.loadDemoTopology();
+                    showNotification('🎭 Demo topology loaded!', 'success');
+                } else {
+                    showNotification('⚠️ Demo mode not available', 'warning');
+                }
+            } catch (error) {
+                console.error('Failed to load demo topology:', error);
+                showNotification('❌ Failed to load demo topology: ' + error.message, 'error');
+            }
+        }
+
+        async function loadMerakiTopology() {
+            try {
+                console.log('Loading Meraki topology...');
+                const response = await fetch('/api/meraki-mcp/organizations');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                
+                console.log('Meraki topology loaded:', data);
+                showNotification('✅ Meraki topology loaded!', 'success');
+            } catch (error) {
+                console.error('Failed to load Meraki topology:', error);
+                showNotification('❌ Failed to load Meraki topology: ' + error.message, 'error');
+            }
+        }
+
+        async function loadCombinedTopology() {
+            try {
+                console.log('Loading combined topology...');
+                await loadFortinetTopology();
+                await loadMerakiTopology();
+                showNotification('🔄 Combined topology loaded!', 'success');
+            } catch (error) {
+                console.error('Failed to load combined topology:', error);
+                showNotification('❌ Failed to load combined topology: ' + error.message, 'error');
+            }
+        }
+
+        function clearTopology() {
+            try {
+                console.log('Clearing topology...');
+                if (window.clearScene) {
+                    window.clearScene();
+                    showNotification('🗑️ Topology cleared!', 'success');
+                } else {
+                    showNotification('⚠️ Clear function not available', 'warning');
+                }
+            } catch (error) {
+                console.error('Failed to clear topology:', error);
+                showNotification('❌ Failed to clear topology: ' + error.message, 'error');
+            }
+        }
+
+        function setViewMode(mode) {
+            try {
+                console.log('Setting view mode to:', mode);
+                currentViewMode = mode;
+                
+                // Update button states
+                document.querySelectorAll('.view-toggle button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                // Change camera perspective
+                if (window.camera && window.scene) {
+                    if (mode === '2d') {
+                        window.camera.position.set(0, 100, 0);
+                        window.camera.lookAt(0, 0, 0);
+                    } else {
+                        window.camera.position.set(50, 50, 50);
+                        window.camera.lookAt(0, 0, 0);
+                    }
+                }
+                
+                showNotification(`👁️ Switched to ${mode.toUpperCase()} view`, 'success');
+            } catch (error) {
+                console.error('Failed to set view mode:', error);
+                showNotification('❌ Failed to change view mode: ' + error.message, 'error');
+            }
+        }
+
+        function toggleDeviceLabels() {
+            try {
+                console.log('Toggling device labels...');
+                // Toggle labels implementation
+                showNotification('🏷️ Device labels toggled!', 'success');
+            } catch (error) {
+                console.error('Failed to toggle labels:', error);
+                showNotification('❌ Failed to toggle labels: ' + error.message, 'error');
+            }
+        }
+
+        function toggleConnections() {
+            try {
+                console.log('Toggling connections...');
+                // Toggle connections implementation
+                showNotification('🔗 Connections toggled!', 'success');
+            } catch (error) {
+                console.error('Failed to toggle connections:', error);
+                showNotification('❌ Failed to toggle connections: ' + error.message, 'error');
+            }
+        }
+
+        function toggleHealthStatus() {
+            try {
+                console.log('Toggling health status...');
+                // Toggle health status implementation
+                showNotification('💚 Health status toggled!', 'success');
+            } catch (error) {
+                console.error('Failed to toggle health status:', error);
+                showNotification('❌ Failed to toggle health status: ' + error.message, 'error');
+            }
+        }
+
+        function startTroubleshooting() {
+            try {
+                console.log('Starting troubleshooting...');
+                const panel = document.getElementById('troubleshooting-panel');
+                if (panel) {
+                    panel.classList.remove('hidden');
+                    showNotification('🔧 Troubleshooting panel opened', 'success');
+                }
+            } catch (error) {
+                console.error('Failed to start troubleshooting:', error);
+                showNotification('❌ Failed to start troubleshooting: ' + error.message, 'error');
+            }
+        }
+
+        function closeTroubleshooting() {
+            try {
+                console.log('Closing troubleshooting...');
+                const panel = document.getElementById('troubleshooting-panel');
+                if (panel) {
+                    panel.classList.add('hidden');
+                    showNotification('🔧 Troubleshooting panel closed', 'success');
+                }
+            } catch (error) {
+                console.error('Failed to close troubleshooting:', error);
+                showNotification('❌ Failed to close troubleshooting: ' + error.message, 'error');
+            }
+        }
+
+        function displayTopologyInfo(data) {
+            console.log('Displaying basic topology info:', data);
+            // Basic topology display fallback
+            const info = `
+                <div style="padding: 20px; background: #f0f0f0; border-radius: 5px; margin: 10px;">
+                    <h3>🔥 Network Topology</h3>
+                    <p><strong>Nodes:</strong> ${data.nodes ? data.nodes.length : 0}</p>
+                    <p><strong>Links:</strong> ${data.links ? data.links.length : 0}</p>
+                    <pre style="background: white; padding: 10px; border-radius: 3px; overflow: auto; max-height: 200px;">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            document.getElementById('canvas-container').innerHTML = info;
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            
+            // Set background color based on type
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#ef4444';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#f59e0b';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#3b82f6';
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function initializeVisualization() {
+            console.log('Initializing visualization...');
+            // Initialize the 3D scene if app.js is available
+            if (window.initApp) {
+                window.initApp();
+            }
+        }
+
+        async function loadCombinedTopology() {
+            await loadFortinetTopology();
+            await loadMerakiTopology();
+        }
+
+        function clearTopology() {
+            topologyData = null;
+            selectedDevice = null;
+            hideDeviceDetails();
+            if (window.clearScene) {
+                window.clearScene();
+            }
+            console.log('Topology cleared');
+        }
+
+        async function loadFortinetTopologyWithDemo() {
+            // Create realistic demo data showing full icon system
+            const demoData = {
+                nodes: [
+                    {
+                        id: "fg-192.168.0.254",
+                        type: "fortigate",
+                        role: "gateway",
+                        name: "Lab-FortiGate",
+                        ip: "192.168.0.254",
+                        model: "FGT61F",
+                        serial: "FGT61FTK20020975",
+                        status: "online",
+                        metadata: {
+                            hostname: "fg-lab",
+                            version: "v7.6.4",
+                            firmware: "FG61F-7.6.4"
+                        }
+                    },
+                    {
+                        id: "fsw-FGS124EPOE",
+                        type: "fortiswitch",
+                        role: "switch",
+                        name: "Lab-Switch-01",
+                        ip: "192.168.0.100",
+                        model: "FGS-124E-POE",
+                        serial: "S124E123456789",
+                        status: "online",
+                        metadata: {
+                            firmware: "v6.4.8",
+                            ports: 24,
+                            poe_budget: "370W",
+                            vlan_count: 10
+                        }
+                    },
+                    {
+                        id: "fsw-FGS124EPOE-02",
+                        type: "fortiswitch",
+                        role: "switch",
+                        name: "Lab-Switch-02",
+                        ip: "192.168.0.101",
+                        model: "FGS-124E-POE",
+                        serial: "S124E987654321",
+                        status: "online",
+                        metadata: {
+                            firmware: "v6.4.8",
+                            ports: 24,
+                            poe_budget: "370W",
+                            vlan_count: 8
+                        }
+                    },
+                    {
+                        id: "fap-FAP231F",
+                        type: "fortiap",
+                        role: "access_point",
+                        name: "Lab-AP-Office",
+                        ip: "192.168.0.110",
+                        model: "FAP-231F",
+                        serial: "FAP231F123456789",
+                        status: "online",
+                        metadata: {
+                            firmware: "v7.0.5",
+                            ssid: "Lab-Network",
+                            band: "WiFi 6",
+                            clients: 15,
+                            channel: 36
+                        }
+                    },
+                    {
+                        id: "fap-FAP231F-02",
+                        type: "fortiap",
+                        role: "access_point",
+                        name: "Lab-AP-Guest",
+                        ip: "192.168.0.111",
+                        model: "FAP-231F",
+                        serial: "FAP231F987654321",
+                        status: "online",
+                        metadata: {
+                            firmware: "v7.0.5",
+                            ssid: "Lab-Guest",
+                            band: "WiFi 6",
+                            clients: 8,
+                            channel: 149
+                        }
+                    },
+                    {
+                        id: "fap-FAP221E",
+                        type: "fortiap",
+                        role: "access_point",
+                        name: "Lab-AP-Warehouse",
+                        ip: "192.168.0.112",
+                        model: "FAP-221E",
+                        serial: "FAP221E123456789",
+                        status: "online",
+                        metadata: {
+                            firmware: "v7.0.5",
+                            ssid: "Lab-Industrial",
+                            band: "WiFi 6E",
+                            clients: 3,
+                            channel: 1
+                        }
+                    }
+                ],
+                links: [
+                    {
+                        from: "fg-192.168.0.254",
+                        to: "fsw-FGS124EPOE",
+                        type: "fortilink",
+                        status: "online",
+                        metadata: {
+                            bandwidth: "1Gbps",
+                            protocol: "FortiLink"
+                        }
+                    },
+                    {
+                        from: "fg-192.168.0.254",
+                        to: "fsw-FGS124EPOE-02",
+                        type: "fortilink",
+                        status: "online",
+                        metadata: {
+                            bandwidth: "1Gbps",
+                            protocol: "FortiLink"
+                        }
+                    },
+                    {
+                        from: "fsw-FGS124EPOE",
+                        to: "fap-FAP231F",
+                        type: "wired",
+                        status: "online",
+                        metadata: {
+                            port: "1",
+                            poe: true,
+                            speed: "1Gbps"
+                        }
+                    },
+                    {
+                        from: "fsw-FGS124EPOE",
+                        to: "fap-FAP231F-02",
+                        type: "wired",
+                        status: "online",
+                        metadata: {
+                            port: "2",
+                            poe: true,
+                            speed: "1Gbps"
+                        }
+                    },
+                    {
+                        from: "fsw-FGS124EPOE-02",
+                        to: "fap-FAP221E",
+                        type: "wired",
+                        status: "online",
+                        metadata: {
+                            port: "24",
+                            poe: true,
+                            speed: "1Gbps"
+                        }
+                    }
+                ],
+                triageHints: []
+            };
+            
+            console.log('🎭 Demo topology loaded with full device support:', demoData);
+            topologyData = demoData;
+            
+            // Load demo data into 3D scene directly
+            if (window.loadFortinetTopologyScene) {
+                // Load the demo data into the scene instead of fetching from API
+                loadDemoDataIntoScene(demoData);
+            } else {
+                displayTopologyInfo(demoData);
+            }
+            
+            updateDeviceCounts(demoData);
+        }
+
+        // Load demo data directly into 3D scene
+        function loadDemoDataIntoScene(demoData) {
+            console.log('🎭 Loading demo data into 3D scene...');
+            
+            if (!window.scene || !window.camera || !window.renderer) {
+                console.error('3D scene not initialized');
+                return;
+            }
+            
+            // Clear existing scene
+            if (window.clearScene) {
+                window.clearScene();
+            }
+            
+            if (demoData.nodes && demoData.nodes.length > 0) {
+                // Create devices from demo data
+                const devices = [];
+                
+                demoData.nodes.forEach(node => {
+                    const device = {
+                        name: node.name || node.id,
+                        type: node.type || 'unknown',
+                        role: node.role || 'device',
+                        ip: node.ip || '',
+                        model: node.model || '',
+                        status: node.status || 'unknown',
+                        metadata: node.metadata || {}
+                    };
+                    devices.push(device);
+                });
+                
+                // Add devices to scene using the same logic as loadFortinetTopologyScene
+                Promise.all(devices.map(async device => {
+                    const mesh = await window.createDeviceMesh(device.type, device.name);
+                    if (device.position) {
+                        mesh.position.set(device.position.x, device.position.y, device.position.z);
+                    }
+                    window.scene.add(mesh);
+                    return mesh;
+                })).then(() => {
+                    // Auto-layout devices
+                    const devicesInScene = window.scene.children.filter(obj => obj.userData.type);
+                    const gridSize = Math.ceil(Math.sqrt(devicesInScene.length));
+                    const spacing = 25;
+                    
+                    devicesInScene.forEach((device, index) => {
+                        const row = Math.floor(index / gridSize);
+                        const col = index % gridSize;
+                        const x = (col - gridSize / 2) * spacing;
+                        const z = (row - gridSize / 2) * spacing;
+                        
+                        device.position.set(x, 5, z);
+                    });
+                    
+                    // Update YAML output
+                    if (window.updateYAML) {
+                        window.updateYAML();
+                    }
+                    
+                    console.log(`✅ Loaded ${devices.length} demo devices into scene`);
+                }).catch(error => {
+                    console.error('Failed to load demo devices:', error);
+                });
+            }
+        }
+
+        function updateDeviceCounts(data) {
+            const nodes = data.nodes || [];
+            const links = data.links || [];
+            
+            const fortigates = nodes.filter(n => n.type === 'fortigate').length;
+            const fortiswitches = nodes.filter(n => n.type === 'fortiswitch').length;
+            const fortiaPs = nodes.filter(n => n.type === 'fortiap').length;
+            
+            console.log(`📊 Device Counts: ${fortigates} FortiGates, ${fortiswitches} FortiSwitches, ${fortiaPs} FortiAPs, ${links.length} connections`);
+        }
+
+        function displayTopologyInfo(data) {
+            // Simple display when 3D is not available
+            const nodes = data.nodes || [];
+            const links = data.links || [];
+            
+            console.log(`🔥 Network Topology Loaded: ${nodes.length} devices, ${links.length} connections`);
+            
+            // Show first device details by default
+            if (nodes.length > 0) {
+                const firstDevice = nodes[0];
+                showDeviceDetails(firstDevice);
+                console.log('📋 Default device selected:', firstDevice);
+            }
+            
+            nodes.forEach(node => {
+                console.log(`🔧 ${node.type?.toUpperCase() || 'DEVICE'}: ${node.name || node.id} (${node.ip}) - ${node.model || 'Unknown model'}`);
+            });
+            
+            if (links.length > 0) {
+                console.log(`🔗 Found ${links.length} network connections`);
+            }
+        }
+
+        function initializeVisualization() {
+            console.log('Visualization initialized');
+            // Initialize Three.js scene if available
+            if (window.initApp) {
+                window.initApp();
+            }
+        }
+
+        // UI control functions
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            console.log('View mode set to:', mode);
+            // Implementation for 2D/3D switching
+        }
+
+        function toggleDeviceLabels() {
+            console.log('Toggling device labels');
+            // Implementation for device labels
+        }
+
+        function toggleConnections() {
+            console.log('Toggling connections');
+            // Implementation for connection lines
+        }
+
+        function toggleHealthStatus() {
+            console.log('Toggling health status');
+            // Implementation for health indicators
+        }
+
+        function hideDeviceDetails() {
+            document.getElementById('selected-device').classList.add('hidden');
+        }
+
+        function startTroubleshooting() {
+            if (!selectedDevice) {
+                alert('Please select a device first');
+                return;
+            }
+            
+            const issue = prompt('Describe the issue you are experiencing:');
+            if (!issue) return;
+            
+            console.log('Starting troubleshooting for:', selectedDevice, issue);
+            alert('Troubleshooting started for ' + selectedDevice);
+        }
+
+        function setupEventListeners() {
+            // Device selection
+            window.addEventListener('deviceSelected', function(event) {
+                selectedDevice = event.detail;
+                showDeviceDetails(selectedDevice);
+            });
+
+            // Troubleshooting results
+            window.addEventListener('troubleshootingResults', function(event) {
+                showTroubleshootingResults(event.detail);
+            });
+        }
+
+        // View mode switching
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            if (mode === '2d') {
+                // Switch to 2D visualization
+                console.log('Switching to 2D view');
+                // Implementation for 2D view
+            } else {
+                // Switch to 3D visualization
+                console.log('Switching to 3D view');
+                // Implementation for 3D view (default)
+            }
+        }
+
+        // Topology loading functions
+        async function loadFortinetTopology() {
+            try {
+                const response = await fetch('/api/topology/scene');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                topologyData = await response.json();
+                
+                // Initialize troubleshooting engine with topology
+                if (window.troubleshootingEngine) {
+                    await window.troubleshootingEngine.initialize(topologyData);
+                }
+                
+                // Load in 3D view
+                if (window.loadFortinetTopologyScene) {
+                    await window.loadFortinetTopologyScene();
+                }
+                
+                console.log('Fortinet topology loaded:', topologyData);
+            } catch (error) {
+                console.error('Failed to load Fortinet topology:', error);
+                alert('Failed to load Fortinet topology: ' + error.message);
+            }
+        }
+
+        async function loadMerakiTopology() {
+            try {
+                const response = await fetch('/api/meraki-mcp/organizations');
+                const orgs = await response.json();
+                
+                if (orgs.success && orgs.data) {
+                    // Load first organization's networks
+                    const orgId = orgs.data[0].id;
+                    const networksResponse = await fetch(`/api/meraki-mcp/networks/${orgId}`);
+                    const networks = await networksResponse.json();
+                    
+                    console.log('Meraki topology loaded:', networks);
+                    // TODO: Implement Meraki topology visualization
+                }
+            } catch (error) {
+                console.error('Failed to load Meraki topology:', error);
+                alert('Failed to load Meraki topology: ' + error.message);
+            }
+        }
+
+        async function loadCombinedTopology() {
+            await loadFortinetTopology();
+            await loadMerakiTopology();
+            // TODO: Merge and visualize combined topology
+        }
+
+        function clearTopology() {
+            if (window.clearScene) {
+                window.clearScene();
+            }
+            selectedDevice = null;
+            topologyData = null;
+            hideDeviceDetails();
+        }
+
+        // UI control functions
+        function toggleDeviceLabels() {
+            // Toggle device labels visibility
+            console.log('Toggling device labels');
+        }
+
+        function toggleConnections() {
+            // Toggle connection lines visibility
+            console.log('Toggling connections');
+        }
+
+        function toggleHealthStatus() {
+            // Toggle health status indicators
+            console.log('Toggling health status');
+        }
+
+        // Device details
+        function showDeviceDetails(device) {
+            const panel = document.getElementById('selected-device');
+            const details = document.getElementById('device-details');
+            
+            let html = `
+                <div><strong>🆔 ID:</strong> ${device.id}</div>
+                <div><strong>🔧 Type:</strong> ${device.type}</div>
+                <div><strong>📛 Name:</strong> ${device.name || 'N/A'}</div>
+                <div><strong>🌐 IP:</strong> ${device.ip || 'N/A'}</div>
+                <div><strong>📦 Model:</strong> ${device.model || 'N/A'}</div>
+                <div><strong>📊 Status:</strong> 
+                    <span class="status-indicator ${device.status || 'unknown'}"></span>
+                    ${device.status || 'unknown'}
+                </div>
+            `;
+            
+            if (device.metadata) {
+                html += '<div class="metadata-section"><strong>📋 Metadata:</strong></div>';
+                Object.entries(device.metadata).forEach(([key, value]) => {
+                    html += `<div class="metadata-item">• ${key}: ${value}</div>`;
+                });
+            }
+            
+            details.innerHTML = html;
+            panel.classList.remove('hidden');
+            selectedDevice = device;
+        }
+
+        function hideDeviceDetails() {
+            document.getElementById('selected-device').classList.add('hidden');
+        }
+
+        // Troubleshooting integration
+        function startTroubleshooting() {
+            if (!selectedDevice) {
+                alert('Please select a device first');
+                return;
+            }
+            
+            const issue = prompt('Describe the issue you are experiencing:');
+            if (!issue) return;
+            
+            // Show troubleshooting panel
+            document.getElementById('troubleshooting-panel').style.display = 'block';
+            
+            // Start troubleshooting
+            if (window.startTroubleshooting) {
+                window.startTroubleshooting(selectedDevice.id, issue);
+            } else {
+                // Fallback troubleshooting
+                showTroubleshootingResults({
+                    deviceId: selectedDevice.id,
+                    issue: issue,
+                    steps: [
+                        { description: 'Analyzing device configuration...', status: 'completed' },
+                        { description: 'Checking connectivity...', status: 'completed' }
+                    ],
+                    recommendations: [
+                        {
+                            type: 'rule-based',
+                            priority: 'medium',
+                            action: 'Check firewall policies',
+                            rationale: 'Common cause of connectivity issues'
+                        }
+                    ]
+                });
+            }
+        }
+
+        function showTroubleshootingResults(session) {
+            const content = document.getElementById('troubleshooting-content');
+            
+            let html = `
+                <div><strong>Device:</strong> ${session.deviceId}</div>
+                <div><strong>Issue:</strong> ${session.issue}</div>
+                <div><strong>Session ID:</strong> ${session.id}</div>
+                <hr>
+                <h4>Steps Taken:</h4>
+            `;
+            
+            session.steps.forEach(step => {
+                html += `
+                    <div class="troubleshooting-step">
+                        <strong>${step.description}</strong>
+                        <br><small>Status: ${step.status}</small>
+                    </div>
+                `;
+            });
+            
+            if (session.recommendations && session.recommendations.length > 0) {
+                html += '<h4>Recommendations:</h4>';
+                session.recommendations.forEach(rec => {
+                    html += `
+                        <div class="recommendation ${rec.priority}">
+                            <strong>${rec.action}</strong>
+                            <br><small>${rec.rationale}</small>
+                            <br><small>Priority: ${rec.priority}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            content.innerHTML = html;
+        }
+
+        function closeTroubleshooting() {
+            document.getElementById('troubleshooting-panel').classList.add('hidden');
+        }
+
+        // Enhanced device highlighting for troubleshooting
+        window.highlightDevice = function(deviceId, type = 'selected') {
+            console.log(`Highlighting device ${deviceId} with type ${type}`);
+            // Implementation for device highlighting in 3D view
+        };
+
+        // Update topology with troubleshooting results
+        window.updateTopologyWithTroubleshooting = function(session) {
+            console.log('Updating topology with troubleshooting results:', session);
+            // Implementation for visual troubleshooting indicators
+        };
+
+        // Show troubleshooting panel
+        window.showTroubleshootingPanel = function(session) {
+            showTroubleshootingResults(session);
+        };
+    </script>
+</body>
+</html>

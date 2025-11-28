@@ -156,7 +156,18 @@ vss_extraction/
 .screenshots/
 test_screenshots/
 
-# 3D models and media files (keep source)
+# Generated asset directories (rebuildable on clone)
+lab_3d_models/
+realistic_device_svgs/
+realistic_3d_models/
+extracted_graphics/
+extracted_icons/
+reports/
+
+# Large docs / PDFs (can be re-downloaded locally)
+docs/**/*.pdf
+
+# 3D models and media files (keep source, ignore generated binaries)
 *.obj
 *.stl
 *.3ds
@@ -191,3 +202,9 @@ poetry.lock
 .pre-commit-config.yaml
 .flake8
 .pylintrc
+
+# cagent development configs and local state (keep out of this repo)
+src/enhanced_network_api/cagent-dev.yaml
+src/enhanced_network_api/golang-cagent-dev.yaml
+src/enhanced_network_api/golang-cagent-dev-memory.yaml
+cagent_dev_memory.db

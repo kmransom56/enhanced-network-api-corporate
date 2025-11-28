@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 2D Fortinet Network Topology</title>
+    <link rel="stylesheet" href="/static/2d_topology_enhanced.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>🌐 Enhanced 2D Fortinet Network Topology</h1>
+            <div class="button-group">
+                <button onclick="loadFortinetTopology()">🔥 Load Fortinet</button>
+                <button onclick="loadDemoTopology()">🎭 Demo Mode</button>
+                <button onclick="toggleDeviceLabels()">🏷️ Labels</button>
+                <button onclick="toggleHealthStatus()">💚 Health</button>
+                <button onclick="resetView()">🔄 Reset View</button>
+            </div>
+        </div>
+        
+        <div class="topology-container">
+            <svg id="topology-svg" width="100%" height="100%"></svg>
+            <div class="info-panel">
+                <h3>Network Status</h3>
+                <p>Devices: <span id="device-count">0</span></p>
+                <p>Connections: <span id="connection-count">0</span></p>
+                <p>Health: <span id="health-status">Good</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced 2D Topology Visualization
+        class Enhanced2DTopology {
+            constructor() {
+                this.svg = document.getElementById('topology-svg');
+                this.devices = new Map();
+                this.connections = [];
+                this.showLabels = true;
+                this.showHealth = true;
+                this.svgNS = "http://www.w3.org/2000/svg";
+                
+                // Device icon configurations with model-specific fallback
+                const deviceIcons = {
+                    'fortigate': '/static/fortinet-icons-extracted/FortiGate.svg',
+                    'fortiswitch': '/static/fortinet-icons-extracted/FortiSwitch.svg', 
+                    'fortiap': '/static/fortinet-icons-extracted/FortiAP.svg',
+                    'fortimanager': '/static/fortinet-icons-extracted/FortiManager.svg',
+                    'fortianalyzer': '/static/fortinet-icons-extracted/FortiAnalyzer.svg',
+                    'default': '/static/fortinet-icons-extracted/Virtual.svg'
+                };
+                
+                // Model-specific icon mapping - make it a class property
+                this.modelSpecificIcons = {
+                    'FortiGate_600E': '/static/model-specific-icons/FortiGate_600E.svg',
+                    'FortiSwitch_148E': '/static/model-specific-icons/FortiSwitch_148E.svg',
+                    'FortiAP_432F': '/static/model-specific-icons/FortiAP_432F.svg'
+                };
+                
+                this.deviceIcons = {
+                    'fortigate': {
+                        icon: deviceIcons['fortigate'],
+                        size: 60,
+                        color: '#ff6b6b',
+                        labelColor: '#ff6b6b'
+                    },
+                    'fortiswitch': {
+                        icon: deviceIcons['fortiswitch'],
+                        size: 50,
+                        color: '#4ecdc4',
+                        labelColor: '#4ecdc4'
+                    },
+                    'fortiap': {
+                        icon: deviceIcons['fortiap'],
+                        size: 45,
+                        color: '#45b7d1',
+                        labelColor: '#45b7d1'
+                    },
+                    'fortimanager': {
+                        icon: deviceIcons['fortimanager'],
+                        size: 55,
+                        color: '#9b59b6',
+                        labelColor: '#9b59b6'
+                    },
+                    'fortianalyzer': {
+                        icon: deviceIcons['fortianalyzer'],
+                        size: 55,
+                        color: '#e67e22',
+                        labelColor: '#e67e22'
+                    },
+                    'default': {
+                        icon: '/static/fortinet-icons-extracted/Virtual.svg',
+                        size: 40,
+                        color: '#95a5a6',
+                        labelColor: '#95a5a6'
+                    }
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupSVG();
+                this.setupEventListeners();
+                console.log('✅ Enhanced 2D Topology initialized');
+            }
+            
+            setupSVG() {
+                // Set up SVG dimensions and viewBox
+                const rect = this.svg.getBoundingClientRect();
+                this.svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+                
+                // Create definitions for gradients and filters
+                const defs = document.createElementNS(this.svgNS, 'defs');
+                
+                // Add gradients for devices
+                Object.entries(this.deviceIcons).forEach(([type, config]) => {
+                    const gradient = document.createElementNS(this.svgNS, 'radialGradient');
+                    gradient.setAttribute('id', `gradient-${type}`);
+                    
+                    const stop1 = document.createElementNS(this.svgNS, 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', config.color);
+                    stop1.setAttribute('stop-opacity', '0.8');
+                    
+                    const stop2 = document.createElementNS(this.svgNS, 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', config.color);
+                    stop2.setAttribute('stop-opacity', '0.3');
+                    
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+                    defs.appendChild(gradient);
+                });
+                
+                // Add shadow filter
+                const filter = document.createElementNS(this.svgNS, 'filter');
+                filter.setAttribute('id', 'shadow');
+                
+                const feGaussianBlur = document.createElementNS(this.svgNS, 'feGaussianBlur');
+                feGaussianBlur.setAttribute('in', 'SourceAlpha');
+                feGaussianBlur.setAttribute('stdDeviation', '3');
+                
+                const feOffset = document.createElementNS(this.svgNS, 'feOffset');
+                feOffset.setAttribute('dx', '2');
+                feOffset.setAttribute('dy', '2');
+                feOffset.setAttribute('result', 'offsetblur');
+                
+                const feComponentTransfer = document.createElementNS(this.svgNS, 'feComponentTransfer');
+                const feFuncA = document.createElementNS(this.svgNS, 'feFuncA');
+                feFuncA.setAttribute('type', 'linear');
+                feFuncA.setAttribute('slope', '0.3');
+                feComponentTransfer.appendChild(feFuncA);
+                
+                const feMerge = document.createElementNS(this.svgNS, 'feMerge');
+                const feMergeNode1 = document.createElementNS(this.svgNS, 'feMergeNode');
+                const feMergeNode2 = document.createElementNS(this.svgNS, 'feMergeNode');
+                feMergeNode2.setAttribute('in', 'SourceGraphic');
+                feMerge.appendChild(feMergeNode1);
+                feMerge.appendChild(feMergeNode2);
+                
+                filter.appendChild(feGaussianBlur);
+                filter.appendChild(feOffset);
+                filter.appendChild(feComponentTransfer);
+                filter.appendChild(feMerge);
+                defs.appendChild(filter);
+                
+                this.svg.appendChild(defs);
+                
+                // Create main group for topology
+                this.topologyGroup = document.createElementNS(this.svgNS, 'g');
+                this.topologyGroup.setAttribute('id', 'topology-group');
+                this.svg.appendChild(this.topologyGroup);
+            }
+            
+            setupEventListeners() {
+                // Handle window resize
+                window.addEventListener('resize', () => this.handleResize());
+                
+                // Handle device interactions
+                this.svg.addEventListener('click', (e) => this.handleDeviceClick(e));
+                this.svg.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+            }
+            
+            handleResize() {
+                const rect = this.svg.getBoundingClientRect();
+                this.svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+            }
+            
+            async loadFortinetTopology() {
+                try {
+                    console.log('🔥 Loading Fortinet topology...');
+                    const response = await fetch('/api/topology/scene');
+                    const data = await response.json();
+                    
+                    if (data.nodes && data.links) {
+                        this.renderTopology(data);
+                        this.updateStats(data.nodes.length, data.links.length);
+                    } else {
+                        this.showError('Invalid topology data received');
+                    }
+                } catch (error) {
+                    console.error('Failed to load Fortinet topology:', error);
+                    this.showError('Failed to load topology: ' + error.message);
+                }
+            }
+            
+            loadDemoTopology() {
+                const demoData = {
+                    nodes: [
+                        { 
+                            id: "fg-600e-main", 
+                            type: "fortigate", 
+                            name: "FG-600E-Main", 
+                            model: "FortiGate_600E",
+                            ip: "192.168.0.254",
+                            status: "active",
+                            health: "good",
+                            cpu: "15%",
+                            memory: "45%",
+                            connections: 12,
+                            throughput: "1.2 Gbps",
+                            sessions: 2847,
+                            serial: "FG600E1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fmg-200f", 
+                            type: "fortimanager", 
+                            name: "FMG-200F-Corp", 
+                            ip: "192.168.0.10",
+                            status: "online",
+                            health: "good",
+                            model: "FortiManager 200F",
+                            serial: "FMG200F1234567890",
+                            version: "v7.2.0"
+                        },
+                        { 
+                            id: "faz-100f", 
+                            type: "fortianalyzer", 
+                            name: "FAZ-100F-Log", 
+                            ip: "192.168.0.20",
+                            status: "online",
+                            health: "good",
+                            model: "FortiAnalyzer 100F",
+                            serial: "FAZ100F1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fsw-148e-core", 
+                            type: "fortiswitch", 
+                            name: "FS-148E-CoreSwitch", 
+                            model: "FortiSwitch_148E",
+                            ip: "192.168.0.100",
+                            status: "active",
+                            health: "good",
+                            cpu: "8%",
+                            memory: "32%",
+                            ports: 48,
+                            uptime: "45 days",
+                            vlans: 12,
+                            serial: "FS148E1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fsw-124e-access", 
+                            type: "fortiswitch", 
+                            name: "FS-124E-Access01", 
+                            ip: "192.168.0.101",
+                            status: "online",
+                            health: "warning",
+                            serial: "FS124E1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fap-432f-office", 
+                            type: "fortiap", 
+                            name: "FAP-432F-Office01", 
+                            model: "FortiAP_432F",
+                            ip: "192.168.0.110",
+                            status: "active",
+                            health: "good",
+                            clients: 24,
+                            ssid: "CORP-WIFI",
+                            channel: 36,
+                            band: "5GHz",
+                            throughput: "1.2 Gbps",
+                            serial: "FAP432F1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fap-231f-guest", 
+                            type: "fortiap", 
+                            name: "FAP-231F-Guest01", 
+                            ip: "192.168.0.111",
+                            status: "online",
+                            health: "good",
+                            model: "FortiAP 231F",
+                            serial: "FAP231F1234567890",
+                            version: "v7.0.0"
+                        },
+                        { 
+                            id: "fap-224f-warehouse", 
+                            type: "fortiap", 
+                            name: "FAP-224F-Warehouse01", 
+                            ip: "192.168.0.112",
+                            status: "offline",
+                            health: "critical",
+                            model: "FortiAP 224F",
+                            serial: "FAP224F1234567890",
+                            version: "v7.0.0"
+                        }
+                    ],
+                    links: [
+                        { from: "fg-600e-main", to: "fmg-200f", type: "mgmt", status: "active" },
+                        { from: "fg-600e-main", to: "faz-100f", type: "log", status: "active" },
+                        { from: "fg-600e-main", to: "fsw-148e-core", type: "fortilink", status: "active" },
+                        { from: "fg-600e-main", to: "fsw-124e-access", type: "fortilink", status: "active" },
+                        { from: "fsw-148e-core", to: "fsw-124e-access", type: "cascade", status: "active" },
+                        { from: "fsw-148e-core", to: "fap-432f-office", type: "wired", status: "active" },
+                        { from: "fsw-124e-access", to: "fap-231f-guest", type: "wired", status: "active" },
+                        { from: "fsw-124e-access", to: "fap-224f-warehouse", type: "wired", status: "error" }
+                    ]
+                };
+                
+                this.renderTopology(demoData);
+                this.updateStats(demoData.nodes.length, demoData.links.length);
+            }
+            
+            renderTopology(data) {
+                this.clearTopology();
+                
+                const rect = this.svg.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const radius = Math.min(rect.width, rect.height) * 0.3;
+                
+                // Create devices in a circular layout
+                data.nodes.forEach((node, index) => {
+                    const angle = (index / data.nodes.length) * Math.PI * 2 - Math.PI / 2;
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+                    
+                    this.createDevice(node, x, y);
+                });
+                
+                // Create connections
+                data.links.forEach(link => {
+                    const fromDevice = this.devices.get(link.from);
+                    const toDevice = this.devices.get(link.to);
+                    
+                    if (fromDevice && toDevice) {
+                        this.createConnection(fromDevice, toDevice, link);
+                    }
+                });
+                
+                console.log(`✅ Rendered ${data.nodes.length} devices and ${data.links.length} connections`);
+            }
+            
+            createDevice(nodeData, x, y) {
+                const config = this.deviceIcons[nodeData.type] || this.deviceIcons.default;
+                
+                // Create device group
+                const deviceGroup = document.createElementNS(this.svgNS, 'g');
+                deviceGroup.setAttribute('id', `device-${nodeData.id}`);
+                deviceGroup.setAttribute('class', 'device');
+                deviceGroup.setAttribute('transform', `translate(${x}, ${y})`);
+                deviceGroup.style.cursor = 'pointer';
+                
+                // Create device circle with gradient
+                const circle = document.createElementNS(this.svgNS, 'circle');
+                circle.setAttribute('r', config.size / 2);
+                circle.setAttribute('fill', `url(#gradient-${nodeData.type})`);
+                circle.setAttribute('stroke', config.color);
+                circle.setAttribute('stroke-width', '2');
+                circle.setAttribute('filter', 'url(#shadow)');
+                
+                // Create device icon (using text for now, will be replaced with actual SVG icons)
+                const iconGroup = document.createElementNS(this.svgNS, 'g');
+                iconGroup.setAttribute('class', 'device-icon');
+                
+                // Load actual SVG icon with model-specific fallback
+                const iconPath = this.getModelSpecificIcon(nodeData) || config.icon;
+                this.loadSVGIcon(iconPath, iconGroup, config.size);
+                
+                // Create device label
+                const label = document.createElementNS(this.svgNS, 'text');
+                label.setAttribute('class', 'device-label');
+                label.setAttribute('y', config.size / 2 + 20);
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('fill', config.labelColor);
+                label.setAttribute('font-size', '12');
+                label.setAttribute('font-weight', 'bold');
+                label.textContent = nodeData.name;
+                
+                // Create health indicator
+                const healthIndicator = document.createElementNS(this.svgNS, 'circle');
+                healthIndicator.setAttribute('class', 'health-indicator');
+                healthIndicator.setAttribute('cx', config.size / 2 - 5);
+                healthIndicator.setAttribute('cy', -config.size / 2 + 5);
+                healthIndicator.setAttribute('r', '6');
+                healthIndicator.setAttribute('fill', this.getHealthColor(nodeData.health || 'good'));
+                healthIndicator.setAttribute('stroke', '#ffffff');
+                healthIndicator.setAttribute('stroke-width', '2');
+                
+                // Add click handler
+                deviceGroup.addEventListener('click', () => this.showDeviceDetails(nodeData));
+                
+                // Assemble device
+                deviceGroup.appendChild(circle);
+                deviceGroup.appendChild(iconGroup);
+                deviceGroup.appendChild(label);
+                deviceGroup.appendChild(healthIndicator);
+                
+                if (this.showHealth) {
+                    deviceGroup.appendChild(healthIndicator);
+                }
+                
+                this.topologyGroup.appendChild(deviceGroup);
+                
+                // Store device reference
+                this.devices.set(nodeData.id, {
+                    element: deviceGroup,
+                    data: nodeData,
+                    x: x,
+                    y: y
+                });
+            }
+            
+            getModelSpecificIcon(nodeData) {
+                // Check for model-specific icon first
+                if (nodeData.model && this.modelSpecificIcons[nodeData.model]) {
+                    return this.modelSpecificIcons[nodeData.model];
+                }
+                
+                // Check for partial model match
+                if (nodeData.model) {
+                    for (const modelName in this.modelSpecificIcons) {
+                        if (nodeData.model.includes(modelName)) {
+                            return this.modelSpecificIcons[modelName];
+                        }
+                    }
+                }
+                
+                return null; // Fallback to generic icon
+            }
+            
+            async loadSVGIcon(iconPath, container, size) {
+                try {
+                    // Add cache-busting parameter
+                    const cacheBuster = `?t=${Date.now()}`;
+                    const response = await fetch(iconPath + cacheBuster);
+                    if (response.ok) {
+                        const svgText = await response.text();
+                        const parser = new DOMParser();
+                        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                        const icon = svgDoc.documentElement;
+                        
+                        // Scale and position the icon
+                        icon.setAttribute('width', size * 0.8);
+                        icon.setAttribute('height', size * 0.8);
+                        icon.setAttribute('x', -size * 0.4);
+                        icon.setAttribute('y', -size * 0.4);
+                        icon.setAttribute('fill', '#ffffff');
+                        icon.style.display = 'block';
+                        icon.style.visibility = 'visible';
+                        
+                        // Clear any existing content
+                        while (container.firstChild) {
+                            container.removeChild(container.firstChild);
+                        }
+                        
+                        container.appendChild(icon);
+                        console.log(`✅ Loaded SVG icon: ${iconPath}`);
+                    } else {
+                        console.warn(`❌ Failed to load SVG icon: ${iconPath} (${response.status})`);
+                        this.createTextIcon(container, size);
+                    }
+                } catch (error) {
+                    console.warn('Failed to load SVG icon:', iconPath, error);
+                    this.createTextIcon(container, size);
+                }
+            }
+            
+            createTextIcon(container, size) {
+                const text = document.createElementNS(this.svgNS, 'text');
+                text.setAttribute('x', '0');
+                text.setAttribute('y', '5');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#ffffff');
+                text.setAttribute('font-size', size * 0.4);
+                text.setAttribute('font-weight', 'bold');
+                text.textContent = '🔥';
+                container.appendChild(text);
+            }
+            
+            createConnection(fromDevice, toDevice, linkData) {
+                const line = document.createElementNS(this.svgNS, 'line');
+                line.setAttribute('class', 'connection');
+                line.setAttribute('x1', fromDevice.x);
+                line.setAttribute('y1', fromDevice.y);
+                line.setAttribute('x2', toDevice.x);
+                line.setAttribute('y2', toDevice.y);
+                line.setAttribute('stroke', this.getConnectionColor(linkData.status || 'active'));
+                line.setAttribute('stroke-width', '3');
+                line.setAttribute('stroke-opacity', '0.6');
+                line.setAttribute('stroke-dasharray', linkData.type === 'wireless' ? '5,5' : '0');
+                
+                // Add connection to background
+                this.topologyGroup.insertBefore(line, this.topologyGroup.firstChild);
+                
+                this.connections.push({
+                    element: line,
+                    from: fromDevice,
+                    to: toDevice,
+                    data: linkData
+                });
+            }
+            
+            getHealthColor(health) {
+                const colors = {
+                    'good': '#4caf50',
+                    'warning': '#ff9800',
+                    'critical': '#f44336',
+                    'offline': '#9e9e9e'
+                };
+                return colors[health] || colors['good'];
+            }
+            
+            getConnectionColor(status) {
+                const colors = {
+                    'active': '#58a6ff',
+                    'error': '#f44336',
+                    'warning': '#ff9800',
+                    'inactive': '#9e9e9e'
+                };
+                return colors[status] || colors['active'];
+            }
+            
+            showDeviceDetails(deviceData) {
+                const details = `
+                    <strong>${deviceData.name}</strong><br>
+                    Type: ${deviceData.type}<br>
+                    IP: ${deviceData.ip || 'N/A'}<br>
+                    Status: ${deviceData.status || 'Unknown'}<br>
+                    Health: ${deviceData.health || 'Unknown'}
+                `;
+                
+                // Show details in a tooltip or panel
+                this.showTooltip(details);
+            }
+            
+            showTooltip(content) {
+                // Remove existing tooltip
+                const existingTooltip = document.querySelector('.tooltip');
+                if (existingTooltip) {
+                    existingTooltip.remove();
+                }
+                
+                // Create new tooltip
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.innerHTML = content;
+                tooltip.style.cssText = `
+                    position: absolute;
+                    background: rgba(26, 31, 46, 0.95);
+                    color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    border: 1px solid #30363d;
+                    font-size: 12px;
+                    z-index: 1000;
+                    pointer-events: none;
+                `;
+                
+                document.body.appendChild(tooltip);
+                
+                // Position tooltip near mouse
+                document.addEventListener('mousemove', function positionTooltip(e) {
+                    tooltip.style.left = e.clientX + 10 + 'px';
+                    tooltip.style.top = e.clientY + 10 + 'px';
+                });
+                
+                // Remove tooltip after 3 seconds
+                setTimeout(() => {
+                    tooltip.remove();
+                    document.removeEventListener('mousemove', positionTooltip);
+                }, 3000);
+            }
+            
+            toggleDeviceLabels() {
+                this.showLabels = !this.showLabels;
+                const labels = this.svg.querySelectorAll('.device-label');
+                labels.forEach(label => {
+                    label.style.display = this.showLabels ? 'block' : 'none';
+                });
+            }
+            
+            toggleHealthStatus() {
+                this.showHealth = !this.showHealth;
+                const indicators = this.svg.querySelectorAll('.health-indicator');
+                indicators.forEach(indicator => {
+                    indicator.style.display = this.showHealth ? 'block' : 'none';
+                });
+            }
+            
+            resetView() {
+                // Reset zoom and pan
+                this.topologyGroup.setAttribute('transform', 'translate(0,0) scale(1)');
+            }
+            
+            clearTopology() {
+                this.devices.clear();
+                this.connections = [];
+                this.topologyGroup.innerHTML = '';
+            }
+            
+            updateStats(deviceCount, connectionCount) {
+                document.getElementById('device-count').textContent = deviceCount;
+                document.getElementById('connection-count').textContent = connectionCount;
+                
+                // Calculate overall health
+                const healthStatus = this.calculateOverallHealth();
+                document.getElementById('health-status').textContent = healthStatus;
+                document.getElementById('health-status').style.color = this.getHealthColor(healthStatus);
+            }
+            
+            calculateOverallHealth() {
+                // Simple health calculation based on device statuses
+                const devices = Array.from(this.devices.values());
+                const criticalDevices = devices.filter(d => d.data.health === 'critical').length;
+                const warningDevices = devices.filter(d => d.data.health === 'warning').length;
+                
+                if (criticalDevices > 0) return 'critical';
+                if (warningDevices > 0) return 'warning';
+                return 'good';
+            }
+            
+            showError(message) {
+                console.error(message);
+                // Could show an error notification here
+            }
+            
+            handleDeviceClick(e) {
+                // Handle device selection
+                const deviceElement = e.target.closest('.device');
+                if (deviceElement) {
+                    // Remove previous selection
+                    const prevSelected = this.svg.querySelector('.device.selected');
+                    if (prevSelected) {
+                        prevSelected.classList.remove('selected');
+                    }
+                    
+                    // Add selection to clicked device
+                    deviceElement.classList.add('selected');
+                }
+            }
+            
+            handleMouseMove(e) {
+                // Handle hover effects
+                const deviceElement = e.target.closest('.device');
+                if (deviceElement) {
+                    this.svg.style.cursor = 'pointer';
+                } else {
+                    this.svg.style.cursor = 'default';
+                }
+            }
+        }
+        
+        // Initialize the enhanced 2D topology
+        let topology2D;
+        
+        window.addEventListener('load', function() {
+            topology2D = new Enhanced2DTopology();
+        });
+        
+        // Global functions for button clicks
+        function loadFortinetTopology() {
+            topology2D.loadFortinetTopology();
+        }
+        
+        function loadDemoTopology() {
+            topology2D.loadDemoTopology();
+        }
+        
+        function toggleDeviceLabels() {
+            topology2D.toggleDeviceLabels();
+        }
+        
+        function toggleHealthStatus() {
+            topology2D.toggleHealthStatus();
+        }
+        
+        function resetView() {
+            topology2D.resetView();
+        }
+    </script>
+</body>
+</html>

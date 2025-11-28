@@ -1,0 +1,86 @@
+{
+  "topology": {
+    "devices": [
+      {
+        "id": "fg-192-168-0-254",
+        "name": "FortiGate-Main",
+        "type": "fortigate",
+        "ip": "192.168.0.254",
+        "status": "active",
+        "model": "FG600E",
+        "serial": "FG600E321X5901234",
+        "version": "v7.4.0",
+        "interfaces": [
+          {
+            "name": "wan1",
+            "ip": "203.0.113.1",
+            "status": "up",
+            "speed": "1Gbps"
+          },
+          {
+            "name": "lan1",
+            "ip": "192.168.0.254",
+            "status": "up",
+            "speed": "1Gbps"
+          },
+          {
+            "name": "dmz",
+            "ip": "10.0.0.254",
+            "status": "up",
+            "speed": "1Gbps"
+          }
+        ],
+        "firewall_policies": 25,
+        "cpu_usage": 15.2,
+        "memory_usage": 42.8,
+        "connections": 1250,
+        "site": "Main",
+        "cell_id": 2
+      },
+      {
+        "id": "network-lan1",
+        "name": "LAN Network",
+        "type": "network",
+        "ip": "192.168.0.0/24",
+        "status": "active",
+        "site": "Main",
+        "cell_id": 3
+      },
+      {
+        "id": "network-wan1",
+        "name": "WAN Network",
+        "type": "network",
+        "ip": "203.0.113.0/24",
+        "status": "active",
+        "site": "Main",
+        "cell_id": 4
+      }
+    ],
+    "links": [
+      {
+        "source_id": "fg-192-168-0-254",
+        "target_id": "network-lan1",
+        "source_interface": "lan1",
+        "target_interface": "network",
+        "link_type": "physical",
+        "bandwidth": "1Gbps",
+        "status": "active"
+      },
+      {
+        "source_id": "fg-192-168-0-254",
+        "target_id": "network-wan1",
+        "source_interface": "wan1",
+        "target_interface": "network",
+        "link_type": "physical",
+        "bandwidth": "1Gbps",
+        "status": "active"
+      }
+    ],
+    "timestamp": 16686.318280994,
+    "total_devices": 3,
+    "total_links": 2,
+    "source": "fortigate_demo"
+  },
+  "export_timestamp": "2025-11-22T12:03:10.731375",
+  "export_format": "json"
+}

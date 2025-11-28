@@ -1,0 +1,178 @@
+{
+  "nodes": [
+    {
+      "id": "Local-FortiGate",
+      "label": "Local-FortiGate",
+      "type": "FortiGate",
+      "icon": "realistic_device_svgs/FortiGate.svg",
+      "model": "realistic_3d_models/models/FortiGate.obj"
+    },
+    {
+      "id": "SW",
+      "label": "SW",
+      "type": "FortiSwitch",
+      "icon": "realistic_device_svgs/FortiSwitch.svg",
+      "model": "realistic_3d_models/models/FortiSwitch.obj"
+    },
+    {
+      "id": "AP",
+      "label": "AP",
+      "type": "FortiAP",
+      "icon": "realistic_device_svgs/FortiAP.svg",
+      "model": "realistic_3d_models/models/FortiAP.obj"
+    },
+    {
+      "id": "AP2",
+      "label": "AP2",
+      "type": "FortiAP",
+      "icon": "realistic_device_svgs/FortiAP.svg",
+      "model": "realistic_3d_models/models/FortiAP.obj"
+    },
+    {
+      "id": "Android_Z1RMUE0S",
+      "label": "Android_Z1RMUE0S",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "dc:a0:d0:06:25:6b",
+      "label": "dc:a0:d0:06:25:6b",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "Android_YJ8EXP5K",
+      "label": "Android_YJ8EXP5K",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "LGwebOSTV",
+      "label": "LGwebOSTV",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "6e:22:22:ac:fb:95",
+      "label": "6e:22:22:ac:fb:95",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "AP",
+      "label": "AP",
+      "type": "FortiAP",
+      "icon": "realistic_device_svgs/FortiAP.svg",
+      "model": "realistic_3d_models/models/FortiAP.obj"
+    },
+    {
+      "id": "AP2",
+      "label": "AP2",
+      "type": "FortiAP",
+      "icon": "realistic_device_svgs/FortiAP.svg",
+      "model": "realistic_3d_models/models/FortiAP.obj"
+    },
+    {
+      "id": "Android_Z1RMUE0S",
+      "label": "Android_Z1RMUE0S",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "dc:a0:d0:06:25:6b",
+      "label": "dc:a0:d0:06:25:6b",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "Android_YJ8EXP5K",
+      "label": "Android_YJ8EXP5K",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "LGwebOSTV",
+      "label": "LGwebOSTV",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    },
+    {
+      "id": "6e:22:22:ac:fb:95",
+      "label": "6e:22:22:ac:fb:95",
+      "type": "Mobile Device (Randomized MAC)",
+      "icon": "realistic_device_svgs/Unknown.svg",
+      "model": "/static/3d-models/generic_device.obj"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Local-FortiGate",
+      "to": "SW"
+    },
+    {
+      "from": "SW",
+      "to": "AP"
+    },
+    {
+      "from": "SW",
+      "to": "AP2"
+    },
+    {
+      "from": "AP",
+      "to": "Android_Z1RMUE0S"
+    },
+    {
+      "from": "AP",
+      "to": "dc:a0:d0:06:25:6b"
+    },
+    {
+      "from": "AP",
+      "to": "Android_YJ8EXP5K"
+    },
+    {
+      "from": "AP",
+      "to": "LGwebOSTV"
+    },
+    {
+      "from": "AP",
+      "to": "6e:22:22:ac:fb:95"
+    },
+    {
+      "from": "SW",
+      "to": "AP"
+    },
+    {
+      "from": "SW",
+      "to": "AP2"
+    },
+    {
+      "from": "AP",
+      "to": "Android_Z1RMUE0S"
+    },
+    {
+      "from": "AP",
+      "to": "dc:a0:d0:06:25:6b"
+    },
+    {
+      "from": "AP",
+      "to": "Android_YJ8EXP5K"
+    },
+    {
+      "from": "AP",
+      "to": "LGwebOSTV"
+    },
+    {
+      "from": "AP",
+      "to": "6e:22:22:ac:fb:95"
+    }
+  ]
+}

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FortiGateAPI.cmdb.firewall.internet_service_list &mdash; fortigate-api 2.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=d7b522e2"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="FortiGateAPI.cmdb.firewall.internet_service_name" href="internet_service_name.html" />
+    <link rel="prev" title="FortiGateAPI.cmdb.firewall.internet_service_ipbl_vendor" href="internet_service_ipbl_vendor.html" /> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fortigateapi/cmdb/firewall/internet_service_list", "programming_language": "words", "project": "fortigate-api", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "", "version": "latest"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="fortigate-api" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/fortigateapi/cmdb/firewall/internet_service_list.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            fortigate-api
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../_contents.html">FortiGateAPI</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../FortiGateAPI.html">FortiGateAPI</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../_contents.html">FortiGateAPI.cmdb</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../alertemail/_contents.html">alertemail</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../antivirus/_contents.html">antivirus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../application/_contents.html">application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../authentication/_contents.html">authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../certificate/_contents.html">certificate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../credential_store/_contents.html">credential_store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dlp/_contents.html">dlp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dnsfilter/_contents.html">dnsfilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../emailfilter/_contents.html">emailfilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../endpoint_control/_contents.html">endpoint_control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../extender_controller/_contents.html">extender_controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../file_filter/_contents.html">file_filter</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="_contents.html">firewall</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="acl.html">acl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="acl6.html">acl6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="address.html">address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="address6.html">address6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="address6_template.html">address6_template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="addrgrp.html">addrgrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="addrgrp6.html">addrgrp6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="auth_portal.html">auth_portal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="central_snat_map.html">central_snat_map</a></li>
+<li class="toctree-l4"><a class="reference internal" href="city.html">city</a></li>
+<li class="toctree-l4"><a class="reference internal" href="country.html">country</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decrypted_traffic_mirror.html">decrypted_traffic_mirror</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dnstranslation.html">dnstranslation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dos_policy.html">dos_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dos_policy6.html">dos_policy6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="identity_based_route.html">identity_based_route</a></li>
+<li class="toctree-l4"><a class="reference internal" href="interface_policy.html">interface_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="interface_policy6.html">interface_policy6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service.html">internet_service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_addition.html">internet_service_addition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_append.html">internet_service_append</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_botnet.html">internet_service_botnet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_custom.html">internet_service_custom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_custom_group.html">internet_service_custom_group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_definition.html">internet_service_definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_extension.html">internet_service_extension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_group.html">internet_service_group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_ipbl_reason.html">internet_service_ipbl_reason</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_ipbl_vendor.html">internet_service_ipbl_vendor</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">internet_service_list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_name.html">internet_service_name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_owner.html">internet_service_owner</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_reputation.html">internet_service_reputation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="internet_service_sld.html">internet_service_sld</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ip_translation.html">ip_translation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ippool.html">ippool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ippool6.html">ippool6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ldb_monitor.html">ldb_monitor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="local_in_policy.html">local_in_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="local_in_policy6.html">local_in_policy6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multicast_address.html">multicast_address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multicast_address6.html">multicast_address6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multicast_policy.html">multicast_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multicast_policy6.html">multicast_policy6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="policy.html">policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="policy46.html">policy46</a></li>
+<li class="toctree-l4"><a class="reference internal" href="policy64.html">policy64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="profile_group.html">profile_group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="profile_protocol_options.html">profile_protocol_options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="proxy_address.html">proxy_address</a></li>
+<li class="toctree-l4"><a class="reference internal" href="proxy_addrgrp.html">proxy_addrgrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="proxy_policy.html">proxy_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="region.html">region</a></li>
+<li class="toctree-l4"><a class="reference internal" href="security_policy.html">security_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shaping_policy.html">shaping_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shaping_profile.html">shaping_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sniffer.html">sniffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssl_server.html">ssl_server</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ssl_ssh_profile.html">ssl_ssh_profile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="traffic_class.html">traffic_class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttl_policy.html">ttl_policy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vendor_mac.html">vendor_mac</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vendor_mac_summary.html">vendor_mac_summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vip.html">vip</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vip46.html">vip46</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vip6.html">vip6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vip64.html">vip64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vipgrp.html">vipgrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vipgrp46.html">vipgrp46</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vipgrp6.html">vipgrp6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vipgrp64.html">vipgrp64</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_ipmacbinding/_contents.html">firewall_ipmacbinding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_schedule/_contents.html">firewall_schedule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_service/_contents.html">firewall_service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_shaper/_contents.html">firewall_shaper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_ssh/_contents.html">firewall_ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_ssl/_contents.html">firewall_ssl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../firewall_wildcard_fqdn/_contents.html">firewall_wildcard_fqdn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ftp_proxy/_contents.html">ftp_proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../icap/_contents.html">icap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ips/_contents.html">ips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log/_contents.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_disk/_contents.html">log_disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_fortianalyzer/_contents.html">log_fortianalyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_fortianalyzer2/_contents.html">log_fortianalyzer2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_fortianalyzer3/_contents.html">log_fortianalyzer3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_fortianalyzer_cloud/_contents.html">log_fortianalyzer_cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_fortiguard/_contents.html">log_fortiguard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_memory/_contents.html">log_memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_null_device/_contents.html">log_null_device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_syslogd/_contents.html">log_syslogd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_syslogd2/_contents.html">log_syslogd2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_syslogd3/_contents.html">log_syslogd3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_syslogd4/_contents.html">log_syslogd4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../log_webtrends/_contents.html">log_webtrends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../report/_contents.html">report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../router/_contents.html">router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ssh_filter/_contents.html">ssh_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../switch_controller/_contents.html">switch_controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../switch_controller_auto_config/_contents.html">switch_controller_auto_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../switch_controller_initial_config/_contents.html">switch_controller_initial_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../switch_controller_security_policy/_contents.html">switch_controller_security_policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system/_contents.html">system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_3g_modem/_contents.html">system_3g_modem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_autoupdate/_contents.html">system_autoupdate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_dhcp/_contents.html">system_dhcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_dhcp6/_contents.html">system_dhcp6</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_lldp/_contents.html">system_lldp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_replacemsg/_contents.html">system_replacemsg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../system_snmp/_contents.html">system_snmp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user/_contents.html">user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../voip/_contents.html">voip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vpn/_contents.html">vpn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vpn_certificate/_contents.html">vpn_certificate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vpn_ipsec/_contents.html">vpn_ipsec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vpn_ssl/_contents.html">vpn_ssl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vpn_ssl_web/_contents.html">vpn_ssl_web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../waf/_contents.html">waf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wanopt/_contents.html">wanopt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../web_proxy/_contents.html">web_proxy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../webfilter/_contents.html">webfilter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wireless_controller/_contents.html">wireless_controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../wireless_controller_hotspot20/_contents.html">wireless_controller_hotspot20</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../log/_contents.html">FortiGateAPI.log (not ready)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../monitor/_contents.html">FortiGateAPI.monitor (not ready)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../FortiGate.html">FortiGate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/_contents.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vladimirs-git/fortigate-api/tree/main/examples">Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fortigate-api</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../_contents.html">FortiGateAPI</a></li>
+          <li class="breadcrumb-item"><a href="../_contents.html">FortiGateAPI.cmdb</a></li>
+          <li class="breadcrumb-item"><a href="_contents.html">FortiGateAPI.cmdb.firewall</a></li>
+      <li class="breadcrumb-item active">FortiGateAPI.cmdb.firewall.internet_service_list</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/vladimirs-git/fortigate-api/blob/main/docs/fortigateapi/cmdb/firewall/internet_service_list.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fortigateapi-cmdb-firewall-internet-service-list">
+<h1>FortiGateAPI.cmdb.firewall.internet_service_list<a class="headerlink" href="#fortigateapi-cmdb-firewall-internet-service-list" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fortigate_api.cmdb.firewall.</span></span><span class="sig-name descname"><span class="pre">InternetServiceListFC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fortigate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../FortiGate.html#fortigate_api.FortiGate" title="fortigate_api.fortigate.FortiGate"><span class="pre">FortiGate</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC" title="Permalink to this definition"></a></dt>
+<dd><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Web UI</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>API</p></td>
+<td><p><a class="reference external" href="https://172.16.177.65/api/v2/cmdb/firewall/internet-service-list">https://172.16.177.65/api/v2/cmdb/firewall/internet-service-list</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Data</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.uid">
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'id'</span></em><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.uid" title="Permalink to this definition"></a></dt>
+<dd><p>Unique identifier of fortigate-object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.create" title="Permalink to this definition"></a></dt>
+<dd><p>Create the fortigate-object in the Fortigate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data of the fortigate-object.
+More details can be found at <a class="reference external" href="https://fndn.fortinet.net">https://fndn.fortinet.net</a> for related <code class="docutils literal notranslate"><span class="pre">POST</span></code> method.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Session response.</p>
+<ul class="simple">
+<li><p><cite>&lt;Response [200]&gt;</cite> Object successfully created,</p></li>
+<li><p><cite>&lt;Response [500]&gt;</cite> Object already exists.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.delete" title="Permalink to this definition"></a></dt>
+<dd><p>Delete the fortigate-object from the Fortigate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>str</em><em> or </em><em>int</em>) – Identifier of the fortigate-object.
+Used to delete a single object.</p></li>
+<li><p><strong>filter</strong> (<em>str</em><em> or </em><em>List</em><em>[</em><em>str</em><em>]</em>) – Filter fortigate-objects by one or multiple <a class="reference internal" href="../../filtering_conditions.html#filtering-conditions"><span class="std std-ref">Filtering conditions</span></a>.
+Used to delete multiple objects.</p></li>
+<li><p><strong>kwargs</strong> – Fortigate REST API parameters.
+More details can be found at <a class="reference external" href="https://fndn.fortinet.net">https://fndn.fortinet.net</a> for related <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Session response.</p>
+<ul class="simple">
+<li><p><cite>&lt;Response [200]&gt;</cite> Object successfully deleted,</p></li>
+<li><p><cite>&lt;Response [404]&gt;</cite> Object not found in the Fortigate.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get fortigate-objects, all or filtered by some parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Fortigate REST API parameters.
+<code class="docutils literal notranslate"><span class="pre">filter</span></code> - Filter fortigate-objects by one or multiple <a class="reference internal" href="../../filtering_conditions.html#filtering-conditions"><span class="std std-ref">Filtering conditions</span></a>.
+More details can be found at <a class="reference external" href="https://fndn.fortinet.net">https://fndn.fortinet.net</a> for related <code class="docutils literal notranslate"><span class="pre">GET</span></code> method.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of the fortigate-objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.is_exist">
+<span class="sig-name descname"><span class="pre">is_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.is_exist" title="Permalink to this definition"></a></dt>
+<dd><p>Check if a fortigate-object exists in the Fortigate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>uid</strong> (<em>str</em><em> or </em><em>int</em>) – Identifier of the fortigate-object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True - object exists, False - object does not exist.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update fortigate-object on the Fortigate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Data of the fortigate-object to update.
+More details can be found at <a class="reference external" href="https://fndn.fortinet.net">https://fndn.fortinet.net</a> for related <code class="docutils literal notranslate"><span class="pre">PUT</span></code> method.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Session response.</p>
+<ul class="simple">
+<li><p><cite>&lt;Response [200]&gt;</cite> Object successfully updated,</p></li>
+<li><p><cite>&lt;Response [404]&gt;</cite> Object has not been updated.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.firewall.InternetServiceListFC.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fortigate_api.cmdb.firewall.InternetServiceListFC.url" title="Permalink to this definition"></a></dt>
+<dd><p>URL to the fortigate-object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="internet_service_ipbl_vendor.html" class="btn btn-neutral float-left" title="FortiGateAPI.cmdb.firewall.internet_service_ipbl_vendor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="internet_service_name.html" class="btn btn-neutral float-right" title="FortiGateAPI.cmdb.firewall.internet_service_name" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Vladimirs Prusakovs.
+      <span class="commit">Revision <code>401b2c7b</code>.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

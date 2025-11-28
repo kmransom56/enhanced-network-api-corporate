@@ -1,0 +1,8 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+                <rect width="64" height="64" fill="#7B1FA2" rx="2"/>
+                <rect x="4" y="4" width="56" height="56" fill="#4A148C" rx="2"/>
+                <rect x="8" y="8" width="48" height="48" fill="#9C27B0"/>
+                <text x="32" y="25" text-anchor="middle" fill="white" font-family="Arial" font-size="8">MENU</text>
+                <text x="32" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="6">$12.99</text>
+                <text x="32" y="45" text-anchor="middle" fill="white" font-family="Arial" font-size="6">$8.99</text>
+            </svg>

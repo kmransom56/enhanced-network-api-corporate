@@ -1,0 +1,275 @@
+/* Network Operations Center - Fortinet Management Styles */
+/* Based on Restaurant Network NOC branding */
+
+body { 
+    margin: 0; 
+    display: flex; 
+    height: 100vh; 
+    overflow: hidden; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+#asset-panel { 
+    width: 280px; 
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); 
+    padding: 15px; 
+    overflow-y: auto; 
+    border-right: 1px solid #4a5568;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+}
+
+#asset-panel h3 { 
+    margin: 0 0 15px 0; 
+    color: #63b3ed; 
+    font-size: 18px; 
+    font-weight: 600;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 8px;
+}
+
+#asset-panel h4 { 
+    margin: 15px 0 8px 0; 
+    color: #a0aec0; 
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#asset-panel hr { 
+    margin: 12px 0; 
+    border: none; 
+    border-top: 1px solid #4a5568; 
+}
+
+.btn { 
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: 100%;
+    margin: 3px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn:hover { 
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn:active { 
+    transform: translateY(0);
+}
+
+.btn.danger { 
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); 
+}
+
+.btn.danger:hover { 
+    background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%); 
+}
+
+.btn.success { 
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); 
+}
+
+.btn.success:hover { 
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%); 
+}
+
+.view-toggle { 
+    display: flex; 
+    gap: 5px; 
+    margin: 10px 0;
+}
+
+.view-toggle .btn { 
+    flex: 1; 
+}
+
+#main { 
+    flex: 1; 
+    position: relative; 
+    background: #0f1419;
+}
+
+#canvas-container { 
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+    background: radial-gradient(circle at center, #1a202c 0%, #0f1419 100%);
+}
+
+#topology-canvas { 
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+}
+
+#selected-device { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); 
+    padding: 15px; 
+    border-radius: 8px; 
+    border: 1px solid #4a5568;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    min-width: 250px;
+    max-width: 300px;
+}
+
+#selected-device h4 { 
+    margin: 0 0 10px 0; 
+    color: #63b3ed; 
+    font-size: 16px;
+}
+
+#selected-device div { 
+    margin: 5px 0; 
+    font-size: 13px;
+    color: #e2e8f0;
+}
+
+#selected-device strong { 
+    color: #a0aec0; 
+}
+
+.status-indicator { 
+    display: inline-block; 
+    width: 8px; 
+    height: 8px; 
+    border-radius: 50%; 
+    margin-right: 5px;
+}
+
+.status-indicator.online { 
+    background: #48bb78; 
+    box-shadow: 0 0 4px #48bb78;
+}
+
+.status-indicator.offline { 
+    background: #e53e3e; 
+    box-shadow: 0 0 4px #e53e3e;
+}
+
+.status-indicator.unknown { 
+    background: #ed8936; 
+    box-shadow: 0 0 4px #ed8936;
+}
+
+#troubleshooting-panel { 
+    position: absolute; 
+    bottom: 15px; 
+    left: 15px; 
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); 
+    padding: 15px; 
+    border-radius: 8px; 
+    border: 1px solid #4a5568;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    max-width: 400px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#troubleshooting-panel h3 { 
+    margin: 0 0 10px 0; 
+    color: #63b3ed; 
+    font-size: 16px;
+}
+
+#troubleshooting-content div { 
+    margin: 5px 0; 
+    font-size: 13px;
+    color: #e2e8f0;
+}
+
+.troubleshooting-step { 
+    padding: 8px; 
+    margin: 5px 0; 
+    background: #1a202c; 
+    border-radius: 4px; 
+    border-left: 3px solid #4299e1;
+}
+
+.recommendation { 
+    padding: 8px; 
+    margin: 5px 0; 
+    border-radius: 4px; 
+    font-size: 12px;
+}
+
+.recommendation.high { 
+    background: rgba(229, 62, 62, 0.2); 
+    border-left: 3px solid #e53e3e;
+}
+
+.recommendation.medium { 
+    background: rgba(237, 137, 54, 0.2); 
+    border-left: 3px solid #ed8936;
+}
+
+.recommendation.low { 
+    background: rgba(72, 187, 120, 0.2); 
+    border-left: 3px solid #48bb78;
+}
+
+/* Loading and status indicators */
+.loading { 
+    opacity: 0.6; 
+    pointer-events: none; 
+}
+
+.error { 
+    background: rgba(229, 62, 62, 0.1); 
+    border: 1px solid #e53e3e;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #asset-panel {
+        width: 240px;
+    }
+    
+    #selected-device {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 10px;
+    }
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Metadata styling */
+.metadata-section {
+    margin-top: 10px;
+}
+
+.metadata-item {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #cbd5e0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

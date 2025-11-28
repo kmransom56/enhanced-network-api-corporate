@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMDB Scope &mdash; fortigate-api 2.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=d7b522e2"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fortigateapi/CmdbS", "programming_language": "words", "project": "fortigate-api", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "", "version": "latest"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="fortigate-api" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/fortigateapi/CmdbS.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fortigate-api
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_contents.html">FortiGateAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FortiGate.html">FortiGate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/_contents.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vladimirs-git/fortigate-api/tree/main/examples">Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fortigate-api</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CMDB Scope</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/vladimirs-git/fortigate-api/blob/main/docs/fortigateapi/CmdbS.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cmdb-scope">
+<h1>CMDB Scope<a class="headerlink" href="#cmdb-scope" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fortigate_api.cmdb.</span></span><span class="sig-name descname"><span class="pre">CmdbS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fortigate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="FortiGate.html#fortigate_api.FortiGate" title="fortigate_api.fortigate.FortiGate"><span class="pre">FortiGate</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS" title="Permalink to this definition"></a></dt>
+<dd><p>Cmdb scope connectors.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.alertemail">
+<span class="sig-name descname"><span class="pre">alertemail</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.alertemail" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AlertemailC</span></code> cmdb/alertemail connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.antivirus">
+<span class="sig-name descname"><span class="pre">antivirus</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.antivirus" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AntivirusC</span></code> cmdb/antivirus connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.application">
+<span class="sig-name descname"><span class="pre">application</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.application" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplicationC</span></code> cmdb/application connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.authentication">
+<span class="sig-name descname"><span class="pre">authentication</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.authentication" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AuthenticationC</span></code> cmdb/authentication connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.certificate">
+<span class="sig-name descname"><span class="pre">certificate</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.certificate" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateC</span></code> cmdb/certificate connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.credential_store">
+<span class="sig-name descname"><span class="pre">credential_store</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.credential_store" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CredentialStoreC</span></code> cmdb/credential-store connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.dlp">
+<span class="sig-name descname"><span class="pre">dlp</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.dlp" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DlpC</span></code> cmdb/dlp connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.dnsfilter">
+<span class="sig-name descname"><span class="pre">dnsfilter</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.dnsfilter" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DnsfilterC</span></code> cmdb/dnsfilter connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.emailfilter">
+<span class="sig-name descname"><span class="pre">emailfilter</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.emailfilter" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailfilterC</span></code> cmdb/emailfilter connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.endpoint_control">
+<span class="sig-name descname"><span class="pre">endpoint_control</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.endpoint_control" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EndpointControlC</span></code> cmdb/endpoint-control connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.extender_controller">
+<span class="sig-name descname"><span class="pre">extender_controller</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.extender_controller" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtenderControllerC</span></code> cmdb/extender-controller connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.file_filter">
+<span class="sig-name descname"><span class="pre">file_filter</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.file_filter" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FileFilterC</span></code> cmdb/file-filter connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall">
+<span class="sig-name descname"><span class="pre">firewall</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallC</span></code> cmdb/firewall connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_ipmacbinding">
+<span class="sig-name descname"><span class="pre">firewall_ipmacbinding</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_ipmacbinding" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallIpmacbindingC</span></code> cmdb/firewall.ipmacbinding connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_schedule">
+<span class="sig-name descname"><span class="pre">firewall_schedule</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_schedule" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallScheduleC</span></code> cmdb/firewall.schedule connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_service">
+<span class="sig-name descname"><span class="pre">firewall_service</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_service" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallServiceC</span></code> cmdb/firewall.service connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_shaper">
+<span class="sig-name descname"><span class="pre">firewall_shaper</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_shaper" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallShaperC</span></code> cmdb/firewall.shaper connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_ssh">
+<span class="sig-name descname"><span class="pre">firewall_ssh</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_ssh" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallSshC</span></code> cmdb/firewall.ssh connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_ssl">
+<span class="sig-name descname"><span class="pre">firewall_ssl</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_ssl" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallSslC</span></code> cmdb/firewall.ssl connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.firewall_wildcard_fqdn">
+<span class="sig-name descname"><span class="pre">firewall_wildcard_fqdn</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.firewall_wildcard_fqdn" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FirewallWildcardFqdnC</span></code> cmdb/firewall.wildcard-fqdn connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.ftp_proxy">
+<span class="sig-name descname"><span class="pre">ftp_proxy</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.ftp_proxy" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FtpProxyC</span></code> cmdb/ftp-proxy connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.icap">
+<span class="sig-name descname"><span class="pre">icap</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.icap" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">IcapC</span></code> cmdb/icap connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.ips">
+<span class="sig-name descname"><span class="pre">ips</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.ips" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">IpsC</span></code> cmdb/ips connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log">
+<span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogC</span></code> cmdb/log connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_disk">
+<span class="sig-name descname"><span class="pre">log_disk</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_disk" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogDiskC</span></code> cmdb/log.disk connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_fortianalyzer">
+<span class="sig-name descname"><span class="pre">log_fortianalyzer</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_fortianalyzer" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogFortianalyzerC</span></code> cmdb/log.fortianalyzer connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_fortianalyzer2">
+<span class="sig-name descname"><span class="pre">log_fortianalyzer2</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_fortianalyzer2" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogFortianalyzer2C</span></code> cmdb/log.fortianalyzer2 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_fortianalyzer3">
+<span class="sig-name descname"><span class="pre">log_fortianalyzer3</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_fortianalyzer3" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogFortianalyzer3C</span></code> cmdb/log.fortianalyzer3 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_fortianalyzer_cloud">
+<span class="sig-name descname"><span class="pre">log_fortianalyzer_cloud</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_fortianalyzer_cloud" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogFortianalyzerCloudC</span></code> cmdb/log.fortianalyzer-cloud connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_fortiguard">
+<span class="sig-name descname"><span class="pre">log_fortiguard</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_fortiguard" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogFortiguardC</span></code> cmdb/log.fortiguard connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_memory">
+<span class="sig-name descname"><span class="pre">log_memory</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_memory" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogMemoryC</span></code> cmdb/log.memory connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_null_device">
+<span class="sig-name descname"><span class="pre">log_null_device</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_null_device" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogNullDeviceC</span></code> cmdb/log.null-device connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_syslogd">
+<span class="sig-name descname"><span class="pre">log_syslogd</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_syslogd" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogSyslogdC</span></code> cmdb/log.syslogd connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_syslogd2">
+<span class="sig-name descname"><span class="pre">log_syslogd2</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_syslogd2" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogSyslogd2C</span></code> cmdb/log.syslogd2 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_syslogd3">
+<span class="sig-name descname"><span class="pre">log_syslogd3</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_syslogd3" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogSyslogd3C</span></code> cmdb/log.syslogd3 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_syslogd4">
+<span class="sig-name descname"><span class="pre">log_syslogd4</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_syslogd4" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogSyslogd4C</span></code> cmdb/log.syslogd4 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.log_webtrends">
+<span class="sig-name descname"><span class="pre">log_webtrends</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.log_webtrends" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LogWebtrendsC</span></code> cmdb/log.webtrends connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.report">
+<span class="sig-name descname"><span class="pre">report</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.report" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ReportC</span></code> cmdb/report connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.router">
+<span class="sig-name descname"><span class="pre">router</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.router" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RouterC</span></code> cmdb/router connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.ssh_filter">
+<span class="sig-name descname"><span class="pre">ssh_filter</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.ssh_filter" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SshFilterC</span></code> cmdb/ssh-filter connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.switch_controller">
+<span class="sig-name descname"><span class="pre">switch_controller</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.switch_controller" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SwitchControllerC</span></code> cmdb/switch-controller connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.switch_controller_auto_config">
+<span class="sig-name descname"><span class="pre">switch_controller_auto_config</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.switch_controller_auto_config" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SwitchControllerAutoConfigC</span></code> cmdb/switch-controller.auto-config connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.switch_controller_initial_config">
+<span class="sig-name descname"><span class="pre">switch_controller_initial_config</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.switch_controller_initial_config" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SwitchControllerInitialConfigC</span></code> cmdb/switch-controller.initial-config connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.switch_controller_security_policy">
+<span class="sig-name descname"><span class="pre">switch_controller_security_policy</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.switch_controller_security_policy" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SwitchControllerSecurityPolicyC</span></code> cmdb/switch-controller.security-policy connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system">
+<span class="sig-name descname"><span class="pre">system</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemC</span></code> cmdb/system connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_3g_modem">
+<span class="sig-name descname"><span class="pre">system_3g_modem</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_3g_modem" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">System3gModemC</span></code> cmdb/system.3g-modem connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_autoupdate">
+<span class="sig-name descname"><span class="pre">system_autoupdate</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_autoupdate" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemAutoupdateC</span></code> cmdb/system.autoupdate connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_dhcp">
+<span class="sig-name descname"><span class="pre">system_dhcp</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_dhcp" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemDhcpC</span></code> cmdb/system.dhcp connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_dhcp6">
+<span class="sig-name descname"><span class="pre">system_dhcp6</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_dhcp6" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemDhcp6C</span></code> cmdb/system.dhcp6 connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_lldp">
+<span class="sig-name descname"><span class="pre">system_lldp</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_lldp" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemLldpC</span></code> cmdb/system.lldp connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_replacemsg">
+<span class="sig-name descname"><span class="pre">system_replacemsg</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_replacemsg" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemReplacemsgC</span></code> cmdb/system.replacemsg connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.system_snmp">
+<span class="sig-name descname"><span class="pre">system_snmp</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.system_snmp" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemSnmpC</span></code> cmdb/system.snmp connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.user" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">UserC</span></code> cmdb/user connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.voip">
+<span class="sig-name descname"><span class="pre">voip</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.voip" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VoipC</span></code> cmdb/voip connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.vpn">
+<span class="sig-name descname"><span class="pre">vpn</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.vpn" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VpnC</span></code> cmdb/vpn connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.vpn_certificate">
+<span class="sig-name descname"><span class="pre">vpn_certificate</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.vpn_certificate" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VpnCertificateC</span></code> cmdb/vpn.certificate connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.vpn_ipsec">
+<span class="sig-name descname"><span class="pre">vpn_ipsec</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.vpn_ipsec" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VpnIpsecC</span></code> cmdb/vpn.ipsec connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.vpn_ssl">
+<span class="sig-name descname"><span class="pre">vpn_ssl</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.vpn_ssl" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VpnSslC</span></code> cmdb/vpn.ssl connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.vpn_ssl_web">
+<span class="sig-name descname"><span class="pre">vpn_ssl_web</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.vpn_ssl_web" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">VpnSslWebC</span></code> cmdb/vpn.ssl.web connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.waf">
+<span class="sig-name descname"><span class="pre">waf</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.waf" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WafC</span></code> cmdb/waf connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.wanopt">
+<span class="sig-name descname"><span class="pre">wanopt</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.wanopt" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WanoptC</span></code> cmdb/wanopt connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.web_proxy">
+<span class="sig-name descname"><span class="pre">web_proxy</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.web_proxy" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WebProxyC</span></code> cmdb/web-proxy connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.webfilter">
+<span class="sig-name descname"><span class="pre">webfilter</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.webfilter" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WebfilterC</span></code> cmdb/webfilter connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.wireless_controller">
+<span class="sig-name descname"><span class="pre">wireless_controller</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.wireless_controller" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WirelessControllerC</span></code> cmdb/wireless-controller connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.cmdb.CmdbS.wireless_controller_hotspot20">
+<span class="sig-name descname"><span class="pre">wireless_controller_hotspot20</span></span><a class="headerlink" href="#fortigate_api.cmdb.CmdbS.wireless_controller_hotspot20" title="Permalink to this definition"></a></dt>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WirelessControllerHotspot20C</span></code> cmdb/wireless-controller.hotspot20 connectors.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Vladimirs Prusakovs.
+      <span class="commit">Revision <code>401b2c7b</code>.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

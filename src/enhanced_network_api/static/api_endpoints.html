@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Network API &mdash; Endpoint Overview</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 20px 48px 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #60a5fa;
+        }
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        section {
+            margin-bottom: 24px;
+            padding: 16px 18px;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+        }
+        h2 {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+            color: #93c5fd;
+        }
+        p {
+            margin: 4px 0 12px 0;
+            color: #d1d5db;
+            font-size: 13px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            font-size: 13px;
+        }
+        li {
+            padding: 6px 0;
+            border-top: 1px solid rgba(31, 41, 55, 0.7);
+        }
+        li:first-child {
+            border-top: none;
+        }
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 12px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            color: #e5e7eb;
+        }
+        a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .method {
+            display: inline-block;
+            min-width: 46px;
+            font-weight: 600;
+        }
+        .tag {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-left: 6px;
+            background: rgba(31, 41, 55, 0.9);
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1>Enhanced Network API &mdash; Endpoint Overview</h1>
+        <p class="subtitle">
+            Quick reference for the main topology, FortiGate, DrawIO export, and intelligent API documentation endpoints
+            exposed by this instance.
+        </p>
+
+        <section>
+            <h2>Topology &amp; 3D Viewer</h2>
+            <p>Core endpoints that power the 3D Network Topology Lab viewer and related tools.</p>
+            <ul>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/api/topology/raw"><code>/api/topology/raw</code></a>
+                    <span class="tag">Fortinet MCP</span><br />
+                    Raw topology JSON returned from the Fortinet MCP bridge.
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/api/topology/scene"><code>/api/topology/scene</code></a>
+                    <span class="tag">normalized</span><br />
+                    Normalized 3D scene (nodes/links) built from the Fortinet topology.
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/api/topology/scene-enhanced"><code>/api/topology/scene-enhanced</code></a>
+                    <span class="tag">models</span><br />
+                    Scene with device model matching, 3D model paths, and vendor metadata.
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/api/topology/babylon-lab-format"><code>/api/topology/babylon-lab-format</code></a>
+                    <span class="tag">lab JSON</span><br />
+                    Topology in the <code>models/connections</code> JSON format consumed by
+                    <code>/3d-lab</code>.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Router-based APIs (Smart Analysis &amp; LLM)</h2>
+            <p>
+                Additional endpoints are registered via FastAPI routers in
+                <code>api.endpoints.smart_analysis</code>, <code>api.endpoints.meraki_mcp</code>, and
+                <code>api.endpoints.fortinet_llm</code>. These cover smart troubleshooting tools,
+                Meraki MCP integration, and Fortinet LLM helpers.
+            </p>
+            <ul>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/smart-tools"><code>/smart-tools</code></a>
+                    <span class="tag">Smart analysis UI</span><br />
+                    Web interface exposing smart analysis tools backed by the
+                    <code>smart_analysis</code> router.
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <code>api.endpoints.smart_analysis</code>,
+                    <code>api.endpoints.meraki_mcp</code>,
+                    <code>api.endpoints.fortinet_llm</code><br />
+                    Programmatic endpoints exposed by these routers are best viewed using the
+                    auto-generated listing at
+                    <a href="/api-endpoints/auto"><code>/api-endpoints/auto</code></a>
+                    or the OpenAPI schema at <code>/openapi.json</code>.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Direct FortiGate API</h2>
+            <p>Endpoints that call the FortiGate API directly via <code>FortiGateTopologyCollector</code>.</p>
+            <ul>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/fortigate/topology-direct</code>
+                    <span class="tag">JSON body</span><br />
+                    Collect full FortiGate-centric topology (devices &amp; links). Accepts optional
+                    <code>credentials</code> in the request body; otherwise uses environment variables.
+                </li>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/fortigate/system-status</code>
+                    <span class="tag">JSON body</span><br />
+                    Return FortiGate system status from <code>/monitor/system/status</code>.
+                </li>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/fortigate/firewall-policies</code>
+                    <span class="tag">JSON body</span><br />
+                    Return a summary count of configured firewall policies.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>DrawIO Export &amp; 3D Scene</h2>
+            <p>Endpoints that generate DrawIO diagrams and 3D scene snapshots from the topology.</p>
+            <ul>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/topology/drawio-xml</code>
+                    <span class="tag">.drawio</span><br />
+                    Generate a DrawIO XML diagram suitable for importing into
+                    <a href="https://app.diagrams.net/" target="_blank" rel="noreferrer noopener">DrawIO</a>.
+                    The request body can specify <code>layout</code> and related options.
+                </li>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/topology/drawio-3d-scene</code>
+                    <span class="tag">3D JSON</span><br />
+                    Generate a 3D scene JSON snapshot (nodes/links) aligned with the DrawIO diagram.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Intelligent API Documentation</h2>
+            <p>Search FortiGate and Meraki API documentation with natural language.</p>
+            <ul>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/api/intelligent-api/query</code>
+                    <span class="tag">FortiGate / Meraki</span><br />
+                    Query the in-memory API knowledge base for matching endpoints. The request body
+                    should include <code>query</code> and optional <code>device_type</code>
+                    (<code>fortigate</code>, <code>meraki</code>, or <code>all</code>).
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <code>/docs/search?q=&lt;term&gt;</code>
+                    <span class="tag">FortiGate docs</span><br />
+                    Full-text search over the scraped FortiGate API documentation in <code>docs/fortigate-api</code>.
+                    Returns a JSON list of matches (title, path, snippet).
+                </li>
+                <li>
+                    <span class="method">POST</span>
+                    <code>/docs/qa</code>
+                    <span class="tag">vLLM</span><br />
+                    Question-answering endpoint that retrieves context from local FortiGate docs and
+                    calls the configured vLLM model. The request body should contain a
+                    <code>{ "question": "..." }</code> payload.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Health &amp; Diagnostics</h2>
+            <p>Endpoints to monitor the API service and inspect recent performance metrics.</p>
+            <ul>
+                <li>
+                    <span class="method">GET</span>
+                    <code>/health</code>
+                    <span class="tag">status</span><br />
+                    Basic health check returning overall status, timestamps, and service indicators
+                    (API, MCP bridge, topology endpoints).
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <code>/api/performance/metrics</code>
+                    <span class="tag">perf</span><br />
+                    Returns recent timing samples for expensive code paths (e.g. topology
+                    normalization) as collected by the internal performance recorder.
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <code>/api-endpoints</code>
+                    <span class="tag">docs</span><br />
+                    This overview page listing the main API endpoints.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Related Documentation</h2>
+            <p>Additional pages that complement these endpoints.</p>
+            <ul>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/"><code>/</code> &mdash; Main 3D topology interface</a>
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/3d-lab"><code>/3d-lab</code> &mdash; 3D Network Topology Lab viewer</a>
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/2d-svg"><code>/2d-svg</code> &mdash; 2D SVG topology viewer</a>
+                </li>
+                <li>
+                    <span class="method">GET</span>
+                    <a href="/automated-topology"><code>/automated-topology</code> &mdash; Automated topology workflow</a>
+                </li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

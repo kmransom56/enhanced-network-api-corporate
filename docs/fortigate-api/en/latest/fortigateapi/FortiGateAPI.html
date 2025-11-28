@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FortiGateAPI &mdash; fortigate-api 2.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=d7b522e2"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FortiGateAPI.cmdb" href="cmdb/_contents.html" />
+    <link rel="prev" title="FortiGateAPI" href="_contents.html" /> 
+
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "fortigateapi/FortiGateAPI", "programming_language": "words", "project": "fortigate-api", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "", "version": "latest"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="fortigate-api" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/fortigateapi/FortiGateAPI.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fortigate-api
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="_contents.html">FortiGateAPI</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FortiGateAPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fortigate_api.FortiGateAPI"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.fortigate"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.fortigate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.cmdb"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.cmdb</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.log"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.log</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.monitor"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.monitor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.vdom"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.vdom</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.login"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fortigate_api.FortiGateAPI.logout"><code class="docutils literal notranslate"><span class="pre">FortiGateAPI.logout()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cmdb/_contents.html">FortiGateAPI.cmdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log/_contents.html">FortiGateAPI.log (not ready)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor/_contents.html">FortiGateAPI.monitor (not ready)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FortiGate.html">FortiGate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/_contents.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/vladimirs-git/fortigate-api/tree/main/examples">Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fortigate-api</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="_contents.html">FortiGateAPI</a></li>
+      <li class="breadcrumb-item active">FortiGateAPI</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/vladimirs-git/fortigate-api/blob/main/docs/fortigateapi/FortiGateAPI.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fortigateapi">
+<h1>FortiGateAPI<a class="headerlink" href="#fortigateapi" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fortigate_api.</span></span><span class="sig-name descname"><span class="pre">FortiGateAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fortigate_api.FortiGateAPI" title="Permalink to this definition"></a></dt>
+<dd><p>FortiGateAPI - Python connector to Fortigate API endpoints.</p>
+<p>Init FortiGateAPI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host</strong> (<em>str</em>) – Fortigate hostname or ip address.</p></li>
+<li><p><strong>username</strong> (<em>str</em>) – Administrator name. Mutually exclusive with <cite>token</cite>.</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Administrator password. Mutually exclusive with <cite>token</cite>.</p></li>
+<li><p><strong>token</strong> (<em>str</em>) – Token. Mutually exclusive with <cite>username</cite> and <cite>password</cite>.</p></li>
+<li><p><strong>scheme</strong> (<em>str</em>) – Access method: <cite>https</cite> or <cite>http</cite>. Default is <cite>https</cite>.</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – TCP port. Default is <cite>443</cite> for scheme=`https`, <cite>80</cite> for scheme=`http`.</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – Session timeout (minutes). Default is 15.</p></li>
+<li><p><strong>verify</strong> (<em>bool</em>) – Transport Layer Security.
+<cite>True</cite> - A TLS certificate required,
+<cite>False</cite> - Requests will accept any TLS certificate.
+Default is <cite>False</cite>.</p></li>
+<li><p><strong>vdom</strong> (<em>str</em>) – Name of the virtual domain. Default is <cite>root</cite>.</p></li>
+<li><p><strong>logging</strong> (<em>bool</em>) – Logging REST API response.
+<cite>Ture</cite> - Enable response logging, <cite>False</cite> - otherwise. Default is <cite>False</cite>.</p></li>
+<li><p><strong>logging_error</strong> (<em>bool</em>) – Logging only the REST API response with error.
+<cite>Ture</cite> - Enable errors logging, <cite>False</cite> - otherwise. Default is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.fortigate">
+<span class="sig-name descname"><span class="pre">fortigate</span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.fortigate" title="Permalink to this definition"></a></dt>
+<dd><p><a class="reference internal" href="FortiGate.html#fortigate_api.FortiGate" title="fortigate_api.FortiGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">FortiGate</span></code></a> REST API connector.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.cmdb">
+<span class="sig-name descname"><span class="pre">cmdb</span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.cmdb" title="Permalink to this definition"></a></dt>
+<dd><p><a class="reference internal" href="CmdbS.html#fortigate_api.cmdb.CmdbS" title="fortigate_api.cmdb.CmdbS"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmdbS</span></code></a> CMDB scope connectors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.log">
+<span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.log" title="Permalink to this definition"></a></dt>
+<dd><p><a class="reference internal" href="LogS.html#fortigate_api.log.LogS" title="fortigate_api.log.LogS"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogS</span></code></a> Log scope connectors. (not ready)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.monitor">
+<span class="sig-name descname"><span class="pre">monitor</span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.monitor" title="Permalink to this definition"></a></dt>
+<dd><p><a class="reference internal" href="MonitorS.html#fortigate_api.monitor.MonitorS" title="fortigate_api.monitor.MonitorS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorS</span></code></a> Monitor scope connectors. (not ready)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.vdom">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vdom</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fortigate_api.FortiGateAPI.vdom" title="Permalink to this definition"></a></dt>
+<dd><p>Actual virtual domain.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.login" title="Permalink to this definition"></a></dt>
+<dd><p>Login to the Fortigate using REST API and creates a Session.</p>
+<ul class="simple">
+<li><p>Validate <cite>token</cite> if object has been initialized with <cite>token</cite> parameter.</p></li>
+<li><p>Validate  <cite>password</cite> if object has been initialized with <cite>username</cite> parameter.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None. Creates Session.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fortigate_api.FortiGateAPI.logout">
+<span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fortigate_api.FortiGateAPI.logout" title="Permalink to this definition"></a></dt>
+<dd><p>Logout from the Fortigate using REST API and deletes Session.</p>
+<ul class="simple">
+<li><p>No need to logout if object has been initialized with <cite>token</cite> parameter.</p></li>
+<li><p>Logout if object has been initialized with <cite>username</cite> parameter.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None. Deletes Session.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;FortiGateAPI examples.</span>
+
+<span class="sd">- Initialize FortiGateAPI with optional parameters scheme=`https`, port=443</span>
+<span class="sd">- Create address in the Fortigate</span>
+<span class="sd">- Get address by name (unique identifier)</span>
+<span class="sd">- Update address data in the Fortigate</span>
+<span class="sd">- Delete address from the Fortigate</span>
+<span class="sd">- Check for absence of address in the Fortigate</span>
+<span class="sd">- FortiGateAPI `with` statement</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">fortigate_api</span> <span class="kn">import</span> <span class="n">FortiGateAPI</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s2">&quot;host&quot;</span>
+<span class="n">USERNAME</span> <span class="o">=</span> <span class="s2">&quot;username&quot;</span>
+<span class="n">PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span>
+
+<span class="c1"># Initialize FortiGateAPI with optional parameters scheme=`https`, port=443</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">FortiGateAPI</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="n">HOST</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">USERNAME</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="n">PASSWORD</span><span class="p">,</span>
+    <span class="n">scheme</span><span class="o">=</span><span class="s2">&quot;https&quot;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
+    <span class="n">logging_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>  <span class="c1"># login is optional</span>
+
+<span class="c1"># Create address in the Fortigate</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ADDRESS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;obj-type&quot;</span><span class="p">:</span> <span class="s2">&quot;ip&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subnet&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.100 255.255.255.252&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ipmask&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;address.create </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># address.create &lt;Response [200]&gt;</span>
+
+<span class="c1"># Get address by name (unique identifier)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ADDRESS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;addresses count=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># addresses count=1</span>
+
+<span class="c1"># Update address data in the Fortigate</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ADDRESS&quot;</span><span class="p">,</span> <span class="s2">&quot;subnet&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.255 255.255.255.255&quot;</span><span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;address.update </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># address.update &lt;Response [200]&gt;</span>
+
+<span class="c1"># Delete address from the Fortigate</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;ADDRESS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;address.delete </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># address.delete &lt;Response [200]&gt;</span>
+
+<span class="c1"># Check for absence of address in the Fortigate</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">is_exist</span><span class="p">(</span><span class="s2">&quot;ADDRESS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;address.is_exist </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># address.is_exist False</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">logout</span><span class="p">()</span>
+
+<span class="c1"># FortiGateAPI `with` statement</span>
+<span class="k">with</span> <span class="n">FortiGateAPI</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">HOST</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">USERNAME</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">PASSWORD</span><span class="p">)</span> <span class="k">as</span> <span class="n">api</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">cmdb</span><span class="o">.</span><span class="n">firewall</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">is_exist</span><span class="p">(</span><span class="s2">&quot;ADDRESS&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;address.is_exist&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>  <span class="c1"># exist &lt;Response [404]&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_contents.html" class="btn btn-neutral float-left" title="FortiGateAPI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cmdb/_contents.html" class="btn btn-neutral float-right" title="FortiGateAPI.cmdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Vladimirs Prusakovs.
+      <span class="commit">Revision <code>401b2c7b</code>.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

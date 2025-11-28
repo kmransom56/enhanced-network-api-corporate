@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" width="8.5in" height="11.0in" viewBox="0 0 612.0 792.0">
+ <v:documentProperties>
+  <v:userDefs>
+   <v:ud v:nameU="msvConvertTheme" v:val="0"/>
+  </v:userDefs>
+ </v:documentProperties>
+ <g id="SFixTitle"/>
+ <g id="SContent">
+  <g>
+   <g/>
+   <g transform="matrix(1.0,0.0,0.0,-1.0,0.0,792.0)">
+    <g transform="matrix(1.0,0.0,0.0,1.0,0.0,363.0)" v:mID="1.0">
+     <title>Created with Evaluation version of Aspose.Diagram (c).</title>
+     <g transform="matrix(1.0,0.0,0.0,1.0,0.0,0.0)">
+      <text x="74.48399" y="10.8" class="TextStyle0" fill="#A5A5A5" opacity="1.0" transform="matrix(1.0,0.0,0.0,-1.0,0.0,38.4)">Created with Evaluation version of Aspose.Diagram (c).</text>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+ <style type="text/css"><![CDATA[ .TextStyle0 {font-family:C059;font-size:18.0px;} ]]></style>
+</svg>

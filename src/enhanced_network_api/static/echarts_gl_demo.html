@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECharts-GL 3D Network Topology Test</title>
+    <link rel="stylesheet" href="/static/echarts_gl_test.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>🌐 ECharts-GL 3D Network Topology</h1>
+            <button onclick="loadFortinetTopology()">🔥 Load Fortinet</button>
+            <button onclick="loadDemoTopology()">🎭 Demo Mode</button>
+            <button onclick="clearChart()">🗑️ Clear</button>
+            <button onclick="resetView()">🔄 Reset View</button>
+        </div>
+        
+        <div class="chart-container">
+            <div id="chart"></div>
+            <div class="loading" id="loading">Loading...</div>
+            <div class="info">
+                <h3>Network Topology</h3>
+                <p>Devices: <span id="deviceCount">0</span></p>
+                <p>Connections: <span id="connectionCount">0</span></p>
+                <p>Library: ECharts-GL</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ECharts and ECharts-GL -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
+    <script>
+        // Check if libraries loaded properly
+        window.addEventListener('load', function() {
+            console.log('Checking ECharts-GL availability...');
+            console.log('ECharts loaded:', typeof echarts !== 'undefined');
+            console.log('ECharts-GL loaded:', typeof echarts !== 'undefined' && echarts.gl !== undefined);
+            
+            if (typeof echarts !== 'undefined' && echarts.gl) {
+                console.log('✅ ECharts-GL is ready!');
+            } else {
+                console.error('❌ ECharts-GL failed to load');
+                // Try alternative CDN
+                console.log('Trying alternative CDN...');
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/echarts-gl@2.0.9/dist/echarts-gl.min.js';
+                script.onload = function() {
+                    console.log('✅ ECharts-GL loaded from unpkg!');
+                };
+                document.head.appendChild(script);
+            }
+        });
+    </script>
+
+    <script>
+        let myChart = null;
+        let currentTopology = null;
+
+        // Initialize chart
+        function initChart() {
+            // Wait for ECharts-GL to be available
+            if (typeof echarts === 'undefined') {
+                console.error('ECharts not loaded');
+                return;
+            }
+            
+            if (!echarts.gl) {
+                console.error('ECharts-GL not loaded yet, retrying...');
+                setTimeout(initChart, 500);
+                return;
+            }
+            
+            console.log('Initializing ECharts-GL chart...');
+            const chartDom = document.getElementById('chart');
+            myChart = echarts.init(chartDom);
+            
+            // Set initial empty option
+            myChart.setOption({
+                backgroundColor: '#0e1116',
+                grid3D: {
+                    show: true,
+                    boxWidth: 200,
+                    boxHeight: 80,
+                    boxDepth: 200,
+                    viewControl: {
+                        distance: 250,
+                        alpha: 40,
+                        beta: 40,
+                        autoRotate: true,
+                        autoRotateSpeed: 10
+                    },
+                    light: {
+                        main: {
+                            intensity: 1.2,
+                            shadow: true
+                        },
+                        ambient: {
+                            intensity: 0.3
+                        }
+                    }
+                },
+                xAxis3D: { type: 'value' },
+                yAxis3D: { type: 'value' },
+                zAxis3D: { type: 'value' },
+                series: []
+            });
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                myChart.resize();
+            });
+        }
+
+        // Device type configurations
+        const deviceTypes = {
+            'fortigate': { color: '#ff6b6b', size: 30, symbol: 'circle' },
+            'fortiswitch': { color: '#4ecdc4', size: 25, symbol: 'rect' },
+            'fortiap': { color: '#45b7d1', size: 20, symbol: 'triangle' },
+            'default': { color: '#95a5a6', size: 20, symbol: 'circle' }
+        };
+
+        // Load Fortinet topology from API
+        async function loadFortinetTopology() {
+            showLoading(true);
+            try {
+                const response = await fetch('/api/topology/scene');
+                const data = await response.json();
+                
+                if (data.nodes && data.links) {
+                    renderTopology(data);
+                    currentTopology = data;
+                } else {
+                    alert('Invalid topology data received');
+                }
+            } catch (error) {
+                console.error('Failed to load Fortinet topology:', error);
+                alert('Failed to load topology data');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Load demo topology
+        function loadDemoTopology() {
+            showLoading(true);
+            
+            const demoData = {
+                nodes: [
+                    { id: "fg-192.168.0.254", type: "fortigate", name: "Lab-FortiGate", ip: "192.168.0.254" },
+                    { id: "fsw-001", type: "fortiswitch", name: "Lab-Switch-01", ip: "192.168.0.100" },
+                    { id: "fsw-002", type: "fortiswitch", name: "Lab-Switch-02", ip: "192.168.0.101" },
+                    { id: "fap-001", type: "fortiap", name: "Lab-AP-Office", ip: "192.168.0.110" },
+                    { id: "fap-002", type: "fortiap", name: "Lab-AP-Guest", ip: "192.168.0.111" },
+                    { id: "fap-003", type: "fortiap", name: "Lab-AP-Warehouse", ip: "192.168.0.112" }
+                ],
+                links: [
+                    { from: "fg-192.168.0.254", to: "fsw-001", type: "fortilink" },
+                    { from: "fg-192.168.0.254", to: "fsw-002", type: "fortilink" },
+                    { from: "fsw-001", to: "fap-001", type: "wired" },
+                    { from: "fsw-001", to: "fap-002", type: "wired" },
+                    { from: "fsw-002", to: "fap-003", type: "wired" }
+                ]
+            };
+            
+            setTimeout(() => {
+                renderTopology(demoData);
+                currentTopology = demoData;
+                showLoading(false);
+            }, 500);
+        }
+
+        // Render topology using ECharts-GL
+        function renderTopology(data) {
+            if (!myChart) {
+                initChart();
+            }
+
+            // Process nodes
+            const nodes = data.nodes.map((node, index) => {
+                const type = deviceTypes[node.type] || deviceTypes.default;
+                
+                // Calculate positions in a circular/grid layout
+                const angle = (index / data.nodes.length) * Math.PI * 2;
+                const radius = 80;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                const y = 0;
+                
+                return [x, y, z, node.name, node.type, node.ip || '', type.color, type.size];
+            });
+
+            // Process links
+            const links = data.links.map(link => {
+                const fromNode = data.nodes.findIndex(n => n.id === link.from);
+                const toNode = data.nodes.findIndex(n => n.id === link.to);
+                
+                if (fromNode !== -1 && toNode !== -1) {
+                    const angle1 = (fromNode / data.nodes.length) * Math.PI * 2;
+                    const angle2 = (toNode / data.nodes.length) * Math.PI * 2;
+                    const radius = 80;
+                    
+                    const x1 = Math.cos(angle1) * radius;
+                    const z1 = Math.sin(angle1) * radius;
+                    const y1 = 0;
+                    
+                    const x2 = Math.cos(angle2) * radius;
+                    const z2 = Math.sin(angle2) * radius;
+                    const y2 = 0;
+                    
+                    return [[x1, y1, z1], [x2, y2, z2]];
+                }
+                return null;
+            }).filter(link => link !== null);
+
+            // Update info
+            document.getElementById('deviceCount').textContent = data.nodes.length;
+            document.getElementById('connectionCount').textContent = data.links.length;
+
+            // Set chart option
+            const option = {
+                backgroundColor: '#0e1116',
+                title: {
+                    text: '3D Network Topology',
+                    textStyle: {
+                        color: '#ffffff',
+                        fontSize: 18
+                    },
+                    left: 'center',
+                    top: 20
+                },
+                grid3D: {
+                    show: true,
+                    boxWidth: 200,
+                    boxHeight: 80,
+                    boxDepth: 200,
+                    viewControl: {
+                        distance: 250,
+                        alpha: 40,
+                        beta: 40,
+                        autoRotate: true,
+                        autoRotateSpeed: 5
+                    },
+                    light: {
+                        main: {
+                            intensity: 1.2,
+                            shadow: true
+                        },
+                        ambient: {
+                            intensity: 0.3
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#30363d'
+                        }
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#8b949e'
+                        }
+                    }
+                },
+                xAxis3D: { type: 'value', show: false },
+                yAxis3D: { type: 'value', show: false },
+                zAxis3D: { type: 'value', show: false },
+                series: [
+                    {
+                        type: 'scatter3D',
+                        name: 'Network Devices',
+                        data: nodes,
+                        symbolSize: function(data) {
+                            return data[7]; // size
+                        },
+                        itemStyle: {
+                            color: function(data) {
+                                return data[6]; // color
+                            },
+                            opacity: 0.8
+                        },
+                        label: {
+                            show: true,
+                            formatter: function(data) {
+                                return data[3]; // name
+                            },
+                            textStyle: {
+                                color: '#ffffff',
+                                fontSize: 12,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                padding: [4, 8],
+                                borderRadius: 4
+                            },
+                            distance: 10
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                opacity: 1
+                            }
+                        }
+                    },
+                    {
+                        type: 'line3D',
+                        name: 'Connections',
+                        data: links,
+                        lineStyle: {
+                            width: 3,
+                            color: '#58a6ff',
+                            opacity: 0.6
+                        },
+                        emphasis: {
+                            lineStyle: {
+                                width: 5,
+                                opacity: 1
+                            }
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option, true);
+        }
+
+        // Clear chart
+        function clearChart() {
+            if (myChart) {
+                myChart.clear();
+                myChart.setOption({
+                    backgroundColor: '#0e1116',
+                    grid3D: {
+                        show: true,
+                        boxWidth: 200,
+                        boxHeight: 80,
+                        boxDepth: 200,
+                        viewControl: {
+                            distance: 250,
+                            alpha: 40,
+                            beta: 40,
+                            autoRotate: true,
+                            autoRotateSpeed: 10
+                        }
+                    },
+                    series: []
+                });
+            }
+            
+            document.getElementById('deviceCount').textContent = '0';
+            document.getElementById('connectionCount').textContent = '0';
+            currentTopology = null;
+        }
+
+        // Reset view
+        function resetView() {
+            if (myChart) {
+                // Reset camera view
+                const option = myChart.getOption();
+                if (option.grid3D && option.grid3D[0]) {
+                    option.grid3D[0].viewControl = {
+                        distance: 250,
+                        alpha: 40,
+                        beta: 40,
+                        autoRotate: true,
+                        autoRotateSpeed: 10
+                    };
+                    myChart.setOption(option);
+                }
+            }
+        }
+
+        // Show/hide loading
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+            console.log('ECharts-GL 3D Network Topology initialized');
+        });
+    </script>
+</body>
+</html>

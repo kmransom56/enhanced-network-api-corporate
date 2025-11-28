@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Topology Viewer - Real Data with 2D/3D</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            grid-template-rows: 60px 1fr 40px;
+            grid-template-areas:
+                "header header header"
+                "sidebar canvas details"
+                "status status status";
+            height: 100vh;
+        }
+        
+        header {
+            grid-area: header;
+            background: rgba(20, 25, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #58a6ff;
+            margin-right: 20px;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        aside {
+            background: rgba(20, 25, 35, 0.9);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(88, 166, 255, 0.3);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar {
+            grid-area: sidebar;
+        }
+        
+        .details-panel {
+            grid-area: details;
+            border-left: 1px solid rgba(88, 166, 255, 0.3);
+            border-right: none;
+        }
+        
+        main {
+            grid-area: canvas;
+            position: relative;
+        }
+        
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        footer {
+            grid-area: status;
+            background: rgba(15, 20, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 30px;
+            font-size: 12px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-label { color: rgba(255, 255, 255, 0.5); }
+        .status-value { color: #58a6ff; font-weight: 500; }
+        
+        .control-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-section h3 {
+            font-size: 14px;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        button, select {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.1));
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        
+        button:hover, select:hover {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.3), rgba(88, 166, 255, 0.2));
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.active {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.4), rgba(88, 166, 255, 0.3));
+            border-color: #58a6ff;
+        }
+        
+        .device-details {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        
+        .device-details h4 {
+            color: #58a6ff;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .device-details .label {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+        
+        .device-details .value {
+            color: #ffffff;
+            margin-left: 5px;
+        }
+        
+        #loading, #error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 25, 35, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .topology-stats {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .topology-stats div {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <div class="header-title">🌐 Network Topology Viewer</div>
+            <div class="header-controls">
+                <button id="loadBtn">🔄 Load Real Data</button>
+                <button id="resetViewBtn">📷 Reset View</button>
+                <button id="autoRotateBtn">🔄 Auto-Rotate</button>
+            </div>
+            <div style="margin-left: auto;">
+                <span class="status-label">Status:</span>
+                <span id="headerStatus" class="status-value">Ready</span>
+            </div>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="control-section">
+                <h3>Layout Algorithm</h3>
+                <select id="layoutSelect">
+                    <option value="force">Force-Directed</option>
+                    <option value="hierarchical">Hierarchical</option>
+                    <option value="circular">Circular</option>
+                    <option value="grid">Grid (Simple)</option>
+                </select>
+            </div>
+            
+            <div class="control-section">
+                <h3>View Options</h3>
+                <button id="toggleLabelsBtn" class="active">🏷️ Device Labels</button>
+                <button id="toggleConnectionsBtn" class="active">🔗 Show Connections</button>
+                <button id="toggleGridBtn">⊞ Show Grid</button>
+            </div>
+            
+            <div class="control-section">
+                <h3>Device Types</h3>
+                <button id="filterAllBtn" class="active">All Devices</button>
+                <button id="filterFortiGateBtn">🛡️ FortiGate</button>
+                <button id="filterSwitchBtn">🔌 Switches</button>
+                <button id="filterAPBtn">📡 Access Points</button>
+                <button id="filterClientBtn">💻 Clients</button>
+            </div>
+            
+            <div class="topology-stats" id="topologyStats">
+                <div><strong>Topology Statistics</strong></div>
+                <div>Devices: <span id="deviceCount">0</span></div>
+                <div>Connections: <span id="connectionCount">0</span></div>
+                <div>Layout: <span id="currentLayout">Not loaded</span></div>
+            </div>
+        </aside>
+        
+        <main>
+            <canvas id="renderCanvas"></canvas>
+            <div id="loading" class="hidden">
+                <div style="font-size: 24px; margin-bottom: 10px;">🔄</div>
+                <div>Loading network topology...</div>
+            </div>
+            <div id="error" class="hidden">
+                <div style="font-size: 24px; margin-bottom: 10px; color: #ff5555;">❌</div>
+                <div id="errorMessage">Error loading topology</div>
+            </div>
+        </main>
+        
+        <aside class="details-panel">
+            <div id="deviceDetails">
+                <div class="device-details">
+                    <h4>📋 Device Information</h4>
+                    <p style="color: rgba(255,255,255,0.6);">Click on a device to view details</p>
+                </div>
+            </div>
+        </aside>
+        
+        <footer>
+            <div class="status-item">
+                <span class="status-label">🎯 FPS:</span>
+                <span id="fpsCounter" class="status-value">60</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">📦 Meshes:</span>
+                <span id="meshCounter" class="status-value">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">🌐 Devices:</span>
+                <span id="deviceCounter" class="status-value">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">🔗 Links:</span>
+                <span id="linkCounter" class="status-value">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">⏱️</span>
+                <span id="timeDisplay" class="status-value">00:00:00</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Global state
+        let engine, scene, camera;
+        let devices = [];
+        let connections = [];
+        let deviceMeshes = new Map();
+        let connectionLines = [];
+        let autoRotate = false;
+        let showLabels = true;
+        let showConnections = true;
+        let showGrid = false;
+        let currentLayout = 'force';
+        let topologyData = null;
+        
+        // Initialize Babylon.js scene
+        function initBabylon() {
+            const canvas = document.getElementById('renderCanvas');
+            engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+            
+            scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0.05, 0.05, 0.1, 1.0);
+            
+            // Camera
+            camera = new BABYLON.ArcRotateCamera('camera', 
+                -Math.PI / 2, Math.PI / 3, 40, 
+                BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvas, true);
+            camera.lowerRadiusLimit = 15;
+            camera.upperRadiusLimit = 150;
+            camera.wheelPrecision = 50;
+            
+            // Lights
+            const hemiLight = new BABYLON.HemisphericLight('hemiLight', 
+                new BABYLON.Vector3(0, 1, 0), scene);
+            hemiLight.intensity = 0.7;
+            
+            const dirLight = new BABYLON.DirectionalLight('dirLight', 
+                new BABYLON.Vector3(-1, -2, -1), scene);
+            dirLight.position = new BABYLON.Vector3(20, 40, 20);
+            dirLight.intensity = 0.5;
+            
+            // Ground
+            const ground = BABYLON.MeshBuilder.CreateGround('ground', 
+                {width: 100, height: 100}, scene);
+            const groundMat = new BABYLON.StandardMaterial('groundMat', scene);
+            groundMat.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
+            groundMat.specularColor = new BABYLON.Color3(0, 0, 0);
+            ground.material = groundMat;
+            
+            // Optional grid
+            const gridMat = new BABYLON.StandardMaterial('gridMat', scene);
+            gridMat.wireframe = true;
+            gridMat.diffuseColor = new BABYLON.Color3(0.2, 0.3, 0.4);
+            gridMat.emissiveColor = new BABYLON.Color3(0.1, 0.15, 0.2);
+            
+            const grid = BABYLON.MeshBuilder.CreateGround('grid', 
+                {width: 100, height: 100, subdivisions: 25}, scene);
+            grid.material = gridMat;
+            grid.position.y = 0.01;
+            grid.visibility = showGrid ? 1 : 0;
+            
+            // Pointer events
+            scene.onPointerObservable.add((pointerInfo) => {
+                if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+                    const pickedMesh = pointerInfo.pickInfo.pickedMesh;
+                    if (pickedMesh && pickedMesh.metadata && pickedMesh.metadata.deviceData) {
+                        showDeviceDetails(pickedMesh.metadata.deviceData);
+                    }
+                }
+            });
+            
+            // Render loop
+            engine.runRenderLoop(() => {
+                if (autoRotate) {
+                    camera.alpha += 0.005;
+                }
+                scene.render();
+                updateStats();
+            });
+            
+            window.addEventListener('resize', () => engine.resize());
+            
+            console.log('✅ Babylon.js initialized');
+        }
+        
+        // 2D Layout Algorithms
+        const LayoutAlgorithms = {
+            // Force-directed layout (Fruchterman-Reingold)
+            force: function(nodes, links) {
+                const width = 80, height = 80;
+                const iterations = 100;
+                const k = Math.sqrt((width * height) / nodes.length);
+                const temperature = width / 10;
+                
+                // Initialize random positions
+                nodes.forEach(node => {
+                    node.x = Math.random() * width - width/2;
+                    node.z = Math.random() * height - height/2;
+                    node.vx = 0;
+                    node.vz = 0;
+                });
+                
+                // Iterate
+                for (let iter = 0; iter < iterations; iter++) {
+                    const t = temperature * (1 - iter / iterations);
+                    
+                    // Repulsive forces between all nodes
+                    for (let i = 0; i < nodes.length; i++) {
+                        nodes[i].vx = 0;
+                        nodes[i].vz = 0;
+                        
+                        for (let j = 0; j < nodes.length; j++) {
+                            if (i === j) continue;
+                            
+                            const dx = nodes[i].x - nodes[j].x;
+                            const dz = nodes[i].z - nodes[j].z;
+                            const dist = Math.sqrt(dx*dx + dz*dz) || 0.01;
+                            const repulsion = (k * k) / dist;
+                            
+                            nodes[i].vx += (dx / dist) * repulsion;
+                            nodes[i].vz += (dz / dist) * repulsion;
+                        }
+                    }
+                    
+                    // Attractive forces for connected nodes
+                    links.forEach(link => {
+                        const source = nodes.find(n => n.id === link.from);
+                        const target = nodes.find(n => n.id === link.to);
+                        if (!source || !target) return;
+                        
+                        const dx = target.x - source.x;
+                        const dz = target.z - source.z;
+                        const dist = Math.sqrt(dx*dx + dz*dz) || 0.01;
+                        const attraction = (dist * dist) / k;
+                        
+                        const fx = (dx / dist) * attraction;
+                        const fz = (dz / dist) * attraction;
+                        
+                        source.vx += fx;
+                        source.vz += fz;
+                        target.vx -= fx;
+                        target.vz -= fz;
+                    });
+                    
+                    // Apply velocities
+                    nodes.forEach(node => {
+                        const velocity = Math.sqrt(node.vx*node.vx + node.vz*node.vz);
+                        if (velocity > 0) {
+                            const limit = Math.min(velocity, t);
+                            node.x += (node.vx / velocity) * limit;
+                            node.z += (node.vz / velocity) * limit;
+                        }
+                    });
+                }
+                
+                return nodes;
+            },
+            
+            // Hierarchical layout
+            hierarchical: function(nodes, links) {
+                // Find root nodes (no incoming edges)
+                const hasIncoming = new Set(links.map(l => l.to));
+                const roots = nodes.filter(n => !hasIncoming.has(n.id));
+                
+                if (roots.length === 0 && nodes.length > 0) {
+                    roots.push(nodes[0]); // Fallback to first node
+                }
+                
+                const levels = new Map();
+                const visited = new Set();
+                
+                function assignLevel(nodeId, level) {
+                    if (visited.has(nodeId)) return;
+                    visited.add(nodeId);
+                    
+                    if (!levels.has(level)) {
+                        levels.set(level, []);
+                    }
+                    levels.get(level).push(nodeId);
+                    
+                    // Find children
+                    const children = links.filter(l => l.from === nodeId).map(l => l.to);
+                    children.forEach(child => assignLevel(child, level + 1));
+                }
+                
+                roots.forEach(root => assignLevel(root.id, 0));
+                
+                // Assign positions
+                const levelSpacing = 15;
+                const nodeSpacing = 12;
+                
+                let maxLevel = 0;
+                levels.forEach((_, level) => { if (level > maxLevel) maxLevel = level; });
+                
+                nodes.forEach(node => {
+                    let level = 0;
+                    for (let [l, ids] of levels.entries()) {
+                        if (ids.includes(node.id)) {
+                            level = l;
+                            break;
+                        }
+                    }
+                    
+                    const levelNodes = levels.get(level) || [];
+                    const index = levelNodes.indexOf(node.id);
+                    const offset = (levelNodes.length - 1) * nodeSpacing / 2;
+                    
+                    node.x = index * nodeSpacing - offset;
+                    node.z = (level - maxLevel / 2) * levelSpacing;
+                });
+                
+                return nodes;
+            },
+            
+            // Circular layout
+            circular: function(nodes, links) {
+                const radius = Math.max(20, nodes.length * 2);
+                nodes.forEach((node, i) => {
+                    const angle = (i / nodes.length) * 2 * Math.PI;
+                    node.x = Math.cos(angle) * radius;
+                    node.z = Math.sin(angle) * radius;
+                });
+                return nodes;
+            },
+            
+            // Simple grid layout
+            grid: function(nodes, links) {
+                const cols = Math.ceil(Math.sqrt(nodes.length));
+                nodes.forEach((node, i) => {
+                    node.x = (i % cols) * 8 - (cols * 4);
+                    node.z = Math.floor(i / cols) * 8 - (Math.ceil(nodes.length / cols) * 4);
+                });
+                return nodes;
+            }
+        };
+        
+        // Create 3D device from SVG path (extrusion)
+        function create3DDeviceFromSVG(deviceData, svgPath) {
+            // For now, create geometric shapes based on device type
+            // In production, this would parse the actual SVG and extrude it
+            const deviceType = deviceData.type || deviceData.device_type || 'unknown';
+            let mesh, color;
+            
+            // Restaurant/POS devices get priority visual treatment
+            if (deviceType.includes('POS') || deviceType.includes('Terminal')) {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 2.5, height: 2, depth: 1.5}, scene);
+                color = new BABYLON.Color3(0.0, 0.6, 0.2); // Green
+            } else if (deviceType.includes('Tablet') || deviceType.includes('iPad')) {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 1.8, height: 0.3, depth: 2.5}, scene);
+                color = new BABYLON.Color3(0.0, 0.4, 0.8); // Blue
+            } else if (deviceType.includes('Kitchen') || deviceType.includes('KDS')) {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 3, height: 2, depth: 0.5}, scene);
+                color = new BABYLON.Color3(0.8, 0.4, 0.0); // Orange
+            } else if (deviceType.includes('Printer')) {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 1.5, height: 1, depth: 1}, scene);
+                color = new BABYLON.Color3(0.4, 0.2, 0.0); // Brown
+            } else if (deviceType === 'fortigate' || deviceType.includes('Firewall')) {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 2, height: 1.5, depth: 1}, scene);
+                color = new BABYLON.Color3(0.8, 0.2, 0.2); // Red
+            } else if (deviceType === 'fortiswitch' || deviceType === 'Switch') {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: 2.5, height: 0.8, depth: 1}, scene);
+                color = new BABYLON.Color3(0.2, 0.2, 0.2); // Dark gray
+            } else if (deviceType === 'fortiap' || deviceType.includes('Access Point')) {
+                mesh = BABYLON.MeshBuilder.CreateCylinder(deviceData.id, {height: 0.5, diameter: 1.5}, scene);
+                color = new BABYLON.Color3(0.0, 0.2, 0.4); // Dark blue
+            } else if (deviceType === 'client' || deviceType === 'endpoint') {
+                mesh = BABYLON.MeshBuilder.CreateSphere(deviceData.id, {diameter: 1.2}, scene);
+                color = new BABYLON.Color3(0.5, 0.5, 0.5); // Gray
+            } else {
+                mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {size: 1.5}, scene);
+                color = new BABYLON.Color3(0.4, 0.4, 0.4); // Gray
+            }
+            
+            // Material
+            const material = new BABYLON.StandardMaterial(`mat_${deviceData.id}`, scene);
+            material.diffuseColor = color;
+            material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+            material.emissiveColor = color.scale(0.1);
+            mesh.material = material;
+            
+            // Add metadata
+            mesh.metadata = { deviceData };
+            
+            // Label
+            if (showLabels) {
+                createDeviceLabel(mesh, deviceData.name || deviceData.hostname || deviceData.id);
+            }
+            
+            return mesh;
+        }
+        
+        // Create device label
+        function createDeviceLabel(parentMesh, text) {
+            const plane = BABYLON.MeshBuilder.CreatePlane(`label_${parentMesh.name}`, {width: 3, height: 0.6}, scene);
+            plane.position.y = 2;
+            plane.parent = parentMesh;
+            plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+            
+            const labelMat = new BABYLON.StandardMaterial(`labelMat_${parentMesh.name}`, scene);
+            labelMat.emissiveColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+            labelMat.disableLighting = true;
+            
+            // Create dynamic texture for text
+            const dynamicTexture = new BABYLON.DynamicTexture(`labelTex_${parentMesh.name}`, {width: 512, height: 128}, scene);
+            const ctx = dynamicTexture.getContext();
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, 512, 128);
+            dynamicTexture.drawText(text, null, null, '32px Arial', '#ffffff', 'rgba(0,0,0,0.7)', true);
+            
+            labelMat.diffuseTexture = dynamicTexture;
+            labelMat.opacityTexture = dynamicTexture;
+            plane.material = labelMat;
+            
+            return plane;
+        }
+        
+        // Create connection line
+        function createConnection(fromMesh, toMesh, linkData) {
+            const points = [
+                fromMesh.position.clone(),
+                toMesh.position.clone()
+            ];
+            
+            const line = BABYLON.MeshBuilder.CreateLines(`conn_${fromMesh.name}_${toMesh.name}`, {
+                points: points,
+                updatable: true
+            }, scene);
+            
+            const status = linkData.status || 'active';
+            line.color = status === 'active' 
+                ? new BABYLON.Color3(0.3, 0.8, 0.3) 
+                : new BABYLON.Color3(0.8, 0.3, 0.3);
+            
+            line.metadata = { fromMesh, toMesh, linkData };
+            
+            return line;
+        }
+        
+        // Update connection lines positions
+        function updateConnections() {
+            connectionLines.forEach(line => {
+                if (line.metadata && line.metadata.fromMesh && line.metadata.toMesh) {
+                    const points = [
+                        line.metadata.fromMesh.position.clone(),
+                        line.metadata.toMesh.position.clone()
+                    ];
+                    line = BABYLON.MeshBuilder.CreateLines(line.name, {
+                        points: points,
+                        instance: line
+                    });
+                }
+            });
+        }
+        
+        // Load real topology data from API
+        async function loadRealTopology() {
+            showLoading();
+            updateStatus('Loading...');
+            
+            try {
+                console.log('📡 Fetching topology from API...');
+                const response = await fetch('/api/topology/scene-enhanced');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Topology loaded:', data);
+                
+                topologyData = data;
+                await renderTopology(data);
+                
+                hideLoading();
+                updateStatus('Loaded');
+            } catch (error) {
+                console.error('❌ Failed to load topology:', error);
+                showError(`Failed to load topology: ${error.message}`);
+                updateStatus('Error');
+            }
+        }
+        
+        // Render topology with selected layout
+        async function renderTopology(data) {
+            // Clear existing
+            deviceMeshes.forEach(mesh => mesh.dispose());
+            deviceMeshes.clear();
+            connectionLines.forEach(line => line.dispose());
+            connectionLines = [];
+            
+            const nodes = data.nodes || [];
+            const links = data.links || [];
+            
+            if (nodes.length === 0) {
+                throw new Error('No devices found in topology data');
+            }
+            
+            console.log(`🎨 Rendering ${nodes.length} devices with ${currentLayout} layout...`);
+            
+            // Apply layout algorithm
+            const layoutFn = LayoutAlgorithms[currentLayout] || LayoutAlgorithms.grid;
+            const positionedNodes = layoutFn(nodes, links);
+            
+            // Create device meshes
+            positionedNodes.forEach(node => {
+                const mesh = create3DDeviceFromSVG(node, node.svg_path);
+                mesh.position.x = node.x || 0;
+                mesh.position.y = 1;
+                mesh.position.z = node.z || 0;
+                deviceMeshes.set(node.id, mesh);
+            });
+            
+            // Create connections
+            if (showConnections) {
+                links.forEach(link => {
+                    const fromMesh = deviceMeshes.get(link.from);
+                    const toMesh = deviceMeshes.get(link.to);
+                    if (fromMesh && toMesh) {
+                        const line = createConnection(fromMesh, toMesh, link);
+                        connectionLines.push(line);
+                    }
+                });
+            }
+            
+            // Update stats
+            document.getElementById('deviceCount').textContent = nodes.length;
+            document.getElementById('connectionCount').textContent = links.length;
+            document.getElementById('currentLayout').textContent = currentLayout;
+            
+            console.log(`✅ Rendered ${deviceMeshes.size} devices and ${connectionLines.length} connections`);
+        }
+        
+        // Show device details panel
+        function showDeviceDetails(deviceData) {
+            const detailsPanel = document.getElementById('deviceDetails');
+            
+            let html = '<div class="device-details">';
+            html += `<h4>📋 ${deviceData.name || deviceData.hostname || 'Device'}</h4>`;
+            
+            html += '<div style="margin-bottom: 15px;">';
+            html += '<div><span class="label">Type:</span> <span class="value">' + (deviceData.device_type || deviceData.type || 'Unknown') + '</span></div>';
+            if (deviceData.device_vendor) html += '<div><span class="label">Vendor:</span> <span class="value">' + deviceData.device_vendor + '</span></div>';
+            if (deviceData.model) html += '<div><span class="label">Model:</span> <span class="value">' + deviceData.model + '</span></div>';
+            if (deviceData.ip) html += '<div><span class="label">IP:</span> <span class="value">' + deviceData.ip + '</span></div>';
+            if (deviceData.mac) html += '<div><span class="label">MAC:</span> <span class="value">' + deviceData.mac + '</span></div>';
+            if (deviceData.status) html += '<div><span class="label">Status:</span> <span class="value">' + deviceData.status + '</span></div>';
+            html += '</div>';
+            
+            if (deviceData.pos_system) {
+                html += '<div style="margin-bottom: 15px;">';
+                html += '<div><span class="label">POS System:</span> <span class="value">' + deviceData.pos_system + '</span></div>';
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            detailsPanel.innerHTML = html;
+        }
+        
+        // UI helpers
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function updateStatus(status) {
+            document.getElementById('headerStatus').textContent = status;
+        }
+        
+        function updateStats() {
+            document.getElementById('fpsCounter').textContent = Math.round(engine.getFps());
+            document.getElementById('meshCounter').textContent = scene.meshes.length;
+            document.getElementById('deviceCounter').textContent = deviceMeshes.size;
+            document.getElementById('linkCounter').textContent = connectionLines.length;
+        }
+        
+        // Event handlers
+        document.getElementById('loadBtn').addEventListener('click', loadRealTopology);
+        
+        document.getElementById('resetViewBtn').addEventListener('click', () => {
+            camera.alpha = -Math.PI / 2;
+            camera.beta = Math.PI / 3;
+            camera.radius = 40;
+            camera.target = BABYLON.Vector3.Zero();
+        });
+        
+        document.getElementById('autoRotateBtn').addEventListener('click', () => {
+            autoRotate = !autoRotate;
+            document.getElementById('autoRotateBtn').classList.toggle('active', autoRotate);
+        });
+        
+        document.getElementById('layoutSelect').addEventListener('change', (e) => {
+            currentLayout = e.target.value;
+            if (topologyData) {
+                renderTopology(topologyData);
+            }
+        });
+        
+        document.getElementById('toggleLabelsBtn').addEventListener('click', () => {
+            showLabels = !showLabels;
+            document.getElementById('toggleLabelsBtn').classList.toggle('active', showLabels);
+            if (topologyData) {
+                renderTopology(topologyData);
+            }
+        });
+        
+        document.getElementById('toggleConnectionsBtn').addEventListener('click', () => {
+            showConnections = !showConnections;
+            document.getElementById('toggleConnectionsBtn').classList.toggle('active', showConnections);
+            connectionLines.forEach(line => line.visibility = showConnections ? 1 : 0);
+        });
+        
+        document.getElementById('toggleGridBtn').addEventListener('click', () => {
+            showGrid = !showGrid;
+            document.getElementById('toggleGridBtn').classList.toggle('active', showGrid);
+            const grid = scene.getMeshByName('grid');
+            if (grid) {
+                grid.visibility = showGrid ? 1 : 0;
+            }
+        });
+        
+        // Filter buttons
+        document.getElementById('filterAllBtn').addEventListener('click', () => {
+            deviceMeshes.forEach(mesh => mesh.visibility = 1);
+            document.querySelectorAll('[id^="filter"]').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('filterAllBtn').classList.add('active');
+        });
+        
+        document.getElementById('filterFortiGateBtn').addEventListener('click', () => {
+            deviceMeshes.forEach((mesh, id) => {
+                const type = mesh.metadata.deviceData.type || '';
+                mesh.visibility = type.includes('fortigate') || type.includes('Firewall') ? 1 : 0.2;
+            });
+        });
+        
+        document.getElementById('filterSwitchBtn').addEventListener('click', () => {
+            deviceMeshes.forEach((mesh, id) => {
+                const type = mesh.metadata.deviceData.type || '';
+                mesh.visibility = type.includes('switch') || type.includes('Switch') ? 1 : 0.2;
+            });
+        });
+        
+        document.getElementById('filterAPBtn').addEventListener('click', () => {
+            deviceMeshes.forEach((mesh, id) => {
+                const type = mesh.metadata.deviceData.type || '';
+                mesh.visibility = type.includes('fortiap') || type.includes('Access Point') ? 1 : 0.2;
+            });
+        });
+        
+        document.getElementById('filterClientBtn').addEventListener('click', () => {
+            deviceMeshes.forEach((mesh, id) => {
+                const type = mesh.metadata.deviceData.type || '';
+                mesh.visibility = type.includes('client') || type.includes('endpoint') ? 1 : 0.2;
+            });
+        });
+        
+        // Update time display
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('timeDisplay').textContent = now.toLocaleTimeString();
+        }, 1000);
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing Network Topology Viewer...');
+            initBabylon();
+            updateStatus('Ready');
+            console.log('✅ Network Topology Viewer initialized');
+        });
+        
+        // Error handling
+        window.addEventListener('error', (event) => {
+            console.error('❌ JavaScript error:', event.error);
+            showError(`JavaScript error: ${event.error.message}`);
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ Unhandled promise rejection:', event.reason);
+            showError(`Promise error: ${event.reason}`);
+        });
+    </script>
+</body>
+</html>

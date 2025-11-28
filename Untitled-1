@@ -1,0 +1,5 @@
+
+
+from aspose.diagram import *
+diagram = Diagram("/home/keith/DrawIO/fortinet_visio/FortiGate_Series_R22_2025Q2.vss);
+diagram.save("output.png", SaveFileFormat.PNG);

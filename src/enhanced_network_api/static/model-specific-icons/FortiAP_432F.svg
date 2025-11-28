@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <style>
+      .model-bg { fill: #0066cc; opacity: 0.9; }
+      .model-frame { fill: none; stroke: #ffffff; stroke-width: 2; }
+      .model-text { fill: #ffffff; font-family: Arial, sans-serif; font-weight: bold; }
+      .model-label { font-size: 24px; text-anchor: middle; }
+      .model-features { font-size: 8px; text-anchor: middle; }
+      .port-indicator { fill: #333333; }
+      .status-led { fill: #00ff00; }
+    </style>
+  </defs>
+  
+  <!-- Main device background -->
+  <rect class="model-bg" x="32" y="48" width="128" height="96" rx="8" />
+  <rect class="model-frame" x="32" y="48" width="128" height="96" rx="8" />
+  
+  <!-- Model label background -->
+  <rect fill="#000000" opacity="0.7" x="52" y="56" width="88" height="28" rx="4" />
+  
+  <!-- Model label -->
+  <text class="model-text model-label" x="96" y="75">432F</text>
+  
+  <!-- Device type indicator -->
+  <text class="model-text model-features" x="96" y="95">FORTIAP</text>
+  
+  <!-- Feature indicators -->
+  <g id="features">
+    <circle class="port-indicator" cx="48" cy="108" r="3" />
+<circle class="port-indicator" cx="64" cy="108" r="3" />
+<circle class="port-indicator" cx="80" cy="108" r="3" />
+
+  </g>
+  
+  <!-- Port indicators -->
+  <g id="ports">
+    
+            <!-- FortiAP antenna indicators -->
+            <line stroke="#ffffff" stroke-width="2" x1="96" y1="96" x2="96" y2="84" />
+            <circle fill="#ffffff" cx="96" cy="84" r="2" />
+            <line stroke="#ffffff" stroke-width="2" x1="96" y1="96" x2="88" y2="90" />
+            <circle fill="#ffffff" cx="88" cy="90" r="2" />
+            <line stroke="#ffffff" stroke-width="2" x1="96" y1="96" x2="104" y2="90" />
+            <circle fill="#ffffff" cx="104" cy="90" r="2" />
+            
+  </g>
+  
+  <!-- Status LED -->
+  <circle class="status-led" cx="160" cy="56" r="4" />
+  
+  <!-- Model-specific details -->
+  <text class="model-text model-features" x="96" y="130" opacity="0.8">
+    3.5 Gbps
+  </text>
+</svg>

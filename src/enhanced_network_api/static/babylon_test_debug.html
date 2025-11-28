@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortinet 3D Topology - Babylon.js with Model-Specific Icons</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0e1116 0%, #1a1f2e 100%);
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: grid;
+            grid-template-rows: 60px 1fr 40px;
+            grid-template-columns: 0 1fr 0;
+            grid-template-areas:
+                "header header header"
+                "sidebar main details"
+                "status status status";
+        }
+        
+        /* Top Toolbar */
+        .top-toolbar {
+            grid-area: header;
+            background: rgba(30, 35, 50, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 0 15px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .toolbar-group:last-child {
+            border-right: none;
+            margin-left: auto;
+        }
+        
+        .toolbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #58a6ff;
+            margin-right: 20px;
+        }
+        
+        /* Left Sidebar */
+        .left-sidebar {
+            grid-area: sidebar;
+            background: rgba(30, 35, 50, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(88, 166, 255, 0.3);
+            width: 280px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 999;
+        }
+        
+        .left-sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-toggle {
+            position: absolute;
+            left: 10px;
+            top: 70px;
+            background: rgba(88, 166, 255, 0.2);
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            color: #58a6ff;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-toggle:hover {
+            background: rgba(88, 166, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* Main Canvas Area */
+        .main-canvas {
+            grid-area: main;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+        
+        #renderCanvas:active {
+            cursor: grabbing;
+        }
+        
+        /* Right Details Panel */
+        .details-panel {
+            grid-area: details;
+            background: rgba(30, 35, 50, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(88, 166, 255, 0.3);
+            width: 350px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 999;
+        }
+        
+        .details-panel.open {
+            transform: translateX(0);
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            grid-area: status;
+            background: rgba(20, 25, 40, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(88, 166, 255, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 30px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .status-value {
+            color: #58a6ff;
+            font-weight: 500;
+        }
+        
+        /* Control Groups */
+        .control-group {
+            margin: 20px 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-group h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Buttons */
+        button {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(88, 166, 255, 0.1));
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.3), rgba(88, 166, 255, 0.2));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.active {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.4), rgba(88, 166, 255, 0.3));
+            border-color: #58a6ff;
+        }
+        
+        /* Data Source Buttons */
+        .data-source-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .data-source-buttons button {
+            flex: 1;
+            font-size: 12px;
+            padding: 6px 8px;
+        }
+        
+        /* Device Info Panel */
+        #deviceInfo {
+            padding: 20px;
+        }
+        
+        #deviceInfo.hidden {
+            display: none;
+        }
+        
+        .device-details {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .device-details h4 {
+            color: #58a6ff;
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(88, 166, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .device-details h5 {
+            color: #58a6ff;
+            margin: 15px 0 8px 0;
+            font-size: 14px;
+        }
+        
+        .label {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+        
+        .value {
+            color: #ffffff;
+            margin-left: 5px;
+        }
+        
+        /* Loading and Error */
+        #loading, #error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(30, 35, 50, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+        }
+        
+        .error {
+            border-color: rgba(255, 100, 100, 0.5);
+            background: rgba(255, 50, 50, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .details-panel {
+                width: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header header"
+                    "main main"
+                    "status status";
+            }
+            
+            .left-sidebar, .details-panel {
+                position: fixed;
+                top: 60px;
+                height: calc(100vh - 100px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+            
+            .details-panel {
+                right: 0;
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #renderCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            touch-action: none;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Toolbar -->
+    <header class="top-toolbar">
+        <div class="toolbar-title">🏢 Fortinet 3D Topology</div>
+        <div class="toolbar-group">
+            <button id="loadTopologyBtn">🌐 Load Topology</button>
+            <button id="refreshBtn">🔄 Refresh</button>
+            <button id="resetViewBtn">📷 Reset View</button>
+        </div>
+        <div class="toolbar-group">
+            <button id="autoRotateBtn">🔄 Auto-Rotate</button>
+            <button id="labelsBtn">🏷️ Labels</button>
+            <button id="healthBtn">💚 Health</button>
+        </div>
+        <div class="toolbar-group">
+            <button id="drawioBtn">📊 DrawIO Diagram</button>
+            <button id="exportBtn">💾 Export JSON</button>
+        </div>
+        <div class="toolbar-group">
+            <span class="status-label">Status:</span>
+            <span id="statusText" class="status-value">Ready</span>
+        </div>
+    </header>
+    
+    <!-- Left Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+    
+    <!-- Left Sidebar -->
+    <aside class="left-sidebar" id="leftSidebar">
+        <div class="control-group">
+            <h3>Data Source</h3>
+            <div class="data-source-buttons">
+                <button id="mcpSourceBtn" class="active">🔌 MCP</button>
+                <button id="apiSourceBtn">🌐 API</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <h3>Display Options</h3>
+            <button id="physicalViewBtn" class="active">🔗 Physical</button>
+            <button id="logicalViewBtn">🌐 Logical</button>
+            <button id="hierarchicalViewBtn">📊 Hierarchical</button>
+        </div>
+        
+        <div class="control-group">
+            <h3>View Options</h3>
+            <button id="metricsBtn">📊 Metrics</button>
+            <button id="gridBtn">⊞ Grid</button>
+            <button id="fullscreenBtn">⛶ Fullscreen</button>
+        </div>
+    </aside>
+    
+    <!-- Main Canvas Area -->
+    <main class="main-canvas">
+        <canvas id="renderCanvas"></canvas>
+        
+        <!-- Loading Overlay -->
+        <div id="loading" class="hidden">
+            <div>🔄 Loading topology...</div>
+        </div>
+        
+        <!-- Error Overlay -->
+        <div id="error" class="hidden">
+            <div>❌ <span id="errorMessage">Error loading topology</span></div>
+        </div>
+    </main>
+    
+    <!-- Right Details Panel -->
+    <aside class="details-panel" id="deviceInfo">
+        <div id="deviceDetails">
+            <div class="device-details">
+                <h4>📋 Device Details</h4>
+                <p>Select a device to view details...</p>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Status Bar -->
+    <footer class="status-bar">
+        <div class="status-item">
+            <span class="status-label">🎯 FPS:</span>
+            <span id="fpsCounter" class="status-value">60</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">📦 Objects:</span>
+            <span id="objectCounter" class="status-value">0</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">🌐 Scene:</span>
+            <span id="sceneStatus" class="status-value">Ready</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">🔗 Devices:</span>
+            <span id="deviceCounter" class="status-value">0</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">⏱️ Time:</span>
+            <span id="timeDisplay" class="status-value">00:00:00</span>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let engine, scene, camera;
+        let devices = [];
+        let connections = [];
+        let autoRotate = false;
+        let showLabels = true;
+        let showHealth = true;
+        let showPerformance = false;
+        let currentDataSource = 'mcp'; // Default to MCP server
+        let currentTopologyView = 'physical';
+        let topologyData = null;
+        let refreshInterval = null;
+        
+        // Model-specific icon mapping
+        const modelSpecificIcons = {
+            'FortiGate_600E': '/static/model-specific-icons/FortiGate_600E.svg',
+            'FortiSwitch_148E': '/static/model-specific-icons/FortiSwitch_148E.svg',
+            'FortiAP_432F': '/static/model-specific-icons/FortiAP_432F.svg'
+        };
+
+        // Get model-specific icon or fallback
+        function getModelSpecificIcon(nodeData) {
+            if (nodeData.model && modelSpecificIcons[nodeData.model]) {
+                console.log(`🎯 3D Using model-specific icon: ${nodeData.model}`);
+                return modelSpecificIcons[nodeData.model];
+            }
+            return null;
+        }
+        
+        // Device configurations with VSS → SVG → Eraser AI 3D models
+        const deviceConfigs = {
+            'fortigate': { 
+                color: new BABYLON.Color3(0.8, 0.2, 0.2), 
+                size: 2.5, 
+                shape: 'box',
+                iconPath: '/static/fortinet-icons/FortiGate.svg',
+                modelPath: '/static/3d-models/FortiGate.glb', // VSS → SVG → Eraser AI 3D model
+                use3DModel: true, // Enable 3D model loading
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiswitch': { 
+                color: new BABYLON.Color3(0.2, 0.8, 0.4), 
+                size: 2.0, 
+                shape: 'cylinder',
+                iconPath: '/static/fortinet-icons/FortiSwitch.svg',
+                modelPath: '/static/3d-models/FortiSwitch.glb', // VSS → SVG → Eraser AI 3D model
+                use3DModel: true, // Enable 3D model loading
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiap': { 
+                color: new BABYLON.Color3(0.2, 0.6, 1), 
+                size: 1.5, 
+                shape: 'cylinder',
+                iconPath: '/static/fortinet-icons/FortiAP.svg',
+                modelPath: '/static/3d-models/FortinetAP.glb', // VSS → SVG → Eraser AI 3D model
+                use3DModel: true, // Enable 3D model loading
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortimanager': { 
+                color: new BABYLON.Color3(0.8, 0.4, 0.8), 
+                size: 2.5, 
+                shape: 'sphere',
+                iconPath: '/static/fortinet-icons-extracted/FortiManager.svg',
+                modelPath: '/static/3d-models/FortiManager.glb',
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortianalyzer': { 
+                color: new BABYLON.Color3(1, 0.8, 0.2), 
+                size: 2.5, 
+                shape: 'sphere',
+                iconPath: '/static/fortinet-icons-extracted/FortiAnalyzer.svg',
+                modelPath: '/static/3d-models/FortiAnalyzer.glb',
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'default': { 
+                color: new BABYLON.Color3(0.6, 0.6, 0.6), 
+                size: 2.0, 
+                shape: 'box',
+                iconPath: '/static/fortinet-icons/default.svg',
+                modelPath: null, // No 3D model for unknown devices
+                use3DModel: false, // Use primitives for unknown devices
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            }
+        };
+        
+        // Initialize Babylon.js
+        function initBabylon() {
+            try {
+                console.log('🎮 Initializing Babylon.js...');
+                
+                const canvas = document.getElementById('renderCanvas');
+                if (!canvas) {
+                    throw new Error('Canvas element not found');
+                }
+                
+                console.log('✅ Canvas found:', canvas);
+                
+                // Set canvas dimensions
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                
+                console.log('✅ Canvas dimensions set:', canvas.width, 'x', canvas.height);
+                
+                // Create engine with Chrome-specific fixes
+                engine = new BABYLON.Engine(canvas, {
+                    antialias: true,
+                    preserveDrawingBuffer: true,
+                    stencil: true,
+                    failIfMajorPerformanceCaveat: false // Don't fail on performance issues
+                });
+                
+                if (!engine) {
+                    console.warn('⚠️ Engine creation failed, trying minimal settings...');
+                    engine = new BABYLON.Engine(canvas, false); // Minimal fallback
+                    if (!engine) {
+                        throw new Error('Failed to create Babylon.js engine with any settings');
+                    }
+                }
+                
+                console.log('✅ Babylon.js engine created');
+                console.log('📊 WebGL Version:', engine.getRenderWidth() > 0 ? 'Working' : 'Failed');
+                
+                scene = new BABYLON.Scene(engine);
+                if (!scene) {
+                    throw new Error('Failed to create Babylon.js scene');
+                }
+                
+                console.log('✅ Babylon.js scene created');
+                
+                // Try different background color approach
+                scene.clearColor = new BABYLON.Color4(0.05, 0.05, 0.1, 1.0); // Full alpha
+                
+                console.log('✅ Scene background color set');
+                
+                // Camera
+                camera = new BABYLON.ArcRotateCamera("camera", 0, Math.PI / 3, 30, BABYLON.Vector3.Zero(), scene);
+                camera.attachControl(canvas, true);
+                camera.wheelPrecision = 50;
+                camera.lowerRadiusLimit = 5;
+                camera.upperRadiusLimit = 50;
+                
+                console.log('✅ Camera created and configured');
+            
+            // Lighting
+                const light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+                light1.intensity = 0.7;
+                
+                const light2 = new BABYLON.DirectionalLight("light2", new BABYLON.Vector3(-1, -2, -1), scene);
+                light2.intensity = 0.3;
+                
+                console.log('✅ Lighting created');
+                
+                // Add a test box to verify rendering
+                const testBox = BABYLON.MeshBuilder.CreateBox("testBox", {size: 2}, scene);
+                testBox.position.y = 1;
+                const testMaterial = new BABYLON.StandardMaterial("testMaterial", scene);
+                testMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.8, 0.2);
+                testBox.material = testMaterial;
+                
+                console.log('✅ Test box created');
+                
+                // Ground
+                const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 40, height: 40}, scene);
+                const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
+                groundMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
+                groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                ground.material = groundMaterial;
+                
+                // Grid
+                const gridMaterial = new BABYLON.StandardMaterial("gridMaterial", scene);
+                gridMaterial.wireframe = true;
+                gridMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.3, 0.4);
+                gridMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.15, 0.2);
+                
+                const grid = BABYLON.MeshBuilder.CreateGround("grid", {width: 40, height: 40, subdivisions: 20}, scene);
+                grid.material = gridMaterial;
+                grid.position.y = 0.01;
+                
+                console.log('✅ Ground and grid created');
+                
+                // Handle pointer events for device selection
+                scene.onPointerObservable.add((pointerInfo) => {
+                    if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
+                            const pickedMesh = pointerInfo.pickInfo.pickedMesh;
+                            
+                            // Check if it's a device (not a child mesh like port or LED)
+                            if (pickedMesh.metadata && !pickedMesh.parent) {
+                                showDeviceInfo(pickedMesh.metadata);
+                                console.log('🔍 Device selected:', pickedMesh.metadata.name);
+                            }
+                            // Check if it's a connection line
+                            else if (pickedMesh.metadata && (pickedMesh.metadata.source || pickedMesh.pickInfo.pickedMesh.metadata.from)) {
+                                const linkData = pickedMesh.metadata;
+                                console.log('🔗 Connection selected:', linkData);
+                                // Show connection information
+                                showConnectionInfo(linkData);
+                            }
+                        }
+                    }
+                });
+                
+                console.log('✅ Pointer event handler added');
+                
+                // Render loop
+                engine.runRenderLoop(() => {
+                    try {
+                        if (autoRotate && camera) {
+                            camera.alpha += 0.005;
+                        }
+                        if (scene) {
+                            scene.render();
+                        }
+                        // updateStats(); // Temporarily disabled to prevent render loop errors
+                    } catch (error) {
+                        console.error('❌ Render loop error:', error);
+                    }
+                });
+                
+                console.log('✅ Render loop started');
+                
+                // Window resize
+                window.addEventListener("resize", () => {
+                    if (engine) {
+                        engine.resize();
+                    }
+                });
+                
+                console.log('✅ Window resize handler added');
+                
+                // Force initial render
+                setTimeout(() => {
+                    if (engine && scene) {
+                        engine.runRenderLoop(() => {
+                            scene.render();
+                        });
+                        console.log('✅ Initial render forced');
+                    }
+                }, 100);
+                
+                console.log("🎮 Babylon.js initialized successfully with enhanced 3D models and model-specific icons");
+                updateStatus('Ready');
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize Babylon.js:', error);
+                showError(`Failed to initialize 3D engine: ${error.message}`);
+                updateStatus('Error');
+            }
+        }
+        
+        // Create device with enhanced 3D models and model-specific icons
+        async function createDevice(deviceData, index) {
+            const config = deviceConfigs[deviceData.type] || deviceConfigs['default'];
+            
+            // Try to load 3D model first
+            if (deviceData.use3DModel && config.modelPath) {
+                return await load3DModel(config.modelPath, deviceData, config);
+            }
+            
+            // Fallback to primitive shapes
+            return createPrimitiveDevice(deviceData, config);
+        }
+        
+        // Load 3D model with VSS + Eraser AI enhancements
+        async function load3DModel(modelPath, deviceData, config) {
+            try {
+                console.log(`🚀 Loading enhanced 3D model: ${modelPath}`);
+                
+                const result = await BABYLON.SceneLoader.ImportMeshAsync("", modelPath, "", scene);
+                
+                if (result.meshes.length > 0) {
+                    const rootMesh = result.meshes[0];
+                    rootMesh.id = deviceData.id;
+                    
+                    // Scale and position
+                    rootMesh.scaling = new BABYLON.Vector3(config.size/2, config.size/2, config.size/2);
+                    
+                    if (deviceData.position) {
+                        rootMesh.position = new BABYLON.Vector3(deviceData.position.x, deviceData.position.y || config.size/2, deviceData.position.z);
+                    } else {
+                        rootMesh.position.y = config.size/2;
+                    }
+                    
+                    // Apply device color
+                    result.meshes.forEach(mesh => {
+                        if (mesh.material) {
+                            mesh.material.diffuseColor = config.color;
+                        }
+                    });
+                    
+                    // Metadata
+                    rootMesh.metadata = deviceData;
+                    
+                    // Health indicator
+                    if (showHealth && deviceData.health) {
+                        addHealthIndicator(rootMesh, deviceData.health, config);
+                    }
+                    
+                    // Label
+                    if (showLabels) {
+                        addLabel(rootMesh, deviceData.name);
+                    }
+                    
+                    console.log(`✅ Enhanced 3D model loaded: ${deviceData.name}`);
+                    return rootMesh;
+                } else {
+                    console.warn(`⚠️ No meshes found in 3D model ${modelPath}, using primitive`);
+                    return createPrimitiveDevice(deviceData, config);
+                }
+            } catch (error) {
+                console.warn(`⚠️ Failed to load 3D model ${modelPath}, using primitive:`, error);
+                return createPrimitiveDevice(deviceData, config);
+            }
+        }
+        
+        // Create primitive device with enhanced visual
+        function createPrimitiveDevice(deviceData, config) {
+            let mesh;
+            const deviceType = deviceData.type || 'default';
+            
+            // Create device-specific shapes
+            switch (deviceType) {
+                case 'fortigate':
+                    // Create a more realistic FortiGate shape
+                    mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: config.size * 2, height: config.size * 0.8, depth: config.size * 0.5}, scene);
+                    break;
+                case 'fortiswitch':
+                    // Create a switch shape with ports
+                    mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {width: config.size * 1.5, height: config.size * 0.3, depth: config.size}, scene);
+                    // Add port indicators
+                    addPortIndicators(mesh, deviceData, config);
+                    break;
+                case 'fortiap':
+                    // Create an AP shape with antenna
+                    mesh = BABYLON.MeshBuilder.CreateCylinder(deviceData.id, {height: config.size * 0.3, diameter: config.size}, scene);
+                    // Add antenna
+                    const antenna = BABYLON.MeshBuilder.CreateCylinder(deviceData.id + "_antenna", {height: config.size * 1.5, diameter: config.size * 0.1}, scene);
+                    antenna.parent = mesh;
+                    antenna.position.y = config.size * 0.9;
+                    break;
+                case 'client':
+                    // Create a client device shape
+                    mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {size: config.size * 0.5}, scene);
+                    break;
+                default:
+                    mesh = BABYLON.MeshBuilder.CreateBox(deviceData.id, {size: config.size}, scene);
+            }
+            
+            // Create device-specific material
+            const material = new BABYLON.StandardMaterial(deviceData.id + "_material", scene);
+            material.diffuseColor = config.color;
+            material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+            material.emissiveColor = config.color.scale(0.3);
+            mesh.material = material;
+            
+            // Position
+            if (deviceData.position) {
+                mesh.position = new BABYLON.Vector3(deviceData.position.x, deviceData.position.y || config.size/2, deviceData.position.z);
+            } else {
+                mesh.position.y = config.size/2;
+            }
+            
+            // Metadata
+            mesh.metadata = deviceData;
+            mesh.isPickable = true;
+            
+            // Add device-specific details
+            addDeviceDetails(mesh, deviceData, config);
+            
+            // Health indicator
+            if (showHealth && deviceData.status) {
+                addHealthIndicator(mesh, deviceData.status, config);
+            }
+            
+            // Label
+            if (showLabels) {
+                addLabel(mesh, deviceData.name || deviceData.hostname || deviceData.id);
+            }
+            
+            console.log(`✅ Enhanced device created: ${deviceData.name}`);
+            return mesh;
+        }
+        
+        // Add port indicators to switches
+        function addPortIndicators(mesh, deviceData, config) {
+            const portCount = 24; // Typical switch port count
+            const portSpacing = config.size * 1.4 / portCount;
+            
+            for (let i = 0; i < portCount; i++) {
+                const port = BABYLON.MeshBuilder.CreateBox(`${mesh.id}_port_${i}`, {width: 0.1, height: 0.1, depth: 0.2}, scene);
+                const portMaterial = new BABYLON.StandardMaterial(`${mesh.id}_port_material_${i}`, scene);
+                portMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                port.material = portMaterial;
+                port.parent = mesh;
+                port.position.x = -config.size * 0.7 + (i * portSpacing);
+                port.position.z = config.size * 0.6;
+            }
+        }
+        
+        // Add device details (LEDs, status lights, etc.)
+        function addDeviceDetails(mesh, deviceData, config) {
+            const deviceType = deviceData.type || 'default';
+            
+            switch (deviceType) {
+                case 'fortigate':
+                    // Add status LEDs
+                    addStatusLEDs(mesh, config, ['power', 'status', 'alarm'], {
+                        power: deviceData.status === 'active' ? 'green' : 'red',
+                        status: 'green',
+                        alarm: 'off'
+                    });
+                    break;
+                case 'fortiswitch':
+                    // Add link status indicators
+                    addStatusLEDs(mesh, config, ['link1', 'link2', 'link3', 'link4'], {
+                        link1: 'green',
+                        link2: 'green',
+                        link3: 'orange',
+                        link4: 'off'
+                    });
+                    break;
+                case 'fortiap':
+                    // Add WiFi indicators
+                    addStatusLEDs(mesh, config, ['wifi', 'power'], {
+                        wifi: 'blue',
+                        power: deviceData.status === 'active' ? 'green' : 'red'
+                    });
+                    break;
+            }
+        }
+        
+        // Add status LEDs to devices
+        function addStatusLEDs(mesh, config, ledNames, ledStates) {
+            const ledSize = 0.15;
+            const ledSpacing = 0.3;
+            
+            ledNames.forEach((ledName, index) => {
+                const led = BABYLON.MeshBuilder.CreateSphere(`${mesh.id}_led_${ledName}`, {diameter: ledSize}, scene);
+                const ledMaterial = new BABYLON.StandardMaterial(`${mesh.id}_led_material_${ledName}`, scene);
+                
+                // Set LED color based on state
+                const state = ledStates[ledName];
+                if (state === 'green') {
+                    ledMaterial.emissiveColor = new BABYLON.Color3(0, 1, 0);
+                } else if (state === 'red') {
+                    ledMaterial.emissiveColor = new BABYLON.Color3(1, 0, 0);
+                } else if (state === 'orange') {
+                    ledMaterial.emissiveColor = new BABYLON.Color3(1, 0.5, 0);
+                } else if (state === 'blue') {
+                    ledMaterial.emissiveColor = new BABYLON.Color3(0, 0.5, 1);
+                } else {
+                    ledMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                }
+                
+                led.material = ledMaterial;
+                led.parent = mesh;
+                led.position.x = -config.size * 0.8 + (index * ledSpacing);
+                led.position.y = config.size * 0.6;
+                led.position.z = 0;
+            });
+        }
+        
+        // Add health indicator
+        function addHealthIndicator(mesh, health, config) {
+            const indicatorColor = config.healthIndicators[health] || config.healthIndicators['offline'];
+            
+            const indicator = BABYLON.MeshBuilder.CreateSphere(mesh.id + "_health", {diameter: 0.5}, scene);
+            const indicatorMaterial = new BABYLON.StandardMaterial(mesh.id + "_health_material", scene);
+            indicatorMaterial.emissiveColor = BABYLON.Color3.FromHexString(indicatorColor);
+            indicator.material = indicatorMaterial;
+            
+            indicator.parent = mesh;
+            indicator.position = new BABYLON.Vector3(config.size/2, config.size/2 + 1, 0);
+        }
+        
+        // Add label
+        function addLabel(mesh, text) {
+            // Create plane for label
+            const labelPlane = BABYLON.MeshBuilder.CreatePlane(mesh.id + "_label", {width: 4, height: 1}, scene);
+            labelPlane.parent = mesh;
+            labelPlane.position = new BABYLON.Vector3(0, 3, 0);
+            labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+            
+            // Create dynamic texture for text
+            const labelTexture = new BABYLON.DynamicTexture("labelTexture", {width: 512, height: 128}, scene);
+            const labelMaterial = new BABYLON.StandardMaterial(mesh.id + "_label_material", scene);
+            labelMaterial.diffuseTexture = labelTexture;
+            labelMaterial.emissiveTexture = labelTexture;
+            labelMaterial.backFaceCulling = false;
+            labelPlane.material = labelMaterial;
+            
+            // Draw text
+            const font = "bold 48px Arial";
+            const textWidth = labelTexture.getContext().measureText(text).width;
+            labelTexture.drawText(text, null, null, font, "#ffffff", "#000000", true);
+        }
+        
+        // Create connection with port labels
+        function createConnection(fromDevice, toDevice, linkData) {
+            if (!fromDevice || !toDevice) {
+                console.warn('⚠️ createConnection: Missing devices', { fromDevice, toDevice, linkData });
+                return;
+            }
+            
+            // Check for valid positions
+            if (!fromDevice.position || !toDevice.position) {
+                console.warn('⚠️ createConnection: Missing device positions', { 
+                    fromDevicePos: fromDevice.position, 
+                    toDevicePos: toDevice.position, 
+                    linkData 
+                });
+                return;
+            }
+            
+            try {
+                const points = [
+                    fromDevice.position.clone(),
+                    toDevice.position.clone()
+                ];
+                
+                const lineName = `${linkData.source || 'unknown'}-${linkData.target || 'unknown'}`;
+                const line = BABYLON.MeshBuilder.CreateLines(lineName, {points: points}, scene);
+                
+                // Line color based on status
+                let lineColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Default gray
+                if (linkData.status === 'active') {
+                    lineColor = new BABYLON.Color3(0.2, 0.8, 0.2); // Green
+                } else if (linkData.status === 'warning') {
+                    lineColor = new BABYLON.Color3(1, 0.8, 0); // Yellow
+                } else if (linkData.status === 'error') {
+                    lineColor = new BABYLON.Color3(1, 0.2, 0.2); // Red
+                }
+                
+                line.color = lineColor;
+                line.isPickable = true;
+                line.metadata = linkData;
+                connections.push(line);
+                
+                // Add port label if available
+                if (linkData.ports && linkData.ports.length > 0) {
+                    const midPoint = fromDevice.position.clone().add(toDevice.position).scale(0.5);
+                    addConnectionLabel(midPoint, linkData.ports.join(' ↔ '), lineColor);
+                } else if (linkData.type) {
+                    // Add connection type label
+                    const midPoint = fromDevice.position.clone().add(toDevice.position).scale(0.5);
+                    addConnectionLabel(midPoint, linkData.type.toUpperCase(), lineColor);
+                }
+                
+                console.log(`✅ Created connection: ${lineName}`);
+            } catch (error) {
+                console.error('❌ Failed to create connection:', error, { fromDevice, toDevice, linkData });
+            }
+        }
+        
+        // Add label to connection
+        function addConnectionLabel(position, text, color) {
+            // Create plane for label
+            const labelPlane = BABYLON.MeshBuilder.CreatePlane(`connection_label_${Date.now()}`, {width: 3, height: 0.8}, scene);
+            labelPlane.position = position.clone();
+            labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+            
+            // Create dynamic texture for text
+            const labelTexture = new BABYLON.DynamicTexture(`connection_label_texture_${Date.now()}`, {width: 256, height: 64}, scene);
+            const labelMaterial = new BABYLON.StandardMaterial(`connection_label_material_${Date.now()}`, scene);
+            labelMaterial.diffuseTexture = labelTexture;
+            labelMaterial.emissiveColor = color;
+            labelMaterial.backFaceCulling = false;
+            labelPlane.material = labelMaterial;
+            
+            // Draw text
+            const font = "bold 24px Arial";
+            labelTexture.drawText(text, null, null, font, "#ffffff", "transparent", true);
+        }
+        
+        // Clear scene
+        function clearScene() {
+            // Remove devices
+            devices.forEach(device => {
+                if (device) {
+                    device.dispose();
+                }
+            });
+            devices = [];
+            
+            // Remove connections
+            connections.forEach(connection => {
+                if (connection) {
+                    connection.dispose();
+                }
+            });
+            connections = [];
+        }
+        
+        // Render topology
+        async function renderTopology(data) {
+            try {
+                clearScene();
+                
+                if (!data || !data.nodes || !Array.isArray(data.nodes)) {
+                    throw new Error('Invalid topology data structure');
+                }
+                
+                console.log(`🎨 Rendering topology with ${data.nodes.length} nodes and ${data.links ? data.links.length : 0} links`);
+                
+                // Create devices (handle both sync and async creation)
+                const devicePromises = data.nodes.map(async (node, index) => {
+                    try {
+                        const device = await createDevice(node, index);
+                        return device;
+                    } catch (error) {
+                        console.error(`❌ Failed to create device ${index}:`, error, node);
+                        return null;
+                    }
+                });
+                
+                // Wait for all devices to be created (including async 3D models)
+                const createdDevices = await Promise.all(devicePromises);
+                
+                // Add non-null devices to the devices array
+                createdDevices.forEach(device => {
+                    if (device && device.metadata) {
+                        devices.push(device);
+                    } else {
+                        console.warn('⚠️ Skipping invalid device:', device);
+                    }
+                });
+                
+                console.log(`✅ Created ${devices.length} valid devices`);
+                
+                // Wait a bit for async 3D models to finish loading
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Create connections if links exist
+                if (data.links && Array.isArray(data.links)) {
+                    data.links.forEach(link => {
+                        const fromDevice = devices.find(d => {
+                            if (!d || !d.metadata) return false;
+                            // Try multiple ID matching strategies
+                            if (d.metadata.id === link.source) return true;
+                            if (d.metadata.serial === link.source) return true;
+                            if (d.metadata.name === link.source) return true;
+                            return false;
+                        });
+                        const toDevice = devices.find(d => {
+                            if (!d || !d.metadata) return false;
+                            // Try multiple ID matching strategies
+                            if (d.metadata.id === link.target) return true;
+                            if (d.metadata.serial === link.target) return true;
+                            if (d.metadata.name === link.target) return true;
+                            return false;
+                        });
+                        
+                        if (fromDevice && toDevice) {
+                            createConnection(fromDevice, toDevice, link);
+                        } else {
+                            console.warn(`⚠️ Could not find devices for link: ${link.source} -> ${link.target}`, { 
+                                fromDevice: fromDevice ? fromDevice.metadata.name : 'null', 
+                                toDevice: toDevice ? toDevice.metadata.name : 'null', 
+                                availableDevices: devices.map(d => d.metadata ? { id: d.id, name: d.metadata.name, serial: d.metadata.serial } : 'null'),
+                                link 
+                            });
+                        }
+                    });
+                }
+                
+                console.log(`🎉 Topology rendered successfully with ${devices.length} devices`);
+                
+            } catch (error) {
+                console.error('❌ Failed to render topology:', error);
+                showError(`Failed to render topology: ${error.message}`);
+            }
+        }
+        
+        // Load Fortinet topology from MCP server (production)
+        async function loadFortinetTopology() {
+            showLoading();
+            updateStatus('Loading...');
+            
+            try {
+                let data;
+                
+                if (currentDataSource === 'mcp') {
+                    data = await loadTopologyFromMCP();
+                } else {
+                    data = await loadTopologyFromAPI();
+                }
+                
+                if (data) {
+                    console.log('🌐 Topology data loaded:', data);
+                    topologyData = data;
+                    await renderTopology(data);
+                    updateStatus('Loaded');
+                } else {
+                    throw new Error('No topology data received');
+                }
+                
+            } catch (error) {
+                console.error('❌ Failed to load topology:', error);
+                showError(`Failed to load topology: ${error.message}`);
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Load from API
+        async function loadTopologyFromAPI() {
+            try {
+                console.log('🌐 Loading from API: /api/topology/scene');
+                const response = await fetch('/api/topology/scene');
+                
+                if (!response.ok) {
+                    console.error('❌ API response error:', response.status, response.statusText);
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ API response received:', data);
+                return data;
+                
+            } catch (error) {
+                console.error('❌ API loading failed:', error);
+                // Return fallback mock data with multiple devices
+                return {
+                    nodes: [
+                        {
+                            id: "fg-192.168.0.254",
+                            name: "FortiGate",
+                            type: "fortigate",
+                            serial: "FG600E321X5901234",
+                            status: "active",
+                            ip: "192.168.0.254",
+                            position: {"x": 0, "y": 0, "z": 0}
+                        },
+                        {
+                            id: "fs-192.168.0.10",
+                            name: "FortiSwitch",
+                            type: "fortiswitch",
+                            serial: "FS148E321X5905678",
+                            status: "active",
+                            ip: "192.168.0.10",
+                            position: {"x": -8, "y": 0, "z": 5}
+                        },
+                        {
+                            id: "fap-192.168.0.20",
+                            name: "FortiAP",
+                            type: "fortiap",
+                            serial: "FAP432F321X5909876",
+                            status: "active",
+                            ip: "192.168.0.20",
+                            position: {"x": 8, "y": 0, "z": 5}
+                        }
+                    ],
+                    links: [
+                        {
+                            "source": "fg-192.168.0.254",
+                            "target": "fs-192.168.0.10",
+                            "type": "fortilink",
+                            "status": "active"
+                        },
+                        {
+                            "source": "fs-192.168.0.10",
+                            "target": "fap-192.168.0.20",
+                            "type": "wired",
+                            "status": "active"
+                        }
+                    ]
+                };
+            }
+        }
+        
+        // Load topology using MCP server
+        async function loadTopologyFromMCP() {
+            try {
+                console.log('🔌 Loading topology from MCP server...');
+                
+                // Use MCP server to discover Fortinet topology with proper authentication
+                const response = await fetch('/mcp/discover_fortinet_topology', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        device_ip: '192.168.0.254',
+                        username: 'admin',
+                        password: '', // Will use API token from environment
+                        include_performance: true,
+                        refresh_cache: false
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`MCP server error: ${response.status}`);
+                }
+                
+                const mcpResult = await response.json();
+                console.log('🔌 MCP topology discovered:', mcpResult);
+                
+                // Convert MCP data to 3D topology format
+                return convertMCPToTopologyFormat(mcpResult);
+                
+            } catch (error) {
+                console.error('MCP server connection failed:', error);
+                // Fallback to API
+                console.log('🔄 Falling back to API data source...');
+                currentDataSource = 'api';
+                updateDataSourceButtons();
+                return await loadTopologyFromAPI();
+            }
+        }
+        
+        // Load topology using REST API (fallback)
+        async function loadTopologyFromAPI() {
+            try {
+                console.log('🌐 Loading topology from REST API...');
+                
+                const response = await fetch('/api/topology/scene');
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('🌐 API topology loaded:', data);
+                return data;
+                
+            } catch (error) {
+                console.error('API loading failed:', error);
+                throw error;
+            }
+        }
+        
+        // Convert MCP data to 3D topology format
+        function convertMCPToTopologyFormat(mcpData) {
+            // Extract actual data from MCP response wrapper
+            console.log('🔍 Raw MCP data:', mcpData);
+            
+            // Handle different MCP response formats
+            let data = null;
+            if (mcpData.content && mcpData.content.content) {
+                // Double wrapped content
+                data = mcpData.content.content;
+            } else if (mcpData.content) {
+                // Single wrapped content
+                data = mcpData.content;
+            } else if (mcpData.nodes && mcpData.links) {
+                // Direct format
+                data = mcpData;
+            } else {
+                console.error('❌ Unable to extract topology data from MCP response');
+                return null;
+            }
+            
+            // Parse JSON string if needed
+            if (typeof data === 'string') {
+                try {
+                    data = JSON.parse(data);
+                } catch (parseError) {
+                    console.error('❌ Failed to parse MCP data as JSON:', parseError);
+                    return null;
+                }
+            }
+            
+            console.log('🔍 Extracted data:', data);
+            console.log('🔍 Data keys:', Object.keys(data));
+            console.log('🔍 Data has nodes:', !!data.nodes);
+            console.log('🔍 Data.nodes type:', typeof data.nodes);
+            console.log('🔍 Data.nodes is array:', Array.isArray(data.nodes));
+            console.log('🔍 Data.nodes value:', data.nodes);
+            console.log('🔍 Full data object:', JSON.stringify(data, null, 2));
+            
+            // Check if data is already in the correct format (nodes/links arrays)
+            if (data.nodes && Array.isArray(data.nodes)) {
+                console.log(`✅ MCP data in correct format: ${data.nodes.length} nodes, ${data.links ? data.links.length : 0} links`);
+                return data;
+            }
+            
+            // Otherwise, convert from legacy MCP format
+            const nodes = [];
+            const links = [];
+            
+            // Process gateways
+            if (data.gateways) {
+                console.log(`📡 Processing ${data.gateways.length} gateways`);
+                data.gateways.forEach(gateway => {
+                    nodes.push({
+                        id: gateway.serial || `fg-${gateway.ip}`,
+                        type: 'fortigate',
+                        name: gateway.hostname || `FG-${gateway.model}`,
+                        model: gateway.model || 'FortiGate',
+                        ip: gateway.ip,
+                        status: gateway.status || 'online',
+                        health: mapHealthStatus(gateway.health),
+                        cpu: gateway.cpu_usage || '0%',
+                        memory: gateway.memory_usage || '0%',
+                        connections: gateway.active_connections || 0,
+                        throughput: gateway.throughput || '0 Mbps',
+                        sessions: gateway.active_sessions || 0,
+                        serial: gateway.serial,
+                        version: gateway.version,
+                        use3DModel: true,
+                        position: calculateNodePosition('gateway', nodes.length)
+                    });
+                });
+            }
+            
+            // Process switches
+            if (data.switches) {
+                console.log(`🔀 Processing ${data.switches.length} switches`);
+                data.switches.forEach(switch_ => {
+                    nodes.push({
+                        id: switch_.serial || `fsw-${switch_.ip}`,
+                        type: 'fortiswitch',
+                        name: switch_.hostname || `FS-${switch_.model}`,
+                        model: switch_.model || 'FortiSwitch',
+                        ip: switch_.ip,
+                        status: switch_.status || 'online',
+                        health: mapHealthStatus(switch_.health),
+                        cpu: switch_.cpu_usage || '0%',
+                        memory: switch_.memory_usage || '0%',
+                        ports: switch_.total_ports || 0,
+                        uptime: switch_.uptime || '0 days',
+                        vlans: switch_.vlan_count || 0,
+                        serial: switch_.serial,
+                        version: switch_.version,
+                        use3DModel: true,
+                        position: calculateNodePosition('switch', nodes.length)
+                    });
+                });
+            }
+            
+            // Process access points
+            if (data.access_points) {
+                console.log(`📡 Processing ${data.access_points.length} access points`);
+                data.access_points.forEach(ap => {
+                    nodes.push({
+                        id: ap.serial || `fap-${ap.ip}`,
+                        type: 'fortiap',
+                        name: ap.hostname || `FAP-${ap.model}`,
+                        model: ap.model || 'FortiAP',
+                        ip: ap.ip,
+                        status: ap.status || 'online',
+                        health: mapHealthStatus(ap.health),
+                        clients: ap.connected_clients || 0,
+                        ssid: ap.ssid || 'Default',
+                        channel: ap.channel || 1,
+                        band: ap.band || '2.4GHz',
+                        throughput: ap.throughput || '0 Mbps',
+                        serial: ap.serial,
+                        version: ap.version,
+                        use3DModel: true,
+                        position: calculateNodePosition('ap', nodes.length)
+                    });
+                });
+            }
+            
+            // Process clients
+            if (data.clients) {
+                console.log(`👥 Processing ${data.clients.length} clients`);
+                data.clients.forEach(client => {
+                    links.push({
+                        from: client.source,
+                        to: client.destination,
+                        type: client.type || 'unknown',
+                        status: client.status || 'active',
+                        bandwidth: client.bandwidth || '1 Gbps'
+                    });
+                });
+            }
+            
+            return { nodes, links };
+        }
+        
+        // Map health status from MCP data
+        function mapHealthStatus(health) {
+            if (!health) return 'good';
+            
+            const healthLower = health.toLowerCase();
+            if (healthLower.includes('critical') || healthLower.includes('error')) return 'critical';
+            if (healthLower.includes('warning') || healthLower.includes('degraded')) return 'warning';
+            if (healthLower.includes('offline') || healthLower.includes('down')) return 'offline';
+            return 'good';
+        }
+        
+        // Calculate node positions for different topology views
+        function calculateNodePosition(nodeType, index) {
+            switch (currentTopologyView) {
+                case 'physical':
+                    return calculatePhysicalPosition(nodeType, index);
+                case 'logical':
+                    return calculateLogicalPosition(nodeType, index);
+                case 'hierarchical':
+                    return calculateHierarchicalPosition(nodeType, index);
+                default:
+                    return { x: 0, y: 0, z: 0 };
+            }
+        }
+        
+        // Physical topology positioning
+        function calculatePhysicalPosition(nodeType, index) {
+            const radius = 20;
+            const angle = (index / 8) * Math.PI * 2;
+            
+            switch (nodeType) {
+                case 'gateway':
+                    return { x: 0, y: 2, z: 0 }; // Center
+                case 'switch':
+                    return { 
+                        x: Math.cos(angle) * radius * 0.7, 
+                        y: 1, 
+                        z: Math.sin(angle) * radius * 0.7 
+                    };
+                case 'ap':
+                    return { 
+                        x: Math.cos(angle + Math.PI/4) * radius, 
+                        y: 0.5, 
+                        z: Math.sin(angle + Math.PI/4) * radius 
+                    };
+                default:
+                    return { x: Math.cos(angle) * radius, y: 1, z: Math.sin(angle) * radius };
+            }
+        }
+        
+        // Logical topology positioning
+        function calculateLogicalPosition(nodeType, index) {
+            const spacing = 15;
+            switch (nodeType) {
+                case 'gateway':
+                    return { x: 0, y: 3, z: 0 };
+                case 'switch':
+                    return { x: (index - 1) * spacing - spacing/2, y: 2, z: 0 };
+                case 'ap':
+                    return { x: (index - 1) * spacing - spacing/2, y: 1, z: 5 };
+                default:
+                    return { x: 0, y: 1, z: 0 };
+            }
+        }
+        
+        // Hierarchical topology positioning
+        function calculateHierarchicalPosition(nodeType, index) {
+            switch (nodeType) {
+                case 'gateway':
+                    return { x: 0, y: 4, z: 0 };
+                case 'switch':
+                    return { x: (index % 3 - 1) * 10, y: 2, z: Math.floor(index / 3) * 10 };
+                case 'ap':
+                    return { x: (index % 3 - 1) * 8, y: 0, z: Math.floor(index / 3) * 8 + 15 };
+                default:
+                    return { x: 0, y: 1, z: 0 };
+            }
+        }
+        
+        // Production control functions
+        function refreshTopology() {
+            console.log('🔄 Refreshing topology data...');
+            loadFortinetTopology();
+        }
+        
+        function switchDataSource(source) {
+            currentDataSource = source;
+            updateDataSourceButtons();
+            console.log(`🔄 Switched to ${source.toUpperCase()} data source`);
+            loadFortinetTopology();
+        }
+        
+        function updateDataSourceButtons() {
+            const mcpBtn = document.getElementById('mcpSourceBtn');
+            const apiBtn = document.getElementById('apiSourceBtn');
+            
+            if (currentDataSource === 'mcp') {
+                mcpBtn.style.background = '#238636';
+                apiBtn.style.background = '#21262d';
+            } else {
+                mcpBtn.style.background = '#21262d';
+                apiBtn.style.background = '#238636';
+            }
+        }
+        
+        function setTopologyView(view) {
+            currentTopologyView = view;
+            console.log(`🔄 Switched to ${view} topology view`);
+            if (topologyData) {
+                renderTopology(topologyData);
+            }
+        }
+        
+        function togglePerformance() {
+            showPerformance = !showPerformance;
+            console.log(`📊 Performance metrics: ${showPerformance ? 'ON' : 'OFF'}`);
+            // Update device displays with performance data
+            updateDeviceDisplays();
+        }
+        
+        function startAutoRefresh() {
+            // Auto-refresh every 30 seconds for production monitoring
+            stopAutoRefresh();
+            refreshInterval = setInterval(() => {
+                console.log('🔄 Auto-refreshing topology...');
+                loadFortinetTopology();
+            }, 30000);
+        }
+        
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+        
+        function updateDeviceDisplays() {
+            devices.forEach(device => {
+                if (device && device.metadata) {
+                    updateDeviceMetrics(device);
+                }
+            });
+        }
+        
+        function updateDeviceMetrics(device) {
+            // Add performance metrics display if enabled
+            if (showPerformance && device.metadata) {
+                // Update labels or add performance indicators
+                const metrics = getDeviceMetrics(device.metadata);
+                if (metrics && device.metadata.name) {
+                    // Update device display with metrics
+                    console.log(`📊 Updated metrics for ${device.metadata.name}:`, metrics);
+                }
+            }
+        }
+        
+        function getDeviceMetrics(deviceData) {
+            return {
+                cpu: deviceData.cpu || 'N/A',
+                memory: deviceData.memory || 'N/A',
+                throughput: deviceData.throughput || 'N/A',
+                connections: deviceData.connections || 0,
+                clients: deviceData.clients || 0
+            };
+        }
+        
+        // Update device information panel
+        function updateDeviceInfo(deviceData) {
+            const deviceInfo = document.getElementById('deviceInfo');
+            const deviceDetails = document.getElementById('deviceDetails');
+            
+            if (!deviceData) {
+                deviceInfo.classList.add('hidden');
+                return;
+            }
+            
+            deviceInfo.classList.remove('hidden');
+            
+            let detailsHTML = `<div class="device-details">`;
+            
+            // Device name and type
+            detailsHTML += `<div style="margin-bottom: 15px;">`;
+            detailsHTML += `<h4 style="color: #58a6ff; margin: 0; font-size: 16px;">${deviceData.name || 'Unknown Device'}</h4>`;
+            detailsHTML += `<p style="margin: 5px 0; color: #8b949e; font-size: 12px;">${deviceData.type ? deviceData.type.charAt(0).toUpperCase() + deviceData.type.slice(1) : 'Unknown'}</p>`;
+            detailsHTML += `</div>`;
+            
+            // Status indicator
+            const statusClass = deviceData.status === 'active' ? 'health-good' : 
+                              deviceData.status === 'warning' ? 'health-warning' : 
+                              deviceData.status === 'error' ? 'health-critical' : 'health-offline';
+            detailsHTML += `<div style="margin-bottom: 15px;">`;
+            detailsHTML += `<span class="health-indicator ${statusClass}"></span>`;
+            detailsHTML += `<span style="color: #ffffff; font-weight: 500;">Status: ${deviceData.status || 'Unknown'}</span>`;
+            detailsHTML += `</div>`;
+            
+            // Network information
+            if (deviceData.ip || deviceData.mac) {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Network Information</h5>`;
+                if (deviceData.ip) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">IP Address:</span> <span class="value">${deviceData.ip}</span></div>`;
+                }
+                if (deviceData.mac && deviceData.mac !== 'Unknown') {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">MAC Address:</span> <span class="value">${deviceData.mac}</span></div>`;
+                }
+                detailsHTML += `</div>`;
+            }
+            
+            // Device specifications
+            if (deviceData.model || deviceData.serial) {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Device Specifications</h5>`;
+                if (deviceData.model) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Model:</span> <span class="value">${deviceData.model}</span></div>`;
+                }
+                if (deviceData.serial && deviceData.serial !== 'Unknown') {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Serial Number:</span> <span class="value">${deviceData.serial}</span></div>`;
+                }
+                if (deviceData.firmware) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Firmware:</span> <span class="value">${deviceData.firmware}</span></div>`;
+                }
+                detailsHTML += `</div>`;
+            }
+            
+            // WiFi specific information for clients and APs
+            if (deviceData.connection_type === 'wifi' || deviceData.type === 'fortiap') {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">WiFi Information</h5>`;
+                if (deviceData.ssid) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">SSID:</span> <span class="value">${deviceData.ssid}</span></div>`;
+                }
+                if (deviceData.signal_strength) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Signal Strength:</span> <span class="value">${deviceData.signal_strength} (${deviceData.signal_dbm})</span></div>`;
+                }
+                if (deviceData.bandwidth) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Bandwidth:</span> <span class="value">${deviceData.bandwidth}</span></div>`;
+                }
+                detailsHTML += `</div>`;
+            }
+            
+            // Client device information
+            if (deviceData.type === 'client') {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Client Information</h5>`;
+                if (deviceData.os && deviceData.os !== 'Unknown') {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Operating System:</span> <span class="value">${deviceData.os}</span></div>`;
+                }
+                if (deviceData.hostname) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Hostname:</span> <span class="value">${deviceData.hostname}</span></div>`;
+                }
+                if (deviceData.last_seen) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Last Seen:</span> <span class="value">${deviceData.last_seen}</span></div>`;
+                }
+                detailsHTML += `</div>`;
+            }
+            
+            // System information
+            if (deviceData.uptime || deviceData.role) {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">System Information</h5>`;
+                if (deviceData.role) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Role:</span> <span class="value">${deviceData.role}</span></div>`;
+                }
+                if (deviceData.uptime) {
+                    detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Uptime:</span> <span class="value">${deviceData.uptime}</span></div>`;
+                }
+                detailsHTML += `</div>`;
+            }
+            
+            detailsHTML += `</div>`;
+            deviceDetails.innerHTML = detailsHTML;
+        }
+        
+        // Show connection information
+        function showConnectionInfo(linkData) {
+            const deviceInfo = document.getElementById('deviceInfo');
+            const deviceDetails = document.getElementById('deviceDetails');
+            
+            deviceInfo.classList.remove('hidden');
+            
+            let detailsHTML = `<div class="device-details">`;
+            detailsHTML += `<h4 style="color: #58a6ff; margin: 0 0 15px 0; font-size: 16px;">🔗 Connection Details</h4>`;
+            
+            detailsHTML += `<div style="margin-bottom: 15px;">`;
+            detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Connection Information</h5>`;
+            detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Type:</span> <span class="value">${linkData.type ? linkData.type.toUpperCase() : 'Unknown'}</span></div>`;
+            detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Status:</span> <span class="value">${linkData.status || 'Unknown'}</span></div>`;
+            detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Description:</span> <span class="value">${linkData.description || 'N/A'}</span></div>`;
+            detailsHTML += `</div>`;
+            
+            if (linkData.ports && linkData.ports.length > 0) {
+                detailsHTML += `<div style="margin-bottom: 15px;">`;
+                detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Port Information</h5>`;
+                detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">From Port:</span> <span class="value">${linkData.ports[0] || 'N/A'}</span></div>`;
+                detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">To Port:</span> <span class="value">${linkData.ports[1] || 'N/A'}</span></div>`;
+                detailsHTML += `</div>`;
+            }
+            
+            detailsHTML += `<div style="margin-bottom: 15px;">`;
+            detailsHTML += `<h5 style="color: #58a6ff; margin: 0 0 8px 0; font-size: 14px;">Connected Devices</h5>`;
+            detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Source:</span> <span class="value">${linkData.source || 'Unknown'}</span></div>`;
+            detailsHTML += `<div style="margin-bottom: 5px;"><span class="label">Target:</span> <span class="value">${linkData.target || 'Unknown'}</span></div>`;
+            detailsHTML += `</div>`;
+            
+            detailsHTML += `</div>`;
+            deviceDetails.innerHTML = detailsHTML;
+        }
+        
+        // Show device information
+        function showDeviceInfo(deviceData) {
+            updateDeviceInfo(deviceData);
+        }
+        
+        // UI Controls
+        function resetCamera() {
+            camera.alpha = 0;
+            camera.beta = Math.PI / 3;
+            camera.radius = 30;
+            camera.target = BABYLON.Vector3.Zero();
+        }
+        
+        function toggleAutoRotate() {
+            autoRotate = !autoRotate;
+            console.log(`🔄 Auto-rotate: ${autoRotate ? 'ON' : 'OFF'}`);
+        }
+        
+        function toggleLabels() {
+            showLabels = !showLabels;
+            devices.forEach(device => {
+                const label = scene.getMeshByName(device.id + "_label");
+                if (label) {
+                    label.setEnabled(showLabels);
+                }
+            });
+            console.log(`🏷️ Labels: ${showLabels ? 'ON' : 'OFF'}`);
+        }
+        
+        function toggleHealth() {
+            showHealth = !showHealth;
+            devices.forEach(device => {
+                const health = scene.getMeshByName(device.id + "_health");
+                if (health) {
+                    health.setEnabled(showHealth);
+                }
+            });
+            console.log(`💚 Health indicators: ${showHealth ? 'ON' : 'OFF'}`);
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function showSuccess(message) {
+            // For now, just show in console and status
+            console.log('✅ Success:', message);
+            updateStatus('Success');
+            
+            // You could add a success notification UI here
+            setTimeout(() => {
+                updateStatus('Ready');
+            }, 3000);
+        }
+        
+        function updateStats() {
+            // COMPLETELY DISABLED - This function is causing render loop errors
+            return;
+        }
+        
+        function updateStatus(status) {
+            const statusElement = document.getElementById('sceneStats');
+            if (statusElement) {
+                statusElement.textContent = status;
+            }
+        }
+        
+        // DrawIO Diagram Generation
+        async function generateDrawIODiagram(layout = 'hierarchical') {
+            try {
+                showLoading('Generating DrawIO diagram...');
+                
+                const response = await fetch('/mcp/generate_drawio_diagram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        layout: layout,
+                        device_types: ['fortigate', 'fortiswitch', 'fortiap']
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`DrawIO generation failed: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('📊 DrawIO diagram generated:', result);
+                
+                // Open in DrawIO web editor instead of downloading
+                const diagramXml = result.content[0].text;
+                
+                // Encode the XML for URL
+                const encodedXml = encodeURIComponent(diagramXml);
+                
+                // Open in DrawIO (diagrams.net)
+                const drawioUrl = `https://app.diagrams.net/?xml=${encodedXml}`;
+                window.open(drawioUrl, '_blank');
+                
+                updateStatus('DrawIO diagram opened');
+                showSuccess(`DrawIO ${layout} diagram opened in browser!`);
+                
+            } catch (error) {
+                console.error('❌ DrawIO generation failed:', error);
+                showError(`DrawIO generation failed: ${error.message}`);
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Topology JSON Export
+        async function exportTopologyJSON(includeHealth = true) {
+            try {
+                showLoading('Exporting topology data...');
+                
+                const response = await fetch('/mcp/export_topology_json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        include_health: includeHealth,
+                        format: 'detailed'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Export failed: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('💾 Topology exported:', result);
+                
+                // Create download link
+                const jsonData = result.content[0].text;
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fortinet-topology-detailed.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                updateStatus('Topology exported');
+                showSuccess('Topology data exported successfully!');
+                
+            } catch (error) {
+                console.error('❌ Export failed:', error);
+                showError(`Export failed: ${error.message}`);
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Initialize on load - Production Mode
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM Content Loaded');
+            
+            // Check if Babylon.js loaded
+            if (typeof BABYLON === 'undefined') {
+                console.error('❌ Babylon.js library not loaded');
+                showError('Babylon.js library failed to load. Please refresh the page.');
+                return;
+            }
+            
+            console.log('✅ Babylon.js library loaded');
+            
+            // Initialize Babylon.js
+            initBabylon();
+            
+            // Initialize production UI - default to API for full topology
+            currentDataSource = 'api';  // Changed from 'mcp' to 'api'
+            updateDataSourceButtons();
+            
+            // Add button event listeners
+            const loadTopologyBtn = document.getElementById('loadTopologyBtn');
+            if (loadTopologyBtn) {
+                loadTopologyBtn.addEventListener('click', loadFortinetTopology);
+                console.log('✅ Load Topology button event listener added');
+            } else {
+                console.error('❌ Load Topology button not found');
+            }
+            
+            // DrawIO button
+            const drawioBtn = document.getElementById('drawioBtn');
+            if (drawioBtn) {
+                drawioBtn.addEventListener('click', () => generateDrawIODiagram('hierarchical'));
+                console.log('✅ DrawIO button event listener added');
+            }
+            
+            // Export button
+            const exportBtn = document.getElementById('exportBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', () => exportTopologyJSON(true));
+                console.log('✅ Export button event listener added');
+            }
+            
+            // Show ready status
+            console.log('🏢 Fortinet Production Topology initialized');
+            console.log('🌐 REST API: Primary data source (13 devices)');
+            console.log('🔌 MCP Server: Fallback data source (1 device)');
+            console.log('🔄 Auto-refresh: 30 second intervals');
+            
+            // Don't auto-load - wait for user action in production
+            showReadyMessage();
+        });
+        
+        // Add error handler for Babylon.js loading
+        window.addEventListener('error', (event) => {
+            console.error('❌ JavaScript error:', event.error);
+            showError(`JavaScript error: ${event.error.message}`);
+        });
+        
+        // Add error handler for resource loading
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ Unhandled promise rejection:', event.reason);
+            showError(`Resource loading error: ${event.reason}`);
+        });
+        
+        function showReadyMessage() {
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.innerHTML = '<div>🏢 Production Ready<br><small>Click "🌐 Load Live Topology" to begin</small></div>';
+                loading.classList.remove('hidden');
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

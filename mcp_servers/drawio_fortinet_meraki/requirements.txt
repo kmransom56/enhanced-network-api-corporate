@@ -1,0 +1,28 @@
+# MCP Server Requirements
+mcp>=1.0.0
+
+# FortiManager/FortiGate API Libraries
+fortiosapi>=0.1.0
+pyfortimanager>=1.0.0
+
+# Meraki Dashboard API
+merakimcp>=1.0.0
+fortiosapi>=0.10.0
+meraki>=1.39.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+networkx>=3.0
+matplotlib>=3.6.0
+pytest>=7.0.0
+black>=23.0.0
+ruff>=0.0.280
+aiohttp>=3.8.0
+
+# Optional: For enhanced diagram generation
+networkx>=3.0
+matplotlib>=3.5.0
+
+# Development dependencies
+pytest-asyncio>=0.21.0
+black>=23.0.0
+ruff>=0.1.0

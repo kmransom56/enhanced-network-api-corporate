@@ -5,7 +5,7 @@ Self-healing functionality tests for Enhanced Network API
 import asyncio
 import json
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 from typing import Dict, Any
 
 from src.enhanced_network_api.platform_web_api_fastapi import app
@@ -15,32 +15,28 @@ from src.enhanced_network_api.platform_web_api_fastapi import app
 @pytest.mark.asyncio
 async def test_fortinet_mcp_bridge_recovery():
     """Test automatic recovery of Fortinet MCP bridge connection."""
-    
-    # Mock the requests.post to simulate bridge failure and recovery
-    with patch('requests.post') as mock_post:
-        # First call fails (bridge down)
-        mock_post.side_effect = [
-            MagicMock(status_code=503, text="Service Unavailable"),
-            MagicMock(status_code=200, json=lambda: {
-                "content": [{"type": "text", "text": '{"devices": [], "links": []}'}],
-                "isError": False
-            })
-        ]
-        
-        # Test the _call_fortinet_tool function with retry logic
-        from src.enhanced_network_api.platform_web_api_fastapi import _call_fortinet_tool
-        from fastapi import HTTPException
-        
-        # First call should handle the error gracefully
+    from fastapi import HTTPException
+    from src.enhanced_network_api.platform_web_api_fastapi import _call_fortinet_tool_async
+
+    failing_client = AsyncMock()
+    failing_client.call.side_effect = HTTPException(status_code=503, detail="Service Unavailable")
+
+    recovering_client = AsyncMock()
+    recovering_client.call.return_value = {"devices": [], "links": []}
+
+    get_client = AsyncMock(side_effect=[failing_client, recovering_client])
+
+    with patch(
+        "src.enhanced_network_api.platform_web_api_fastapi._get_fortinet_client",
+        new=get_client,
+    ):
         with pytest.raises(HTTPException) as exc_info:
-            _call_fortinet_tool("discover_fortinet_topology")
+            await _call_fortinet_tool_async("discover_fortinet_topology")
         assert exc_info.value.status_code == 503
-        
-        # Second call should succeed
-        result2 = _call_fortinet_tool("discover_fortinet_topology")
-        assert isinstance(result2, dict)
-        assert result2.get("devices") == []
-        assert result2.get("links") == []
+
+        result = await _call_fortinet_tool_async("discover_fortinet_topology")
+        assert result.get("devices") == []
+        assert result.get("links") == []
 
 
 @pytest.mark.self_healing

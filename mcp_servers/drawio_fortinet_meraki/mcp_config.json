@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "drawio-fortinet-meraki": {
+      "command": "python",
+      "args": ["mcp_server.py"],
+      "env": {
+        "FORTIMANAGER_HOST": "192.168.0.254",
+        "FORTIMANAGER_USERNAME": "admin",
+        "FORTIMANAGER_PASSWORD": "",
+        "MERAKI_API_KEY": "",
+        "MERAKI_BASE_URL": "https://api.meraki.com",
+        "PYTHONPATH": "."
+      },
+      "disabled": false
+    }
+  }
+}

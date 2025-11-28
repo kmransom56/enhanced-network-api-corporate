@@ -1,0 +1,32 @@
+{
+  "generated_at": "2025-11-21T14:58:49.500038",
+  "total_icons": 3,
+  "icons": [
+    {
+      "model": "FortiGate_600E",
+      "file": "src/enhanced_network_api/static/model-specific-icons/FortiGate_600E.svg",
+      "base_icon": "FortiGate",
+      "model_label": "600E",
+      "color": "#cc3333"
+    },
+    {
+      "model": "FortiSwitch_148E",
+      "file": "src/enhanced_network_api/static/model-specific-icons/FortiSwitch_148E.svg",
+      "base_icon": "FortiSwitch",
+      "model_label": "148E",
+      "color": "#00a652"
+    },
+    {
+      "model": "FortiAP_432F",
+      "file": "src/enhanced_network_api/static/model-specific-icons/FortiAP_432F.svg",
+      "base_icon": "FortiAP",
+      "model_label": "432F",
+      "color": "#0066cc"
+    }
+  ],
+  "usage": {
+    "2d_topology": "/static/model-specific-icons/{model}.svg",
+    "3d_topology": "/static/model-specific-icons/{model}.svg",
+    "fallback": "/static/fortinet-icons-extracted/{base_icon}.svg"
+  }
+}

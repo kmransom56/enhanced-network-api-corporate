@@ -1,0 +1,427 @@
+name: Enhanced Network API CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run health checks daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  PYTHON_VERSION: '3.9'
+  NODE_VERSION: '18'
+
+jobs:
+  # Code Quality and Testing
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    services:
+      # Mock FortiGate service for testing
+      mock-fortigate:
+        image: nginx:alpine
+        ports:
+          - 10443:10443
+        options: >-
+          --health-cmd "curl -f http://localhost:10443/ || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+        pip install -e .
+        npm ci
+    
+    - name: Lint with ruff
+      run: |
+        ruff check src/ tests/
+        ruff format --check src/ tests/
+    
+    - name: Type checking with mypy
+      run: |
+        mypy src/enhanced_network_api/
+    
+    - name: Security scan with bandit
+      run: |
+        bandit -r src/enhanced_network_api/ -f json -o bandit-report.json
+        bandit -r src/enhanced_network_api/
+    
+    - name: Run unit tests
+      run: |
+        pytest tests/ -m "unit" --cov=src/enhanced_network_api --cov-report=xml --cov-report=html
+    
+    - name: Run integration tests
+      run: |
+        pytest tests/ -m "integration" --timeout=600
+    
+    - name: Run self-healing tests
+      run: |
+        pytest tests/ -m "self_healing" --timeout=600
+    
+    - name: Run API tests
+      run: |
+        pytest tests/ -m "api" --timeout=300
+    
+    - name: Run MCP tests
+      run: |
+        pytest tests/ -m "mcp" --timeout=300
+    
+    - name: Run topology tests
+      run: |
+        pytest tests/ -m "topology" --timeout=300
+    
+    - name: Run smoke tests
+      run: |
+        pytest tests/ -m "smoke" --timeout=180
+    
+    - name: Generate test report
+      if: always()
+      run: |
+        pytest tests/ --html=reports/test-report.html --self-contained-html --tb=short
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: matrix.python-version == '3.9'
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+    
+    - name: Upload test artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: |
+          reports/
+          htmlcov/
+          bandit-report.json
+        retention-days: 30
+
+  # Frontend Testing
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+    
+    - name: Run linting
+      run: |
+        npm run lint
+    
+    - name: Run type checking
+      run: |
+        npm run type-check
+    
+    - name: Run unit tests
+      run: |
+        npm run test
+    
+    - name: Build frontend
+      run: |
+        npm run build
+    
+    - name: Upload frontend artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build
+        path: dist/
+        retention-days: 7
+
+  # Security Scanning
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+    
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        languages: python
+
+  # Performance Testing
+  performance:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements-test.txt
+        pip install -e .
+    
+    - name: Run performance tests
+      run: |
+        pytest tests/performance/ -v --timeout=600
+    
+    - name: Load testing
+      run: |
+        # Install and use locust for load testing
+        pip install locust
+        locust -f tests/performance/locustfile.py --headless --users 50 --spawn-rate 5 --run-time 60s --host http://localhost:11111 &
+        
+        # Start the application
+        python -m src.enhanced_network_api.platform_web_api_fastapi &
+        sleep 10
+        
+        # Wait for load test to complete
+        wait
+
+  # Docker Build and Security
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [test, frontend-test]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download frontend build
+      uses: actions/download-artifact@v3
+      with:
+        name: frontend-build
+        path: dist/
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Docker Hub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      continue-on-error: true
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: enhanced-network-api
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        secrets: |
+          GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Run Docker security scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: enhanced-network-api:latest
+        format: 'sarif'
+        output: 'docker-trivy-results.sarif'
+    
+    - name: Upload Docker scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'docker-trivy-results.sarif'
+
+  # Deployment to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [test, frontend-test, docker]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment: staging
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Add your staging deployment commands here
+        # For example: kubectl apply -f k8s/staging/
+    
+    - name: Run smoke tests against staging
+      run: |
+        pytest tests/smoke/ --base-url=https://staging.enhanced-network-api.com
+    
+    - name: Health check
+      run: |
+        curl -f https://staging.enhanced-network-api.com/health || exit 1
+
+  # Deployment to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [test, frontend-test, docker, deploy-staging]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment..."
+        # Add your production deployment commands here
+        # For example: kubectl apply -f k8s/production/
+    
+    - name: Run smoke tests against production
+      run: |
+        pytest tests/smoke/ --base-url=https://enhanced-network-api.com
+    
+    - name: Health check
+      run: |
+        curl -f https://enhanced-network-api.com/health || exit 1
+    
+    - name: Create deployment tag
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const tag = `v${new Date().toISOString().split('T')[0].replace(/-/g, '.')}`;
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `refs/tags/${tag}`,
+            sha: context.sha
+          });
+
+  # Monitoring and Alerting
+  monitoring:
+    name: Health Check
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [deploy-staging, deploy-production]
+    
+    steps:
+    - name: Check deployment health
+      run: |
+        # Check if deployments are healthy
+        if [[ "${{ needs.deploy-staging.result }}" == "success" ]]; then
+          curl -f https://staging.enhanced-network-api.com/health || exit 1
+        fi
+        if [[ "${{ needs.deploy-production.result }}" == "success" ]]; then
+          curl -f https://enhanced-network-api.com/health || exit 1
+        fi
+    
+    - name: Notify on failure
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      continue-on-error: true
+    
+    - name: Notify on success
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      continue-on-error: true
+
+  # Cleanup
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [test, frontend-test, docker, deploy-staging, deploy-production]
+    
+    steps:
+    - name: Clean up old artifacts
+      uses: actions/github-script@v6
+      with:
+        script: |
+          // Clean up old artifacts and releases
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+          });
+          
+          // Keep only the last 10 artifacts
+          const artifactsToDelete = artifacts.data.artifacts.slice(10);
+          
+          for (const artifact of artifactsToDelete) {
+            await github.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id,
+            });
+          }
