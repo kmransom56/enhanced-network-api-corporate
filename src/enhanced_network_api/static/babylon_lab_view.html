@@ -401,6 +401,7 @@
         let engine, scene, camera;
         let devices = [];
         let links = [];
+        let nodes = []; // Global nodes array for filtering
         let autoRotate = false;
         let tooltipEl = null;
         let labelsVisible = true;
@@ -588,7 +589,6 @@
                 }));
 
                 // Auto‑rotate toggle
-                let autoRotate = false;
                 topoPanel.addControl(make3DButton('autoRotate', 'Auto‑Rotate', () => {
                     autoRotate = !autoRotate;
                     logDebug(`🔄 Auto‑rotate ${autoRotate ? 'ON' : 'OFF'}`);
@@ -778,7 +778,7 @@
                 const grid = BABYLON.MeshBuilder.CreateGround('grid', { width: 40, height: 40, subdivisions: 20 }, scene);
                 grid.material = gridMaterial;
                 grid.position.y = 0.01;
-                ```
+
                 logDebug('✅ Ground and grid created');
 
                 // Handle pointer events (selection & hover)
@@ -830,60 +830,6 @@
                 });
 
                 logDebug('✅ Render loop started');
-                // GUI Controls (Full‑screen UI)
-                const gui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('ui');
-                // Reset View button (already exists in HTML, but add shortcut)
-                const resetBtn = BABYLON.GUI.Button.CreateSimpleButton('resetBtn', '📷 Reset View');
-                resetBtn.width = '120px';
-                resetBtn.height = '40px';
-                resetBtn.cornerRadius = 6;
-                resetBtn.color = 'white';
-                resetBtn.background = '#58a6ff';
-                resetBtn.onPointerUpObservable.add(() => {
-                    if (camera) {
-                        camera.alpha = 0;
-                        camera.beta = Math.PI / 3;
-                        camera.radius = 30;
-                    }
-                });
-                gui.addControl(resetBtn);
-                resetBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-                resetBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-                resetBtn.top = '10px';
-                resetBtn.left = '-10px';
-                // Auto‑rotate toggle
-                const autoRotateBtn = BABYLON.GUI.Button.CreateSimpleButton('autoRotateBtn', '🔄 Auto‑Rotate');
-                autoRotateBtn.width = '120px';
-                autoRotateBtn.height = '40px';
-                autoRotateBtn.cornerRadius = 6;
-                autoRotateBtn.color = 'white';
-                autoRotateBtn.background = '#58a6ff';
-                autoRotateBtn.onPointerUpObservable.add(() => {
-                    autoRotate = !autoRotate;
-                    autoRotateBtn.background = autoRotate ? '#ff7b72' : '#58a6ff';
-                });
-                gui.addControl(autoRotateBtn);
-                autoRotateBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-                autoRotateBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-                autoRotateBtn.top = '60px';
-                autoRotateBtn.left = '-10px';
-                // Labels toggle
-                const labelsBtn = BABYLON.GUI.Button.CreateSimpleButton('labelsBtn', '🏷️ Labels');
-                labelsBtn.width = '120px';
-                labelsBtn.height = '40px';
-                labelsBtn.cornerRadius = 6;
-                labelsBtn.color = 'white';
-                labelsBtn.background = '#58a6ff';
-                labelsBtn.onPointerUpObservable.add(() => {
-                    labelsVisible = !labelsVisible;
-                    deviceLabels.forEach(lbl => lbl.isVisible = labelsVisible);
-                    labelsBtn.background = labelsVisible ? '#ff7b72' : '#58a6ff';
-                });
-                gui.addControl(labelsBtn);
-                labelsBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-                labelsBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-                labelsBtn.top = '110px';
-                labelsBtn.left = '-10px';
 
                 // Handle window resize
                 window.addEventListener('resize', () => {
@@ -969,7 +915,7 @@
             }
         }
 
-        function showDeviceInfo(deviceData) {
+        function showDeviceInfoHTML(deviceData) {
             const deviceInfo = document.getElementById('deviceInfo');
             const deviceDetails = document.getElementById('deviceDetails');
 
@@ -978,7 +924,7 @@
             deviceInfo.classList.add('open');
 
             let detailsHTML = `< div class="device-details" > `;
-            detailsHTML += `< h4 >📋 ${ deviceData.name || 'Unknown Device' }</h4 > `;
+            detailsHTML += `< h4 >📋 ${deviceData.name || 'Unknown Device'}</h4 > `;
 
             detailsHTML += `< div style = "margin-bottom: 15px;" > `;
             detailsHTML += `< h5 > Device Information</h5 > `;
@@ -1090,6 +1036,7 @@
             links.forEach(l => l.dispose && l.dispose());
             links = [];
             deviceLabels = [];
+            nodes = []; // Clear global nodes array
 
             // Render links first
             data.links.forEach(function (linkData, index) {
@@ -1108,14 +1055,13 @@
                     (targetNode.position && targetNode.position.z) || 0
                 );
 
-                const line = BABYLON.MeshBuilder.CreateLines(`link_${ index } `, {
+                const line = BABYLON.MeshBuilder.CreateLines(`link_${index}`, {
                     points: [sourcePos, targetPos]
                 }, scene);
                 line.color = new BABYLON.Color3(0.7, 0.7, 0.7);
                 links.push(line);
             });
 
-            // Render devices with actual 3D models and 2D SVG overlays
             // Render devices with actual 3D models and 2D SVG overlays
             for (let index = 0; index < data.nodes.length; index++) {
                 const nodeData = data.nodes[index];
@@ -1135,11 +1081,25 @@
                     mesh = createDeviceBox(nodeData, position);
                 }
 
+                // Ensure mesh has proper metadata
+                if (!mesh.metadata) {
+                    mesh.metadata = { ...nodeData };
+                }
+                mesh.metadata.mesh = mesh; // Add mesh reference for GUI
+
                 // Add 2D SVG overlay/sprite
                 await addSVGOverlay(nodeData, mesh);
 
                 // Add label with device name and IP under the icon
                 createDeviceLabel(nodeData, mesh);
+
+                // Build nodes array entry for filtering
+                const nodeEntry = {
+                    ...nodeData,
+                    mesh: mesh,
+                    label: deviceLabels.length > 0 ? deviceLabels[deviceLabels.length - 1] : null
+                };
+                nodes.push(nodeEntry);
 
                 devices.push(mesh);
             }
@@ -1337,7 +1297,7 @@
             const mesh = BABYLON.MeshBuilder.CreateBox(nodeData.id, size, scene);
             mesh.position = position;
 
-            const material = new BABYLON.StandardMaterial(`mat_${ nodeData.id } `, scene);
+            const material = new BABYLON.StandardMaterial(`mat_${nodeData.id} `, scene);
             material.diffuseColor = color;
             material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
             mesh.material = material;
@@ -1360,7 +1320,7 @@
                     : '';
                 const dtWidth = 256;
                 const dtHeight = 112;
-                const texture = new BABYLON.DynamicTexture(`${ nodeData.id } _label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
+                const texture = new BABYLON.DynamicTexture(`${nodeData.id} _label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
                 texture.hasAlpha = true;
                 const font = "20px 'Segoe UI'";
 
@@ -1374,24 +1334,24 @@
 
                 const detailParts = [];
                 if (vlanText) {
-                    detailParts.push(`VLAN: ${ vlanText } `);
+                    detailParts.push(`VLAN: ${vlanText} `);
                 }
                 if (macText) {
                     // Use full MAC address in label
-                    detailParts.push(`MAC: ${ macText } `);
+                    detailParts.push(`MAC: ${macText} `);
                 }
                 if (detailParts.length > 0) {
                     y += 24;
                     texture.drawText(detailParts.join('  ·  '), null, y, font, "#d0d7ff", null, true);
                 }
 
-                const labelMat = new BABYLON.StandardMaterial(`${ nodeData.id } _label_mat`, scene);
+                const labelMat = new BABYLON.StandardMaterial(`${nodeData.id} _label_mat`, scene);
                 labelMat.diffuseTexture = texture;
                 labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
                 labelMat.backFaceCulling = false;
 
                 // Slightly larger plane and position just below the icon, above the ground
-                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${ nodeData.id } _label`, { width: 3.2, height: 1.1 }, scene);
+                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id} _label`, { width: 3.2, height: 1.1 }, scene);
                 labelPlane.parent = mesh;
                 labelPlane.position = new BABYLON.Vector3(0, 0.5, 0);
                 labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
@@ -1418,7 +1378,7 @@
                 const svgPath = nodeData.icon_svg || svgMap[typeKey] || svgMap['client'];
 
                 // Create a small plane for 2D overlay
-                const overlay = BABYLON.MeshBuilder.CreatePlane(`${ nodeData.id } _overlay`,
+                const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id} _overlay`,
                     { width: 3, height: 2 }, scene);
                 overlay.position = new BABYLON.Vector3(
                     mesh.position.x,
@@ -1428,7 +1388,7 @@
                 overlay.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
                 // Create material with SVG texture
-                const overlayMaterial = new BABYLON.StandardMaterial(`${ nodeData.id } _overlay_mat`, scene);
+                const overlayMaterial = new BABYLON.StandardMaterial(`${nodeData.id} _overlay_mat`, scene);
 
                 // Try to load SVG as texture
                 try {
@@ -1437,7 +1397,7 @@
                     overlayMaterial.emissiveColor = new BABYLON.Color3(0.8, 0.8, 0.8);
                     overlayMaterial.backFaceCulling = false;
                 } catch (e) {
-                    console.log(`Failed to load SVG texture for ${ nodeData.name }: `, e);
+                    console.log(`Failed to load SVG texture for ${nodeData.name}: `, e);
                     // Fallback to device-type color
                     overlayMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
                     overlayMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
@@ -1455,7 +1415,7 @@
                 mesh.metadata.iconSvgPath = svgPath;
 
             } catch (error) {
-                console.log(`Failed to add SVG overlay for ${ nodeData.name }:`, error);
+                console.log(`Failed to add SVG overlay for ${nodeData.name}:`, error);
             }
         }
 
