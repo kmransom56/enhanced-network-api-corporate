@@ -1,7 +1,7 @@
 {
   "device_name": "FortiSwitch_148E",
   "extraction_method": "VSS-Simulation-Linux",
-  "extraction_date": "2025-11-21T14:43:38.765291",
+  "extraction_date": "2025-11-28T20:06:50.567650",
   "specifications": {
     "type": "fortiswitch",
     "description": "FortiSwitch 148E Secure Access Switch",

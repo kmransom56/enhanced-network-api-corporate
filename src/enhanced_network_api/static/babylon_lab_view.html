@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="3D Network Topology Lab Viewer built with Babylon.js">
+    <meta name="keywords" content="3D, Network, Topology, Lab, Viewer, Babylon.js, WebGL">
+    <meta name="author" content="Your Name or Organization">
     <title>3D Network Topology Lab Viewer</title>
     <script src="/static/js/babylon.js"></script>
     <script src="/static/js/babylonjs.loaders.min.js"></script>
+    <script src="/static/js/babylon.gui.min.js"></script>
     <style>
         /* Reuse the same layout and styling as babylon_topology.html for consistency */
         body {
@@ -451,11 +455,11 @@
             if (!isFinite(minX) || !isFinite(maxX) || !isFinite(minZ) || !isFinite(maxZ)) {
                 return;
             }
-
+            // Compute center and extent
             const centerX = (minX + maxX) / 2;
             const centerZ = (minZ + maxZ) / 2;
             const extent = Math.max(maxX - minX, maxZ - minZ, 10);
-            const radius = extent * 1.8;
+            const radius = extent * 2.5;
 
             camera.target = new BABYLON.Vector3(centerX, 0, centerZ);
             camera.radius = radius;
@@ -498,119 +502,535 @@
             tooltipEl.classList.add('hidden');
         }
 
+        function logDebug(msg) {
+            console.log(msg);
+            const log = document.getElementById('debugLog');
+            if (log) {
+                const line = document.createElement('div');
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                log.appendChild(line);
+                log.scrollTop = log.scrollHeight;
+            }
+        }
+
+        // Initialize Babylon.js
         function initBabylon() {
-            const canvas = document.getElementById('renderCanvas');
-            engine = new BABYLON.Engine(canvas, true);
-            scene = new BABYLON.Scene(engine);
-            scene.clearColor = new BABYLON.Color4(0.05, 0.05, 0.1, 1.0);
+            try {
+                logDebug('🎮 Initializing Babylon.js...');
 
-            tooltipEl = document.getElementById('deviceTooltip');
+                const canvas = document.getElementById('renderCanvas');
+                if (!canvas) {
+                    throw new Error('Canvas element not found');
+                }
 
-            camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI / 3, 30, BABYLON.Vector3.Zero(), scene);
-            camera.attachControl(canvas, true);
-            camera.lowerRadiusLimit = 10;
-            camera.upperRadiusLimit = 100;
+                logDebug('✅ Canvas found');
 
-            const light1 = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-            light1.intensity = 0.7;
+                // Check for WebGL support explicitly
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) {
+                    throw new Error('WebGL not supported');
+                }
 
-            const light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(-1, -2, -1), scene);
-            light2.position = new BABYLON.Vector3(20, 40, 20);
-            light2.intensity = 0.5;
+                // Set canvas dimensions
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
 
-            const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 40, height: 40 }, scene);
-            const groundMaterial = new BABYLON.StandardMaterial('groundMaterial', scene);
-            groundMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.15);
-            groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-            ground.material = groundMaterial;
+                // Create engine
+                engine = new BABYLON.Engine(canvas, true);
+                window.engine = engine;
+                if (!engine) {
+                    throw new Error('Failed to create Babylon.js engine');
+                }
 
-            scene.onPointerObservable.add((pointerInfo) => {
-                switch (pointerInfo.type) {
-                    case BABYLON.PointerEventTypes.POINTERPICK: {
-                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
-                            let pickedMesh = pointerInfo.pickInfo.pickedMesh;
-                            // If we picked an overlay/label, use the parent mesh metadata
-                            if (pickedMesh.parent && pickedMesh.parent.metadata) {
-                                pickedMesh = pickedMesh.parent;
-                            }
-                            if (pickedMesh.metadata) {
-                                showDeviceInfo(pickedMesh.metadata);
-                            }
-                        }
-                        break;
+                logDebug('✅ Babylon.js engine created');
+
+                scene = new BABYLON.Scene(engine);
+                window.scene = scene;
+                if (!scene) {
+                    throw new Error('Failed to create Babylon.js scene');
+                }
+
+                logDebug('✅ Babylon.js scene created');
+
+                // Set background
+                const manager = new BABYLON.GUI.GUI3DManager(scene);
+
+                // ------------------------------------------------------------
+                // 3D GUI – Topology Control Panel (floating in the scene)
+                // ------------------------------------------------------------
+                const topoPanel = new BABYLON.GUI.StackPanel3D();
+                topoPanel.isVertical = true;
+                topoPanel.margin = 0.02;
+                topoPanel.width = 2;
+                topoPanel.height = 3;
+                topoPanel.position = new BABYLON.Vector3(0, 2.5, -5);
+                manager.addControl(topoPanel);
+
+                // Helper to create a 3D button
+                function make3DButton(name, label, onClick) {
+                    const btn = new BABYLON.GUI.Button3D(name);
+                    const txt = new BABYLON.GUI.TextBlock();
+                    txt.text = label;
+                    txt.color = 'white';
+                    btn.content = txt;
+                    btn.onPointerUpObservable.add(onClick);
+                    return btn;
+                }
+
+                // Reset View button
+                topoPanel.addControl(make3DButton('reset3d', 'Reset View', () => {
+                    if (camera) {
+                        camera.alpha = 0;
+                        camera.beta = Math.PI / 3;
+                        camera.radius = 30;
+                        logDebug('🔁 3‑D Reset button pressed');
                     }
-                    case BABYLON.PointerEventTypes.POINTERMOVE: {
-                        const evt = pointerInfo.event;
-                        if (!evt) break;
-                        let mesh = null;
-                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit) {
-                            mesh = pointerInfo.pickInfo.pickedMesh;
-                            if (mesh && mesh.parent && mesh.parent.metadata) {
-                                mesh = mesh.parent;
+                }));
+
+                // Auto‑rotate toggle
+                let autoRotate = false;
+                topoPanel.addControl(make3DButton('autoRotate', 'Auto‑Rotate', () => {
+                    autoRotate = !autoRotate;
+                    logDebug(`🔄 Auto‑rotate ${autoRotate ? 'ON' : 'OFF'}`);
+                }));
+
+                // Labels toggle (checkbox style)
+                const labelToggle = new BABYLON.GUI.Checkbox();
+                labelToggle.isChecked = true;
+                labelToggle.onIsCheckedChangedObservable.add(state => {
+                    labelsVisible = state;
+                    deviceLabels.forEach(l => l.isVisible = state);
+                    logDebug(`🏷️ Labels ${state ? 'shown' : 'hidden'}`);
+                });
+                const labelRow = new BABYLON.GUI.StackPanel3D();
+                labelRow.isVertical = false;
+                labelRow.addControl(labelToggle);
+                const lblTxt = new BABYLON.GUI.TextBlock();
+                lblTxt.text = 'Show Labels';
+                lblTxt.color = 'white';
+                labelRow.addControl(lblTxt);
+                topoPanel.addControl(labelRow);
+
+                // Device‑type filter (radio group)
+                const typeGroup = new BABYLON.GUI.RadioGroup('typeFilter');
+                typeGroup.addRadio('All', () => filterDevices('all'), true);
+                typeGroup.addRadio('Switches', () => filterDevices('switch'));
+                typeGroup.addRadio('Routers', () => filterDevices('router'));
+                typeGroup.addRadio('Servers', () => filterDevices('server'));
+                const typePanel = new BABYLON.GUI.StackPanel3D();
+                typePanel.isVertical = true;
+                const typeHeader = new BABYLON.GUI.TextBlock();
+                typeHeader.text = 'Device Type';
+                typeHeader.color = 'white';
+                typePanel.addControl(typeHeader);
+                typePanel.addControl(typeGroup);
+                topoPanel.addControl(typePanel);
+
+                // Vendor filter (checkbox group)
+                const vendorGroup = new BABYLON.GUI.CheckboxGroup('Vendor');
+                vendorGroup.addCheckbox('Cisco', v => filterVendor('cisco', v));
+                vendorGroup.addCheckbox('Fortinet', v => filterVendor('fortinet', v));
+                vendorGroup.addCheckbox('Juniper', v => filterVendor('juniper', v));
+                const vendorPanel = new BABYLON.GUI.StackPanel3D();
+                vendorPanel.isVertical = true;
+                const vendorHeader = new BABYLON.GUI.TextBlock();
+                vendorHeader.text = 'Vendor';
+                vendorHeader.color = 'white';
+                vendorPanel.addControl(vendorHeader);
+                vendorPanel.addControl(vendorGroup);
+                topoPanel.addControl(vendorPanel);
+
+                // ------------------------------------------------------------
+                // HolographicSlate – device detail panel (appears near selected device)
+                // ------------------------------------------------------------
+                const detailSlate = new BABYLON.GUI.HolographicSlate('detailSlate');
+                detailSlate.title = 'Device Details';
+                detailSlate.titleBarHeight = 0.5;
+                detailSlate.dimensions = new BABYLON.Vector2(4, 2);
+                manager.addControl(detailSlate);
+                detailSlate.position = new BABYLON.Vector3(0, 4, 0);
+                const slateTex = new BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(detailSlate.mesh, 1024, 512);
+                detailSlate.content = slateTex;
+                function populateDetailSlate(node) {
+                    slateTex.clear();
+                    const title = new BABYLON.GUI.TextBlock();
+                    title.text = `${node.name || 'Device'} (${node.type || ''})`;
+                    title.fontSize = 24;
+                    title.color = '#58a6ff';
+                    title.height = '40px';
+                    title.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+                    slateTex.addControl(title);
+                    const info = new BABYLON.GUI.StackPanel();
+                    info.isVertical = true;
+                    info.marginTop = '10px';
+                    const addRow = (label, value) => {
+                        const row = new BABYLON.GUI.StackPanel();
+                        row.isVertical = false;
+                        const lbl = new BABYLON.GUI.TextBlock();
+                        lbl.text = `${label}:`;
+                        lbl.width = '80px';
+                        lbl.color = 'rgba(255,255,255,0.6)';
+                        const val = new BABYLON.GUI.TextBlock();
+                        val.text = value ?? '—';
+                        val.color = 'white';
+                        row.addControl(lbl);
+                        row.addControl(val);
+                        info.addControl(row);
+                    };
+                    addRow('IP', node.ip);
+                    addRow('MAC', node.mac);
+                    addRow('Vendor', node.vendor);
+                    addRow('Model', node.model);
+                    addRow('Status', node.status);
+                    slateTex.addControl(info);
+                }
+                function showDeviceInfo(node) {
+                    if (!node) return;
+                    detailSlate.position = node.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 2, 0));
+                    populateDetailSlate(node);
+                    detailSlate.isVisible = true;
+                }
+
+                // ------------------------------------------------------------
+                // Filtering helper functions (device type & vendor)
+                // ------------------------------------------------------------
+                function filterDevices(mode) {
+                    // mode: 'all' | 'switch' | 'router' | 'server'
+                    nodes.forEach(n => {
+                        if (!n.mesh) return;
+                        const visible = (mode === 'all') || (n.type && n.type.toLowerCase() === mode);
+                        n.mesh.setEnabled(visible);
+                        if (n.label) n.label.isVisible = visible && labelsVisible;
+                    });
+                    logDebug(`🔎 Device filter: ${mode}`);
+                }
+                function filterVendor(vendorKey, isChecked) {
+                    nodes.forEach(n => {
+                        if (!n.mesh) return;
+                        const match = n.vendor && n.vendor.toLowerCase().includes(vendorKey);
+                        const visible = isChecked ? match : !match;
+                        // Combine with current type filter – we only toggle the vendor flag
+                        if (visible) n.mesh.setEnabled(true);
+                        else n.mesh.setEnabled(false);
+                        if (n.label) n.label.isVisible = visible && labelsVisible;
+                    });
+                    logDebug(`🔎 Vendor ${vendorKey} ${isChecked ? 'ON' : 'OFF'}`);
+                }
+                scene.clearColor = new BABYLON.Color4(0.05, 0.05, 0.1, 1.0);
+
+                // Create camera
+                camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI / 3, 30, BABYLON.Vector3.Zero(), scene);
+                window.camera = camera;
+                camera.attachControl(canvas, true);
+                camera.lowerRadiusLimit = 10;
+                camera.upperRadiusLimit = 100;
+
+                logDebug('✅ Camera created');
+
+                // Create lights
+                const light1 = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
+                light1.intensity = 0.7;
+
+                const light2 = new BABYLON.DirectionalLight('light2', new BABYLON.Vector3(-1, -2, -1), scene);
+                light2.position = new BABYLON.Vector3(20, 40, 20);
+                light2.intensity = 0.5;
+
+                logDebug('✅ Lighting created');
+
+                // Create ground with textured material
+                const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 40, height: 40 }, scene);
+                const groundMaterial = new BABYLON.StandardMaterial('groundMaterial', scene);
+                groundMaterial.diffuseTexture = new BABYLON.Texture('/static/img/ground.jpg', scene);
+                groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                ground.material = groundMaterial;
+                // Add skybox
+                const skybox = BABYLON.MeshBuilder.CreateBox('skyBox', { size: 1000.0 }, scene);
+                const skyboxMaterial = new BABYLON.StandardMaterial('skyBoxMaterial', scene);
+                skyboxMaterial.backFaceCulling = false;
+                skyboxMaterial.disableLighting = true;
+                skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture('/static/img/skybox/skybox', scene);
+                skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+                skybox.material = skyboxMaterial;
+                // Fog
+                scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
+                scene.fogDensity = 0.02;
+                scene.fogColor = new BABYLON.Color3(0.05, 0.05, 0.1);
+                // Bloom effect
+                const bloom = new BABYLON.BloomEffect(scene);
+                // Directional light with shadows
+                const dirLight = new BABYLON.DirectionalLight('dirLight', new BABYLON.Vector3(-1, -2, -1), scene);
+                dirLight.position = new BABYLON.Vector3(20, 40, 20);
+                dirLight.intensity = 0.6;
+                const shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight);
+                shadowGenerator.useExponentialShadowMap = true;
+                // Add to ground and grid to receive shadows
+                ground.receiveShadows = true;
+                // Ensure meshes will cast shadows later when loaded
+
+                // Create grid
+                const gridMaterial = new BABYLON.StandardMaterial('gridMaterial', scene);
+                gridMaterial.wireframe = true;
+                gridMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.3, 0.4);
+                gridMaterial.emissiveColor = new BABYLON.Color3(0.1, 0.15, 0.2);
+
+                const grid = BABYLON.MeshBuilder.CreateGround('grid', { width: 40, height: 40, subdivisions: 20 }, scene);
+                grid.material = gridMaterial;
+                grid.position.y = 0.01;
+                ```
+                logDebug('✅ Ground and grid created');
+
+                // Handle pointer events (selection & hover)
+                scene.onPointerObservable.add((pointerInfo) => {
+                    if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
+                            const pickedMesh = pointerInfo.pickInfo.pickedMesh;
+
+                            // Highlight selection
+                            if (pickedMesh.metadata && !pickedMesh.parent) {
+                                // Remove previous highlights
+                                scene.meshes.forEach(m => { if (m.highlightLayer) m.highlightLayer.removeMesh(m); });
+                                // Add highlight layer if not exists
+                                if (!scene.highlightLayer) {
+                                    scene.highlightLayer = new BABYLON.HighlightLayer('hl1', scene);
+                                }
+                                scene.highlightLayer.addMesh(pickedMesh, BABYLON.Color3.Yellow());
+                                // Show device details in the holographic slate
+                                showDeviceInfo(pickedMesh.metadata);
+                                logDebug('🔍 Device selected: ' + pickedMesh.metadata.name);
                             }
                         }
-                        if (mesh && mesh.metadata) {
-                            showTooltip(mesh.metadata, evt.clientX, evt.clientY);
+                    } else if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERMOVE) {
+                        // Hover tooltip
+                        if (pointerInfo.pickInfo && pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh) {
+                            const hovered = pointerInfo.pickInfo.pickedMesh;
+                            if (hovered.metadata) {
+                                showTooltip(hovered.metadata, pointerInfo.event.clientX, pointerInfo.event.clientY);
+                            }
                         } else {
                             hideTooltip();
                         }
-                        break;
                     }
-                    default:
-                        break;
-                }
-            });
+                });
 
-            engine.runRenderLoop(() => {
-                if (autoRotate && camera) {
-                    camera.alpha += 0.005;
-                }
-                scene.render();
-                updateStats();
-            });
+                // Start render loop
+                engine.runRenderLoop(() => {
+                    try {
+                        if (autoRotate && camera) {
+                            camera.alpha += 0.005;
+                        }
+                        if (scene) {
+                            scene.render();
+                        }
+                        updateStats();
+                    } catch (error) {
+                        console.error('❌ Render loop error:', error);
+                    }
+                });
 
-            window.addEventListener('resize', () => {
-                engine.resize();
-            });
+                logDebug('✅ Render loop started');
+                // GUI Controls (Full‑screen UI)
+                const gui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('ui');
+                // Reset View button (already exists in HTML, but add shortcut)
+                const resetBtn = BABYLON.GUI.Button.CreateSimpleButton('resetBtn', '📷 Reset View');
+                resetBtn.width = '120px';
+                resetBtn.height = '40px';
+                resetBtn.cornerRadius = 6;
+                resetBtn.color = 'white';
+                resetBtn.background = '#58a6ff';
+                resetBtn.onPointerUpObservable.add(() => {
+                    if (camera) {
+                        camera.alpha = 0;
+                        camera.beta = Math.PI / 3;
+                        camera.radius = 30;
+                    }
+                });
+                gui.addControl(resetBtn);
+                resetBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+                resetBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                resetBtn.top = '10px';
+                resetBtn.left = '-10px';
+                // Auto‑rotate toggle
+                const autoRotateBtn = BABYLON.GUI.Button.CreateSimpleButton('autoRotateBtn', '🔄 Auto‑Rotate');
+                autoRotateBtn.width = '120px';
+                autoRotateBtn.height = '40px';
+                autoRotateBtn.cornerRadius = 6;
+                autoRotateBtn.color = 'white';
+                autoRotateBtn.background = '#58a6ff';
+                autoRotateBtn.onPointerUpObservable.add(() => {
+                    autoRotate = !autoRotate;
+                    autoRotateBtn.background = autoRotate ? '#ff7b72' : '#58a6ff';
+                });
+                gui.addControl(autoRotateBtn);
+                autoRotateBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+                autoRotateBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                autoRotateBtn.top = '60px';
+                autoRotateBtn.left = '-10px';
+                // Labels toggle
+                const labelsBtn = BABYLON.GUI.Button.CreateSimpleButton('labelsBtn', '🏷️ Labels');
+                labelsBtn.width = '120px';
+                labelsBtn.height = '40px';
+                labelsBtn.cornerRadius = 6;
+                labelsBtn.color = 'white';
+                labelsBtn.background = '#58a6ff';
+                labelsBtn.onPointerUpObservable.add(() => {
+                    labelsVisible = !labelsVisible;
+                    deviceLabels.forEach(lbl => lbl.isVisible = labelsVisible);
+                    labelsBtn.background = labelsVisible ? '#ff7b72' : '#58a6ff';
+                });
+                gui.addControl(labelsBtn);
+                labelsBtn.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+                labelsBtn.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                labelsBtn.top = '110px';
+                labelsBtn.left = '-10px';
+
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    if (engine) {
+                        engine.resize();
+                    }
+                });
+
+                window.babylonReady = true;
+
+            } catch (error) {
+                console.error('❌ Failed to initialize Babylon.js:', error);
+                logDebug('❌ Init Error: ' + error.message);
+
+                // Show user-friendly error with 2D fallback option
+                const errorDiv = document.getElementById('error');
+                const errorMessage = document.getElementById('errorMessage');
+                const loading = document.getElementById('loading');
+
+                if (loading) loading.classList.add('hidden');
+                if (errorDiv) {
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.innerHTML = `
+                    < div style = "text-align: center;" >
+                            <h3 style="color: #ff5555; margin-bottom: 10px;">❌ 3D Engine Error</h3>
+                            <p>${error.message}</p>
+                            <p style="margin-top: 15px; font-size: 14px; color: #aaa;">
+                                Your browser or environment does not support WebGL, which is required for 3D visualization.
+                            </p>
+                            <a href="/static/2d_topology_enhanced.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #58a6ff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                ➡️ Switch to 2D View
+                            </a>
+                        </div >
+                    `;
+                }
+            }
+        }
+
+        // UI Functions
+        function showLoading() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            if (loading) loading.classList.remove('hidden');
+            if (error) error.classList.add('hidden');
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            if (loading) loading.classList.add('hidden');
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const error = document.getElementById('error');
+            const loading = document.getElementById('loading');
+            if (errorMessage) errorMessage.textContent = message;
+            if (error) error.classList.remove('hidden');
+            if (loading) loading.classList.add('hidden');
+            logDebug('❌ Error: ' + message);
+        }
+
+        function hideError() {
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function updateStatus(status) {
+            const statusText = document.getElementById('statusText');
+            const sceneStatus = document.getElementById('sceneStatus');
+            if (statusText) statusText.textContent = status;
+            if (sceneStatus) sceneStatus.textContent = status;
+            logDebug('Status: ' + status);
+        }
+
+        function updateStats() {
+            if (scene) {
+                const fpsCounter = document.getElementById('fpsCounter');
+                const objectCounter = document.getElementById('objectCounter');
+                const deviceCounter = document.getElementById('deviceCounter');
+
+                if (fpsCounter) fpsCounter.textContent = Math.round(engine.getFps());
+                if (objectCounter) objectCounter.textContent = scene.meshes.length;
+                if (deviceCounter) deviceCounter.textContent = devices.length;
+            }
         }
 
         function showDeviceInfo(deviceData) {
             const deviceInfo = document.getElementById('deviceInfo');
             const deviceDetails = document.getElementById('deviceDetails');
+
+            if (!deviceInfo || !deviceDetails) return;
+
             deviceInfo.classList.add('open');
 
-            let html = `<div class="device-details">`;
-            html += `<h4>📋 ${deviceData.name || 'Unknown Device'}</h4>`;
-            html += `<div style="margin-bottom: 15px;">`;
-            html += `<div><span class="label">Type:</span><span class="value">${deviceData.deviceType || deviceData.type || 'Unknown'}</span></div>`;
-            html += `<div><span class="label">IP:</span><span class="value">${deviceData.ip || 'N/A'}</span></div>`;
-            if (deviceData.mac) html += `<div><span class="label">MAC:</span><span class="value">${deviceData.mac}</span></div>`;
-            const vendor = deviceData.vendor || deviceData.device_vendor;
-            if (vendor) html += `<div><span class="label">Vendor:</span><span class="value">${vendor}</span></div>`;
-            if (deviceData.vlan) html += `<div><span class="label">VLAN:</span><span class="value">${deviceData.vlan}</span></div>`;
-            if (deviceData.modelPath) {
-                html += `<div><span class="label">3D Model:</span><span class="value">${deviceData.modelPath}</span></div>`;
+            let detailsHTML = `< div class="device-details" > `;
+            detailsHTML += `< h4 >📋 ${ deviceData.name || 'Unknown Device' }</h4 > `;
+
+            detailsHTML += `< div style = "margin-bottom: 15px;" > `;
+            detailsHTML += `< h5 > Device Information</h5 > `;
+            detailsHTML += `< div ><span class="label">Type:</span> <span class="value">${deviceData.deviceType || deviceData.type || 'Unknown'}</span></div > `;
+            detailsHTML += `< div ><span class="label">Vendor:</span> <span class="value">${deviceData.deviceVendor || 'Unknown'}</span></div > `;
+            detailsHTML += `< div ><span class="label">Model:</span> <span class="value">${deviceData.model || 'Unknown'}</span></div > `;
+            detailsHTML += `< div ><span class="label">IP:</span> <span class="value">${deviceData.ip || 'N/A'}</span></div > `;
+            detailsHTML += `< div ><span class="label">Status:</span> <span class="value">${deviceData.status || 'Unknown'}</span></div > `;
+            if (deviceData.mac) detailsHTML += `< div ><span class="label">MAC:</span> <span class="value">${deviceData.mac}</span></div > `;
+            detailsHTML += `</div > `;
+
+            // Show enhanced device information if available
+            if (deviceData.deviceModel || deviceData.device_confidence) {
+                detailsHTML += `< div style = "margin-bottom: 15px;" > `;
+                detailsHTML += `< h5 > Device Recognition</h5 > `;
+                if (deviceData.deviceModel) {
+                    detailsHTML += `< div ><span class="label">3D Model:</span> <span class="value">${deviceData.deviceModel}</span></div > `;
+                }
+                if (deviceData.device_confidence) {
+                    detailsHTML += `< div ><span class="label">Match Confidence:</span> <span class="value">${deviceData.device_confidence}</span></div > `;
+                }
+                if (deviceData.pos_system) {
+                    detailsHTML += `< div ><span class="label">POS System:</span> <span class="value">${deviceData.pos_system}</span></div > `;
+                }
+                detailsHTML += `</div > `;
             }
-            const iconSvgPath = deviceData.iconSvgPath || deviceData.icon_svg;
-            if (iconSvgPath) {
-                html += `<div><span class="label">Icon SVG:</span><span class="value">${iconSvgPath}</span></div>`;
+
+            if (deviceData.health) {
+                detailsHTML += `< div style = "margin-bottom: 15px;" > `;
+                detailsHTML += `< h5 > Health & Performance</h5 > `;
+                detailsHTML += `< div ><span class="label">Health:</span> <span class="value">${deviceData.health}</span></div > `;
+                if (deviceData.cpu) detailsHTML += `< div ><span class="label">CPU:</span> <span class="value">${deviceData.cpu}</span></div > `;
+                if (deviceData.memory) detailsHTML += `< div ><span class="label">Memory:</span> <span class="value">${deviceData.memory}</span></div > `;
+                detailsHTML += `</div > `;
             }
-            html += `</div>`;
-            html += `</div>`;
-            deviceDetails.innerHTML = html;
+
+            detailsHTML += `</div > `;
+            deviceDetails.innerHTML = detailsHTML;
         }
 
         async function loadTopologyFromLab() {
             updateStatus('Loading...');
             showLoading();
             try {
+                logDebug('📡 Fetching topology data...');
                 const resp = await fetch('/api/topology/babylon-lab-format');
                 if (!resp.ok) {
                     const text = await resp.text();
                     throw new Error('HTTP ' + resp.status + ': ' + text);
                 }
                 const lab = await resp.json();
-                console.log('Lab topology payload:', lab);
+                logDebug('✅ Topology data received. Nodes: ' + (lab.models ? lab.models.length : 0));
 
                 const models = lab.models || [];
                 const connections = lab.connections || [];
@@ -629,7 +1049,11 @@
                         mac: m.mac,
                         vlan: m.vlan,
                         status: m.status || 'online',
-                        position: m.position || null
+                        position: m.position || null,
+                        // placeholder for mesh reference
+                        mesh: null,
+                        // placeholder for label GUI
+                        label: null
                     };
                 });
 
@@ -649,6 +1073,7 @@
                 // Center and zoom camera so all nodes are comfortably in view
                 fitCameraToNodes(nodes);
                 updateStatus('Loaded');
+                logDebug('✅ Topology loaded successfully');
             } catch (err) {
                 console.error('Failed to load lab topology:', err);
                 showError(err.message || String(err));
@@ -683,7 +1108,7 @@
                     (targetNode.position && targetNode.position.z) || 0
                 );
 
-                const line = BABYLON.MeshBuilder.CreateLines(`link_${index}`, {
+                const line = BABYLON.MeshBuilder.CreateLines(`link_${ index } `, {
                     points: [sourcePos, targetPos]
                 }, scene);
                 line.color = new BABYLON.Color3(0.7, 0.7, 0.7);
@@ -808,6 +1233,30 @@
                 // 1) model from API (lab-format `model` field, usually /lab_3d_models/...)
                 // 2) model chosen from lab_3d_models/manifest.json
                 // 3) type-based fallback from modelMap
+                // Load device models and create labels
+                const labelGui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('labels');
+                for (let i = 0; i < nodes.length; i++) {
+                    const nodeData = nodes[i];
+                    await loadDeviceModel(nodeData);
+                    // Create a label for the device
+                    if (nodeData.mesh) {
+                        const txt = new BABYLON.GUI.TextBlock();
+                        txt.text = nodeData.name;
+                        txt.color = 'white';
+                        txt.fontSize = 12;
+                        txt.background = 'rgba(0,0,0,0.5)';
+                        const rect = new BABYLON.GUI.Rectangle();
+                        rect.width = '120px';
+                        rect.height = '30px';
+                        rect.background = 'transparent';
+                        rect.addControl(txt);
+                        labelGui.addControl(rect);
+                        rect.linkWithMesh(nodeData.mesh);
+                        rect.linkOffsetY = -30;
+                        nodeData.label = rect;
+                        deviceLabels.push(rect);
+                    }
+                }
                 // 4) generic client model
                 const candidates = [];
                 if (nodeData.model) {
@@ -825,15 +1274,15 @@
                     const candidate = candidates[i];
                     if (!candidate || typeof candidate !== 'string') continue;
 
-                    const lastSlash = sceneFile.lastIndexOf('/');
-                    const rootUrl = lastSlash >= 0 ? sceneFile.substring(0, lastSlash + 1) : "";
-                    const filename = lastSlash >= 0 ? sceneFile.substring(lastSlash + 1) : sceneFile;
+                    const lastSlash = candidate.lastIndexOf('/');
+                    const rootUrl = lastSlash >= 0 ? candidate.substring(0, lastSlash + 1) : "";
+                    const filename = lastSlash >= 0 ? candidate.substring(lastSlash + 1) : candidate;
 
-                    console.log('Attempting to load model:', sceneFile, 'root:', rootUrl, 'file:', filename);
+                    console.log('Attempting to load model:', candidate, 'root:', rootUrl, 'file:', filename);
                     try {
                         const result = await BABYLON.SceneLoader.ImportMeshAsync("", rootUrl, filename, scene);
                         if (result.meshes.length > 0) {
-                            console.log('Successfully loaded model:', sceneFile);
+                            console.log('Successfully loaded model:', candidate);
                             const mesh = result.meshes[0];
                             mesh.position = position;
 
@@ -849,7 +1298,7 @@
                             return mesh;
                         }
                     } catch (e) {
-                        console.log('Failed to load model for', nodeData.name, 'from', sceneFile, e);
+                        console.log('Failed to load model for', nodeData.name, 'from', candidate, e);
                         // Try next candidate
                     }
                 }
@@ -888,7 +1337,7 @@
             const mesh = BABYLON.MeshBuilder.CreateBox(nodeData.id, size, scene);
             mesh.position = position;
 
-            const material = new BABYLON.StandardMaterial(`mat_${nodeData.id}`, scene);
+            const material = new BABYLON.StandardMaterial(`mat_${ nodeData.id } `, scene);
             material.diffuseColor = color;
             material.specularColor = new BABYLON.Color3(0.2, 0.2, 0.2);
             mesh.material = material;
@@ -911,7 +1360,7 @@
                     : '';
                 const dtWidth = 256;
                 const dtHeight = 112;
-                const texture = new BABYLON.DynamicTexture(`${nodeData.id}_label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
+                const texture = new BABYLON.DynamicTexture(`${ nodeData.id } _label_tex`, { width: dtWidth, height: dtHeight }, scene, false);
                 texture.hasAlpha = true;
                 const font = "20px 'Segoe UI'";
 
@@ -925,24 +1374,24 @@
 
                 const detailParts = [];
                 if (vlanText) {
-                    detailParts.push(`VLAN: ${vlanText}`);
+                    detailParts.push(`VLAN: ${ vlanText } `);
                 }
                 if (macText) {
                     // Use full MAC address in label
-                    detailParts.push(`MAC: ${macText}`);
+                    detailParts.push(`MAC: ${ macText } `);
                 }
                 if (detailParts.length > 0) {
                     y += 24;
                     texture.drawText(detailParts.join('  ·  '), null, y, font, "#d0d7ff", null, true);
                 }
 
-                const labelMat = new BABYLON.StandardMaterial(`${nodeData.id}_label_mat`, scene);
+                const labelMat = new BABYLON.StandardMaterial(`${ nodeData.id } _label_mat`, scene);
                 labelMat.diffuseTexture = texture;
                 labelMat.emissiveColor = new BABYLON.Color3(1, 1, 1);
                 labelMat.backFaceCulling = false;
 
                 // Slightly larger plane and position just below the icon, above the ground
-                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_label`, { width: 3.2, height: 1.1 }, scene);
+                const labelPlane = BABYLON.MeshBuilder.CreatePlane(`${ nodeData.id } _label`, { width: 3.2, height: 1.1 }, scene);
                 labelPlane.parent = mesh;
                 labelPlane.position = new BABYLON.Vector3(0, 0.5, 0);
                 labelPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
@@ -969,7 +1418,7 @@
                 const svgPath = nodeData.icon_svg || svgMap[typeKey] || svgMap['client'];
 
                 // Create a small plane for 2D overlay
-                const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_overlay`,
+                const overlay = BABYLON.MeshBuilder.CreatePlane(`${ nodeData.id } _overlay`,
                     { width: 3, height: 2 }, scene);
                 overlay.position = new BABYLON.Vector3(
                     mesh.position.x,
@@ -979,7 +1428,7 @@
                 overlay.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
                 // Create material with SVG texture
-                const overlayMaterial = new BABYLON.StandardMaterial(`${nodeData.id}_overlay_mat`, scene);
+                const overlayMaterial = new BABYLON.StandardMaterial(`${ nodeData.id } _overlay_mat`, scene);
 
                 // Try to load SVG as texture
                 try {
@@ -988,7 +1437,7 @@
                     overlayMaterial.emissiveColor = new BABYLON.Color3(0.8, 0.8, 0.8);
                     overlayMaterial.backFaceCulling = false;
                 } catch (e) {
-                    console.log(`Failed to load SVG texture for ${nodeData.name}:`, e);
+                    console.log(`Failed to load SVG texture for ${ nodeData.name }: `, e);
                     // Fallback to device-type color
                     overlayMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
                     overlayMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
@@ -1006,7 +1455,7 @@
                 mesh.metadata.iconSvgPath = svgPath;
 
             } catch (error) {
-                console.log(`Failed to add SVG overlay for ${nodeData.name}:`, error);
+                console.log(`Failed to add SVG overlay for ${ nodeData.name }:`, error);
             }
         }
 

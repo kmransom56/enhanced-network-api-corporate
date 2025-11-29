@@ -1,7 +1,7 @@
 {
   "device_name": "FortiGate_600E",
   "extraction_method": "VSS-Simulation-Linux",
-  "extraction_date": "2025-11-21T14:43:38.765047",
+  "extraction_date": "2025-11-28T20:06:50.567364",
   "specifications": {
     "type": "fortigate",
     "description": "FortiGate 600E Next-Generation Firewall",
