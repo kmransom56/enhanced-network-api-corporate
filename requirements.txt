@@ -1,3 +1,4 @@
 requests
 fortigate-api
 beautifulsoup4
+orjson

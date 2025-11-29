@@ -1,0 +1,32 @@
+{
+  "working_endpoints": [],
+  "switch_endpoints": [],
+  "ap_endpoints": [],
+  "device_endpoints": [],
+  "errors": [
+    {
+      "endpoint": "/api/v2/monitor/system/status",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    },
+    {
+      "endpoint": "/api/v2/monitor/system/resource/usage",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    },
+    {
+      "endpoint": "/api/v2/monitor/system/interface",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    },
+    {
+      "endpoint": "/api/v2/cmdb/system/global",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    },
+    {
+      "endpoint": "/api/v2/cmdb/switch-controller/managed-switch",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    },
+    {
+      "endpoint": "/api/v2/cmdb/system/interface",
+      "error": "JSONEncoder.__init__() got an unexpected keyword argument 'casefold'"
+    }
+  ]
+}

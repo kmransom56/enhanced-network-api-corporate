@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {
+      "id": "fg-192.168.0.254",
+      "type": "fortigate",
+      "role": "gateway",
+      "name": "fw",
+      "ip": "192.168.0.254",
+      "model": "v7.6.4",
+      "serial": "FGT61FTK20020975",
+      "status": "unknown",
+      "metadata": {
+        "hostname": null,
+        "version": "v7.6.4"
+      }
+    }
+  ],
+  "links": [],
+  "triageHints": []
+}

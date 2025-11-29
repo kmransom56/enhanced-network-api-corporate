@@ -1,0 +1,5 @@
+{
+  "Cisco Meraki Wireless Access Point": "models/meraki_ap.obj",
+  "Fortinet Firewall": "models/fortigate_firewall.obj",
+  "Fortinet Switch": "models/fortiswitch.obj"
+}

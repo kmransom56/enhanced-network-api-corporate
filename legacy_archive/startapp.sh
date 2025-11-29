@@ -1,0 +1,1 @@
+cd /home/keith/enhanced-network-api-corporate && source .venv/bin/activate && PYTHONPATH=/home/keith/enhanced-network-api-corporate/src python -m uvicorn enhanced_network_api.platform_web_api_fastapi:app --host 0.0.0.0 --port 11111 &

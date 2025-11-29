@@ -1,0 +1,16 @@
+{
+  "gateways": [
+    {
+      "id": "fg-192.168.0.254",
+      "name": "fw",
+      "hostname": null,
+      "ip": "192.168.0.254",
+      "model": "v7.6.4",
+      "serial": "FGT61FTK20020975",
+      "version": "v7.6.4"
+    }
+  ],
+  "switches": [],
+  "aps": [],
+  "links": []
+}

@@ -28,6 +28,42 @@ from .vss_svg_integration import extract_and_integrate_vss_icons
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+MANUFACTURER_ICON_MAP = {
+    # Fortinet devices
+    'fortinet': {
+        'firewall': 'fortigate_1u.svg',
+        'access_point': 'fortiap_indoor.svg',
+        'switch': 'fortiswitch_124e.svg',
+        'extender': 'fortiextender_appliance.svg',
+    },
+    
+    # Cisco (routers, switches)
+    'cisco': {
+        'router': 'cisco_router.svg',
+        'switch': 'cisco_catalyst.svg',
+        'access_point': 'cisco_meraki_ap.svg',
+        'firewall': 'cisco_asa.svg',
+    },
+    
+    # Printers & office
+    'canon': 'printer_generic.svg',
+    'hp': 'printer_generic.svg',
+    'xerox': 'printer_generic.svg',
+    'brother': 'printer_generic.svg',
+    
+    # Mobile & endpoints
+    'apple': 'smartphone_apple.svg',
+    'samsung': 'smartphone_android.svg',
+    'lg': 'monitor.svg',
+    'dell': 'workstation.svg',
+    'lenovo': 'workstation.svg',
+    'microsoft': 'workstation.svg',
+    
+    # Generic fallbacks
+    'default_iot': 'device_generic.svg',
+    'default_client': 'client_generic.svg',
+}
+
 
 @dataclass
 class NetworkDevice:
@@ -106,17 +142,20 @@ class NetworkTopologyWorkflow:
         svg_output_dir: str = 'realistic_device_svgs',
         vss_file_path: Optional[str] = None,
         use_vss_icons: bool = True,
-        verify_ssl: bool = False
+        verify_ssl: bool = False,
+        ca_cert_path: Optional[str] = None
     ):
         self.fortigate_host = fortigate_host
         self.fortigate_token = fortigate_token
         self.verify_ssl = verify_ssl
+        self.ca_cert_path = ca_cert_path
         
         # Initialize FortiOS API authentication
         self.fg_auth = FortiGateAuth(
             host=fortigate_host,
             api_token=fortigate_token,
-            verify_ssl=verify_ssl
+            verify_ssl=verify_ssl,
+            ca_cert=ca_cert_path
         )
         
         # Initialize device modules
@@ -384,15 +423,47 @@ class NetworkTopologyWorkflow:
         log.info(f"✓ Generated/assigned {svg_count} SVG icons")
     
     def _generate_svg_filename(self, device: NetworkDevice) -> str:
-        """Generate standardized SVG filename for device"""
-        # Sanitize device type for filename
-        device_type = device.device_type or device.type or 'generic'
-        device_type = device_type.lower().replace(' ', '_').replace('/', '_')
+        """Generate standardized SVG filename for device using manufacturer map"""
+        return self._get_device_icon_name(device)
+
+    def _get_device_icon_name(self, device: NetworkDevice) -> str:
+        """Map device to appropriate icon filename"""
+        vendor = (device.vendor or 'generic').lower()
+        device_type = (device.device_type or device.type or 'generic').lower()
         
-        # Use vendor-specific naming if available
-        vendor = (device.vendor or 'generic').lower().replace(' ', '_')
+        # Check manufacturer map
+        if vendor in MANUFACTURER_ICON_MAP:
+            vendor_map = MANUFACTURER_ICON_MAP[vendor]
+            if isinstance(vendor_map, dict):
+                # Try exact match
+                if device_type in vendor_map:
+                    return vendor_map[device_type]
+                # Try partial match
+                for key, icon in vendor_map.items():
+                    if key in device_type:
+                        return icon
+            elif isinstance(vendor_map, str):
+                return vendor_map
         
-        return f"{vendor}_{device_type}.svg"
+        # Fallback based on device type
+        if 'firewall' in device_type or 'gateway' in device_type:
+            return 'firewall_generic.svg'
+        elif 'switch' in device_type:
+            return 'switch_generic.svg'
+        elif 'access_point' in device_type or 'ap' in device_type:
+            return 'access_point_generic.svg'
+        elif 'printer' in device_type:
+            return 'printer_generic.svg'
+        elif 'phone' in device_type:
+            return 'phone_generic.svg'
+        elif 'camera' in device_type:
+            return 'camera_generic.svg'
+        elif 'smartphone' in device_type or 'mobile' in device_type:
+            return 'smartphone_generic.svg'
+        elif 'workstation' in device_type or 'laptop' in device_type:
+            return 'workstation_generic.svg'
+            
+        return 'device_unknown.svg'
     
     def _create_device_svg(self, device: NetworkDevice) -> str:
         """Create SVG icon for device based on its type"""
@@ -433,68 +504,78 @@ class NetworkTopologyWorkflow:
         # Status color
         status_color = '#00ff00' if device.status == 'online' else '#ff0000'
         
-        # Device-specific configurations
+        # Default config
+        bg_color = '#6c757d'
+        border_color = '#5a6268'
+        shape_svg = '''
+            <rect x="25" y="40" width="78" height="48" rx="4" fill="#404040"/>
+            <rect x="30" y="45" width="68" height="35" fill="#c0c0c0"/>
+        '''
+
         if 'fortigate' in device_type or 'firewall' in device_type:
-            return {
-                'bg_color': '#dc3545',
-                'border_color': '#c82333',
-                'status_color': status_color,
-                'shape_svg': '''
-                    <rect x="20" y="40" width="88" height="48" rx="4" fill="#8b0000"/>
-                    <rect x="25" y="45" width="78" height="8" fill="#ff6b6b"/>
-                    <rect x="25" y="58" width="78" height="8" fill="#ff6b6b"/>
-                    <rect x="25" y="71" width="78" height="8" fill="#ff6b6b"/>
-                '''
-            }
+            bg_color = '#dc3545'
+            border_color = '#c82333'
+            shape_svg = '''
+                <rect x="20" y="40" width="88" height="48" rx="4" fill="#8b0000"/>
+                <rect x="25" y="45" width="78" height="8" fill="#ff6b6b"/>
+                <rect x="25" y="58" width="78" height="8" fill="#ff6b6b"/>
+                <rect x="25" y="71" width="78" height="8" fill="#ff6b6b"/>
+            '''
         elif 'fortiswitch' in device_type or 'switch' in device_type:
-            return {
-                'bg_color': '#28a745',
-                'border_color': '#218838',
-                'status_color': status_color,
-                'shape_svg': '''
-                    <rect x="15" y="45" width="98" height="38" rx="4" fill="#006400"/>
-                    <circle cx="25" cy="64" r="4" fill="#00ff00"/>
-                    <circle cx="40" cy="64" r="4" fill="#00ff00"/>
-                    <circle cx="55" cy="64" r="4" fill="#00ff00"/>
-                    <circle cx="70" cy="64" r="4" fill="#00ff00"/>
-                    <circle cx="85" cy="64" r="4" fill="#00ff00"/>
-                    <circle cx="100" cy="64" r="4" fill="#00ff00"/>
-                '''
-            }
-        elif 'fortiap' in device_type or 'access' in device_type or 'wifi' in device_type:
-            return {
-                'bg_color': '#ffc107',
-                'border_color': '#e0a800',
-                'status_color': status_color,
-                'shape_svg': '''
-                    <circle cx="64" cy="64" r="30" fill="#cc8800"/>
-                    <path d="M 64 44 Q 44 44 34 54" stroke="#fff" stroke-width="4" fill="none"/>
-                    <path d="M 64 44 Q 84 44 94 54" stroke="#fff" stroke-width="4" fill="none"/>
-                    <path d="M 64 54 Q 49 54 42 61" stroke="#fff" stroke-width="3" fill="none"/>
-                    <path d="M 64 54 Q 79 54 86 61" stroke="#fff" stroke-width="3" fill="none"/>
-                '''
-            }
-        elif 'pos' in device_type or 'terminal' in device_type:
-            return {
-                'bg_color': '#6f42c1',
-                'border_color': '#5a32a3',
-                'status_color': status_color,
-                'shape_svg': '''
-                    <rect x="30" y="35" width="68" height="58" rx="6" fill="#4a0080"/>
-                    <rect x="35" y="40" width="58" height="35" fill="#e0e0e0"/>
-                    <rect x="45" y="78" width="38" height="8" rx="2" fill="#808080"/>
-                '''
-            }
-        else:  # Generic client/device
-            return {
-                'bg_color': '#6c757d',
-                'border_color': '#5a6268',
-                'status_color': status_color,
-                'shape_svg': '''
-                    <rect x="25" y="40" width="78" height="48" rx="4" fill="#404040"/>
-                    <rect x="30" y="45" width="68" height="35" fill="#c0c0c0"/>
-                '''
-            }
+            bg_color = '#28a745'
+            border_color = '#218838'
+            shape_svg = '''
+                <rect x="15" y="45" width="98" height="38" rx="4" fill="#006400"/>
+                <circle cx="25" cy="64" r="4" fill="#00ff00"/>
+                <circle cx="40" cy="64" r="4" fill="#00ff00"/>
+                <circle cx="55" cy="64" r="4" fill="#00ff00"/>
+                <circle cx="70" cy="64" r="4" fill="#00ff00"/>
+                <circle cx="85" cy="64" r="4" fill="#00ff00"/>
+                <circle cx="100" cy="64" r="4" fill="#00ff00"/>
+            '''
+        elif 'fortiap' in device_type or 'access_point' in device_type or 'wifi' in device_type:
+            bg_color = '#ffc107'
+            border_color = '#e0a800'
+            shape_svg = '''
+                <circle cx="64" cy="64" r="30" fill="#cc8800"/>
+                <path d="M 64 44 Q 44 44 34 54" stroke="#fff" stroke-width="4" fill="none"/>
+                <path d="M 64 44 Q 84 44 94 54" stroke="#fff" stroke-width="4" fill="none"/>
+                <path d="M 64 54 Q 49 54 42 61" stroke="#fff" stroke-width="3" fill="none"/>
+                <path d="M 64 54 Q 79 54 86 61" stroke="#fff" stroke-width="3" fill="none"/>
+            '''
+        elif 'printer' in device_type:
+            bg_color = '#17a2b8'
+            border_color = '#138496'
+            shape_svg = '''
+                <rect x="34" y="40" width="60" height="40" fill="#e0e0e0"/>
+                <rect x="44" y="30" width="40" height="10" fill="#fff"/>
+                <rect x="44" y="80" width="40" height="15" fill="#fff" stroke="#999"/>
+                <line x1="49" y1="85" x2="79" y2="85" stroke="#000" stroke-width="1"/>
+                <line x1="49" y1="90" x2="79" y2="90" stroke="#000" stroke-width="1"/>
+            '''
+        elif 'smartphone' in device_type or 'mobile' in device_type:
+            bg_color = '#6610f2'
+            border_color = '#520dc2'
+            shape_svg = '''
+                <rect x="44" y="24" width="40" height="80" rx="4" fill="#333"/>
+                <rect x="46" y="30" width="36" height="60" fill="#000"/>
+                <circle cx="64" cy="98" r="3" fill="#555"/>
+            '''
+        elif 'workstation' in device_type or 'laptop' in device_type:
+            bg_color = '#007bff'
+            border_color = '#0062cc'
+            shape_svg = '''
+                <rect x="24" y="30" width="80" height="50" rx="2" fill="#333"/>
+                <rect x="28" y="34" width="72" height="42" fill="#000"/>
+                <polygon points="24,80 104,80 114,95 14,95" fill="#555"/>
+            '''
+
+        return {
+            'bg_color': bg_color,
+            'border_color': border_color,
+            'status_color': status_color,
+            'shape_svg': shape_svg
+        }
     
     async def step6_build_connections(self):
         """Step 6: Build network topology connections"""
@@ -675,16 +756,22 @@ class NetworkTopologyWorkflow:
 async def main():
     """Example usage of the workflow"""
     import os
+    from dotenv import load_dotenv
+    
+    # Load environment variables from .env file
+    load_dotenv()
     
     # Configuration from environment
     fortigate_host = os.getenv('FORTIGATE_HOST', '192.168.1.99')
     fortigate_token = os.getenv('FORTIGATE_TOKEN', 'your-api-token')
+    ca_cert_path = os.getenv('CA_CERT_PATH')
     
     # Initialize workflow
     workflow = NetworkTopologyWorkflow(
         fortigate_host=fortigate_host,
         fortigate_token=fortigate_token,
-        verify_ssl=False
+        verify_ssl=False,
+        ca_cert_path=ca_cert_path
     )
     
     # Execute complete workflow

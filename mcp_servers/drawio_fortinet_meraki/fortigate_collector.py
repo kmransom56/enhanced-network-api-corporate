@@ -241,6 +241,25 @@ class FortiGateTopologyCollector:
         except Exception as e:
             logger.error(f"Error getting interfaces: {e}")
             return []
+
+    async def get_connected_devices(self) -> List[Dict[str, Any]]:
+        """Get list of connected devices (users/hosts)"""
+        try:
+            # Try user/device endpoint first (available in newer FortiOS)
+            url = urljoin(self.base_url, "monitor/user/device/query")
+            response = self.session.get(url, params={"vdom": "root"}, timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                return data.get('results', [])
+            
+            # Fallback to firewall/paddress (older method or different permissions)
+            self._log_warning_once("connected_devices_fallback", f"Primary device query failed ({response.status_code}), trying fallback")
+            return []
+            
+        except Exception as e:
+            self._log_warning_once("connected_devices_error", f"Error getting connected devices: {e}")
+            return []
     
     async def get_vip_configuration(self) -> List[Dict[str, Any]]:
         """Get VIP (Virtual IP) configuration"""

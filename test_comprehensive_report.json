@@ -1,0 +1,186 @@
+{
+  "timestamp": "2025-11-28T08:20:59.611438+00:00",
+  "summary": {
+    "total_tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "warnings": 0
+  },
+  "categories": {
+    "Health & Status": [
+      {
+        "name": "Health endpoint responds",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.001s",
+        "data": {
+          "status": "healthy",
+          "timestamp": "2025-11-28T08:20:59.614213",
+          "services": {
+            "api": {
+              "status": "online",
+              "response_time": "fast"
+            },
+            "mcp_bridge": {
+              "status": "unknown",
+              "response_time": null
+            },
+            "topology_endpoints": {
+              "status": "online",
+              "response_time": "fast"
+            }
+          },
+          "metrics": {
+            "uptime": "unknown",
+            "memory_usage": "unknown",
+            "cpu_usage": "unknown",
+            "active_connections": 0
+          },
+          "version": "2.0.0"
+        }
+      }
+    ],
+    "Topology API": [
+      {
+        "name": "Topology scene endpoint",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.497s",
+        "data": null
+      },
+      {
+        "name": "Raw topology endpoint",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.002s",
+        "data": null
+      }
+    ],
+    "Static Pages": [
+      {
+        "name": "Main dashboard",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.001s",
+        "data": null
+      },
+      {
+        "name": "2D topology view",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.001s",
+        "data": null
+      },
+      {
+        "name": "Smart tools interface",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.001s",
+        "data": null
+      },
+      {
+        "name": "Automated topology docs",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.002s",
+        "data": null
+      }
+    ],
+    "Performance & Monitoring": [
+      {
+        "name": "Performance metrics endpoint",
+        "status": "PASS",
+        "details": "Status: 200",
+        "response_time": "0.001s",
+        "data": null
+      }
+    ]
+  },
+  "performance_metrics": {
+    "Health check response": {
+      "value": 0.0012297630310058594,
+      "unit": "s",
+      "threshold": 1.0,
+      "passed": true
+    },
+    "Topology scene load": {
+      "value": 0.4970824718475342,
+      "unit": "s",
+      "threshold": 2.0,
+      "passed": true
+    },
+    "Raw topology load": {
+      "value": 0.0015835762023925781,
+      "unit": "s",
+      "threshold": 2.0,
+      "passed": true
+    }
+  },
+  "accuracy_validation": {
+    "Health status is 'healthy'": {
+      "expected": "healthy",
+      "actual": "healthy",
+      "passed": true
+    },
+    "API service is online": {
+      "expected": "online",
+      "actual": "online",
+      "passed": true
+    },
+    "Scene has nodes": {
+      "expected": "> 0",
+      "actual": 3,
+      "passed": true
+    },
+    "Scene has links": {
+      "expected": ">= 0",
+      "actual": 2,
+      "passed": true
+    },
+    "Nodes have required fields": {
+      "expected": "['id', 'name', 'type']",
+      "actual": "Present",
+      "passed": true
+    },
+    "Main dashboard returns HTML": {
+      "expected": "text/html",
+      "actual": "text/html; charset=utf-8",
+      "passed": true
+    },
+    "2D topology view returns HTML": {
+      "expected": "text/html",
+      "actual": "text/html; charset=utf-8",
+      "passed": true
+    },
+    "Smart tools interface returns HTML": {
+      "expected": "text/html",
+      "actual": "text/html; charset=utf-8",
+      "passed": true
+    },
+    "Automated topology docs returns HTML": {
+      "expected": "text/html",
+      "actual": "text/html; charset=utf-8",
+      "passed": true
+    },
+    "Metrics data structure": {
+      "expected": "Present",
+      "actual": "Present",
+      "passed": true
+    },
+    "Node IDs are unique": {
+      "expected": "All unique",
+      "actual": "3 unique / 3 total",
+      "passed": true
+    },
+    "Links reference valid nodes": {
+      "expected": "All valid",
+      "actual": "Valid",
+      "passed": true
+    },
+    "Node types are valid": {
+      "expected": "['fortigate', 'fortiswitch', 'fortiap', 'client', 'endpoint', 'device', 'network']",
+      "actual": "All valid",
+      "passed": true
+    }
+  }
+}

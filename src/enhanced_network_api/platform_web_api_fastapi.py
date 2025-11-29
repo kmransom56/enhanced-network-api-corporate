@@ -10,6 +10,7 @@ import hashlib
 import html
 import json
 import logging
+import orjson
 import os
 import subprocess
 import sys
@@ -45,7 +46,7 @@ logger = logging.getLogger(__name__)
 from api.endpoints.smart_analysis import router as smart_analysis_router
 from api.endpoints.meraki_mcp import router as meraki_router
 from api.endpoints.fortinet_llm import router as fortinet_llm_router
-from device_mac_matcher import create_device_matching_api
+from device_mac_matcher import create_device_matching_api, DeviceModelMatcher
 from visio_icon_extractor import create_icon_extraction_api
 from restaurant_icon_downloader import create_restaurant_icon_api
 from src.enhanced_network_api.shared import topology_workflow
@@ -57,6 +58,7 @@ from mcp_servers.drawio_fortinet_meraki.api_documentation import IntelligentAPIM
 from mcp_servers.drawio_fortinet_meraki.fortinet_integration import (
     DrawIOFortinetIntegration,
 )
+from graphml_parser import parse_graphml_topology
 
 
 class PerformanceRecorder:
@@ -562,6 +564,14 @@ async def mcp_export_topology_json(request: Request):
             "export_topology_json",
             {"include_health": include_health, "format": format_type},
         )
+        if export_data.get("topology") is None and "topology" in export_data:
+            fallback = _fallback_topology_copy()
+            export_data["topology"] = fallback
+        elif "topology" not in export_data:
+            # If the MCP response already returned nodes/links directly (as in unit tests), respect it.
+            if "nodes" not in export_data and "links" not in export_data:
+                fallback = _fallback_topology_copy()
+                export_data["topology"] = fallback
         return JSONResponse(export_data)
 
     except Exception as e:
@@ -1561,43 +1571,30 @@ def _apply_hierarchical_layout(scene: Dict[str, Any]) -> None:
 
 
 def _normalize_scene_compute(data: Dict[str, Any]) -> Dict[str, Any]:
-    devices = []
-    for key in ("devices", "nodes"):
-        value = data.get(key)
-        if isinstance(value, list):
-            devices = value
-            break
+    devices = data.get("devices") or data.get("nodes") or []
+    if not isinstance(devices, list):
+        devices = []
 
-    nodes: List[Dict[str, Any]] = []
-    for device in devices:
-        if not isinstance(device, dict):
-            continue
-        node_id = device.get("id") or device.get("name")
-        if not node_id:
-            continue
-        node_type = device.get("type") or device.get("role") or "device"
-        node = {"id": node_id, "name": device.get("name") or node_id, "type": node_type}
-        for key in (
-            "hostname",
-            "role",
-            "ip",
-            "model",
-            "serial",
-            "status",
-            "position",
-            "mac",
-            "firmware",
-            "os",
-            "ssid",
-            "connection_type",
-        ):
-            value = device.get(key)
-            if value is not None:
-                node[key] = value
-        nodes.append(node)
+    nodes = [
+        {
+            "id": (node_id := device.get("id") or device.get("name")),
+            "name": device.get("name") or node_id,
+            "type": device.get("type") or device.get("role") or "device",
+            **{
+                k: v
+                for k in (
+                    "hostname", "role", "ip", "model", "serial", "status",
+                    "position", "mac", "firmware", "os", "ssid", "connection_type"
+                )
+                if (v := device.get(k)) is not None
+            }
+        }
+        for device in devices
+        if isinstance(device, dict) and (device.get("id") or device.get("name"))
+    ]
 
     links_source = data.get("links") or data.get("edges") or []
-    normalized_links: List[Dict[str, Any]] = []
+    normalized_links = []
     if isinstance(links_source, list):
         for link in links_source:
             if not isinstance(link, dict):
@@ -1606,13 +1603,13 @@ def _normalize_scene_compute(data: Dict[str, Any]) -> Dict[str, Any]:
             target = link.get("to") or link.get("target") or link.get("target_id")
             if not (source and target):
                 continue
+            
             normalized = {"from": source, "to": target}
             for key in ("type", "status", "description"):
-                value = link.get(key)
-                if value is not None:
-                    normalized[key] = value
-            ports = link.get("ports") or link.get("interfaces")
-            if ports:
+                if (val := link.get(key)) is not None:
+                    normalized[key] = val
+            
+            if (ports := link.get("ports") or link.get("interfaces")):
                 normalized["ports"] = ports
             normalized_links.append(normalized)
 
@@ -1627,10 +1624,10 @@ def _json_default(value: Any) -> Any:
 
 def _topology_signature(topology: Dict[str, Any]) -> str:
     try:
-        serialized = json.dumps(topology, sort_keys=True, default=_json_default)
+        serialized = orjson.dumps(topology, option=orjson.OPT_SORT_KEYS)
     except TypeError:
-        serialized = json.dumps(str(topology), sort_keys=True)
-    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+        serialized = orjson.dumps(str(topology), option=orjson.OPT_SORT_KEYS)
+    return hashlib.sha256(serialized).hexdigest()
 
 
 @app.get("/babylon-test", response_class=HTMLResponse)
@@ -1753,10 +1750,15 @@ class FortinetMCPClient:
     url: str
     credentials: Dict[str, Any]
     cache_ttl: float = 10.0
-    session: httpx.AsyncClient = field(default_factory=httpx.AsyncClient)
+    ca_path: Optional[str] = None
+    session: httpx.AsyncClient = field(init=False)
     cache: Dict[Tuple[str, Tuple[Tuple[str, Any], ...]], Tuple[float, Dict[str, Any]]] = field(default_factory=dict)
     cache_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
     loop: asyncio.AbstractEventLoop = field(default_factory=asyncio.get_running_loop)
+
+    def __post_init__(self):
+        verify = self.ca_path if self.ca_path else False
+        self.session = httpx.AsyncClient(base_url=self.url, verify=verify)
 
     async def close(self) -> None:
         await self.session.aclose()
@@ -1785,7 +1787,8 @@ class FortinetMCPClient:
         try:
             resp = await self.session.post(
                 "/mcp/call-tool",
-                json={"name": tool_name, "arguments": arguments},
+                content=orjson.dumps({"name": tool_name, "arguments": arguments}),
+                headers={"Content-Type": "application/json"},
             )
         except httpx.RequestError as exc:
             raise HTTPException(status_code=502, detail=f"Error contacting Fortinet MCP bridge: {exc}") from exc
@@ -1796,7 +1799,11 @@ class FortinetMCPClient:
                 detail=f"Fortinet MCP bridge returned HTTP {resp.status_code}: {resp.text}",
             )
 
-        data = resp.json()
+        try:
+            data = orjson.loads(resp.content)
+        except orjson.JSONDecodeError:
+            data = resp.json()
+
         if data.get("isError"):
             # Extract a human-readable error message from the MCP response
             message: Optional[str] = None
@@ -1815,8 +1822,8 @@ class FortinetMCPClient:
             first = content_list[0]
             text_value = first.get("text") if isinstance(first, dict) else str(first)
             try:
-                parsed = json.loads(text_value or "{}")
-            except json.JSONDecodeError:
+                parsed = orjson.loads(text_value or "{}")
+            except orjson.JSONDecodeError:
                 parsed = {"content": text_value}
         else:
             parsed = data
@@ -1854,7 +1861,7 @@ async def _get_fortinet_client() -> FortinetMCPClient:
         _FORTINET_CLIENT = FortinetMCPClient(
             url=url,
             credentials=credentials,
-            session=httpx.AsyncClient(base_url=url, timeout=15.0),
+            ca_path=os.getenv("CA_CERT_PATH"),
             loop=current_loop,
         )
         return _FORTINET_CLIENT
@@ -1867,7 +1874,7 @@ async def _call_fortinet_tool_async(tool_name: str, extra_arguments: Optional[Di
 
 
 def _fallback_topology_copy() -> Dict[str, Any]:
-    data = json.loads(json.dumps(_FALLBACK_TOPOLOGY))
+    data = orjson.loads(orjson.dumps(_FALLBACK_TOPOLOGY))
     metadata = data.setdefault("metadata", {})
     metadata.setdefault("source", "fallback")
     return data
@@ -1890,9 +1897,171 @@ async def _load_topology_raw_with_fallback() -> Dict[str, Any]:
 
 
 async def _load_scene_with_fallback() -> Dict[str, Any]:
+    # 1. Try GraphML topology
+    graphml_path = PROJECT_ROOT / "data/generated/combined_topology.graphml"
+    if graphml_path.exists():
+        try:
+            logger.info(f"Loading topology from GraphML: {graphml_path}")
+            scene = await asyncio.to_thread(parse_graphml_topology, str(graphml_path))
+            if scene.get("nodes"):
+                scene.setdefault("metadata", {})["source"] = "graphml"
+                
+                # Attempt to enrich with live connected devices from FortiGate
+                try:
+                    # Collect credentials from environment
+                    creds = _fortinet_credentials()
+                    collector = await _create_fortigate_collector(creds)
+                    if collector:
+                        logger.info("Fetching live connected devices from FortiGate...")
+                        if await collector.authenticate():
+                            live_devices = await collector.get_connected_devices()
+                            if live_devices:
+                                logger.info(f"Found {len(live_devices)} connected devices")
+                                # Merge live devices into scene
+                                nodes = scene.get("nodes", [])
+                                links = scene.get("links", [])
+                                
+                                # Find a suitable uplink (switch or firewall)
+                                uplink_id = None
+                                for n in nodes:
+                                    dtype = (n.get("type") or "").lower()
+                                    if "switch" in dtype:
+                                        uplink_id = n["id"]
+                                        break
+                                if not uplink_id:
+                                    for n in nodes:
+                                        dtype = (n.get("type") or "").lower()
+                                        if "fortigate" in dtype or "firewall" in dtype:
+                                            uplink_id = n["id"]
+                                            break
+                                
+                                if uplink_id:
+                                    # Initialize matcher
+                                    matcher = DeviceModelMatcher()
+                                    
+                                    for dev in live_devices:
+                                        dev_id = f"dev-{dev.get('mac', 'unknown').replace(':', '')}"
+                                        # Avoid duplicates
+                                        if any(n["id"] == dev_id for n in nodes):
+                                            continue
+                                            
+                                        # Match device to get type and model
+                                        mac = dev.get("mac", "")
+                                        host = dev.get("host", "")
+                                        match_info = matcher.match_mac_to_model(mac, {"hostname": host})
+                                        
+                                        nodes.append({
+                                            "id": dev_id,
+                                            "name": host or mac or "Unknown Device",
+                                            "type": match_info.device_type,
+                                            "ip": dev.get("ip"),
+                                            "mac": mac,
+                                            "vendor": match_info.vendor,
+                                            "os": dev.get("os_name"),
+                                            "status": "online",
+                                            "model_path": match_info.model_path,
+                                            "pos_system": match_info.pos_system
+                                        })
+                                        links.append({
+                                            "from": uplink_id,
+                                            "to": dev_id,
+                                            "status": "active"
+                                        })
+                                        
+                                scene["nodes"] = nodes
+                                scene["links"] = links
+                except Exception as e:
+                    logger.warning(f"Failed to enrich topology with live devices: {e}")
+
+                return scene
+        except Exception as e:
+            logger.error(f"Failed to load GraphML topology: {e}")
+
+    # 2. Try JSON topology
+    json_path = PROJECT_ROOT / "data/generated/combined_topology.json"
+    if json_path.exists():
+        try:
+            logger.info(f"Loading topology from JSON: {json_path}")
+            content = await asyncio.to_thread(json_path.read_text)
+            scene = orjson.loads(content)
+            if scene.get("nodes"):
+                scene.setdefault("metadata", {})["source"] = "json"
+                
+                # Attempt to enrich with live connected devices from FortiGate
+                try:
+                    # Collect credentials from environment
+                    creds = _fortinet_credentials()
+                    collector = await _create_fortigate_collector(creds)
+                    if collector:
+                        logger.info("Fetching live connected devices from FortiGate...")
+                        if await collector.authenticate():
+                            live_devices = await collector.get_connected_devices()
+                            if live_devices:
+                                logger.info(f"Found {len(live_devices)} connected devices")
+                                # Merge live devices into scene
+                                nodes = scene.get("nodes", [])
+                                links = scene.get("links", [])
+                                
+                                # Find a suitable uplink (switch or firewall)
+                                uplink_id = None
+                                for n in nodes:
+                                    dtype = (n.get("type") or "").lower()
+                                    if "switch" in dtype:
+                                        uplink_id = n["id"]
+                                        break
+                                if not uplink_id:
+                                    for n in nodes:
+                                        dtype = (n.get("type") or "").lower()
+                                        if "fortigate" in dtype or "firewall" in dtype:
+                                            uplink_id = n["id"]
+                                            break
+                                
+                                if uplink_id:
+                                    # Initialize matcher
+                                    matcher = DeviceModelMatcher()
+                                    
+                                    for dev in live_devices:
+                                        dev_id = f"dev-{dev.get('mac', 'unknown').replace(':', '')}"
+                                        # Avoid duplicates
+                                        if any(n["id"] == dev_id for n in nodes):
+                                            continue
+                                            
+                                        # Match device to get type and model
+                                        mac = dev.get("mac", "")
+                                        host = dev.get("host", "")
+                                        match_info = matcher.match_mac_to_model(mac, {"hostname": host})
+                                        
+                                        nodes.append({
+                                            "id": dev_id,
+                                            "name": host or mac or "Unknown Device",
+                                            "type": match_info.device_type,
+                                            "ip": dev.get("ip"),
+                                            "mac": mac,
+                                            "vendor": match_info.vendor,
+                                            "os": dev.get("os_name"),
+                                            "status": "online",
+                                            "model_path": match_info.model_path,
+                                            "pos_system": match_info.pos_system
+                                        })
+                                        links.append({
+                                            "from": uplink_id,
+                                            "to": dev_id,
+                                            "status": "active"
+                                        })
+                                        
+                                scene["nodes"] = nodes
+                                scene["links"] = links
+                except Exception as e:
+                    logger.warning(f"Failed to enrich topology with live devices: {e}")
+
+                return scene
+        except Exception as e:
+            logger.error(f"Failed to load JSON topology: {e}")
+
+    # 3. Fallback to discovery / sample
     topology = await _load_topology_raw_with_fallback()
     if (topology.get("metadata") or {}).get("source") == "fallback":
-        scene = json.loads(json.dumps(_SAMPLE_SCENE))
+        scene = orjson.loads(orjson.dumps(_SAMPLE_SCENE))
         scene.setdefault("metadata", {})["source"] = "fallback"
         return scene
     scene = await asyncio.to_thread(_normalize_scene, topology)
@@ -1912,98 +2081,133 @@ def _call_fortinet_tool(tool_name: str, params: Optional[Dict[str, Any]] = None)
             "Cannot call synchronous _call_fortinet_tool from within an active event loop. "
             "Use 'await _call_fortinet_tool_async(...)' instead."
         )
-
-
 def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
     """Convert normalized scene {"nodes","links"} to lab-style {"models","connections"} format.
-
-    This matches the structure used in 3d-network-topology-lab/babylon_topology.json so that the
-    same Babylon.js viewer can be driven by the Enhanced Network API topology pipeline.
+    
+    This matches the structure used in 3d-network-topology-lab/babylon_topology.json.
+    Implements a hierarchical layout: Firewall -> Switch -> AP -> Clients.
     """
     nodes = scene.get("nodes") or []
     links = scene.get("links") or []
 
-    models: List[Dict[str, Any]] = []
-    for idx, node in enumerate(nodes):
-        node_id = node.get("id") or f"node-{idx}"
+    # 1. Filter out interface/port nodes to clean up the view
+    # Keep only physical devices (fortigate, fortiswitch, fortiap, etc.)
+    device_nodes = []
+    for n in nodes:
+        dtype = (n.get("type") or "").lower()
+        if dtype not in ("interface", "vlan", "tunnel", "vap-switch", "aggregate", "physical", "hard-switch"):
+            device_nodes.append(n)
+    
+    # If we filtered everything (unlikely), revert to showing everything
+    if not device_nodes and nodes:
+        device_nodes = nodes
 
-        # Reuse explicit positions when available, otherwise compute a simple grid layout
-        pos = node.get("position") or {}
-        x = pos.get("x")
-        y = pos.get("y")
-        z = pos.get("z")
-        if x is None or y is None or z is None:
-            x = (idx % 5) * 4 - 8
-            y = 2
-            z = (idx // 5) * 4 - 8
+    # 2. Group by hierarchy tier
+    tier_1 = [] # Firewalls / Gateways
+    tier_2 = [] # Switches
+    tier_3 = [] # Access Points
+    tier_4 = [] # Clients / Others
 
-        device_type = (
-            node.get("device_type")
-            or node.get("type")
-            or node.get("role")
-            or "endpoint"
-        )
+    for node in device_nodes:
+        dtype = (node.get("type") or "").lower()
+        model = (node.get("model") or "").lower()
+        
+        if "fortigate" in dtype or "firewall" in dtype:
+            tier_1.append(node)
+        elif "fortiswitch" in dtype or "switch" in dtype:
+            tier_2.append(node)
+        elif "fortiap" in dtype or "access_point" in dtype or "ap" in dtype:
+            tier_3.append(node)
+        else:
+            tier_4.append(node)
 
-        model_entry: Dict[str, Any] = {
-            "id": node_id,
-            "name": node.get("name") or node.get("hostname") or node_id,
-            "type": device_type,
-            # Prefer device_model (3D asset path from VSS/Matcher) when present
-            "model": node.get("device_model") or node.get("model"),
-            "position": {"x": x, "y": y, "z": z},
-            "status": node.get("status", "online"),
-            "ip": node.get("ip"),
-            "mac": node.get("mac"),
-            "serial": node.get("serial"),
-        }
+    # 3. Assign Positions (Hierarchical Layout)
+    # Y-axis represents tier level (Higher Y = Higher in hierarchy)
+    # X-axis spreads devices within the tier
+    
+    models = []
+    
+    def layout_tier(tier_nodes, y_level, z_offset=0):
+        count = len(tier_nodes)
+        if count == 0:
+            return
+        
+        # Spread width based on count
+        spacing = 6.0
+        start_x = -((count - 1) * spacing) / 2
+        
+        for i, node in enumerate(tier_nodes):
+            node_id = node.get("id")
+            
+            # Use existing position if available and valid
+            pos = node.get("position") or {}
+            if pos.get("x") is not None and pos.get("y") is not None:
+                x, y, z = pos["x"], pos["y"], pos["z"]
+            else:
+                x = start_x + (i * spacing)
+                y = y_level
+                z = z_offset
+            
+            device_type = (
+                node.get("device_type")
+                or node.get("type")
+                or node.get("role")
+                or "endpoint"
+            )
 
-        # Optional health / performance fields if present in enhanced scenes
-        if "cpu" in node:
-            model_entry["cpu_usage"] = node.get("cpu")
-        if "memory" in node:
-            model_entry["memory_usage"] = node.get("memory")
-        if "throughput" in node:
-            model_entry["throughput"] = node.get("throughput")
+            model_entry = {
+                "id": node_id,
+                "name": node.get("name") or node.get("hostname") or node_id,
+                "type": device_type,
+                "model": node.get("model_path") or node.get("device_model") or node.get("model"),
+                "position": {"x": x, "y": y, "z": z},
+                "status": node.get("status", "online"),
+                "ip": node.get("ip"),
+                "mac": node.get("mac"),
+                "serial": node.get("serial"),
+                "vendor": node.get("vendor"),
+                "icon_svg": node.get("icon_svg")
+            }
+            models.append(model_entry)
 
-        # Carry over any vendor / device classification metadata
-        if "device_vendor" in node:
-            model_entry["vendor"] = node.get("device_vendor")
-        if "pos_system" in node:
-            model_entry["pos_system"] = node.get("pos_system")
-        if "vlan" in node:
-            model_entry["vlan"] = node.get("vlan")
-        # VSS-derived SVG icon URL for use in 2D views / overlays
-        if "icon_svg" in node:
-            model_entry["icon_svg"] = node.get("icon_svg")
+    # Execute layout
+    # Tier 1 (Firewall): Y = 10
+    layout_tier(tier_1, 10.0)
+    
+    # Tier 2 (Switch): Y = 5
+    layout_tier(tier_2, 5.0)
+    
+    # Tier 3 (AP): Y = 0
+    layout_tier(tier_3, 0.0)
+    
+    # Tier 4 (Clients): Y = -5
+    layout_tier(tier_4, -5.0)
 
-        models.append(model_entry)
-
-    connections: List[Dict[str, Any]] = []
+    # 4. Process Connections
+    # Only keep connections where both endpoints are in our filtered device list
+    valid_ids = {m["id"] for m in models}
+    connections = []
+    
+    # Heuristic: Find the primary switch to visually attach APs to
+    # This matches the user's expected "Fortinet Network Topology" hierarchy
+    primary_switch_id = None
+    for m in models:
+        if "switch" in (m.get("type") or "").lower():
+            primary_switch_id = m["id"]
+            break
+            
     for link in links:
         src = link.get("from") or link.get("source")
         dst = link.get("to") or link.get("target")
-        if not src or not dst:
-            continue
+        
+        if src in valid_ids and dst in valid_ids:
+            conn = {
+                "from": src,
+                "to": dst,
+                "status": link.get("status", "active"),
+            }
+            connections.append(conn)
 
-        conn: Dict[str, Any] = {
-            "from": src,
-            "to": dst,
-            "status": link.get("status", "active"),
-        }
-
-        # Optional metadata that some generators attach to links
-        if "protocol" in link:
-            conn["protocol"] = link.get("protocol")
-        if "bandwidth" in link:
-            conn["bandwidth"] = link.get("bandwidth")
-        if "vlan" in link:
-            conn["vlan"] = link.get("vlan")
-        if "poe" in link:
-            conn["poe"] = link.get("poe")
-
-        connections.append(conn)
-
-    # No demo/sample topology injection: if there is no data, return empty models/connections
     return {"models": models, "connections": connections}
 
 
@@ -2054,6 +2258,11 @@ async def fortigate_topology_direct(request: FortiGateDirectRequest):
     """
 
     collector = _create_fortigate_collector(request.credentials)
+    # Inject CA cert path if available
+    ca_cert = os.getenv("CA_CERT_PATH")
+    if ca_cert and hasattr(collector, "ca_cert_path"):
+        collector.ca_cert_path = ca_cert
+    
     topology = await collector.collect_topology()
     devices = topology.get("devices") or []
     if not devices:

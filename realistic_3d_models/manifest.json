@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "models": [
+    {
+      "name": "FortiSwitch",
+      "svgPath": "optimized_svgs/FortiSwitch.svg",
+      "objPath": "models/FortiSwitch.obj",
+      "category": "switch",
+      "tags": [
+        "switch"
+      ]
+    },
+    {
+      "name": "FortiAP",
+      "svgPath": "optimized_svgs/FortiAP.svg",
+      "objPath": "models/FortiAP.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "FortiGate",
+      "svgPath": "optimized_svgs/FortiGate.svg",
+      "objPath": "models/FortiGate.obj",
+      "category": "firewall",
+      "tags": [
+        "firewall"
+      ]
+    },
+    {
+      "name": "Laptop",
+      "svgPath": "optimized_svgs/Laptop.svg",
+      "objPath": "models/Laptop.obj",
+      "category": "access_point",
+      "tags": [
+        "access_point"
+      ]
+    },
+    {
+      "name": "Smartphone",
+      "svgPath": "optimized_svgs/Smartphone.svg",
+      "objPath": "models/Smartphone.obj",
+      "category": "unknown",
+      "tags": []
+    }
+  ]
+}

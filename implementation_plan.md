@@ -34,9 +34,12 @@ The goal is to improve the efficiency of the `enhanced-network-api` by optimizin
 - Parallelize `step4_identify_devices` using `asyncio.gather` and `asyncio.to_thread` to prevent blocking on OUI lookups.
 - Parallelize `step5_generate_svg_icons` using `asyncio.to_thread` for file I/O.
 - Add `MANUFACTURER_ICON_MAP` constant with mappings for Fortinet, Cisco, Printers, Mobile, etc.
-- Implement `_get_device_icon_name` (or update `_generate_svg_filename`) to use `MANUFACTURER_ICON_MAP` for precise icon selection.
-- Update `_get_icon_config` to support the expanded set of device types and vendors defined in the map.
-
+- [x] **Manufacturer-to-Icon Mapping**:
+    - [x] Define `MANUFACTURER_ICON_MAP` in `network_topology_workflow.py`.
+    - [x] Update `_generate_svg_filename` and `_get_icon_config` to use the map.
+- [x] **SSL Certificate Support**:
+    - [x] Update `FortiGateAuth` to accept custom CA certificate path.
+    - [x] Update `NetworkTopologyWorkflow` to pass CA certificate path.
 
 #### [MODIFY] [src/enhanced_network_api/device_mac_matcher.py](file:///home/keith/enhanced-network-api-corporate/src/enhanced_network_api/device_mac_matcher.py)
 - Implement `_lookup_maclookup_app` using `https://api.maclookup.app/v2/macs/{mac}/company/name`.

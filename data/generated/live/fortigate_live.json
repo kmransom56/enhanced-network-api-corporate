@@ -1,0 +1,524 @@
+{
+  "links": [
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "Local Network"
+      ],
+      "to": "port-Local Network",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "NET_INT_SSID"
+      ],
+      "to": "port-NET_INT_SSID",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "_default"
+      ],
+      "to": "port-_default",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "a"
+      ],
+      "to": "port-a",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "b"
+      ],
+      "to": "port-b",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "dmz"
+      ],
+      "to": "port-dmz",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "fortilink"
+      ],
+      "to": "port-fortilink",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal"
+      ],
+      "to": "port-internal",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal1"
+      ],
+      "to": "port-internal1",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal2"
+      ],
+      "to": "port-internal2",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal3"
+      ],
+      "to": "port-internal3",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal4"
+      ],
+      "to": "port-internal4",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "internal5"
+      ],
+      "to": "port-internal5",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "l2t.root"
+      ],
+      "to": "port-l2t.root",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "modem"
+      ],
+      "to": "port-modem",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "nac_segment"
+      ],
+      "to": "port-nac_segment",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "naf.root"
+      ],
+      "to": "port-naf.root",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "onboarding"
+      ],
+      "to": "port-onboarding",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "quarantine"
+      ],
+      "to": "port-quarantine",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "rspan"
+      ],
+      "to": "port-rspan",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "ssl.root"
+      ],
+      "to": "port-ssl.root",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "video"
+      ],
+      "to": "port-video",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "voice"
+      ],
+      "to": "port-voice",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "wan1"
+      ],
+      "to": "port-wan1",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "wan2"
+      ],
+      "to": "port-wan2",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "wqt.root"
+      ],
+      "to": "port-wqt.root",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "wqtn.25.NET_INT"
+      ],
+      "to": "port-wqtn.25.NET_INT",
+      "type": "interface"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "ports": [
+        "fortilink"
+      ],
+      "to": "switch-SW",
+      "type": "switch"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "to": "ap-AP",
+      "type": "wireless"
+    },
+    {
+      "from": "FGT61FTK20020975",
+      "to": "ap-AP2",
+      "type": "wireless"
+    }
+  ],
+  "metadata": {
+    "fortimanager_device_count": 31,
+    "link_count": 30,
+    "meraki_device_count": 0,
+    "node_count": 31,
+    "source": "automated_topology_workflow"
+  },
+  "nodes": [
+    {
+      "id": "FGT61FTK20020975",
+      "ip": "192.168.0.254",
+      "model": "FGT61F",
+      "name": "FW",
+      "serial": "FGT61FTK20020975",
+      "status": "online",
+      "type": "fortigate",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-Local Network",
+      "ip": "192.168.0.254 255.255.255.0",
+      "model": "vlan",
+      "name": "Local Network",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-NET_INT_SSID",
+      "ip": "192.168.2.1 255.255.255.0",
+      "model": "vap-switch",
+      "name": "NET_INT_SSID",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-_default",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "vlan",
+      "name": "_default",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-a",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "a",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-b",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "b",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-dmz",
+      "ip": "10.10.10.1 255.255.255.0",
+      "model": "physical",
+      "name": "dmz",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-fortilink",
+      "ip": "10.255.1.1 255.255.255.0",
+      "model": "aggregate",
+      "name": "fortilink",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal",
+      "ip": "192.168.1.254 255.255.255.0",
+      "model": "hard-switch",
+      "name": "internal",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal1",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "internal1",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal2",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "internal2",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal3",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "internal3",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal4",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "internal4",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-internal5",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "internal5",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-l2t.root",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "tunnel",
+      "name": "l2t.root",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-modem",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "modem",
+      "status": "down",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-nac_segment",
+      "ip": "10.255.13.1 255.255.255.0",
+      "model": "vlan",
+      "name": "nac_segment",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-naf.root",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "tunnel",
+      "name": "naf.root",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-onboarding",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "vlan",
+      "name": "onboarding",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-quarantine",
+      "ip": "10.255.11.1 255.255.255.0",
+      "model": "vlan",
+      "name": "quarantine",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-rspan",
+      "ip": "10.255.12.1 255.255.255.0",
+      "model": "vlan",
+      "name": "rspan",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-ssl.root",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "tunnel",
+      "name": "ssl.root",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-video",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "vlan",
+      "name": "video",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-voice",
+      "ip": "10.255.91.1 255.255.255.0",
+      "model": "vlan",
+      "name": "voice",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-wan1",
+      "ip": "10.0.0.167 255.255.255.0",
+      "model": "physical",
+      "name": "wan1",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-wan2",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "physical",
+      "name": "wan2",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-wqt.root",
+      "ip": "10.253.255.254 255.255.240.0",
+      "model": "switch",
+      "name": "wqt.root",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "port-wqtn.25.NET_INT",
+      "ip": "0.0.0.0 0.0.0.0",
+      "model": "vlan",
+      "name": "wqtn.25.NET_INT",
+      "status": "up",
+      "type": "interface",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "switch-SW",
+      "name": "SW",
+      "serial": "S124EPTQ22000276",
+      "status": "enable",
+      "type": "fortiswitch",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "ap-AP",
+      "name": "AP",
+      "serial": "FP231FTF20023043",
+      "status": "enable",
+      "type": "fortiap",
+      "vendor": "fortinet"
+    },
+    {
+      "id": "ap-AP2",
+      "name": "AP2",
+      "serial": "FP231FTF22003593",
+      "status": "enable",
+      "type": "fortiap",
+      "vendor": "fortinet"
+    }
+  ]
+}

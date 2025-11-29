@@ -1,0 +1,119 @@
+INFO:api_documentation:Intelligent API MCP initialized
+ERROR:api_documentation:LLM API error: 404
+ERROR:api_documentation:Error generating API request: LLM request failed
+ERROR:api_documentation:LLM API error: 404
+ERROR:api_documentation:Error generating API request: LLM request failed
+ERROR:api_documentation:LLM API error: 404
+ERROR:api_documentation:Error generating API request: LLM request failed
+ERROR:api_documentation:LLM API error: 404
+ERROR:api_documentation:Error generating API request: LLM request failed
+ERROR:api_documentation:LLM API error: 404
+ERROR:api_documentation:Error generating API request: LLM request failed
+ERROR:fortigate_collector:❌ Authentication failed: 404
+ERROR:fortigate_collector:Response: {"status":"error","http_status":404,"path":"system","name":"status","serial":"FGT61FTK20020975","version":"v7.6.4","build":3596,"http_method":"GET"}...
+🚀 Intelligent API MCP Test Suite
+============================================================
+
+🔍 Testing API Documentation Queries
+==================================================
+📚 FortiGate Endpoints: 5
+📚 Meraki Endpoints: 5
+
+🔎 Query: 'system status' on fortigate
+  ✅ Found 1 results:
+    - system_status: GET /api/v2/cmdb/system/status
+      Get FortiGate system status and information...
+      Relevance: 3
+
+🔎 Query: 'network interfaces' on fortigate
+  ✅ Found 0 results:
+
+🔎 Query: 'firewall policies' on fortigate
+  ✅ Found 0 results:
+
+🔎 Query: 'organizations' on meraki
+  ✅ Found 3 results:
+    - organizations: GET /organizations
+      List organizations...
+      Relevance: 5
+    - networks: GET /organizations/{organizationId}/networks
+      List networks in an organization...
+      Relevance: 2
+    - devices: GET /organizations/{organizationId}/devices
+      List devices in an organization...
+      Relevance: 2
+
+🔎 Query: 'switch ports' on meraki
+  ✅ Found 1 results:
+    - switch_ports: GET /devices/{serial}/switch/ports
+      List switch ports...
+      Relevance: 3
+
+🔎 Query: 'access points' on meraki
+  ✅ Found 1 results:
+    - access_points: GET /networks/{networkId}/devices
+      List access points in a network...
+      Relevance: 3
+
+🤖 Testing LLM API Request Generation
+==================================================
+🔗 LLM URL: http://localhost:11434
+🧠 LLM Model: fortinet-custom
+✅ LLM initialized successfully
+
+🎯 Query: 'Show me the system status'
+  ✅ Generated Request:
+    Method: GET
+    URL: /api/v2/cmdb/system/status
+    Description: Generated request for: Show me the system status
+    Confidence: 0.5
+
+🎯 Query: 'Get all network interfaces'
+  ✅ Generated Request:
+    Method: GET
+    URL: /api/v2/cmdb/system/interface
+    Description: Generated request for: Get all network interfaces
+    Confidence: 0.5
+
+🎯 Query: 'List firewall policies'
+  ✅ Generated Request:
+    Method: GET
+    URL: /api/v2/cmdb/firewall/policy
+    Description: Generated request for: List firewall policies
+    Confidence: 0.5
+
+🎯 Query: 'Check resource usage'
+  ✅ Generated Request:
+    Method: GET
+    URL: /api/v2/monitor/system/resource/usage
+    Description: Generated request for: Check resource usage
+    Confidence: 0.5
+
+🎯 Query: 'Show VIP configuration'
+  ✅ Generated Request:
+    Method: GET
+    URL: /api/v2/cmdb/firewall/vip
+    Description: Generated request for: Show VIP configuration
+    Confidence: 0.5
+
+🔧 Testing MCP Server Integration
+==================================================
+❌ Import error: No module named 'mcp'
+
+🔐 Testing FortiGate API Authentication
+==================================================
+🏠 Host: 192.168.0.254:10443
+👤 Username: !cg@RW%G@o
+🔐 Password: ✅ Set
+❌ Authentication failed
+
+============================================================
+📊 TEST RESULTS SUMMARY
+============================================================
+API Documentation         ✅ PASS
+LLM Integration           ✅ PASS
+MCP Server Integration    ❌ FAIL
+FortiGate API Auth        ❌ FAIL
+
+🎯 Overall: 2/4 tests passed
+⚠️  Some tests failed. Check the output above for details.

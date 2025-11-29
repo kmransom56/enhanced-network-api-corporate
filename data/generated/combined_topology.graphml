@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <graph id="automated-topology" edgedefault="undirected">
+    <node id="FGT61FTK20020975" vendor="fortinet" name="FW" ip="192.168.0.254" model="FGT61F" serial="FGT61FTK20020975" status="online" type="fortigate"/>
+    <node id="port-Local Network" vendor="fortinet" name="Local Network" ip="192.168.0.254 255.255.255.0" model="vlan" status="up" type="interface"/>
+    <node id="port-NET_INT_SSID" vendor="fortinet" name="NET_INT_SSID" ip="192.168.2.1 255.255.255.0" model="vap-switch" status="up" type="interface"/>
+    <node id="port-_default" vendor="fortinet" name="_default" ip="0.0.0.0 0.0.0.0" model="vlan" status="up" type="interface"/>
+    <node id="port-a" vendor="fortinet" name="a" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-b" vendor="fortinet" name="b" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-dmz" vendor="fortinet" name="dmz" ip="10.10.10.1 255.255.255.0" model="physical" status="up" type="interface"/>
+    <node id="port-fortilink" vendor="fortinet" name="fortilink" ip="10.255.1.1 255.255.255.0" model="aggregate" status="up" type="interface"/>
+    <node id="port-internal" vendor="fortinet" name="internal" ip="192.168.1.254 255.255.255.0" model="hard-switch" status="up" type="interface"/>
+    <node id="port-internal1" vendor="fortinet" name="internal1" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-internal2" vendor="fortinet" name="internal2" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-internal3" vendor="fortinet" name="internal3" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-internal4" vendor="fortinet" name="internal4" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-internal5" vendor="fortinet" name="internal5" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-l2t.root" vendor="fortinet" name="l2t.root" ip="0.0.0.0 0.0.0.0" model="tunnel" status="up" type="interface"/>
+    <node id="port-modem" vendor="fortinet" name="modem" ip="0.0.0.0 0.0.0.0" model="physical" status="down" type="interface"/>
+    <node id="port-nac_segment" vendor="fortinet" name="nac_segment" ip="10.255.13.1 255.255.255.0" model="vlan" status="up" type="interface"/>
+    <node id="port-naf.root" vendor="fortinet" name="naf.root" ip="0.0.0.0 0.0.0.0" model="tunnel" status="up" type="interface"/>
+    <node id="port-onboarding" vendor="fortinet" name="onboarding" ip="0.0.0.0 0.0.0.0" model="vlan" status="up" type="interface"/>
+    <node id="port-quarantine" vendor="fortinet" name="quarantine" ip="10.255.11.1 255.255.255.0" model="vlan" status="up" type="interface"/>
+    <node id="port-rspan" vendor="fortinet" name="rspan" ip="10.255.12.1 255.255.255.0" model="vlan" status="up" type="interface"/>
+    <node id="port-ssl.root" vendor="fortinet" name="ssl.root" ip="0.0.0.0 0.0.0.0" model="tunnel" status="up" type="interface"/>
+    <node id="port-video" vendor="fortinet" name="video" ip="0.0.0.0 0.0.0.0" model="vlan" status="up" type="interface"/>
+    <node id="port-voice" vendor="fortinet" name="voice" ip="10.255.91.1 255.255.255.0" model="vlan" status="up" type="interface"/>
+    <node id="port-wan1" vendor="fortinet" name="wan1" ip="10.0.0.167 255.255.255.0" model="physical" status="up" type="interface"/>
+    <node id="port-wan2" vendor="fortinet" name="wan2" ip="0.0.0.0 0.0.0.0" model="physical" status="up" type="interface"/>
+    <node id="port-wqt.root" vendor="fortinet" name="wqt.root" ip="10.253.255.254 255.255.240.0" model="switch" status="up" type="interface"/>
+    <node id="port-wqtn.25.NET_INT" vendor="fortinet" name="wqtn.25.NET_INT" ip="0.0.0.0 0.0.0.0" model="vlan" status="up" type="interface"/>
+    <node id="switch-SW" vendor="fortinet" name="SW" serial="S124EPTQ22000276" status="enable" type="fortiswitch"/>
+    <node id="ap-AP" vendor="fortinet" name="AP" serial="FP231FTF20023043" status="enable" type="fortiap"/>
+    <node id="ap-AP2" vendor="fortinet" name="AP2" serial="FP231FTF22003593" status="enable" type="fortiap"/>
+    <edge id="e0" source="FGT61FTK20020975" target="port-Local Network" type="interface" ports="['Local Network']"/>
+    <edge id="e1" source="FGT61FTK20020975" target="port-NET_INT_SSID" type="interface" ports="['NET_INT_SSID']"/>
+    <edge id="e2" source="FGT61FTK20020975" target="port-_default" type="interface" ports="['_default']"/>
+    <edge id="e3" source="FGT61FTK20020975" target="port-a" type="interface" ports="['a']"/>
+    <edge id="e4" source="FGT61FTK20020975" target="port-b" type="interface" ports="['b']"/>
+    <edge id="e5" source="FGT61FTK20020975" target="port-dmz" type="interface" ports="['dmz']"/>
+    <edge id="e6" source="FGT61FTK20020975" target="port-fortilink" type="interface" ports="['fortilink']"/>
+    <edge id="e7" source="FGT61FTK20020975" target="port-internal" type="interface" ports="['internal']"/>
+    <edge id="e8" source="FGT61FTK20020975" target="port-internal1" type="interface" ports="['internal1']"/>
+    <edge id="e9" source="FGT61FTK20020975" target="port-internal2" type="interface" ports="['internal2']"/>
+    <edge id="e10" source="FGT61FTK20020975" target="port-internal3" type="interface" ports="['internal3']"/>
+    <edge id="e11" source="FGT61FTK20020975" target="port-internal4" type="interface" ports="['internal4']"/>
+    <edge id="e12" source="FGT61FTK20020975" target="port-internal5" type="interface" ports="['internal5']"/>
+    <edge id="e13" source="FGT61FTK20020975" target="port-l2t.root" type="interface" ports="['l2t.root']"/>
+    <edge id="e14" source="FGT61FTK20020975" target="port-modem" type="interface" ports="['modem']"/>
+    <edge id="e15" source="FGT61FTK20020975" target="port-nac_segment" type="interface" ports="['nac_segment']"/>
+    <edge id="e16" source="FGT61FTK20020975" target="port-naf.root" type="interface" ports="['naf.root']"/>
+    <edge id="e17" source="FGT61FTK20020975" target="port-onboarding" type="interface" ports="['onboarding']"/>
+    <edge id="e18" source="FGT61FTK20020975" target="port-quarantine" type="interface" ports="['quarantine']"/>
+    <edge id="e19" source="FGT61FTK20020975" target="port-rspan" type="interface" ports="['rspan']"/>
+    <edge id="e20" source="FGT61FTK20020975" target="port-ssl.root" type="interface" ports="['ssl.root']"/>
+    <edge id="e21" source="FGT61FTK20020975" target="port-video" type="interface" ports="['video']"/>
+    <edge id="e22" source="FGT61FTK20020975" target="port-voice" type="interface" ports="['voice']"/>
+    <edge id="e23" source="FGT61FTK20020975" target="port-wan1" type="interface" ports="['wan1']"/>
+    <edge id="e24" source="FGT61FTK20020975" target="port-wan2" type="interface" ports="['wan2']"/>
+    <edge id="e25" source="FGT61FTK20020975" target="port-wqt.root" type="interface" ports="['wqt.root']"/>
+    <edge id="e26" source="FGT61FTK20020975" target="port-wqtn.25.NET_INT" type="interface" ports="['wqtn.25.NET_INT']"/>
+    <edge id="e27" source="FGT61FTK20020975" target="switch-SW" type="switch" ports="['fortilink']"/>
+    <edge id="e28" source="FGT61FTK20020975" target="ap-AP" type="wireless"/>
+    <edge id="e29" source="FGT61FTK20020975" target="ap-AP2" type="wireless"/>
+  </graph>
+</graphml>

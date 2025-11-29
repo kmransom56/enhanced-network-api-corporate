@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Topology</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { margin: 0; background: #1a1f2e; color: white; font-family: Arial; }
+        .node circle { stroke: white; stroke-width: 2px; cursor: pointer; }
+        .node rect { stroke: white; stroke-width: 2px; fill: #cc3333; cursor: pointer; }
+        .link { stroke: #58a6ff; stroke-width: 2px; }
+        .label { font-size: 12px; fill: white; text-anchor: middle; pointer-events: none; }
+        button { background: #238636; color: white; border: none; padding: 10px; margin: 10px; cursor: pointer; }
+        
+        /* Device info panel */
+        .device-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #58a6ff;
+            border-radius: 8px;
+            padding: 15px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .device-info h3 {
+            margin: 0 0 10px 0;
+            color: #58a6ff;
+            font-size: 16px;
+        }
+        
+        .device-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        
+        .device-info .label {
+            color: #ccc;
+        }
+        
+        .device-info .value {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .device-info .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .node:hover {
+            filter: brightness(1.2);
+        }
+        
+        .node.selected {
+            filter: brightness(1.5) drop-shadow(0 0 10px #58a6ff);
+        }
+    </style>
+</head>
+<body>
+    <button onclick="loadTopology()">Load Topology</button>
+    <div id="status">Ready</div>
+    <svg id="topology" width="800" height="600"></svg>
+    
+    <!-- Device Information Panel -->
+    <div id="deviceInfo" class="device-info">
+        <button class="close-btn" onclick="closeDeviceInfo()">×</button>
+        <h3 id="deviceTitle">Device Information</h3>
+        <div id="deviceDetails"></div>
+    </div>
+
+    <script>
+        function updateStatus(msg) {
+            document.getElementById('status').textContent = msg;
+        }
+        
+        function showDeviceInfo(device) {
+            const panel = document.getElementById('deviceInfo');
+            const title = document.getElementById('deviceTitle');
+            const details = document.getElementById('deviceDetails');
+            
+            // Clear previous selection
+            d3.selectAll('.node').classed('selected', false);
+            
+            // Highlight selected device
+            d3.select(event.currentTarget).classed('selected', true);
+            
+            // Set device title
+            title.textContent = device.name || 'Unknown Device';
+            
+            // Build device details HTML
+            let detailsHTML = '';
+            
+            // Basic information
+            if (device.hostname) {
+                detailsHTML += `<div class="info-row"><span class="label">Hostname:</span><span class="value">${device.hostname}</span></div>`;
+            }
+            
+            if (device.type) {
+                detailsHTML += `<div class="info-row"><span class="label">Type:</span><span class="value">${device.type.toUpperCase()}</span></div>`;
+            }
+            
+            if (device.model) {
+                detailsHTML += `<div class="info-row"><span class="label">Model:</span><span class="value">${device.model}</span></div>`;
+            }
+            
+            if (device.ip) {
+                detailsHTML += `<div class="info-row"><span class="label">IP Address:</span><span class="value">${device.ip}</span></div>`;
+            }
+            
+            if (device.mac) {
+                detailsHTML += `<div class="info-row"><span class="label">MAC Address:</span><span class="value">${device.mac.toUpperCase()}</span></div>`;
+            }
+            
+            if (device.serial) {
+                detailsHTML += `<div class="info-row"><span class="label">Serial:</span><span class="value">${device.serial}</span></div>`;
+            }
+            
+            if (device.status) {
+                const statusColor = device.status === 'active' ? '#4caf50' : '#f44336';
+                detailsHTML += `<div class="info-row"><span class="label">Status:</span><span class="value" style="color: ${statusColor}">${device.status.toUpperCase()}</span></div>`;
+            }
+            
+            if (device.firmware) {
+                detailsHTML += `<div class="info-row"><span class="label">Firmware:</span><span class="value">${device.firmware}</span></div>`;
+            }
+            
+            if (device.os) {
+                detailsHTML += `<div class="info-row"><span class="label">OS:</span><span class="value">${device.os}</span></div>`;
+            }
+            
+            if (device.uptime) {
+                detailsHTML += `<div class="info-row"><span class="label">Uptime:</span><span class="value">${device.uptime}</span></div>`;
+            }
+            
+            if (device.last_seen) {
+                detailsHTML += `<div class="info-row"><span class="label">Last Seen:</span><span class="value">${device.last_seen}</span></div>`;
+            }
+            
+            if (device.role) {
+                detailsHTML += `<div class="info-row"><span class="label">Role:</span><span class="value">${device.role.replace('_', ' ').toUpperCase()}</span></div>`;
+            }
+            
+            if (device.connection_type) {
+                detailsHTML += `<div class="info-row"><span class="label">Connection:</span><span class="value">${device.connection_type.toUpperCase()}</span></div>`;
+            }
+            
+            // WiFi specific information
+            if (device.connection_type === "wifi" && device.ssid) {
+                detailsHTML += `<div class="info-row"><span class="label">SSID:</span><span class="value">${device.ssid}</span></div>`;
+            }
+            
+            if (device.signal_strength) {
+                detailsHTML += `<div class="info-row"><span class="label">Signal:</span><span class="value">${device.signal_strength} (${device.signal_dbm})</span></div>`;
+            }
+            
+            if (device.bandwidth) {
+                detailsHTML += `<div class="info-row"><span class="label">Bandwidth:</span><span class="value">${device.bandwidth}</span></div>`;
+            }
+            
+            // Position information
+            if (device.position) {
+                detailsHTML += `<div class="info-row"><span class="label">Position:</span><span class="value">X:${device.position.x}, Y:${device.position.y}, Z:${device.position.z}</span></div>`;
+            }
+            
+            // Device ID
+            if (device.id) {
+                detailsHTML += `<div class="info-row"><span class="label">Device ID:</span><span class="value">${device.id}</span></div>`;
+            }
+            
+            details.innerHTML = detailsHTML;
+            panel.style.display = 'block';
+        }
+        
+        function closeDeviceInfo() {
+            document.getElementById('deviceInfo').style.display = 'none';
+            d3.selectAll('.node').classed('selected', false);
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) window.simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) window.simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        function loadTopology() {
+            updateStatus('Loading...');
+            
+            // Load from API with multiple APs and client devices
+            fetch('/api/topology/scene')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('🌐 Loaded topology data:', data);
+                    renderTopology(data);
+                    updateStatus(`Loaded - ${data.nodes.length} devices, ${data.links.length} connections`);
+                })
+                .catch(error => {
+                    console.error('❌ Failed to load topology:', error);
+                    updateStatus('Error loading topology');
+                });
+        }
+
+        function renderTopology(data) {
+            const svg = d3.select("#topology");
+            svg.selectAll("*").remove();
+            
+            const width = 800;
+            const height = 600;
+            
+            // Create force simulation
+            window.simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(width/2, height/2));
+
+            // Create links
+            const link = svg.append("g")
+                .selectAll("line")
+                .data(data.links)
+                .enter()
+                .append("line")
+                .attr("class", "link");
+
+            // Create nodes
+            const node = svg.append("g")
+                .selectAll("g")
+                .data(data.nodes)
+                .enter()
+                .append("g")
+                .attr("class", "node")
+                .on("click", function(event, d) {
+                    showDeviceInfo(d);
+                })
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            // Add shapes and VSS → SVG → Eraser AI extracted model-specific icons
+            node.each(function(d) {
+                const g = d3.select(this);
+                let size, color, iconPath;
+                
+                // Configure based on device type
+                if (d.type === "fortigate") {
+                    size = 60;
+                    color = "#cc3333";
+                    iconPath = d.model ? `/static/model-specific-icons/${d.model}.svg` : "/static/fortinet-icons/FortiGate.svg";
+                } else if (d.type === "fortiswitch") {
+                    size = 50;
+                    color = "#00a652";
+                    iconPath = d.model ? `/static/model-specific-icons/${d.model}.svg` : "/static/fortinet-icons/FortiSwitch.svg";
+                } else if (d.type === "fortiap") {
+                    size = 40;
+                    color = "#0066cc";
+                    iconPath = d.model ? `/static/model-specific-icons/${d.model}.svg` : "/static/fortinet-icons/FortiAP.svg";
+                } else if (d.type === "client") {
+                    size = 30;
+                    color = "#666666";
+                    // Use client-specific icons
+                    iconPath = d.model ? `/static/fortinet-icons/${d.model}.svg` : "/static/fortinet-icons/Client.svg";
+                } else {
+                    size = 40;
+                    color = "#999999";
+                    iconPath = "/static/fortinet-icons/Client.svg";
+                }
+                
+                // Add background shape
+                if (d.type === "fortigate") {
+                    g.append("rect")
+                        .attr("x", -size/2)
+                        .attr("y", -size/2)
+                        .attr("width", size)
+                        .attr("height", size)
+                        .attr("fill", color)
+                        .attr("rx", 4);
+                } else {
+                    g.append("circle")
+                        .attr("r", size/2)
+                        .attr("fill", color);
+                }
+                
+                // Add device icon
+                g.append("image")
+                    .attr("xlink:href", iconPath)
+                    .attr("x", -size/2.5)
+                    .attr("y", -size/2.5)
+                    .attr("width", size*0.8)
+                    .attr("height", size*0.8)
+                    .attr("preserveAspectRatio", "xMidYMid meet")
+                    .on("error", function() {
+                        // Fallback to generic icon
+                        d3.select(this).remove();
+                        g.append("text")
+                            .attr("text-anchor", "middle")
+                            .attr("dy", ".3em")
+                            .style("font-size", "12px")
+                            .style("fill", "#fff")
+                            .style("font-weight", "bold")
+                            .text(d.type === "client" ? "C" : d.type.charAt(0).toUpperCase());
+                    });
+                
+                // Add device name label
+                g.append("text")
+                    .attr("class", "label")
+                    .attr("dy", size/2 + (d.type === "client" ? 15 : 20))
+                    .style("font-size", d.type === "client" ? "10px" : "12px")
+                    .style("font-weight", d.type === "client" ? "normal" : "bold")
+                    .text(d.name);
+                
+                // Add model/IP label for Fortinet devices
+                if (d.type !== "client") {
+                    g.append("text")
+                        .attr("class", "label")
+                        .attr("dy", size/2 + (d.type === "client" ? 15 : 35))
+                        .style("font-size", "9px")
+                        .style("fill", "#ccc")
+                        .text(d.model ? d.model.replace(/.*_/, '') : d.ip);
+                }
+            });
+
+            // Update positions
+            window.simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+                
+                node
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+            });
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', () => {
+            setTimeout(loadTopology, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Network Topology Lab Viewer</title>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="/static/js/babylon.js"></script>
+    <script src="/static/js/babylonjs.loaders.min.js"></script>
     <style>
         /* Reuse the same layout and styling as babylon_topology.html for consistency */
         body {
@@ -247,7 +248,8 @@
             margin-left: 5px;
         }
 
-        #loading, #error {
+        #loading,
+        #error {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -296,7 +298,8 @@
                     "status status";
             }
 
-            .left-sidebar, .details-panel {
+            .left-sidebar,
+            .details-panel {
                 position: fixed;
                 top: 60px;
                 height: calc(100vh - 100px);
@@ -311,6 +314,7 @@
         }
     </style>
 </head>
+
 <body>
     <header class="top-toolbar">
         <div class="toolbar-title">🧪 3D Network Topology Lab</div>
@@ -345,9 +349,19 @@
 
     <main class="main-canvas">
         <canvas id="renderCanvas"></canvas>
+
+        <!-- Debug Log -->
+        <div id="debugLog"
+            style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: lime; font-family: monospace; padding: 10px; max-height: 300px; overflow-y: auto; z-index: 3000; pointer-events: none; width: 400px;">
+            <div>Debug Log:</div>
+        </div>
+
+        <!-- Loading Overlay -->
         <div id="loading" class="hidden">
             <div>🔄 Loading topology...</div>
         </div>
+
+        <!-- Error Overlay -->
         <div id="error" class="hidden">
             <div>❌ <span id="errorMessage">Error loading topology</span></div>
         </div>
@@ -677,7 +691,9 @@
             });
 
             // Render devices with actual 3D models and 2D SVG overlays
-            data.nodes.forEach(async function (nodeData, index) {
+            // Render devices with actual 3D models and 2D SVG overlays
+            for (let index = 0; index < data.nodes.length; index++) {
+                const nodeData = data.nodes[index];
                 const hasPos = nodeData.position && typeof nodeData.position.x === 'number' && typeof nodeData.position.z === 'number';
                 const position = new BABYLON.Vector3(
                     hasPos ? nodeData.position.x : (index % 5) * 4 - 8,
@@ -690,6 +706,7 @@
 
                 // Fallback to device-specific box if model loading fails
                 if (!mesh) {
+                    console.log('Falling back to box for', nodeData.name);
                     mesh = createDeviceBox(nodeData, position);
                 }
 
@@ -700,7 +717,7 @@
                 createDeviceLabel(nodeData, mesh);
 
                 devices.push(mesh);
-            });
+            }
         }
 
         let labModelManifest = null;
@@ -776,10 +793,10 @@
             try {
                 // Map device types to fallback 3D models (used only when no model is provided)
                 const modelMap = {
-                    'fortigate': '/realistic_3d_models/models/FortiGate.obj',
-                    'fortiswitch': '/realistic_3d_models/models/FortiSwitch.obj',
-                    'fortiap': '/realistic_3d_models/models/FortiAP.obj',
-                    'client': '/realistic_3d_models/models/Laptop.obj'
+                    'fortigate': '/static/3d-models/FortiGate.glb',
+                    'fortiswitch': '/static/3d-models/FortiSwitch.glb',
+                    'fortiap': '/static/3d-models/FortinetAP.glb',
+                    'client': '/static/3d-models/generic_device.obj'
                 };
 
                 const typeKey = (nodeData.type || '').toLowerCase();
@@ -808,15 +825,20 @@
                     const candidate = candidates[i];
                     if (!candidate || typeof candidate !== 'string') continue;
 
-                    const sceneFile = candidate; // allow absolute paths like /lab_3d_models/models/...
+                    const lastSlash = sceneFile.lastIndexOf('/');
+                    const rootUrl = lastSlash >= 0 ? sceneFile.substring(0, lastSlash + 1) : "";
+                    const filename = lastSlash >= 0 ? sceneFile.substring(lastSlash + 1) : sceneFile;
+
+                    console.log('Attempting to load model:', sceneFile, 'root:', rootUrl, 'file:', filename);
                     try {
-                        const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", sceneFile, scene);
+                        const result = await BABYLON.SceneLoader.ImportMeshAsync("", rootUrl, filename, scene);
                         if (result.meshes.length > 0) {
+                            console.log('Successfully loaded model:', sceneFile);
                             const mesh = result.meshes[0];
                             mesh.position = position;
 
                             // Scale the model appropriately (VSS-derived GLTFs and OBJs are small)
-                            mesh.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
+                            mesh.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
 
                             mesh.metadata = {
                                 ...nodeData,
@@ -834,6 +856,7 @@
             } catch (error) {
                 console.log('Failed to load 3D model for', nodeData && nodeData.name, error);
             }
+            console.log('No suitable model found for', nodeData.name, 'candidates:', candidates);
             return null;
         }
 
@@ -944,9 +967,9 @@
 
                 // Prefer icon_svg from the API (VSS→SVG), fall back to type-based SVG
                 const svgPath = nodeData.icon_svg || svgMap[typeKey] || svgMap['client'];
-                
+
                 // Create a small plane for 2D overlay
-                const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_overlay`, 
+                const overlay = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_overlay`,
                     { width: 3, height: 2 }, scene);
                 overlay.position = new BABYLON.Vector3(
                     mesh.position.x,
@@ -957,7 +980,7 @@
 
                 // Create material with SVG texture
                 const overlayMaterial = new BABYLON.StandardMaterial(`${nodeData.id}_overlay_mat`, scene);
-                
+
                 // Try to load SVG as texture
                 try {
                     const texture = new BABYLON.Texture(svgPath, scene);
@@ -970,9 +993,9 @@
                     overlayMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
                     overlayMaterial.emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
                 }
-                
+
                 overlay.material = overlayMaterial;
-                
+
                 // Parent overlay to mesh
                 overlay.parent = mesh;
 
@@ -981,7 +1004,7 @@
                     mesh.metadata = { ...nodeData };
                 }
                 mesh.metadata.iconSvgPath = svgPath;
-                
+
             } catch (error) {
                 console.log(`Failed to add SVG overlay for ${nodeData.name}:`, error);
             }
@@ -1104,4 +1127,5 @@
         });
     </script>
 </body>
+
 </html>

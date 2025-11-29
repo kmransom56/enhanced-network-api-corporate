@@ -1,0 +1,327 @@
+{
+  "nodes": [
+    {
+      "id": "fg-192-168-0-254",
+      "name": "FortiGate-192.168.0.254",
+      "type": "fortigate",
+      "ip": "192.168.0.254",
+      "model": "Unknown",
+      "serial": "FGT61FTK20020975",
+      "status": "active"
+    },
+    {
+      "id": "network-local network",
+      "name": "Local Network Network",
+      "type": "network",
+      "ip": "192.168.0.254 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-net_int_ssid",
+      "name": "NET_INT_SSID Network",
+      "type": "network",
+      "ip": "192.168.2.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-_default",
+      "name": "_default Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-a",
+      "name": "a Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-b",
+      "name": "b Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-dmz",
+      "name": "dmz Network",
+      "type": "network",
+      "ip": "10.10.10.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-fortilink",
+      "name": "fortilink Network",
+      "type": "network",
+      "ip": "10.255.1.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal",
+      "name": "internal Network",
+      "type": "network",
+      "ip": "192.168.1.254 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal1",
+      "name": "internal1 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal2",
+      "name": "internal2 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal3",
+      "name": "internal3 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal4",
+      "name": "internal4 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-internal5",
+      "name": "internal5 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-l2t.root",
+      "name": "l2t.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-nac_segment",
+      "name": "nac_segment Network",
+      "type": "network",
+      "ip": "10.255.13.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-naf.root",
+      "name": "naf.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-onboarding",
+      "name": "onboarding Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-quarantine",
+      "name": "quarantine Network",
+      "type": "network",
+      "ip": "10.255.11.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-rspan",
+      "name": "rspan Network",
+      "type": "network",
+      "ip": "10.255.12.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-ssl.root",
+      "name": "ssl.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-video",
+      "name": "video Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-voice",
+      "name": "voice Network",
+      "type": "network",
+      "ip": "10.255.91.1 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-wan1",
+      "name": "wan1 Network",
+      "type": "network",
+      "ip": "10.0.0.167 255.255.255.0",
+      "status": "active"
+    },
+    {
+      "id": "network-wan2",
+      "name": "wan2 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    },
+    {
+      "id": "network-wqt.root",
+      "name": "wqt.root Network",
+      "type": "network",
+      "ip": "10.253.255.254 255.255.240.0",
+      "status": "active"
+    },
+    {
+      "id": "network-wqtn.25.net_int",
+      "name": "wqtn.25.NET_INT Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active"
+    }
+  ],
+  "links": [
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-local network",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-net_int_ssid",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-_default",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-a",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-b",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-dmz",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-fortilink",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal1",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal2",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal3",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal4",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-internal5",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-l2t.root",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-nac_segment",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-naf.root",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-onboarding",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-quarantine",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-rspan",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-ssl.root",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-video",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-voice",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-wan1",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-wan2",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-wqt.root",
+      "status": "active"
+    },
+    {
+      "from": "fg-192-168-0-254",
+      "to": "network-wqtn.25.net_int",
+      "status": "active"
+    }
+  ]
+}

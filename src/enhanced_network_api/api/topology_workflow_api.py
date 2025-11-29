@@ -26,6 +26,7 @@ class WorkflowConfig(BaseModel):
     oui_database_path: Optional[str] = Field(None, description="Path to OUI database")
     model_library_path: Optional[str] = Field(None, description="Path to 3D model library")
     svg_output_dir: str = Field("realistic_device_svgs", description="Output directory for SVG icons")
+    ca_cert_path: Optional[str] = Field(None, description="Path to custom CA certificate")
 
 
 class WorkflowResult(BaseModel):
@@ -102,7 +103,8 @@ async def run_workflow_background(job_id: str, config: WorkflowConfig):
             oui_database_path=config.oui_database_path,
             model_library_path=config.model_library_path,
             svg_output_dir=config.svg_output_dir,
-            verify_ssl=config.verify_ssl
+            verify_ssl=config.verify_ssl,
+            ca_cert_path=config.ca_cert_path
         )
         
         result = await workflow.execute_workflow()
@@ -161,7 +163,8 @@ async def get_workflow_status(job_id: str):
 async def get_babylon_lab_format(
     fortigate_host: Optional[str] = Query(None, description="FortiGate host (if not using cached data)"),
     fortigate_token: Optional[str] = Query(None, description="FortiGate token (if not using cached data)"),
-    use_cache: bool = Query(True, description="Use cached topology data if available")
+    use_cache: bool = Query(True, description="Use cached topology data if available"),
+    ca_cert_path: Optional[str] = Query(None, description="Path to custom CA certificate")
 ):
     """
     Get topology data in Babylon.js lab format for 3D visualization
@@ -184,7 +187,8 @@ async def get_babylon_lab_format(
             workflow = NetworkTopologyWorkflow(
                 fortigate_host=fortigate_host,
                 fortigate_token=fortigate_token,
-                verify_ssl=False
+                verify_ssl=False,
+                ca_cert_path=ca_cert_path
             )
             
             result = await workflow.execute_workflow()

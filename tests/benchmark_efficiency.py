@@ -9,143 +9,18 @@ from collections import defaultdict
 # Mocking necessary imports/globals
 logger = None
 
-def _normalize_scene_compute(data: Dict[str, Any]) -> Dict[str, Any]:
-    devices = []
-    for key in ("devices", "nodes"):
-        value = data.get(key)
-        if isinstance(value, list):
-            devices = value
-            break
+import sys
+from pathlib import Path
 
-    nodes: List[Dict[str, Any]] = []
-    for device in devices:
-        if not isinstance(device, dict):
-            continue
-        node_id = device.get("id") or device.get("name")
-        if not node_id:
-            continue
-        node_type = device.get("type") or device.get("role") or "device"
-        node = {"id": node_id, "name": device.get("name") or node_id, "type": node_type}
-        for key in (
-            "hostname",
-            "role",
-            "ip",
-            "model",
-            "serial",
-            "status",
-            "position",
-            "mac",
-            "firmware",
-            "os",
-            "ssid",
-            "connection_type",
-        ):
-            value = device.get(key)
-            if value is not None:
-                node[key] = value
-        nodes.append(node)
+# Add src and project root to path
+project_root = Path(__file__).resolve().parent.parent
+sys.path.append(str(project_root))
+sys.path.append(str(project_root / "src"))
 
-    links_source = data.get("links") or data.get("edges") or []
-    normalized_links: List[Dict[str, Any]] = []
-    if isinstance(links_source, list):
-        for link in links_source:
-            if not isinstance(link, dict):
-                continue
-            source = link.get("from") or link.get("source") or link.get("source_id")
-            target = link.get("to") or link.get("target") or link.get("target_id")
-            if not (source and target):
-                continue
-            normalized = {"from": source, "to": target}
-            for key in ("type", "status", "description"):
-                value = link.get(key)
-                if value is not None:
-                    normalized[key] = value
-            ports = link.get("ports") or link.get("interfaces")
-            if ports:
-                normalized["ports"] = ports
-            normalized_links.append(normalized)
-
-    return {"nodes": nodes, "links": normalized_links}
-
-def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
-    nodes = scene.get("nodes") or []
-    links = scene.get("links") or []
-
-    models: List[Dict[str, Any]] = []
-    for idx, node in enumerate(nodes):
-        node_id = node.get("id") or f"node-{idx}"
-
-        pos = node.get("position") or {}
-        x = pos.get("x")
-        y = pos.get("y")
-        z = pos.get("z")
-        if x is None or y is None or z is None:
-            x = (idx % 5) * 4 - 8
-            y = 2
-            z = (idx // 5) * 4 - 8
-
-        device_type = (
-            node.get("device_type")
-            or node.get("type")
-            or node.get("role")
-            or "endpoint"
-        )
-
-        model_entry: Dict[str, Any] = {
-            "id": node_id,
-            "name": node.get("name") or node.get("hostname") or node_id,
-            "type": device_type,
-            "model": node.get("device_model") or node.get("model"),
-            "position": {"x": x, "y": y, "z": z},
-            "status": node.get("status", "online"),
-            "ip": node.get("ip"),
-            "mac": node.get("mac"),
-            "serial": node.get("serial"),
-        }
-
-        if "cpu" in node:
-            model_entry["cpu_usage"] = node.get("cpu")
-        if "memory" in node:
-            model_entry["memory_usage"] = node.get("memory")
-        if "throughput" in node:
-            model_entry["throughput"] = node.get("throughput")
-
-        if "device_vendor" in node:
-            model_entry["vendor"] = node.get("device_vendor")
-        if "pos_system" in node:
-            model_entry["pos_system"] = node.get("pos_system")
-        if "vlan" in node:
-            model_entry["vlan"] = node.get("vlan")
-        if "icon_svg" in node:
-            model_entry["icon_svg"] = node.get("icon_svg")
-
-        models.append(model_entry)
-
-    connections: List[Dict[str, Any]] = []
-    for link in links:
-        src = link.get("from") or link.get("source")
-        dst = link.get("to") or link.get("target")
-        if not src or not dst:
-            continue
-
-        conn: Dict[str, Any] = {
-            "from": src,
-            "to": dst,
-            "status": link.get("status", "active"),
-        }
-
-        if "protocol" in link:
-            conn["protocol"] = link.get("protocol")
-        if "bandwidth" in link:
-            conn["bandwidth"] = link.get("bandwidth")
-        if "vlan" in link:
-            conn["vlan"] = link.get("vlan")
-        if "poe" in link:
-            conn["poe"] = link.get("poe")
-
-        connections.append(conn)
-
-    return {"models": models, "connections": connections}
+from enhanced_network_api.platform_web_api_fastapi import (
+    _normalize_scene_compute,
+    _scene_to_lab_format,
+)
 
 def generate_data(num_devices=1000, num_links=2000):
     devices = []

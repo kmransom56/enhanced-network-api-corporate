@@ -16,6 +16,27 @@ import logging
 
 log = logging.getLogger(__name__)
 
+DEVICE_TYPES = {
+    'networking': ['switch', 'router', 'gateway', 'firewall', 'access_point'],
+    'computing': ['workstation', 'laptop', 'desktop', 'server', 'workgroup_server'],
+    'mobile': ['smartphone', 'tablet', 'mobile_device'],
+    'iot': ['printer', 'scanner', 'multifunction_device', 'camera', 'iot_device', 'smart_device'],
+    'voice': ['voip_phone', 'ip_phone', 'phone'],
+    'audio_video': ['monitor', 'tv', 'projector', 'digital_signage'],
+    'vehicle': ['vehicle', 'ev_charger'],
+    'other': ['unknown', 'generic']
+}
+
+OUI_DEVICE_TYPES = {
+    '08:00:27': 'virtual_machine',  # VirtualBox
+    '00:1A:92': 'ip_phone',          # Polycom
+    '00:1E:BD': 'printer',           # Canon
+    'BC:5F:F4': 'printer',           # Brother
+    '4C:72:B9': 'smartphone',        # Apple iPhone
+    '00:50:F2': 'workstation',       # Microsoft
+    '00:13:10': 'voip_phone',        # Cisco IP Phone
+}
+
 @dataclass
 class DeviceInfo:
     mac_address: str
@@ -60,7 +81,37 @@ class OUILookup:
         if self.macaddress_io_api_key:
             return self._lookup_macaddress_io(mac_address)
         
-        # Return unknown if no API key
+        # Fallback to free APIs
+        result = self._lookup_maclookup_app(mac_address)
+        if result['vendor'] != 'Unknown':
+            return result
+            
+        result = self._lookup_macvendors_com(mac_address)
+        if result['vendor'] != 'Unknown':
+            return result
+        
+        return {'vendor': 'Unknown', 'address': ''}
+
+    def _lookup_maclookup_app(self, mac_address: str) -> Dict[str, str]:
+        """Lookup using maclookup.app (Free: 100/day)"""
+        try:
+            url = f"https://api.maclookup.app/v2/macs/{mac_address}/company/name"
+            response = requests.get(url, timeout=5)
+            if response.status_code == 200:
+                return {'vendor': response.text.strip(), 'address': ''}
+        except Exception as e:
+            log.debug(f"maclookup.app failed: {e}")
+        return {'vendor': 'Unknown', 'address': ''}
+
+    def _lookup_macvendors_com(self, mac_address: str) -> Dict[str, str]:
+        """Lookup using macvendors.com (Free: 100/hour)"""
+        try:
+            url = f"https://macvendors.com/api/{mac_address}"
+            response = requests.get(url, timeout=5)
+            if response.status_code == 200:
+                return {'vendor': response.text.strip(), 'address': ''}
+        except Exception as e:
+            log.debug(f"macvendors.com failed: {e}")
         return {'vendor': 'Unknown', 'address': ''}
     
     def _lookup_macaddress_io(self, mac_address: str) -> Dict[str, str]:
@@ -261,11 +312,48 @@ class DeviceClassifier:
                 # Default classification based on vendor
                 return f"{vendor} Device"
         
+        # PRIORITY 3: Advanced Classification (OUI + Metadata)
+        advanced_type = self._classify_device_advanced(mac, vendor, context)
+        if advanced_type != 'unknown':
+            return advanced_type
+
         # Generic classification based on OUI patterns
         if self._detect_random_mac(mac):
             return 'Mobile Device (Randomized MAC)'
         
         return 'Unknown Device'
+
+    def _classify_device_advanced(self, mac_address: str, vendor: str, context: Optional[Dict] = None) -> str:
+        """Classify device using OUI + metadata"""
+        mac = mac_address.upper()
+        oui24 = mac[:8]  # First 3 octets (standard)
+        
+        # Check known OUI map
+        if oui24 in OUI_DEVICE_TYPES:
+            return OUI_DEVICE_TYPES[oui24]
+        
+        vendor_lower = vendor.lower()
+        metadata = context or {}
+        hostname = metadata.get('hostname', '').lower()
+        model = metadata.get('model', '').lower()
+        
+        # Rule-based classification
+        if any(x in vendor_lower for x in ['polycom', 'cisco', 'avaya', 'yealink']):
+            return 'voip_phone'
+        elif any(x in vendor_lower for x in ['hp', 'xerox', 'canon', 'brother', 'ricoh']):
+            return 'printer'
+        elif any(x in vendor_lower for x in ['apple', 'samsung', 'lg', 'sony']):
+            if any(x in hostname for x in ('iphone', 'ipad', 'android')):
+                return 'mobile_device'
+        elif 'fortinet' in vendor_lower:
+            if model.startswith('fortigate'):
+                return 'firewall'
+            elif 'fortiap' in model:
+                return 'access_point'
+            elif 'fortiswitch' in model:
+                return 'switch'
+        
+        return 'unknown'
     
     def _classify_restaurant_device(self, mac: str, vendor: str, context: Optional[Dict] = None) -> str:
         """Classify restaurant technology devices specifically"""
@@ -381,40 +469,40 @@ class DeviceModelMatcher:
         # Restaurant Technology Devices (Primary Focus) - following iconlab.md format
         default_models = {
             # Restaurant POS Systems
-            "Ingenico POS Terminal": "/static/3d-models/pos_register.obj",
-            "Square POS Terminal": "/static/3d-models/square_terminal.obj",
-            "Toast POS Terminal": "/static/3d-models/toast_pos.obj",
-            "NCR POS Terminal": "/static/3d-models/ncr_pos.obj",
-            "Micros POS Terminal": "/static/3d-models/micros_pos.obj",
-            "Clover POS Terminal": "/static/3d-models/clover_pos.obj",
+            "Ingenico POS Terminal": "/static/3d-models/generated/models/Smartphone.obj", # Placeholder
+            "Square POS Terminal": "/static/3d-models/generated/models/Smartphone.obj",
+            "Toast POS Terminal": "/static/3d-models/generated/models/Smartphone.obj",
+            "NCR POS Terminal": "/static/3d-models/generated/models/Laptop.obj",
+            "Micros POS Terminal": "/static/3d-models/generated/models/Laptop.obj",
+            "Clover POS Terminal": "/static/3d-models/generated/models/Smartphone.obj",
             
             # Restaurant Device Types
-            "POS Register/Cash Terminal": "/static/3d-models/pos_register.obj",
-            "POS Tablet/Tabletop Ordering": "/static/3d-models/pos_tablet.obj",
-            "Kitchen Display Unit (KDS)": "/static/3d-models/kitchen_display.obj",
-            "Digital Menu Board": "/static/3d-models/digital_menu.obj",
-            "Kitchen/Receipt Printer": "/static/3d-models/kitchen_printer.obj",
-            "Payment Terminal": "/static/3d-models/payment_terminal.obj",
+            "POS Register/Cash Terminal": "/static/3d-models/generated/models/Laptop.obj",
+            "POS Tablet/Tabletop Ordering": "/static/3d-models/generated/models/Smartphone.obj",
+            "Kitchen Display Unit (KDS)": "/static/3d-models/generated/models/Laptop.obj",
+            "Digital Menu Board": "/static/3d-models/generated/models/Laptop.obj",
+            "Kitchen/Receipt Printer": "/static/3d-models/generated/models/Laptop.obj",
+            "Payment Terminal": "/static/3d-models/generated/models/Smartphone.obj",
             
             # Generic restaurant devices
-            "Apple iPad": "/static/3d-models/pos_tablet.obj",
-            "Raspberry Pi": "/static/3d-models/kitchen_display.obj",
+            "Apple iPad": "/static/3d-models/generated/models/Smartphone.obj",
+            "Raspberry Pi": "/static/3d-models/generated/models/Laptop.obj",
             
             # Network equipment (secondary - for restaurant infrastructure)
-            "Cisco Meraki Wireless Access Point": "/static/3d-models/meraki_ap.obj",
-            "Cisco Meraki Switch": "/static/3d-models/switch.obj",
-            "Cisco Meraki Security Appliance/Firewall": "/static/3d-models/firewall.obj",
-            "Fortinet Firewall/UTM": "/static/3d-models/firewall.obj",
-            "Fortinet Wireless Access Point": "/static/3d-models/ap.obj",
-            "Fortinet Switch": "/static/3d-models/switch.obj",
+            "Cisco Meraki Wireless Access Point": "/static/3d-models/generated/models/FortiAP.obj",
+            "Cisco Meraki Switch": "/static/3d-models/generated/models/FortiSwitch.obj",
+            "Cisco Meraki Security Appliance/Firewall": "/static/3d-models/generated/models/FortiGate.obj",
+            "Fortinet Firewall/UTM": "/static/3d-models/generated/models/FortiGate.obj",
+            "Fortinet Wireless Access Point": "/static/3d-models/generated/models/FortiAP.obj",
+            "Fortinet Switch": "/static/3d-models/generated/models/FortiSwitch.obj",
             
             # Generic models for fallback
-            "Wireless Access Point": "/static/3d-models/generic_ap.obj",
-            "Firewall/UTM": "/static/3d-models/generic_firewall.obj",
-            "Switch": "/static/3d-models/generic_switch.obj",
-            "POS Terminal": "/static/3d-models/generic_pos.obj",
-            "Camera": "/static/3d-models/generic_camera.obj",
-            "Generic Device": "/static/3d-models/generic_device.obj"
+            "Wireless Access Point": "/static/3d-models/generated/models/FortiAP.obj",
+            "Firewall/UTM": "/static/3d-models/generated/models/FortiGate.obj",
+            "Switch": "/static/3d-models/generated/models/FortiSwitch.obj",
+            "POS Terminal": "/static/3d-models/generated/models/Laptop.obj",
+            "Camera": "/static/3d-models/generated/models/Smartphone.obj",
+            "Generic Device": "/static/3d-models/generated/models/Laptop.obj"
         }
         
         if path and Path(path).exists():
@@ -483,19 +571,19 @@ class DeviceModelMatcher:
     def get_generic_model(self, device_type: str) -> str:
         """Return generic 3D model based on device category - from iconlab.md"""
         generic_models = {
-            'Wireless Access Point': '/static/3d-models/generic_ap.obj',
-            'Firewall/UTM': '/static/3d-models/generic_firewall.obj',
-            'Switch': '/static/3d-models/generic_switch.obj',
-            'POS Terminal': '/static/3d-models/generic_pos.obj',
-            'POS Register/Cash Terminal': '/static/3d-models/generic_pos.obj',
-            'POS Tablet/Tabletop Ordering': '/static/3d-models/generic_pos.obj',
-            'Kitchen Display Unit (KDS)': '/static/3d-models/generic_device.obj',
-            'Digital Menu Board': '/static/3d-models/generic_device.obj',
-            'Kitchen/Receipt Printer': '/static/3d-models/generic_device.obj',
-            'Payment Terminal': '/static/3d-models/generic_device.obj',
-            'Camera': '/static/3d-models/generic_camera.obj'
+            'Wireless Access Point': '/static/3d-models/generated/models/FortiAP.obj',
+            'Firewall/UTM': '/static/3d-models/generated/models/FortiGate.obj',
+            'Switch': '/static/3d-models/generated/models/FortiSwitch.obj',
+            'POS Terminal': '/static/3d-models/generated/models/Laptop.obj',
+            'POS Register/Cash Terminal': '/static/3d-models/generated/models/Laptop.obj',
+            'POS Tablet/Tabletop Ordering': '/static/3d-models/generated/models/Smartphone.obj',
+            'Kitchen Display Unit (KDS)': '/static/3d-models/generated/models/Laptop.obj',
+            'Digital Menu Board': '/static/3d-models/generated/models/Laptop.obj',
+            'Kitchen/Receipt Printer': '/static/3d-models/generated/models/Laptop.obj',
+            'Payment Terminal': '/static/3d-models/generated/models/Smartphone.obj',
+            'Camera': '/static/3d-models/generated/models/Smartphone.obj'
         }
-        return generic_models.get(device_type, '/static/3d-models/generic_device.obj')
+        return generic_models.get(device_type, '/static/3d-models/generated/models/Laptop.obj')
     
     def bulk_match(self, mac_addresses: List[str], context_map: Optional[Dict[str, Dict]] = None) -> List[DeviceInfo]:
         """Match multiple MAC addresses to models - from iconlab.md usage example"""

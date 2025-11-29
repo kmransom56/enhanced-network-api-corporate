@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .button-test {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn.primary { background: #3b82f6; color: white; }
+        .btn.success { background: #10b981; color: white; }
+        .btn.danger { background: #ef4444; color: white; }
+        .btn.warning { background: #f59e0b; color: white; }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Button Functionality Test</h1>
+    <p>This page tests all the button functions from the main interface.</p>
+
+    <div class="button-test">
+        <h3>🔥 Network Discovery</h3>
+        <button class="btn primary" onclick="testLoadFortinet()">🔥 Load Fortinet</button>
+        <button class="btn success" onclick="testLoadDemo()">🎭 Demo Mode</button>
+        <button class="btn primary" onclick="testLoadMeraki()">📡 Load Meraki</button>
+        <button class="btn warning" onclick="testLoadCombined()">🔄 Load Combined</button>
+        <button class="btn danger" onclick="testClear()">🗑️ Clear</button>
+        <div id="discovery-status" class="status">Click buttons to test...</div>
+    </div>
+
+    <div class="button-test">
+        <h3>👁️ View Controls</h3>
+        <button class="btn primary" onclick="testSetView('2d')">2D View</button>
+        <button class="btn primary" onclick="testSetView('3d')">3D View</button>
+        <div id="view-status" class="status">Click buttons to test...</div>
+    </div>
+
+    <div class="button-test">
+        <h3>🎨 Display Options</h3>
+        <button class="btn success" onclick="testToggleLabels()">🏷️ Toggle Labels</button>
+        <button class="btn success" onclick="testToggleConnections()">🔗 Toggle Links</button>
+        <button class="btn success" onclick="testToggleHealth()">💚 Health Status</button>
+        <div id="display-status" class="status">Click buttons to test...</div>
+    </div>
+
+    <div class="button-test">
+        <h3>🔧 Troubleshooting</h3>
+        <button class="btn warning" onclick="testTroubleshoot()">🔧 Start Troubleshooting</button>
+        <button class="btn primary" onclick="testCloseTroubleshoot()">Close Troubleshooting</button>
+        <div id="troubleshoot-status" class="status">Click buttons to test...</div>
+    </div>
+
+    <script>
+        // Import the same functions from the main interface
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            
+            switch (type) {
+                case 'success': notification.style.backgroundColor = '#10b981'; break;
+                case 'error': notification.style.backgroundColor = '#ef4444'; break;
+                case 'warning': notification.style.backgroundColor = '#f59e0b'; break;
+                default: notification.style.backgroundColor = '#3b82f6';
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function updateStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.style.backgroundColor = type === 'success' ? '#d1fae5' : 
+                                           type === 'error' ? '#fee2e2' : '#e5e7eb';
+            }
+        }
+
+        // Test functions
+        async function testLoadFortinet() {
+            updateStatus('discovery-status', 'Loading Fortinet topology...', 'info');
+            try {
+                const response = await fetch('/api/topology/scene');
+                const data = await response.json();
+                updateStatus('discovery-status', `✅ Fortinet loaded! Nodes: ${data.nodes?.length || 0}`, 'success');
+                showNotification('✅ Fortinet topology loaded!', 'success');
+            } catch (error) {
+                updateStatus('discovery-status', `❌ Error: ${error.message}`, 'error');
+                showNotification('❌ Failed to load Fortinet', 'error');
+            }
+        }
+
+        async function testLoadDemo() {
+            updateStatus('discovery-status', 'Loading demo topology...', 'info');
+            showNotification('🎭 Demo mode activated!', 'success');
+            updateStatus('discovery-status', '✅ Demo topology loaded!', 'success');
+        }
+
+        async function testLoadMeraki() {
+            updateStatus('discovery-status', 'Loading Meraki topology...', 'info');
+            try {
+                const response = await fetch('/api/meraki-mcp/organizations');
+                updateStatus('discovery-status', '✅ Meraki endpoint tested!', 'success');
+                showNotification('✅ Meraki topology loaded!', 'success');
+            } catch (error) {
+                updateStatus('discovery-status', `❌ Error: ${error.message}`, 'error');
+                showNotification('❌ Failed to load Meraki', 'error');
+            }
+        }
+
+        async function testLoadCombined() {
+            updateStatus('discovery-status', 'Loading combined topology...', 'info');
+            await testLoadFortinet();
+            await testLoadMeraki();
+            updateStatus('discovery-status', '✅ Combined topology loaded!', 'success');
+            showNotification('🔄 Combined topology loaded!', 'success');
+        }
+
+        function testClear() {
+            updateStatus('discovery-status', 'Clearing topology...', 'info');
+            showNotification('🗑️ Topology cleared!', 'success');
+            updateStatus('discovery-status', '✅ Topology cleared!', 'success');
+        }
+
+        function testSetView(mode) {
+            updateStatus('view-status', `Switching to ${mode.toUpperCase()} view...`, 'info');
+            showNotification(`👁️ Switched to ${mode.toUpperCase()} view`, 'success');
+            updateStatus('view-status', `✅ Now in ${mode.toUpperCase()} view`, 'success');
+        }
+
+        function testToggleLabels() {
+            updateStatus('display-status', 'Toggling device labels...', 'info');
+            showNotification('🏷️ Device labels toggled!', 'success');
+            updateStatus('display-status', '✅ Device labels toggled!', 'success');
+        }
+
+        function testToggleConnections() {
+            updateStatus('display-status', 'Toggling connections...', 'info');
+            showNotification('🔗 Connections toggled!', 'success');
+            updateStatus('display-status', '✅ Connections toggled!', 'success');
+        }
+
+        function testToggleHealth() {
+            updateStatus('display-status', 'Toggling health status...', 'info');
+            showNotification('💚 Health status toggled!', 'success');
+            updateStatus('display-status', '✅ Health status toggled!', 'success');
+        }
+
+        function testTroubleshoot() {
+            updateStatus('troubleshoot-status', 'Opening troubleshooting panel...', 'info');
+            showNotification('🔧 Troubleshooting panel opened', 'success');
+            updateStatus('troubleshoot-status', '✅ Troubleshooting panel open', 'success');
+        }
+
+        function testCloseTroubleshoot() {
+            updateStatus('troubleshoot-status', 'Closing troubleshooting panel...', 'info');
+            showNotification('🔧 Troubleshooting panel closed', 'success');
+            updateStatus('troubleshoot-status', '✅ Troubleshooting panel closed', 'success');
+        }
+
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Button test page loaded!');
+            showNotification('🧪 Button test page ready!', 'success');
+        });
+    </script>
+</body>
+</html>

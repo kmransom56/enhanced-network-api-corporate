@@ -1,0 +1,730 @@
+{
+  "devices": [
+    {
+      "id": "fg-192-168-0-254",
+      "name": "FortiGate-192.168.0.254",
+      "type": "fortigate",
+      "ip": "192.168.0.254",
+      "status": "active",
+      "model": "Unknown",
+      "serial": "FGT61FTK20020975",
+      "version": "v7.6.4",
+      "interfaces": [
+        {
+          "name": "Local Network",
+          "ip": "192.168.0.254 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "NET_INT_SSID",
+          "ip": "192.168.2.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vap-switch"
+        },
+        {
+          "name": "_default",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "a",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "b",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "dmz",
+          "ip": "10.10.10.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "fortilink",
+          "ip": "10.255.1.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "aggregate"
+        },
+        {
+          "name": "internal",
+          "ip": "192.168.1.254 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "hard-switch"
+        },
+        {
+          "name": "internal1",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "internal2",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "internal3",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "internal4",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "internal5",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "l2t.root",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "tunnel"
+        },
+        {
+          "name": "nac_segment",
+          "ip": "10.255.13.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "naf.root",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "tunnel"
+        },
+        {
+          "name": "onboarding",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "quarantine",
+          "ip": "10.255.11.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "rspan",
+          "ip": "10.255.12.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "ssl.root",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "tunnel"
+        },
+        {
+          "name": "video",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "voice",
+          "ip": "10.255.91.1 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        },
+        {
+          "name": "wan1",
+          "ip": "10.0.0.167 255.255.255.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "wan2",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "physical"
+        },
+        {
+          "name": "wqt.root",
+          "ip": "10.253.255.254 255.255.240.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "switch"
+        },
+        {
+          "name": "wqtn.25.NET_INT",
+          "ip": "0.0.0.0 0.0.0.0",
+          "netmask": "",
+          "status": "up",
+          "speed": "auto",
+          "mtu": 1500,
+          "type": "vlan"
+        }
+      ],
+      "vips": [],
+      "firewall_policies": 5,
+      "cpu_usage": 0.0,
+      "memory_usage": 63.0,
+      "connections": 171,
+      "site": "Main"
+    },
+    {
+      "id": "network-local network",
+      "name": "Local Network Network",
+      "type": "network",
+      "ip": "192.168.0.254 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-net_int_ssid",
+      "name": "NET_INT_SSID Network",
+      "type": "network",
+      "ip": "192.168.2.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-_default",
+      "name": "_default Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-a",
+      "name": "a Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-b",
+      "name": "b Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-dmz",
+      "name": "dmz Network",
+      "type": "network",
+      "ip": "10.10.10.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-fortilink",
+      "name": "fortilink Network",
+      "type": "network",
+      "ip": "10.255.1.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal",
+      "name": "internal Network",
+      "type": "network",
+      "ip": "192.168.1.254 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal1",
+      "name": "internal1 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal2",
+      "name": "internal2 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal3",
+      "name": "internal3 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal4",
+      "name": "internal4 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-internal5",
+      "name": "internal5 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-l2t.root",
+      "name": "l2t.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-nac_segment",
+      "name": "nac_segment Network",
+      "type": "network",
+      "ip": "10.255.13.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-naf.root",
+      "name": "naf.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-onboarding",
+      "name": "onboarding Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-quarantine",
+      "name": "quarantine Network",
+      "type": "network",
+      "ip": "10.255.11.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-rspan",
+      "name": "rspan Network",
+      "type": "network",
+      "ip": "10.255.12.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-ssl.root",
+      "name": "ssl.root Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-video",
+      "name": "video Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-voice",
+      "name": "voice Network",
+      "type": "network",
+      "ip": "10.255.91.1 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-wan1",
+      "name": "wan1 Network",
+      "type": "network",
+      "ip": "10.0.0.167 255.255.255.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-wan2",
+      "name": "wan2 Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-wqt.root",
+      "name": "wqt.root Network",
+      "type": "network",
+      "ip": "10.253.255.254 255.255.240.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    },
+    {
+      "id": "network-wqtn.25.net_int",
+      "name": "wqtn.25.NET_INT Network",
+      "type": "network",
+      "ip": "0.0.0.0 0.0.0.0",
+      "status": "active",
+      "subnet": "",
+      "site": "Main"
+    }
+  ],
+  "links": [
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-local network",
+      "source_interface": "Local Network",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-net_int_ssid",
+      "source_interface": "NET_INT_SSID",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-_default",
+      "source_interface": "_default",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-a",
+      "source_interface": "a",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-b",
+      "source_interface": "b",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-dmz",
+      "source_interface": "dmz",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-fortilink",
+      "source_interface": "fortilink",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal",
+      "source_interface": "internal",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal1",
+      "source_interface": "internal1",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal2",
+      "source_interface": "internal2",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal3",
+      "source_interface": "internal3",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal4",
+      "source_interface": "internal4",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-internal5",
+      "source_interface": "internal5",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-l2t.root",
+      "source_interface": "l2t.root",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-nac_segment",
+      "source_interface": "nac_segment",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-naf.root",
+      "source_interface": "naf.root",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-onboarding",
+      "source_interface": "onboarding",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-quarantine",
+      "source_interface": "quarantine",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-rspan",
+      "source_interface": "rspan",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-ssl.root",
+      "source_interface": "ssl.root",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-video",
+      "source_interface": "video",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-voice",
+      "source_interface": "voice",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-wan1",
+      "source_interface": "wan1",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-wan2",
+      "source_interface": "wan2",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-wqt.root",
+      "source_interface": "wqt.root",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    },
+    {
+      "source_id": "fg-192-168-0-254",
+      "target_id": "network-wqtn.25.net_int",
+      "source_interface": "wqtn.25.NET_INT",
+      "target_interface": "network",
+      "link_type": "physical",
+      "bandwidth": "auto",
+      "status": "active"
+    }
+  ],
+  "timestamp": 13165.23952918,
+  "total_devices": 27,
+  "total_links": 26,
+  "source": "fortigate_direct_api"
+}

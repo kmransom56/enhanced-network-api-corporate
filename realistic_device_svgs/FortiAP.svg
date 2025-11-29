@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="apBody" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#f6ad55;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ed8936;stop-opacity:1" />
+        </linearGradient>
+        
+        <!-- Radio wave pattern -->
+        <pattern id="radioWaves" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="5" fill="none" stroke="#4299e1" stroke-width="1" opacity="0.6"/>
+            <circle cx="20" cy="20" r="10" fill="none" stroke="#4299e1" stroke-width="1" opacity="0.4"/>
+            <circle cx="20" cy="20" r="15" fill="none" stroke="#4299e1" stroke-width="1" opacity="0.2"/>
+        </pattern>
+    </defs>
+    
+    <!-- AP body (ceiling mount style) -->
+    <ellipse cx="40" cy="60" rx="25" ry="8" 
+             fill="url(#apBody)" stroke="#dd6b20" stroke-width="2"/>
+    
+    <!-- Mounting arm -->
+    <rect x="37" y="10" width="6" height="50" 
+          fill="#4a5568" stroke="#2d3748" stroke-width="1"/>
+    
+    <!-- Ceiling mount plate -->
+    <rect x="30" y="5" width="20" height="8" rx="2" 
+          fill="#2d3748" stroke="#1a202c" stroke-width="1"/>
+    
+    <!-- Radio waves -->
+    <circle cx="40" cy="60" r="15" fill="url(#radioWaves)" opacity="0.7"/>
+    
+    <!-- Status LED -->
+    <circle cx="40" cy="60" r="3" fill="#48bb78" stroke="#2f855a" stroke-width="1"/>
+    
+    <!-- Antenna indicators -->
+    <line x1="25" y1="55" x2="20" y2="45" 
+          stroke="#4a5568" stroke-width="2" stroke-linecap="round"/>
+    <line x1="55" y1="55" x2="60" y2="45" 
+          stroke="#4a5568" stroke-width="2" stroke-linecap="round"/>
+    
+    <!-- Label -->
+    <text x="40" y="78" text-anchor="middle" 
+          font-family="Arial, sans-serif" font-size="8" fill="#e2e8f0">
+        FortiAP
+    </text>
+</svg>

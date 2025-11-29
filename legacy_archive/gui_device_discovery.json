@@ -1,0 +1,2864 @@
+{
+  "devices": [
+    {
+      "text": "HostnameFWSerial numberFGT61FTK20020975Firmware v7.6.4 build3596 (Feature) ModeNATSystem time2025/11/21 06:54:43Uptime 30d 15h 11m 36sPublic IP73.137.23.113",
+      "tagName": "TABLE",
+      "className": "nu-table nu-table-slightly-condensed nu-table-key-value",
+      "id": ""
+    },
+    {
+      "text": "1FortiSwitch",
+      "tagName": "DIV",
+      "className": "device with-number-bubble clickable nu-button-allow-events ng-star-inserted",
+      "id": ""
+    },
+    {
+      "text": "2FortiAP",
+      "tagName": "DIV",
+      "className": "device with-number-bubble clickable nu-button-allow-events ng-star-inserted",
+      "id": ""
+    },
+    {
+      "text": "System Information HostnameFWSerial numberFGT61FTK20020975Firmware v7.6.4 build3596 (Feature) ModeNATSystem time2025/11/21 06:54:43Uptime 30d 15h 11m 36sPublic IP73.137.23.113",
+      "tagName": "DIV",
+      "className": "widget-wrapper-container nu-absolute-fill ng-tns-c469222471-22 ng-trigger ng-trigger-widgetPositionState auto-transition",
+      "id": ""
+    },
+    {
+      "text": "Licenses  \u00a0 (173.243.140.6)SupportUpdatesIPSAntiVirusWeb FilterRatingFortiToken0%",
+      "tagName": "DIV",
+      "className": "widget-wrapper-container nu-absolute-fill ng-tns-c469222471-23 ng-trigger ng-trigger-widgetPositionState auto-transition",
+      "id": ""
+    },
+    {
+      "text": "SupportUpdatesIPSAntiVirusWeb FilterRatingFortiToken0%",
+      "tagName": "DIV",
+      "className": "widget-body-wrapper ng-tns-c616251753-33",
+      "id": ""
+    },
+    {
+      "text": "Security Fabric LAN Edge[data-nu-icon=ftnt-products__fortigate] .cls-1{fill-rule:evenodd}1FortiGate1FortiSwitch2FortiAP0FortiExtenderFabric Connectors Logging  FortiSandbox  Central Management  FortiC",
+      "tagName": "DIV",
+      "className": "widget-wrapper-container nu-absolute-fill ng-tns-c469222471-25 ng-trigger ng-trigger-widgetPositionState auto-transition",
+      "id": ""
+    },
+    {
+      "text": "LAN Edge[data-nu-icon=ftnt-products__fortigate] .cls-1{fill-rule:evenodd}1FortiGate1FortiSwitch2FortiAP0FortiExtenderFabric Connectors Logging  FortiSandbox  Central Management  FortiClient EMS",
+      "tagName": "DIV",
+      "className": "widget-body-wrapper ng-tns-c616251753-35",
+      "id": ""
+    },
+    {
+      "text": "Sessions IPv41 minuteNow15 seconds ago30 seconds ago45 seconds ago0100200300Current sessions 369SPU 0.3%nTurbo 72.4%Hyperscale SPU",
+      "tagName": "DIV",
+      "className": "widget-wrapper-container nu-absolute-fill ng-tns-c469222471-29 ng-trigger ng-trigger-widgetPositionState auto-transition",
+      "id": ""
+    },
+    {
+      "text": "Assets LatestClick to expand16Devices Software OS Unknown 6 Android 4 FortiSwitch OS 2 FortiAP OS 2 webOS 1 FortiOS 1Click to expand",
+      "tagName": "DIV",
+      "className": "widget-wrapper-container nu-absolute-fill ng-tns-c469222471-31 ng-trigger ng-trigger-widgetPositionState auto-transition",
+      "id": ""
+    },
+    {
+      "text": "16Devices Software OS Unknown 6 Android 4 FortiSwitch OS 2 FortiAP OS 2 webOS 1 FortiOS 1",
+      "tagName": "DIV",
+      "className": "widget-body-wrapper ng-tns-c616251753-43",
+      "id": ""
+    },
+    {
+      "text": "Managed FortiAPs  WiFi Clients  WiFi Maps  SSIDs  Operation Profiles  Connectivity Profiles  Protection Profiles  WiFi Settings  FortiLink Interface  Managed FortiSwitches  FortiSwitch Clients  FortiS",
+      "tagName": "NU-NAV-SUBTREE",
+      "className": "ng-trigger ng-trigger-collapse ng-tns-c4183820809-7 level-2 ng-star-inserted",
+      "id": ""
+    }
+  ],
+  "api_calls": [
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726052.8560195
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/service/login-config",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/login",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726053.2679453
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication-status",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/login",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726053.618536
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/login",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": "{\"username\":\"admin\",\"password\":\"!cg@RW%G@o\"}",
+      "timestamp": 1763726062.4115942
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726067.337377
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/static/fweb_build.json",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726067.9959354
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/state",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726067.9962833
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/object-urls",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726067.9965775
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/service/login-config",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.2265651
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf?scope=global&decode=true",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt?viewOnly=",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.4190137
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt/fortigate-setup?viewOnly=1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5031624
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/forticonverter/show-in-startup?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt/fortigate-setup?viewOnly=1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5033352
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/global?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt/fortigate-setup?viewOnly=1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5035536
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/global?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt/fortigate-setup?viewOnly=1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.503714
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/prompt/fortigate-setup?viewOnly=1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5038767
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/fortiap",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5466783
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/static/fweb_build.json",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/fortiap",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5918958
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/state",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/fortiap",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5921903
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/object-urls",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/fortiap",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.5924335
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/service/login-config",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/fortiap",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.7811518
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf?scope=global&decode=true",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.8129697
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/navbar-dependencies?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726068.8134801
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf/?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.155789
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/switch-controller/managed-switch/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.1771579
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/prefix-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.2424982
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/static-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.2426245
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/forticonverter/eligibility?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.2677588
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/usb-log?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.2730846
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.2907796
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/firmware?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "timeout": "20000",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.3981125
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/endpoint-control/fctems?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4019284
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/endpoint-control/ems/status-summary?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.403386
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/override-setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4050434
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4064164
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/central-management/status?skip_detect=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4077332
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4083607
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/wan-lan-ip-conflict?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4092844
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/connection?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4100506
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/router/lookup?vdom=root&destination=0.0.0.0",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4112666
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/network/lldp/neighbors?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.4122229
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/log/device/state?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.444273
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726069.5448642
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "text/plain"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"error\",\"message\":\"No permission found for the uri: /ng/fortiap \",\"stack\":\"  at https://192.168.0.254:10443/static/main.js:1:288956\\n  at Generator.next (<anonymous>)\\n  at n (https://192.168.0.254:10443/static/main.js:1:4449308)\"},{\"level\":\"info\",\"message\":\"Creating events websocket to \\\"FGT61FTK20020975\\\". \",\"stack\":\"  at J (https://192.168.0.254:10443/static/main.js:1:456060)\\n  at _._subscribe (https://192.168.0.254:10443/static/main.js:1:456693)\\n  at _._trySubscribe (https://192.168.0.254:10443/static/main.js:1:952729)\"}]}",
+      "timestamp": 1763726070.1465054
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726070.3251786
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726070.325438
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wireless-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.0197673
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/static/fweb_build.json",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wireless-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.1751761
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/state",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wireless-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.1753857
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/object-urls",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wireless-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.1755054
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/service/login-config",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wireless-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.3635716
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf?scope=global&decode=true",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.394556
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/navbar-dependencies?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.3954923
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/prefix-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.6552925
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/static-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.6556344
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/forticonverter/eligibility?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.6755927
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/usb-log?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.6781137
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf/?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.7802658
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/switch-controller/managed-switch/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.784092
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8324304
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/firmware?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "timeout": "20000",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8782337
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/endpoint-control/fctems?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8798306
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/endpoint-control/ems/status-summary?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8806205
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/override-setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8817456
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8826463
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/central-management/status?skip_detect=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.884474
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8847876
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/wan-lan-ip-conflict?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8860433
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/connection?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8875308
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/router/lookup?vdom=root&destination=0.0.0.0",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8882082
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/network/lldp/neighbors?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8909278
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/log/device/state?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726079.8913894
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726080.0781388
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726080.6168416
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726080.6170137
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "text/plain"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"error\",\"message\":\"No permission found for the uri: /ng/wireless-controller \",\"stack\":\"  at https://192.168.0.254:10443/static/main.js:1:288956\\n  at Generator.next (<anonymous>)\\n  at n (https://192.168.0.254:10443/static/main.js:1:4449308)\"},{\"level\":\"info\",\"message\":\"Creating events websocket to \\\"FGT61FTK20020975\\\". \",\"stack\":\"  at J (https://192.168.0.254:10443/static/main.js:1:456060)\\n  at _._subscribe (https://192.168.0.254:10443/static/main.js:1:456693)\\n  at _._trySubscribe (https://192.168.0.254:10443/static/main.js:1:952729)\"}]}",
+      "timestamp": 1763726080.665877
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/error-page/403",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726081.66695
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/1?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726081.8059049
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/1?vdom=root",
+      "method": "PUT",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"id\":1,\"q_origin_key\":1,\"name\":\"Status\",\"vdom\":{\"q_origin_key\":\"root\",\"name\":\"root\",\"datasource\":\"system.vdom\",\"css-class\":\"ftnt-vdom\"},\"layout-type\":\"responsive\",\"permanent\":\"enable\",\"csf\":\"enable\",\"columns\":10,\"widget\":[{\"id\":1,\"q_origin_key\":1,\"type\":\"sysinfo\",\"x-pos\":0,\"y-pos\":0,\"width\":1,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":2,\"q_origin_key\":2,\"type\":\"licinfo\",\"x-pos\":1,\"y-pos\":0,\"width\":1,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":3,\"q_origin_key\":3,\"type\":\"forticloud\",\"x-pos\":2,\"y-pos\":0,\"width\":1,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":4,\"q_origin_key\":4,\"type\":\"security-fabric\",\"x-pos\":3,\"y-pos\":0,\"width\":1,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":5,\"q_origin_key\":5,\"type\":\"admins\",\"x-pos\":4,\"y-pos\":0,\"width\":1,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":6,\"q_origin_key\":6,\"type\":\"cpu-usage\",\"x-pos\":5,\"y-pos\":0,\"width\":2,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":7,\"q_origin_key\":7,\"type\":\"memory-usage\",\"x-pos\":6,\"y-pos\":0,\"width\":2,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":8,\"q_origin_key\":8,\"type\":\"sessions\",\"x-pos\":7,\"y-pos\":0,\"width\":2,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":9,\"q_origin_key\":9,\"type\":\"dhcp\",\"x-pos\":8,\"y-pos\":0,\"width\":2,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"1-min\",\"ip_type\":\"ipv4\",\"csf-device\":\"FGT61FTK20020975\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"},{\"id\":10,\"q_origin_key\":10,\"type\":\"device-inventory\",\"x-pos\":9,\"y-pos\":0,\"width\":2,\"height\":1,\"source\":\"\",\"interface\":\"\",\"temperature-unit\":\"fahrenheit\",\"modem\":\"\",\"timeframe\":\"latest\",\"ip_type\":\"ipv4\",\"csf-device\":\"FGT61FTK20020975\",\"app-bandwidth-chart-type\":\"stacked\",\"fabric-device\":\"\",\"fabric-device-widget-name\":\"\",\"fabric-device-widget-visualization-type\":\"\",\"topology-type\":\"\",\"router-view-type\":\"\",\"overlay-autoplay-speed\":5,\"nac-view-type\":\"both\",\"fsso-user-visibility\":\"disable\",\"title\":\"\",\"fortiview-type\":\"\",\"fortiview-sort-by\":\"\",\"fortiview-timeframe\":\"\",\"fortiview-visualization\":\"\",\"fortiview-device\":\"\",\"fortiview-filters\":[],\"wifi-band\":\"\",\"logging-source\":\"\",\"filter-offline-rogue-ap\":\"disable\",\"filter-accepted-rogue-ap\":\"disable\"}]}",
+      "timestamp": 1763726082.3144464
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/geoip/geoip-query/select?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"ip_addresses\":[\"73.137.23.113\"]}",
+      "timestamp": 1763726082.3508406
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/geoip/geoip-query/select?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"ip_addresses\":[\"173.243.140.6\"]}",
+      "timestamp": 1763726082.3550353
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/ntp?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.3624368
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/ptp?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.3627665
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/user/fortitoken?vdom=*",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.3635604
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.37044
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.3706427
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.370799
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/global?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.381823
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/current-admins?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.385674
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/log/device/state?scope=root&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.4035585
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/dhcp?ipv6=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.4059346
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/resource/usage?scope=global",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726082.5814748
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "text/plain"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"warn\",\"message\":\"No language entry found for \\\"AI Use Cases\\\" \",\"stack\":\"  at M (https://192.168.0.254:10443/static/main.js:1:545344)\\n  at S.lookup (https://192.168.0.254:10443/static/main.js:1:540183)\\n  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488150)\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"AI Use Cases\\\" \",\"stack\":\"  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488202)\\n  at g.lang (https://192.168.0.254:10443/static/67041.js:1:2638)\\n  at https://192.168.0.254:10443/static/67041.js:1:7590\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"Proxy Web Sites\\\" \",\"stack\":\"  at M (https://192.168.0.254:10443/static/main.js:1:545344)\\n  at S.lookup (https://192.168.0.254:10443/static/main.js:1:540183)\\n  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488150)\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"Proxy Web Sites\\\" \",\"stack\":\"  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488202)\\n  at g.lang (https://192.168.0.254:10443/static/67041.js:1:2638)\\n  at https://192.168.0.254:10443/static/67041.js:1:7590\"},{\"level\":\"error\",\"message\":\"No permission found for the uri: /user/ftoken \",\"stack\":\"  at https://192.168.0.254:10443/static/main.js:1:288956\\n  at Generator.next (<anonymous>)\\n  at n (https://192.168.0.254:10443/static/main.js:1:4449308)\"}]}",
+      "timestamp": 1763726083.355153
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-certificates?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726083.7270675
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726083.7322607
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/log/forticloud/connection?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726083.7349954
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/user/device/stats?filter_logic=and&timestamp_to=1763726083&stat-key=os_name&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/system/dashboard/1",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"filters\":[{\"type\":\"is_online\",\"value\":\"Online\",\"op\":\"exact\"}]}",
+      "timestamp": 1763726083.7463214
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/authentication",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.4602473
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/static/fweb_build.json",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.603678
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/state",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.6038845
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/object-urls",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.6041152
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/service/login-config",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.8081455
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf?scope=global&decode=true",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.8291857
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/web-ui/navbar-dependencies?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.829445
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/prefix-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.866899
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/static-links?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.8671472
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/forticonverter/eligibility?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.8777783
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/usb-log?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.8789442
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/csf/?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.915274
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/switch-controller/managed-switch/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9185565
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/?datasource=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.925479
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/firmware?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "timeout": "20000",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9949136
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/endpoint-control/fctems?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9960792
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/endpoint-control/ems/status-summary?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9965377
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/override-setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9976392
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9985456
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/central-management/status?skip_detect=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726084.9992135
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0002604
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/wan-lan-ip-conflict?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0014992
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/connection?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0026553
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/router/lookup?vdom=root&destination=0.0.0.0",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0034683
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/network/lldp/neighbors?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0050604
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/log/device/state?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.0054615
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/setting?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.1885862
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.716252
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726085.7166064
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "text/plain"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"info\",\"message\":\"Creating events websocket to \\\"FGT61FTK20020975\\\". \",\"stack\":\"  at J (https://192.168.0.254:10443/static/main.js:1:456060)\\n  at _._subscribe (https://192.168.0.254:10443/static/main.js:1:456693)\\n  at _._trySubscribe (https://192.168.0.254:10443/static/main.js:1:952729)\"}]}",
+      "timestamp": 1763726085.8614123
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/ng/wifi-switch-controller",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json;charset=UTF-8"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"info\",\"message\":\"Created new ng proxy VDOM FortiGate state for FGT61FTK20020975:root\",\"stack\":\"  at Object.get (https://192.168.0.254:10443/static/ng/app.js:2:1241396)\\n  at SelectSetup.<anonymous> (https://192.168.0.254:10443/static/ng/app.js:2:1408919)\\n  at Topology.<anonymous> (https://192.168.0.254:10443/static/ng/app.js:2:1246584)\"}]}",
+      "timestamp": 1763726086.6918144
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?format=wtp-share&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726092.441215
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726092.4414055
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.004148
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.0314746
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/wifi/managed_ap?incl_local=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.0620944
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/wifi/meta?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.0630453
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces/meta?scope=vdom&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.1361597
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces?scope=vdom&count=29&start=0&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"json_filter\":[],\"format\":\"adsl|alias|allow_fabric_heartbeat|description|dhcp4_client_count|dhcp6_client_count|duplex|fortiextender_id|hardware_switch|has_lldp_reception_enabled|icon|in_bandwidth_limit|ipv4_addresses|ipv6_addresses|is_backplane|is_fortilink_vlan|is_hardware_switch_member|is_local_bridge|is_loopback|is_mesh_backhaul|is_nat_tunnel|is_sdwan_zone|is_sslvpn|is_switchctl_interface_mode|is_switchctl_iot_scanning|is_system_interface|is_used_by_fctrl_trunk|is_used_by_redundant|is_virtual_wire_pair_member|is_virtual_wan_link_capable|is_wifi|is_wifi_mesh|is_wifi_vlan|is_zone|link|media|members|name|out_bandwidth_limit|out_of_scope|poe_capable|poe_enabled|poe_status|port_speed|real_interface_name|role|sdwan_zone|speed|ssid|status|supports_lldp_reception|supports_transceiver|type|used_by_aggregate_or_switch|used_by_composite|vdom|vlan_id|vlan_interface|vlan_protocol|vrf\"}",
+      "timestamp": 1763726093.1606138
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.2003694
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.221911
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.2415938
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?datasource=true&with_meta=true&skip=true&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"json_filter\":[{\"filters\":[{\"operator\":\"exact\",\"pattern\":\"FAP231F-default\",\"key\":\"name\"}],\"logic\":\"or\"}]}",
+      "timestamp": 1763726093.2944968
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/wifi/ap-names?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.3319721
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/wifi/ap_platforms?vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.3540823
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/firmware/extension-device?type=fortiap&version=%7B%22major%22:7,%22minor%22:6,%22patch%22:4,%22build%22:3596%7D&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.4251294
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.6467617
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726093.665296
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/setting?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.5559695
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/setting?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.5561564
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/global?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.5562994
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/global?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.556541
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/snmp?datasource=true&with_meta=true&plain-text-password=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.5566661
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/snmp?action=schema&datasource=true&with_meta=true&plain-text-password=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.5567808
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/fortiguard/answers?topics=FortiAP&limit=3&sortkey=viewCount&sortkey=votes&sortkey=active&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.556888
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-certificates?with_ca=1&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.7296429
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-certificates?with_ca=1&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.7299533
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.730102
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/firewall.schedule/recurring?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726094.7302303
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/firewall.schedule/recurring?datasource=true&with_meta=true&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"json_filter\":[{\"filters\":[{\"operator\":\"exact\",\"pattern\":\"default-darrp-optimize\",\"key\":\"name\"}],\"logic\":\"or\"}]}",
+      "timestamp": 1763726095.098785
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/settings",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "text/plain"
+      },
+      "post_data": "{\"messages\":[{\"level\":\"warn\",\"message\":\"No language entry found for \\\"See more link\\\" \",\"stack\":\"  at M (https://192.168.0.254:10443/static/main.js:1:545344)\\n  at S.lookup (https://192.168.0.254:10443/static/main.js:1:540183)\\n  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488150)\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"See more link\\\" \",\"stack\":\"  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488202)\\n  at D.transform (https://192.168.0.254:10443/static/main.js:1:3488675)\\n  at zg (https://192.168.0.254:10443/static/main.js:1:1334697)\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"See more link\\\" \",\"stack\":\"  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488202)\\n  at D.transform (https://192.168.0.254:10443/static/main.js:1:3488675)\\n  at zg (https://192.168.0.254:10443/static/main.js:1:1334697)\"},{\"level\":\"warn\",\"message\":\"No language entry found for \\\"See more link\\\" \",\"stack\":\"  at D.translate (https://192.168.0.254:10443/static/main.js:1:3488202)\\n  at D.transform (https://192.168.0.254:10443/static/main.js:1:3488675)\\n  at zg (https://192.168.0.254:10443/static/main.js:1:1334697)\"}]}",
+      "timestamp": 1763726096.0511556
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?format=wtp-share&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726097.5963314
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?action=schema&datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726097.5966957
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.1570063
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.1846883
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/wifi/managed_ap?incl_local=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.2142868
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces/meta?scope=vdom&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.2689834
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces?scope=vdom&count=29&start=0&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"json_filter\":[],\"format\":\"adsl|alias|allow_fabric_heartbeat|description|dhcp4_client_count|dhcp6_client_count|duplex|fortiextender_id|hardware_switch|has_lldp_reception_enabled|icon|in_bandwidth_limit|ipv4_addresses|ipv6_addresses|is_backplane|is_fortilink_vlan|is_hardware_switch_member|is_local_bridge|is_loopback|is_mesh_backhaul|is_nat_tunnel|is_sdwan_zone|is_sslvpn|is_switchctl_interface_mode|is_switchctl_iot_scanning|is_system_interface|is_used_by_fctrl_trunk|is_used_by_redundant|is_virtual_wire_pair_member|is_virtual_wan_link_capable|is_wifi|is_wifi_mesh|is_wifi_vlan|is_zone|link|media|members|name|out_bandwidth_limit|out_of_scope|poe_capable|poe_enabled|poe_status|port_speed|real_interface_name|role|sdwan_zone|speed|ssid|status|supports_lldp_reception|supports_transceiver|type|used_by_aggregate_or_switch|used_by_composite|vdom|vlan_id|vlan_interface|vlan_protocol|vrf\"}",
+      "timestamp": 1763726098.2965245
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.3358681
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.352966
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.3766239
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?datasource=true&with_meta=true&skip=true&vdom=root",
+      "method": "POST",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "x-http-method-override": "GET",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": "{\"json_filter\":[{\"filters\":[{\"operator\":\"exact\",\"pattern\":\"FAP231F-default\",\"key\":\"name\"}],\"logic\":\"or\"}]}",
+      "timestamp": 1763726098.4270976
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?action=schema&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.483974
+    },
+    {
+      "url": "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?datasource=true&with_meta=true&vdom=root",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-csrftoken": "n1pc7G65tq5mgmfddtmrj97HNG4x8Q",
+        "referer": "https://192.168.0.254:10443/wifi/managed-ap?type=ap",
+        "sec-ch-ua": "\"Chromium\";v=\"141\", \"Not?A_Brand\";v=\"8\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-requested-with": "XMLHttpRequest",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "post_data": null,
+      "timestamp": 1763726098.5082736
+    }
+  ],
+  "unique_endpoints": [
+    "https://192.168.0.254:10443/api/v2/monitor/fortiguard/prefix-links?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/router/lookup?vdom=root&destination=0.0.0.0",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?datasource=true&with_meta=true&skip=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/available-certificates?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/connection?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?action=schema&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/central-management/status?skip_detect=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces/meta?scope=vdom&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/wifi/meta?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/forticonverter/show-in-startup?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/ntp?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/wifi/ap_platforms?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/navigation-favorites?type=&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/setting?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/setting?action=schema&datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/snmp?datasource=true&with_meta=true&plain-text-password=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?action=schema&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/available-certificates?with_ca=1&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/user/fortitoken?vdom=*",
+    "https://192.168.0.254:10443/api/v2/monitor/system/dhcp?ipv6=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/forticonverter/eligibility?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/usb-log?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp-profile?action=schema&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?action=schema&datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/authentication",
+    "https://192.168.0.254:10443/api/v2/monitor/system/csf/?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/firmware/extension-device?type=fortiap&version=%7B%22major%22:7,%22minor%22:6,%22patch%22:4,%22build%22:3596%7D&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/endpoint-control/ems/status-summary?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/csf?scope=global&decode=true",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/global?format=wtp-share&datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/endpoint-control/fctems?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/wifi/ap-names?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/1?datasource=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/web-ui/object-urls",
+    "https://192.168.0.254:10443/api/v2/monitor/system/sandbox/status?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/override-setting?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/ptp?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/vap-group?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/global?action=schema&datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/log.fortianalyzer/setting?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/current-admins?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/network/lldp/neighbors?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/available-interfaces?scope=vdom&count=29&start=0&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/log/device/state?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/fortiguard/static-links?vdom=root",
+    "https://192.168.0.254:10443/api/v2/authentication-status",
+    "https://192.168.0.254:10443/api/v2/service/login-config",
+    "https://192.168.0.254:10443/api/v2/monitor/system/resource/usage?scope=global",
+    "https://192.168.0.254:10443/api/v2/cmdb/firewall.schedule/recurring?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/global?datasource=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/1?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/log/device/state?scope=root&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/firmware?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?action=schema&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/web-ui/state",
+    "https://192.168.0.254:10443/api/v2/monitor/fortiguard/answers?topics=FortiAP&limit=3&sortkey=viewCount&sortkey=votes&sortkey=active&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/system/debug?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/geoip/geoip-query/select?vdom=root",
+    "https://192.168.0.254:10443/api/v2/static/fweb_build.json",
+    "https://192.168.0.254:10443/api/v2/monitor/system/wan-lan-ip-conflict?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/wtp?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/user/device/stats?filter_logic=and&timestamp_to=1763726083&stat-key=os_name&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/wireless-controller/snmp?action=schema&datasource=true&with_meta=true&plain-text-password=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/log/forticloud/connection?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/switch-controller/managed-switch/status?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/central-management?action=schema&datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/web-ui/navbar-dependencies?vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/wifi/managed_ap?incl_local=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/global?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/admin/admin/gui-dashboard/?datasource=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/system/device-upgrade-exemptions?datasource=true&with_meta=true&vdom=root",
+    "https://192.168.0.254:10443/api/v2/monitor/license/status?vdom=root",
+    "https://192.168.0.254:10443/api/v2/cmdb/firewall.schedule/recurring?action=schema&vdom=root"
+  ]
+}

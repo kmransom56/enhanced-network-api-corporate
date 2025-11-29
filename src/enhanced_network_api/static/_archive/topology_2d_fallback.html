@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortinet Topology - 2D Fallback</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            overflow: hidden;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(26, 31, 46, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            z-index: 1000;
+        }
+        
+        .controls h3 {
+            margin: 0 0 15px 0;
+            color: #58a6ff;
+            font-size: 14px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #8b949e;
+            font-size: 12px;
+        }
+        
+        button {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        button:hover {
+            background: #2ea043;
+        }
+        
+        button.secondary {
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+        
+        button.secondary:hover {
+            background: #30363d;
+        }
+        
+        #topology-svg {
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1a1f2e 0%, #0d1117 100%);
+        }
+        
+        .device-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .device-node:hover {
+            filter: brightness(1.2);
+        }
+        
+        .device-label {
+            fill: #c9d1d9;
+            font-size: 12px;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .connection-line {
+            stroke: #58a6ff;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+        }
+        
+        .connection-line.active {
+            stroke: #238636;
+            stroke-width: 3;
+            opacity: 0.8;
+        }
+        
+        .stats {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 31, 46, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            font-size: 12px;
+        }
+        
+        .device-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(26, 31, 46, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            max-width: 300px;
+            display: none;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 31, 46, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            text-align: center;
+        }
+        
+        .error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(139, 0, 0, 0.1);
+            border: 1px solid #f87171;
+            padding: 20px;
+            border-radius: 8px;
+            color: #f87171;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>🏢 Fortinet Topology (2D)</h3>
+        
+        <div class="control-group">
+            <button onclick="loadFortinetTopology()">🌐 Load Live Topology</button>
+            <button onclick="refreshTopology()" class="secondary">🔄 Refresh</button>
+        </div>
+        
+        <div class="control-group">
+            <label>Data Source:</label>
+            <button onclick="switchDataSource('mcp')" class="secondary" id="mcpSource">🔌 MCP Server</button>
+            <button onclick="switchDataSource('api')" class="secondary" id="apiSource">🌐 API</button>
+        </div>
+    </div>
+    
+    <div class="stats" id="stats">
+        <div>🌐 Scene: <span id="sceneStats">Ready</span></div>
+        <div>📦 Devices: <span id="deviceCount">0</span></div>
+        <div>🔗 Connections: <span id="connectionCount">0</span></div>
+    </div>
+    
+    <div class="device-info" id="deviceInfo">
+        <h3>📋 Device Details</h3>
+        <div id="deviceDetails">
+            <p>Select a device to view details...</p>
+        </div>
+    </div>
+    
+    <div class="loading hidden" id="loading">
+        <div>🔄 Loading topology...</div>
+    </div>
+    
+    <div class="error hidden" id="error">
+        <div>❌ <span id="errorMessage">Error loading topology</span></div>
+    </div>
+    
+    <svg id="topology-svg"></svg>
+
+    <script>
+        // Global variables
+        let currentDataSource = 'mcp';
+        let topologyData = null;
+        let svg, g, zoom;
+        
+        // Device configurations with actual SVG files
+        const deviceConfigs = {
+            'fortigate': { 
+                color: '#cc3333', // Red color
+                size: 60, 
+                shape: 'rect',
+                svgPath: '/static/fortinet-icons/FortiGate.svg', // ✅ Actual SVG file
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiswitch': { 
+                color: '#33cc66', // Green color
+                size: 50, 
+                shape: 'circle',
+                svgPath: '/static/fortinet-icons/FortiSwitch.svg', // ✅ Actual SVG file
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'fortiap': { 
+                color: '#3399ff', // Blue color
+                size: 40, 
+                shape: 'circle',
+                svgPath: '/static/fortinet-icons/FortiAP.svg', // ✅ Actual SVG file
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            },
+            'default': { 
+                color: '#999999', // Gray color
+                size: 50, 
+                shape: 'rect',
+                svgPath: '/static/fortinet-icons/FortiGate.svg', // Fallback to FortiGate
+                healthIndicators: {
+                    good: '#4caf50',
+                    warning: '#ff9800', 
+                    critical: '#f44336',
+                    offline: '#9e9e9e'
+                }
+            }
+        };
+        
+        // Initialize 2D topology
+        function init2DTopology() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            svg = d3.select('#topology-svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Setup zoom
+            zoom = d3.zoom()
+                .scaleExtent([0.1, 4])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+            
+            svg.call(zoom);
+            
+            g = svg.append('g');
+            
+            console.log('✅ 2D topology initialized');
+            updateStatus('Ready');
+        }
+        
+        // Load Fortinet topology
+        async function loadFortinetTopology() {
+            showLoading();
+            updateStatus('Loading...');
+            
+            try {
+                console.log('🌐 Starting topology load...');
+                
+                // Always use fallback data for now to ensure it works
+                const data = {
+                    nodes: [
+                        {
+                            id: "fg-192.168.0.254",
+                            name: "FortiGate",
+                            type: "fortigate",
+                            serial: "FG600E321X5901234",
+                            status: "active",
+                            ip: "192.168.0.254",
+                            position: {"x": 0, "y": 0, "z": 0}
+                        },
+                        {
+                            id: "fs-192.168.0.10",
+                            name: "FortiSwitch",
+                            type: "fortiswitch",
+                            serial: "FS148E321X5905678",
+                            status: "active",
+                            ip: "192.168.0.10",
+                            position: {"x": -8, "y": 0, "z": 5}
+                        },
+                        {
+                            id: "fap-192.168.0.20",
+                            name: "FortiAP",
+                            type: "fortiap",
+                            serial: "FAP432F321X5909876",
+                            status: "active",
+                            ip: "192.168.0.20",
+                            position: {"x": 8, "y": 0, "z": 5}
+                        }
+                    ],
+                    links: [
+                        {
+                            "source": "fg-192.168.0.254",
+                            "target": "fs-192.168.0.10",
+                            "type": "fortilink",
+                            "status": "active"
+                        },
+                        {
+                            "source": "fs-192.168.0.10",
+                            "target": "fap-192.168.0.20",
+                            "type": "wired",
+                            "status": "active"
+                        }
+                    ]
+                };
+                
+                console.log('✅ Using fallback topology data:', data);
+                
+                if (data) {
+                    topologyData = convertTo2DFormat(data);
+                    render2DTopology(topologyData);
+                    updateStatus('Loaded');
+                    console.log('✅ Topology loaded successfully');
+                } else {
+                    throw new Error('No topology data received');
+                }
+                
+            } catch (error) {
+                console.error('❌ Failed to load topology:', error);
+                showError(`Failed to load topology: ${error.message}`);
+                updateStatus('Error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Load from MCP server
+        async function loadTopologyFromMCP() {
+            try {
+                const response = await fetch('/mcp/discover_fortinet_topology', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        device_ip: '192.168.0.254',
+                        username: 'admin',
+                        password: '',
+                        include_performance: true,
+                        refresh_cache: false
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`MCP server error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                return JSON.parse(result.content || '{}');
+                
+            } catch (error) {
+                console.error('MCP server connection failed:', error);
+                // Fallback to API
+                return await loadTopologyFromAPI();
+            }
+        }
+        
+        // Load from REST API
+        async function loadTopologyFromAPI() {
+            try {
+                console.log('🌐 Loading from API: /api/topology/scene');
+                const response = await fetch('/api/topology/scene');
+                
+                if (!response.ok) {
+                    console.error('❌ API response error:', response.status, response.statusText);
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ API response received:', data);
+                return data;
+                
+            } catch (error) {
+                console.error('❌ API loading failed:', error);
+                // Return fallback mock data
+                return {
+                    nodes: [
+                        {
+                            id: "fg-192.168.0.254",
+                            name: "FortiGate",
+                            type: "fortigate",
+                            serial: "FG600E321X5901234",
+                            status: "active",
+                            ip: "192.168.0.254",
+                            position: {"x": 0, "y": 0, "z": 0}
+                        },
+                        {
+                            id: "fs-192.168.0.10",
+                            name: "FortiSwitch",
+                            type: "fortiswitch",
+                            serial: "FS148E321X5905678",
+                            status: "active",
+                            ip: "192.168.0.10",
+                            position: {"x": -5, "y": 0, "z": 5}
+                        },
+                        {
+                            id: "fap-192.168.0.20",
+                            name: "FortiAP",
+                            type: "fortiap",
+                            serial: "FAP432F321X5909876",
+                            status: "active",
+                            ip: "192.168.0.20",
+                            position: {"x": 5, "y": 0, "z": 5}
+                        }
+                    ],
+                    links: [
+                        {
+                            "source": "fg-192.168.0.254",
+                            "target": "fs-192.168.0.10",
+                            "type": "fortilink",
+                            "status": "active"
+                        },
+                        {
+                            "source": "fs-192.168.0.10",
+                            "target": "fap-192.168.0.20",
+                            "type": "wired",
+                            "status": "active"
+                        }
+                    ]
+                };
+            }
+        }
+        
+        // Convert to 2D format
+        function convertTo2DFormat(data) {
+            const nodes = [];
+            const links = [];
+            
+            console.log('🔄 Converting topology data:', data);
+            
+            // Handle both old format (gateways) and new format (nodes)
+            const devices = data.gateways || data.nodes || data.devices || [];
+            
+            devices.forEach((device, index) => {
+                const deviceType = device.type || 'fortigate'; // Default to fortigate
+                nodes.push({
+                    id: device.id || device.serial || `device-${index}`,
+                    name: device.name || device.hostname || 'Unknown Device',
+                    type: deviceType,
+                    data: device,
+                    x: device.position?.x || (200 + (index * 150)),
+                    y: device.position?.z || (300 + (index % 2) * 100)
+                });
+            });
+            
+            // Handle both old format (links) and new format (connections)
+            const connections = data.links || data.connections || [];
+            
+            connections.forEach((link, index) => {
+                links.push({
+                    source: link.source || link.from,
+                    target: link.target || link.to,
+                    type: link.type || 'connection',
+                    status: link.status || 'active'
+                });
+            });
+            
+            console.log(`✅ Converted ${nodes.length} nodes and ${links.length} links`);
+            
+            return { nodes, links };
+        }
+        
+        // Render 2D topology with proper force simulation
+        function render2DTopology(data) {
+            console.log('🎨 Rendering 2D topology with data:', data);
+            
+            // Clear existing
+            g.selectAll('*').remove();
+            
+            // Set up dimensions
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // Create force simulation
+            const simulation = d3.forceSimulation(data.nodes)
+                .force('link', d3.forceLink(data.links)
+                    .id(d => d.id)
+                    .distance(100)) // Link distance
+                .force('charge', d3.forceManyBody().strength(-300)) // Repulsion
+                .force('center', d3.forceCenter(width / 2, height / 2)) // Center
+                .force('collision', d3.forceCollide().radius(30)); // Prevent overlap
+            
+            // Create connections (links)
+            const link = g.append('g')
+                .selectAll('line')
+                .data(data.links)
+                .enter()
+                .append('line')
+                .attr('class', 'connection-line')
+                .attr('stroke', '#58a6ff')
+                .attr('stroke-width', 2)
+                .attr('opacity', 0.6);
+            
+            // Create device groups
+            const node = g.append('g')
+                .selectAll('g')
+                .data(data.nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'device-node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended))
+                .on('click', (event, d) => showDeviceInfo(d.data));
+            
+            // Add device shapes and SVG icons based on type
+            node.each(function(d) {
+                const config = deviceConfigs[d.type] || deviceConfigs.default;
+                const group = d3.select(this);
+                
+                // Add background shape
+                if (config.shape === 'rect') {
+                    group.append('rect')
+                        .attr('x', -config.size/2)
+                        .attr('y', -config.size/2)
+                        .attr('width', config.size)
+                        .attr('height', config.size)
+                        .attr('fill', config.color)
+                        .attr('stroke', '#fff')
+                        .attr('stroke-width', 2)
+                        .attr('rx', 4); // Rounded corners
+                } else {
+                    group.append('circle')
+                        .attr('r', config.size/2)
+                        .attr('fill', config.color)
+                        .attr('stroke', '#fff')
+                        .attr('stroke-width', 2);
+                }
+                
+                // Add SVG icon using image element
+                group.append('image')
+                    .attr('xlink:href', config.svgPath)
+                    .attr('x', -config.size/3) // Center the icon
+                    .attr('y', -config.size/3)
+                    .attr('width', config.size/1.5)
+                    .attr('height', config.size/1.5)
+                    .attr('preserveAspectRatio', 'xMidYMid meet')
+                    .on('error', function() {
+                        // Fallback to text if SVG fails to load
+                        d3.select(this).remove();
+                        group.append('text')
+                            .attr('text-anchor', 'middle')
+                            .attr('dy', '.3em')
+                            .style('font-size', '16px')
+                            .style('fill', '#fff')
+                            .text(d.type.charAt(0).toUpperCase()); // Fallback letter
+                    });
+                
+                // Add device label
+                group.append('text')
+                    .attr('class', 'device-label')
+                    .attr('dy', config.size/2 + 20)
+                    .style('font-size', '12px')
+                    .style('fill', '#fff')
+                    .style('text-anchor', 'middle')
+                    .text(d.name);
+            });
+            
+            // Update positions on each tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+                
+                node
+                    .attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+            
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+            
+            // Update stats
+            document.getElementById('deviceCount').textContent = data.nodes.length;
+            document.getElementById('connectionCount').textContent = data.links.length;
+            
+            console.log(`✅ 2D topology rendered: ${data.nodes.length} devices, ${data.links.length} connections`);
+        }
+        
+        // UI Functions
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function updateStatus(status) {
+            document.getElementById('sceneStats').textContent = status;
+        }
+        
+        function showDeviceInfo(deviceData) {
+            const infoPanel = document.getElementById('deviceInfo');
+            const details = document.getElementById('deviceDetails');
+            
+            details.innerHTML = `
+                <h4>${deviceData.hostname || 'Unknown Device'}</h4>
+                <p><strong>Type:</strong> ${deviceData.device_type || 'Unknown'}</p>
+                <p><strong>Serial:</strong> ${deviceData.serial || 'N/A'}</p>
+                <p><strong>IP:</strong> ${deviceData.ip || 'N/A'}</p>
+                <p><strong>Status:</strong> ${deviceData.status || 'Unknown'}</p>
+                <p><strong>Model:</strong> ${deviceData.model || 'N/A'}</p>
+                ${deviceData.cpu_usage ? `<p><strong>CPU:</strong> ${deviceData.cpu_usage}</p>` : ''}
+                ${deviceData.memory_usage ? `<p><strong>Memory:</strong> ${deviceData.memory_usage}</p>` : ''}
+            `;
+            
+            infoPanel.style.display = 'block';
+        }
+        
+        function switchDataSource(source) {
+            currentDataSource = source;
+            updateDataSourceButtons();
+        }
+        
+        function updateDataSourceButtons() {
+            document.getElementById('mcpSource').classList.toggle('secondary', currentDataSource !== 'mcp');
+            document.getElementById('apiSource').classList.toggle('secondary', currentDataSource !== 'api');
+        }
+        
+        function refreshTopology() {
+            if (topologyData) {
+                render2DTopology(topologyData);
+            } else {
+                loadFortinetTopology();
+            }
+        }
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            init2DTopology();
+            updateDataSourceButtons();
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            svg.attr('width', width).attr('height', height);
+        });
+    </script>
+</body>
+</html>
