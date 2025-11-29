@@ -22,7 +22,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
+*.pdf
 # Virtual environments
 .env
 .env.local
@@ -208,3 +208,4 @@ src/enhanced_network_api/cagent-dev.yaml
 src/enhanced_network_api/golang-cagent-dev.yaml
 src/enhanced_network_api/golang-cagent-dev-memory.yaml
 cagent_dev_memory.db
+.site-packages/
