@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babylon.js 3D GUI Test</title>
+    <script src="http://localhost:8001/static/js/babylon.js"></script>
+    <script src="http://localhost:8001/static/js/babylon.gui.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: monospace;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100vh;
+            display: block;
+        }
+
+        #console {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: lime;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 13px;
+            z-index: 1000;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+
+        .error {
+            color: #ff5555;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #50fa7b;
+        }
+
+        .info {
+            color: #8be9fd;
+        }
+
+        .warn {
+            color: #ffb86c;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <div id="console"><strong>🧪 Babylon.js 3D GUI Test Console</strong><br><br></div>
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            consoleDiv.innerHTML += `<div class="${type}">[${time}] ${msg}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(msg);
+        }
+
+        try {
+            log('🎬 Starting Babylon.js 3D GUI test...', 'info');
+
+            const canvas = document.getElementById('renderCanvas');
+            const engine = new BABYLON.Engine(canvas, true);
+            log('✅ Engine created', 'success');
+
+            const scene = new BABYLON.Scene(engine);
+            scene.clearColor = new BABYLON.Color4(0.1, 0.1, 0.2, 1.0);
+            log('✅ Scene created', 'success');
+
+            const camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI / 3, 10, BABYLON.Vector3.Zero(), scene);
+            camera.attachControl(canvas, true);
+            log('✅ Camera created', 'success');
+
+            const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
+            log('✅ Light created', 'success');
+
+            const sphere = BABYLON.MeshBuilder.CreateSphere('sphere', { diameter: 2 }, scene);
+            sphere.position.y = 1;
+            const sphereMat = new BABYLON.StandardMaterial('sphereMat', scene);
+            sphereMat.diffuseColor = new BABYLON.Color3(0.4, 0.6, 1);
+            sphere.material = sphereMat;
+            log('✅ Test sphere created', 'success');
+
+            const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 10, height: 10 }, scene);
+            log('✅ Ground created', 'success');
+
+            log('🔧 Creating 3D GUI Manager...', 'info');
+            const manager = new BABYLON.GUI.GUI3DManager(scene);
+            log('✅ GUI3DManager created', 'success');
+
+            log('🔧 Creating StackPanel3D...', 'info');
+            const panel = new BABYLON.GUI.StackPanel3D();
+            panel.isVertical = true;
+            panel.margin = 0.02;
+            panel.position = new BABYLON.Vector3(0, 2, -5);
+            manager.addControl(panel);
+            log('✅ StackPanel3D created', 'success');
+
+            log('🔧 Creating Button3D...', 'info');
+            const button = new BABYLON.GUI.Button3D('testButton');
+            const buttonTxt = new BABYLON.GUI.TextBlock();
+            buttonTxt.text = 'Click Me!';
+            buttonTxt.color = 'white';
+            button.content = buttonTxt;
+            button.onPointerUpObservable.add(() => {
+                log('🎯 3D Button clicked!', 'success');
+            });
+            panel.addControl(button);
+            log('✅ Button3D created', 'success');
+
+            log('🔧 Creating HolographicButton...', 'info');
+            const holoButton = new BABYLON.GUI.HolographicButton('holoButton');
+            holoButton.text = 'Holographic';
+            holoButton.onPointerUpObservable.add(() => {
+                log('✨ Holographic button clicked!', 'success');
+            });
+            panel.addControl(holoButton);
+            log('✅ HolographicButton created', 'success');
+
+            log('🔧 Creating HolographicSlate...', 'info');
+            const slate = new BABYLON.GUI.HolographicSlate('testSlate');
+            slate.title = 'Test Slate';
+            slate.titleBarHeight = 0.5;
+            slate.dimensions = new BABYLON.Vector2(3, 2);
+            slate.position = new BABYLON.Vector3(3, 2, 0);
+            manager.addControl(slate);
+
+            const slateTex = BABYLON.GUI.AdvancedDynamicTexture.CreateForMesh(slate.mesh, 512, 512);
+            const slateText = new BABYLON.GUI.TextBlock();
+            slateText.text = 'This is a\nHolographicSlate!\n\nClick devices in\nthe main app to\nsee this in action.';
+            slateText.color = 'white';
+            slateText.fontSize = 20;
+            slateTex.addControl(slateText);
+            log('✅ HolographicSlate created', 'success');
+
+            // Test classes that might not exist in 3D GUI
+            log('<br>🔧 Testing which GUI classes exist...', 'info');
+
+            try {
+                const checkbox = new BABYLON.GUI.Checkbox();
+                log('⚠️  BABYLON.GUI.Checkbox EXISTS (2D GUI only)', 'warn');
+            } catch (e) {
+                log(`❌ BABYLON.GUI.Checkbox: ${e.message}`, 'error');
+            }
+
+            try {
+                const radioGroup = new BABYLON.GUI.RadioGroup('test');
+                log('⚠️  BABYLON.GUI.RadioGroup EXISTS (2D GUI only)', 'warn');
+            } catch (e) {
+                log(`❌ BABYLON.GUI.RadioGroup: ${e.message}`, 'error');
+            }
+
+            try {
+                const checkboxGroup = new BABYLON.GUI.CheckboxGroup('test');
+                log('⚠️  BABYLON.GUI.CheckboxGroup EXISTS (2D GUI only)', 'warn');
+            } catch (e) {
+                log(`❌ BABYLON.GUI.CheckboxGroup: ${e.message}`, 'error');
+            }
+
+            // Start render loop
+            engine.runRenderLoop(() => {
+                scene.render();
+            });
+
+            window.addEventListener('resize', () => {
+                engine.resize();
+            });
+
+            log('<br>🎉 All tests completed! Scene is rendering.', 'success');
+            log('💡 Try clicking the 3D buttons floating in the scene!', 'info');
+            log('💡 Rotate camera with left mouse, zoom with scroll wheel', 'info');
+
+        } catch (error) {
+            log('<br>❌ FATAL ERROR: ' + error.message, 'error');
+            log('Stack: ' + error.stack, 'error');
+        }
+    </script>
+</body>
+
+</html>

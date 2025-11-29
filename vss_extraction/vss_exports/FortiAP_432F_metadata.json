@@ -1,7 +1,7 @@
 {
   "device_name": "FortiAP_432F",
   "extraction_method": "VSS-Simulation-Linux",
-  "extraction_date": "2025-11-28T20:06:50.567935",
+  "extraction_date": "2025-11-29T08:14:14.986422",
   "specifications": {
     "type": "fortiap",
     "description": "FortiAP 432F Wireless Access Point",

@@ -287,10 +287,10 @@ The application is successfully working with real data:
 4. **Alerting:** Configure alerts for performance thresholds
 
 ### 📊 Next Steps
-1. Access web interface at: http://localhost:11111/
-2. View 3D topology at: http://localhost:11111/3d-lab
-3. Try smart tools at: http://localhost:11111/smart-tools
-4. Monitor health at: http://localhost:11111/health
+1. Access web interface at: http://localhost:8001/
+2. View 3D topology at: http://localhost:8001/3d-lab
+3. Try smart tools at: http://localhost:8001/smart-tools
+4. Monitor health at: http://localhost:8001/health
 
 ---
 
@@ -339,7 +339,7 @@ Test Date: 2025-11-27 10:12:59 EST
 
 ### Web Interfaces
 - `/` - Main visualization interface
-- `/3d-lab` - 3D network topology lab
+- `/3d-lab` - 3D network topology lab (port 8001)
 - `/2d-svg` - 2D SVG topology
 - `/smart-tools` - Smart analysis tools
 - `/iconlab` - IconLab portal

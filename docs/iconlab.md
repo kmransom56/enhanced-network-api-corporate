@@ -886,7 +886,7 @@ The Enhanced Network API platform now provides integrated endpoints for VSS to S
 
 curl -F "file=@FortiGate_Series_R22_2025Q2.vss" \
      -F "scale=1.0" \
-     http://localhost:11111/api/icons/vss-to-svg-lab
+     http://localhost:8001/api/icons/vss-to-svg-lab
 ```
 
 Response:
@@ -907,7 +907,7 @@ Response:
 # Endpoint: POST /api/icons/svg-to-3d-lab
 # Converts SVGs to 3D models using the lab SVGTo3DConverter
 
-curl -X POST http://localhost:11111/api/icons/svg-to-3d-lab \
+curl -X POST http://localhost:8001/api/icons/svg-to-3d-lab \
      -H "Content-Type: application/json" \
      -d '{"input_dir": "extracted_icons/lab_vss_svgs", "output_dir": "lab_3d_models"}'
 ```
@@ -976,7 +976,7 @@ The platform also includes a Babylon.js lab viewer that consumes topology data i
 # Endpoint: GET /api/topology/babylon-lab-format
 # Returns topology in lab-style {"models", "connections"} format
 
-curl http://localhost:11111/api/topology/babylon-lab-format
+curl http://localhost:8001/api/topology/babylon-lab-format
 ```
 
 Response format (matches 3d-network-topology-lab/babylon_topology.json):
@@ -1006,7 +1006,7 @@ Response format (matches 3d-network-topology-lab/babylon_topology.json):
 }
 ```
 
-Access the 3D lab viewer at: `http://localhost:11111/3d-lab`
+Access the 3D lab viewer at: `http://localhost:8001/3d-lab`
 
 ## Developer Workflow: Agent-Assisted Coding for Enhanced Network API
 =================================================================

@@ -114,12 +114,12 @@ app.mount("/network-map-files", StaticFiles(directory=HERE), name="network-map-f
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Mount additional static directories for generated / vendor 2D and 3D assets
-app.mount("/extracted_icons", StaticFiles(directory="extracted_icons"), name="extracted_icons")
-app.mount("/lab_3d_models", StaticFiles(directory="lab_3d_models"), name="lab_3d_models")
-app.mount("/realistic_device_svgs", StaticFiles(directory="realistic_device_svgs"), name="realistic_device_svgs")
-app.mount("/realistic_3d_models", StaticFiles(directory="realistic_3d_models"), name="realistic_3d_models")
+app.mount("/extracted_icons", StaticFiles(directory=str(PROJECT_ROOT / "extracted_icons")), name="extracted_icons")
+app.mount("/lab_3d_models", StaticFiles(directory=str(PROJECT_ROOT / "lab_3d_models")), name="lab_3d_models")
+app.mount("/realistic_device_svgs", StaticFiles(directory=str(PROJECT_ROOT / "realistic_device_svgs")), name="realistic_device_svgs")
+app.mount("/realistic_3d_models", StaticFiles(directory=str(PROJECT_ROOT / "realistic_3d_models")), name="realistic_3d_models")
 # Vendor stencil-derived models (VSS → GLTF) live under vss_extraction/vss_exports
-app.mount("/vss_extraction", StaticFiles(directory="vss_extraction"), name="vss_extraction")
+app.mount("/vss_extraction", StaticFiles(directory=str(PROJECT_ROOT / "vss_extraction")), name="vss_extraction")
 
 PERF_RECORDER = PerformanceRecorder()
 app.state.performance = PERF_RECORDER

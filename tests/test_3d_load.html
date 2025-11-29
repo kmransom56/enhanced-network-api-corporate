@@ -1,85 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Load Test</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #000; color: #fff; }
-        #renderCanvas { width: 100%; height: 60vh; border: 1px solid #333; }
-        #debug { padding: 10px; background: #111; font-family: monospace; font-size: 12px; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #fff;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 60vh;
+            border: 1px solid #333;
+        }
+
+        #debug {
+            padding: 10px;
+            background: #111;
+            font-family: monospace;
+            font-size: 12px;
+        }
     </style>
 </head>
+
 <body>
     <h1>3D Topology Load Test</h1>
     <canvas id="renderCanvas"></canvas>
     <div id="debug">Loading...</div>
-    
+
     <script>
         const debug = document.getElementById('debug');
-        
+
         function log(msg) {
             console.log(msg);
             debug.innerHTML += msg + '<br>';
         }
-        
+
         log('Starting 3D test...');
-        
+
         // Test 1: Check Babylon.js loaded
         if (typeof BABYLON === 'undefined') {
             log('ERROR: Babylon.js not loaded');
         } else {
             log('✅ Babylon.js loaded');
         }
-        
+
         // Test 2: Initialize Babylon.js
         try {
             const canvas = document.getElementById('renderCanvas');
             const engine = new BABYLON.Engine(canvas, true);
             const scene = new BABYLON.Scene(engine);
-            
+
             log('✅ Babylon.js initialized');
-            
+
             // Test 3: Create basic objects
-            const camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI/3, 10, BABYLON.Vector3.Zero(), scene);
+            const camera = new BABYLON.ArcRotateCamera('camera', 0, Math.PI / 3, 10, BABYLON.Vector3.Zero(), scene);
             camera.attachControl(canvas, true);
-            
+
             const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
-            const box = BABYLON.MeshBuilder.CreateBox('test', {size: 2}, scene);
-            
+            const box = BABYLON.MeshBuilder.CreateBox('test', { size: 2 }, scene);
+
             log('✅ Basic 3D objects created');
-            
+
             // Test 4: Start render loop
             engine.runRenderLoop(() => {
                 scene.render();
             });
-            
+
             log('✅ Render loop started');
-            
+
             // Test 5: Load topology data
-            fetch('http://localhost:11111/api/topology/scene')
+            fetch('http://localhost:8001/api/topology/scene')
                 .then(response => response.json())
                 .then(data => {
                     log(`✅ Topology data loaded: ${data.nodes.length} nodes, ${data.links.length} links`);
-                    
+
                     // Create a simple visualization
                     data.nodes.forEach((node, index) => {
-                        const mesh = BABYLON.MeshBuilder.CreateBox(node.id, {size: 1}, scene);
+                        const mesh = BABYLON.MeshBuilder.CreateBox(node.id, { size: 1 }, scene);
                         mesh.position.x = (index % 5) * 3 - 6;
                         mesh.position.z = Math.floor(index / 5) * 3 - 6;
                     });
-                    
+
                     log('✅ Simple topology visualization created');
                     log('🎉 All tests passed! 3D is working.');
                 })
                 .catch(error => {
                     log('❌ Failed to load topology: ' + error.message);
                 });
-                
+
         } catch (error) {
             log('❌ Babylon.js error: ' + error.message);
         }
     </script>
 </body>
+
 </html>

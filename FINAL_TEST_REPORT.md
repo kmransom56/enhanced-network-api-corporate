@@ -11,7 +11,7 @@
 The Enhanced Network API application has been successfully tested for functionality, accuracy, and performance. The application is **OPERATIONAL** with an **87.5% overall pass rate** across comprehensive testing.
 
 ### Overall Results
-- ✅ **Application Status**: Running on port 11111
+- ✅ **Application Status**: Running on port 8001
 - ✅ **Health Check**: Healthy
 - ✅ **API Endpoints**: 7/8 operational (87.5%)
 - ✅ **Performance**: All metrics within thresholds
@@ -136,7 +136,7 @@ Links: 4
 ### Operational Features ✅
 
 **Core Functionality**:
-- ✅ FastAPI web server (port 11111)
+- ✅ FastAPI web server (port 8001)
 - ✅ Health monitoring endpoint
 - ✅ Topology discovery and visualization
 - ✅ 3D topology viewer (Babylon.js)
@@ -156,7 +156,7 @@ Links: 4
 - ✅ 2D topology enhanced (`/2d-topology-enhanced`)
 - ✅ Smart tools (`/smart-tools`)
 - ✅ Automated topology docs (`/automated-topology`)
-- ✅ 3D lab viewer (`/3d-lab`)
+- ✅ 3D lab viewer (`/3d-lab` at port 8001)
 - ✅ IconLab portal (`/iconlab`)
 
 ### Known Issues ⚠️

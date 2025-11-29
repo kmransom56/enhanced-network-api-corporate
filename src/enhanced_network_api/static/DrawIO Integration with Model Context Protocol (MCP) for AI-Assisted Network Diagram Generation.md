@@ -75,31 +75,13 @@ pnpm dlx drawio-mcp-server
 
 text
 
-**Configuration for Claude Desktop (macOS):**
+**Configuration for AI Clients**
 
 {
 "mcpServers": {
 "drawio": {
 "command": "npx",
 "args": ["-y", "drawio-mcp-server"]
-}
-}
-}
-
-text
-
-**Configuration for Amazon Q CLI:**
-
-{
-"mcpServers": {
-"awslabs.drawio-mcp-server": {
-"command": "uvx",
-"args": ["drawio-mcp-server"],
-"env": {
-"FASTMCP_LOG_LEVEL": "ERROR"
-},
-"autoApprove": [],
-"disabled": false
 }
 }
 }

@@ -11,7 +11,7 @@ from typing import Dict, List, Any
 from datetime import datetime, UTC
 
 # Configuration
-BASE_URL = "http://localhost:11111"
+BASE_URL = "http://localhost:8001"
 TIMEOUT = 10
 
 class TestReport:
