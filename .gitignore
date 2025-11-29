@@ -158,6 +158,9 @@ vss_extraction/vss_exports/
 vss_extraction/assets/
 vss_extraction/*.ps1
 vss_extraction/*.pyc
+vss_extraction/*.png
+vss_extraction/*.jpg
+vss_extraction/*.jpeg
 .screenshots/
 test_screenshots/
 
