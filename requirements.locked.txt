@@ -33,7 +33,7 @@ black==23.11.0
 ruff==0.1.6
 
 # Security & Validation
-cryptography==41.0.7
+cryptography==44.0.1
 python-jose[cryptography]==3.3.0
 
 # Monitoring & Logging
