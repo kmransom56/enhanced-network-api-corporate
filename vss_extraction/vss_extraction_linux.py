@@ -40,6 +40,20 @@ class VSSEXtractionLinux:
                 "dimensions": {"width": 0.2, "height": 0.3, "depth": 0.2},
                 "color": "#3366cc",
                 "features": ["antennas", "leds", "mounting_bracket", "ethernet_ports"]
+            },
+            "Laptop": {
+                "type": "client",
+                "description": "Laptop/Computer Endpoint Device",
+                "dimensions": {"width": 0.4, "height": 0.05, "depth": 0.3},
+                "color": "#888888",
+                "features": ["screen", "keyboard", "ports"]
+            },
+            "Smartphone": {
+                "type": "client",
+                "description": "Mobile/Smartphone Endpoint Device",
+                "dimensions": {"width": 0.08, "height": 0.15, "depth": 0.01},
+                "color": "#333333",
+                "features": ["screen", "camera", "ports"]
             }
         }
     

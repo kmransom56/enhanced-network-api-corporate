@@ -233,8 +233,9 @@
             <div class="control-section">
                 <h3>Layout Algorithm</h3>
                 <select id="layoutSelect">
-                    <option value="force">Force-Directed</option>
+                    <option value="network_tree" selected>Network Tree (Fortinet)</option>
                     <option value="hierarchical">Hierarchical</option>
+                    <option value="force">Force-Directed</option>
                     <option value="circular">Circular</option>
                     <option value="grid">Grid (Simple)</option>
                 </select>
@@ -320,7 +321,7 @@
         let showLabels = true;
         let showConnections = true;
         let showGrid = false;
-        let currentLayout = 'force';
+        let currentLayout = 'network_tree';
         let topologyData = null;
 
         // Initialize Babylon.js scene
@@ -467,8 +468,120 @@
                 return nodes;
             },
 
-            // Hierarchical layout
+            // Network Tree Layout - Matches Fortinet topology diagram
+            // Internet (top) → Fortigate (center) → FortiSwitch (left) / Wireless AP (right) → End Devices
+            network_tree: function (nodes, links) {
+                const nodeMap = {};
+                nodes.forEach(n => nodeMap[n.id] = n);
+                
+                const spacing = { vertical: 80, horizontal: 120, device: 60 };
+                
+                // Identify devices
+                const internetNodes = [];
+                const fortigateNodes = [];
+                const switchNodes = [];
+                const apNodes = [];
+                const wiredClients = [];
+                const wirelessClients = [];
+                
+                nodes.forEach(node => {
+                    const type = (node.type || node.role || '').toLowerCase();
+                    const connType = (node.connection_type || '').toLowerCase();
+                    
+                    if (type.includes('internet') || type.includes('wan')) {
+                        internetNodes.push(node.id);
+                    } else if (type.includes('fortigate') || type.includes('firewall')) {
+                        fortigateNodes.push(node.id);
+                    } else if (type.includes('fortiswitch') || type.includes('switch')) {
+                        switchNodes.push(node.id);
+                    } else if (type.includes('fortiap') || type.includes('ap') || type.includes('wireless')) {
+                        apNodes.push(node.id);
+                    } else if (connType === 'wifi' || node.ssid) {
+                        wirelessClients.push(node.id);
+                    } else {
+                        wiredClients.push(node.id);
+                    }
+                });
+                
+                // Build parent-child relationships
+                const parentByChild = {};
+                links.forEach(link => {
+                    const src = link.from || link.source;
+                    const dst = link.to || link.target;
+                    if (!src || !dst) return;
+                    
+                    const srcType = ((nodeMap[src] || {}).type || '').toLowerCase();
+                    const dstType = ((nodeMap[dst] || {}).type || '').toLowerCase();
+                    
+                    if (srcType.includes('internet') && dstType.includes('fortigate')) {
+                        parentByChild[dst] = src;
+                    } else if (srcType.includes('fortigate') && (dstType.includes('switch') || dstType.includes('ap'))) {
+                        parentByChild[dst] = src;
+                    } else if (srcType.includes('switch') && (dstType.includes('client') || dstType.includes('endpoint'))) {
+                        parentByChild[dst] = src;
+                    } else if (srcType.includes('ap') && (dstType.includes('client') || dstType.includes('endpoint'))) {
+                        parentByChild[dst] = src;
+                    }
+                });
+                
+                // Calculate positions
+                const centerX = 400;
+                const startY = 100;
+                
+                internetNodes.forEach(id => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX;
+                        node.z = startY;
+                    }
+                });
+                
+                fortigateNodes.forEach(id => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX;
+                        node.z = startY + spacing.vertical;
+                    }
+                });
+                
+                switchNodes.forEach((id, i) => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX - spacing.horizontal;
+                        node.z = startY + spacing.vertical * 2;
+                    }
+                });
+                
+                apNodes.forEach((id, i) => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX + spacing.horizontal;
+                        node.z = startY + spacing.vertical * 2;
+                    }
+                });
+                
+                wiredClients.forEach((id, i) => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX - spacing.horizontal + (i - wiredClients.length / 2) * spacing.device;
+                        node.z = startY + spacing.vertical * 3;
+                    }
+                });
+                
+                wirelessClients.forEach((id, i) => {
+                    const node = nodeMap[id];
+                    if (node) {
+                        node.x = centerX + spacing.horizontal + (i - wirelessClients.length / 2) * spacing.device;
+                        node.z = startY + spacing.vertical * 3;
+                    }
+                });
+                
+                return nodes;
+            },
+            
+            // Hierarchical layout (legacy, uses network_tree)
             hierarchical: function (nodes, links) {
+                return LayoutAlgorithms.network_tree(nodes, links);
                 // Find root nodes (no incoming edges)
                 const hasIncoming = new Set(links.map(l => l.to));
                 const roots = nodes.filter(n => !hasIncoming.has(n.id));

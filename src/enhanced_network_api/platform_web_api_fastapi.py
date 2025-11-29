@@ -1395,6 +1395,18 @@ def _enhance_scene_with_models(scene: Dict[str, Any]) -> Dict[str, Any]:
             # Representative FortiAP SVG extracted from the stencil set
             node.setdefault("icon_svg", f"{icon_base}/shape_007_c__f.svg")
         
+        # Add 3D models for endpoint/client devices
+        if "client" in device_type_str or "endpoint" in device_type_str or "device" in device_type_str:
+            connection_type = (node.get("connection_type") or "").lower()
+            # Use appropriate model based on device type
+            if "laptop" in device_type_str or "computer" in device_type_str or connection_type == "ethernet":
+                node.setdefault("device_model", "/realistic_3d_models/models/Laptop.obj")
+            elif "phone" in device_type_str or "mobile" in device_type_str or connection_type == "wifi":
+                node.setdefault("device_model", "/realistic_3d_models/models/Smartphone.obj")
+            else:
+                # Default endpoint model
+                node.setdefault("device_model", "/realistic_3d_models/models/Laptop.obj")
+        
         # Add fallback model paths based on device type when no specific model is known
         if "device_model" not in node:
             device_type = node.get("type", "unknown").lower()
@@ -1406,14 +1418,28 @@ def _enhance_scene_with_models(scene: Dict[str, Any]) -> Dict[str, Any]:
     return enhanced_scene
 
 
-def _apply_hierarchical_layout(scene: Dict[str, Any]) -> None:
+def _apply_hierarchical_layout(scene: Dict[str, Any], layout_type: str = "network_tree") -> None:
     """Apply a hierarchical, link-aware layout to the normalized scene.
 
-    Devices are arranged in horizontal rows by type (internet → FortiGate →
-    FortiSwitch → FortiAP → endpoint), and children are positioned directly
-    under their parent in X using the scene's links. This makes the 3D lab
-    resemble a Fortinet-style tree diagram.
+    Devices are arranged in a tree structure matching the network topology diagram:
+    - Internet (top center)
+    - Fortigate (center, below Internet)
+    - FortiSwitch (left) and Wireless AP (right)
+    - End devices (below their parent)
+    
+    Args:
+        scene: Scene dictionary with nodes and links
+        layout_type: Layout algorithm to use ("network_tree" or "hierarchical")
     """
+    if layout_type == "network_tree":
+        from .layout_network_tree import calculate_network_tree_layout
+        nodes = scene.get("nodes", [])
+        links = scene.get("links", [])
+        if nodes:
+            positioned_nodes = calculate_network_tree_layout(nodes, links)
+            # Update scene with positioned nodes
+            scene["nodes"] = positioned_nodes
+        return
 
     nodes = scene.get("nodes", [])
     links = scene.get("links", [])

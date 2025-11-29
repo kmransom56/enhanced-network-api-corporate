@@ -970,59 +970,132 @@
             }
         }
 
-        // Hierarchical auto-layout function - positions devices like a Visio network diagram
-        function calculateHierarchicalLayout(nodes, links) {
-            const layers = {};
+        // Network Tree Layout - Matches the specific Fortinet topology diagram
+        // Layout: Internet (top) → Fortigate (center) → FortiSwitch (left) / Wireless AP (right) → End Devices
+        function calculateNetworkTreeLayout(nodes, links) {
             const nodeMap = {};
             nodes.forEach(n => nodeMap[n.id] = n);
-
-            // Identify device roles and assign to layers
+            
+            const spacing = {
+                vertical: 8.0,
+                horizontal: 6.0,
+                device: 4.0
+            };
+            
+            // Identify devices by type
+            const internetNodes = [];
+            const fortigateNodes = [];
+            const switchNodes = [];
+            const apNodes = [];
+            const wiredClients = [];
+            const wirelessClients = [];
+            
             nodes.forEach(node => {
-                const type = (node.type || '').toLowerCase();
-                const role = (node.role || '').toLowerCase();
-
-                if (type.includes('fortigate') || role.includes('gateway') || role.includes('firewall')) {
-                    node.layer = 0; // Top layer - gateway/firewall
-                } else if (type.includes('fortiswitch') || role.includes('switch')) {
-                    node.layer = 1; // Second layer - switches
-                } else if (type.includes('fortiap') || role.includes('access') || role.includes('ap')) {
-                    node.layer = 2; // Third layer - access points
-                } else if (type.includes('client') || role.includes('client')) {
-                    // Determine if wireless or wired
-                    const isWireless = node.connection_type === 'wifi' || node.ssid;
-                    node.layer = isWireless ? 3 : 2; // Wireless clients at bottom, wired at layer 2
-                } else {
-                    node.layer = 2; // Default to middle layer
+                const type = (node.type || node.role || '').toLowerCase();
+                const connectionType = (node.connection_type || '').toLowerCase();
+                
+                if (type.includes('internet') || type.includes('wan')) {
+                    internetNodes.push(node.id);
+                } else if (type.includes('fortigate') || type.includes('firewall') || type.includes('gateway')) {
+                    fortigateNodes.push(node.id);
+                } else if (type.includes('fortiswitch') || (type.includes('switch') && type.includes('forti'))) {
+                    switchNodes.push(node.id);
+                } else if (type.includes('fortiap') || type.includes('access_point') || type.includes('ap') || type.includes('wireless')) {
+                    apNodes.push(node.id);
+                } else if (connectionType === 'wifi' || type.includes('wireless') || node.ssid) {
+                    wirelessClients.push(node.id);
+                } else if (connectionType === 'ethernet' || type.includes('wired') || type.includes('client') || type.includes('endpoint')) {
+                    wiredClients.push(node.id);
                 }
             });
-
-            // Group nodes by layer
+            
+            // Build parent-child relationships
+            const parentByChild = {};
+            links.forEach(link => {
+                const source = link.from || link.source;
+                const target = link.to || link.target;
+                if (!source || !target) return;
+                
+                const sourceType = ((nodeMap[source] || {}).type || '').toLowerCase();
+                const targetType = ((nodeMap[target] || {}).type || '').toLowerCase();
+                
+                // Internet → Fortigate
+                if (sourceType.includes('internet') && targetType.includes('fortigate')) {
+                    parentByChild[target] = source;
+                } else if (targetType.includes('internet') && sourceType.includes('fortigate')) {
+                    parentByChild[source] = target;
+                }
+                // Fortigate → Switch/AP
+                else if (sourceType.includes('fortigate') && (targetType.includes('switch') || targetType.includes('ap'))) {
+                    parentByChild[target] = source;
+                } else if (targetType.includes('fortigate') && (sourceType.includes('switch') || sourceType.includes('ap'))) {
+                    parentByChild[source] = target;
+                }
+                // Switch/AP → Clients
+                else if (sourceType.includes('switch') && (targetType.includes('client') || targetType.includes('endpoint'))) {
+                    parentByChild[target] = source;
+                } else if (targetType.includes('switch') && (sourceType.includes('client') || sourceType.includes('endpoint'))) {
+                    parentByChild[source] = target;
+                } else if (sourceType.includes('ap') && (targetType.includes('client') || targetType.includes('endpoint'))) {
+                    parentByChild[target] = source;
+                } else if (targetType.includes('ap') && (sourceType.includes('client') || sourceType.includes('endpoint'))) {
+                    parentByChild[source] = target;
+                }
+            });
+            
+            // Calculate positions
+            const positions = {};
+            
+            // Layer 1: Internet (top center)
+            internetNodes.forEach(nodeId => {
+                positions[nodeId] = { x: 0, y: spacing.vertical * 3, z: 0 };
+            });
+            
+            // Layer 2: Fortigate (center, below Internet)
+            fortigateNodes.forEach(nodeId => {
+                positions[nodeId] = { x: 0, y: spacing.vertical * 2, z: 0 };
+            });
+            
+            // Layer 3: FortiSwitch (left) and Wireless AP (right)
+            const xLeft = -spacing.horizontal;
+            const xRight = spacing.horizontal;
+            
+            switchNodes.forEach((nodeId, i) => {
+                positions[nodeId] = { x: xLeft, y: spacing.vertical, z: 0 };
+            });
+            
+            apNodes.forEach((nodeId, i) => {
+                positions[nodeId] = { x: xRight, y: spacing.vertical, z: 0 };
+            });
+            
+            // Layer 4: End devices (below their parent)
+            wiredClients.forEach((nodeId, i) => {
+                const parent = parentByChild[nodeId];
+                const xPos = xLeft + (i - wiredClients.length / 2) * spacing.device;
+                positions[nodeId] = { x: xPos, y: 0, z: 0 };
+            });
+            
+            wirelessClients.forEach((nodeId, i) => {
+                const parent = parentByChild[nodeId];
+                const xPos = xRight + (i - wirelessClients.length / 2) * spacing.device;
+                positions[nodeId] = { x: xPos, y: 0, z: 0 };
+            });
+            
+            // Apply positions to nodes
             nodes.forEach(node => {
-                if (!layers[node.layer]) layers[node.layer] = [];
-                layers[node.layer].push(node);
+                if (positions[node.id]) {
+                    node.calculatedPosition = positions[node.id];
+                } else {
+                    node.calculatedPosition = { x: 0, y: 0, z: 0 };
+                }
             });
-
-            // Calculate positions for each layer
-            const layerKeys = Object.keys(layers).sort((a, b) => a - b);
-            const layerSpacing = 15; // Vertical spacing between layers
-            const deviceSpacing = 12; // Horizontal spacing between devices
-
-            layerKeys.forEach(layerKey => {
-                const layerNodes = layers[layerKey];
-                const layerY = layerKey * layerSpacing; // Y increases downward
-                const layerWidth = (layerNodes.length - 1) * deviceSpacing;
-                const startX = -layerWidth / 2; // Center the layer
-
-                layerNodes.forEach((node, index) => {
-                    node.calculatedPosition = {
-                        x: startX + (index * deviceSpacing),
-                        y: layerY,
-                        z: 0
-                    };
-                });
-            });
-
+            
             return nodes;
+        }
+        
+        // Legacy hierarchical layout (kept for compatibility)
+        function calculateHierarchicalLayout(nodes, links) {
+            return calculateNetworkTreeLayout(nodes, links);
         }
 
         async function renderTopology(data) {
