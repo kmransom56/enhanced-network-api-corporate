@@ -3,13 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced 2D Fortinet Network Topology</title>
+    <title>Enhanced 2D Fortinet Network Topology (D3.js)</title>
     <link rel="stylesheet" href="/static/2d_topology_enhanced.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .node {
+            cursor: move;
+        }
+        .node:hover {
+            stroke-width: 3px;
+        }
+        .link {
+            fill: none;
+            stroke: #999;
+            stroke-width: 2px;
+            stroke-opacity: 0.6;
+        }
+        .link:hover {
+            stroke-width: 3px;
+            stroke-opacity: 1;
+        }
+        .node-label {
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            pointer-events: none;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+        }
+        .zoom-btn {
+            display: block;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .zoom-btn:hover {
+            background: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="controls">
-            <h1>🌐 Enhanced 2D Fortinet Network Topology</h1>
+            <h1>🌐 Enhanced 2D Fortinet Network Topology (D3.js Interactive)</h1>
             <div class="button-group">
                 <button onclick="loadFortinetTopology()">🔥 Load Fortinet</button>
                 <button onclick="loadDemoTopology()">🎭 Demo Mode</button>
@@ -19,8 +72,14 @@
             </div>
         </div>
         
-        <div class="topology-container">
+        <div class="topology-container" style="position: relative;">
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()">🔍+ Zoom In</button>
+                <button class="zoom-btn" onclick="zoomOut()">🔍- Zoom Out</button>
+                <button class="zoom-btn" onclick="resetZoom()">📍 Reset Zoom</button>
+            </div>
             <svg id="topology-svg" width="100%" height="100%"></svg>
+            <div class="tooltip" id="tooltip" style="display: none;"></div>
             <div class="info-panel">
                 <h3>Network Status</h3>
                 <p>Devices: <span id="device-count">0</span></p>
@@ -31,15 +90,18 @@
     </div>
 
     <script>
-        // Enhanced 2D Topology Visualization
+        // Enhanced 2D Topology Visualization with D3.js
         class Enhanced2DTopology {
             constructor() {
-                this.svg = document.getElementById('topology-svg');
+                this.svg = d3.select('#topology-svg');
                 this.devices = new Map();
                 this.connections = [];
                 this.showLabels = true;
                 this.showHealth = true;
                 this.svgNS = "http://www.w3.org/2000/svg";
+                this.zoom = null;
+                this.tooltip = d3.select('#tooltip');
+                this.currentData = null;
                 
                 // Device icon configurations with model-specific fallback
                 const deviceIcons = {
@@ -101,15 +163,34 @@
             }
             
             init() {
-                this.setupSVG();
+                this.setupD3SVG();
                 this.setupEventListeners();
-                console.log('✅ Enhanced 2D Topology initialized');
+                console.log('✅ Enhanced 2D Topology with D3.js initialized');
             }
             
-            setupSVG() {
-                // Set up SVG dimensions and viewBox
-                const rect = this.svg.getBoundingClientRect();
-                this.svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+            setupD3SVG() {
+                // Set up SVG dimensions
+                const width = this.svg.node().getBoundingClientRect().width || 1200;
+                const height = this.svg.node().getBoundingClientRect().height || 800;
+                
+                // Create container group for zoom/pan
+                this.g = this.svg.append('g').attr('class', 'topology-container');
+                
+                // Set up zoom behavior
+                this.zoom = d3.zoom()
+                    .scaleExtent([0.1, 4])
+                    .on('zoom', (event) => {
+                        this.g.attr('transform', event.transform);
+                    });
+                
+                this.svg.call(this.zoom);
+                
+                // Create groups for links and nodes (links first so nodes appear on top)
+                this.linkGroup = this.g.append('g').attr('class', 'links');
+                this.nodeGroup = this.g.append('g').attr('class', 'nodes');
+                
+                console.log('✅ D3.js SVG setup complete');
+            }
                 
                 // Create definitions for gradients and filters
                 const defs = document.createElementNS(this.svgNS, 'defs');
@@ -195,8 +276,32 @@
                     const data = await response.json();
                     
                     if (data.nodes && data.links) {
-                        this.renderTopology(data);
-                        this.updateStats(data.nodes.length, data.links.length);
+                        // Filter out interface nodes - only show actual devices
+                        const filteredNodes = data.nodes.filter(node => {
+                            const type = (node.type || '').toLowerCase();
+                            const id = (node.id || '').toLowerCase();
+                            // Exclude interface, port, vlan, tunnel, and other non-device nodes
+                            return !type.includes('interface') && 
+                                   !type.includes('port') && 
+                                   !type.includes('vlan') && 
+                                   !type.includes('tunnel') && 
+                                   !type.includes('vap-switch') && 
+                                   !type.includes('aggregate') && 
+                                   !id.startsWith('port-') &&
+                                   !id.startsWith('if-');
+                        });
+                        
+                        // Filter links to only include connections between filtered nodes
+                        const nodeIds = new Set(filteredNodes.map(n => n.id));
+                        const filteredLinks = data.links.filter(link => {
+                            const source = link.from || link.source || link.source_id;
+                            const target = link.to || link.target || link.target_id;
+                            return nodeIds.has(source) && nodeIds.has(target);
+                        });
+                        
+                        const filteredData = { nodes: filteredNodes, links: filteredLinks };
+                        this.renderTopology(filteredData);
+                        this.updateStats(filteredNodes.length, filteredLinks.length);
                     } else {
                         this.showError('Invalid topology data received');
                     }
@@ -329,33 +434,459 @@
             }
             
             renderTopology(data) {
+                this.currentData = data;
                 this.clearTopology();
                 
-                const rect = this.svg.getBoundingClientRect();
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const radius = Math.min(rect.width, rect.height) * 0.3;
+                const width = this.svg.node().getBoundingClientRect().width || 1200;
+                const height = this.svg.node().getBoundingClientRect().height || 800;
                 
-                // Create devices in a circular layout
-                data.nodes.forEach((node, index) => {
-                    const angle = (index / data.nodes.length) * Math.PI * 2 - Math.PI / 2;
-                    const x = centerX + Math.cos(angle) * radius;
-                    const y = centerY + Math.sin(angle) * radius;
-                    
-                    this.createDevice(node, x, y);
+                // Network Tree Layout - Hierarchical layout matching Fortinet topology diagram
+                const positions = this.calculateNetworkTreeLayout(data.nodes, data.links, width, height);
+                
+                // Update node positions
+                data.nodes.forEach(node => {
+                    const pos = positions[node.id] || { x: width / 2, y: height / 2 };
+                    node.x = pos.x;
+                    node.y = pos.y;
                 });
                 
-                // Create connections
-                data.links.forEach(link => {
-                    const fromDevice = this.devices.get(link.from);
-                    const toDevice = this.devices.get(link.to);
+                // Create node map for link resolution
+                const nodeMap = new Map(data.nodes.map(n => [n.id, n]));
+                
+                // Normalize links and resolve to node objects
+                const links = data.links
+                    .map(link => {
+                        const sourceId = link.from || link.source || link.source_id;
+                        const targetId = link.to || link.target || link.target_id;
+                        const sourceNode = nodeMap.get(sourceId);
+                        const targetNode = nodeMap.get(targetId);
+                        
+                        if (!sourceNode || !targetNode) return null; // Skip invalid links
+                        
+                        return {
+                            source: sourceNode,
+                            target: targetNode,
+                            type: link.type || 'default',
+                            status: link.status || 'active',
+                            ports: link.ports || link.interfaces || []
+                        };
+                    })
+                    .filter(link => link !== null); // Remove invalid links
+                
+                // Create D3.js links - use enter/update/exit pattern
+                const linkSelection = this.linkGroup.selectAll('.link')
+                    .data(links, d => `${d.source.id}-${d.target.id}`);
+                
+                // Remove old links
+                linkSelection.exit().remove();
+                
+                // Add new links
+                const linkEnter = linkSelection.enter()
+                    .append('line')
+                    .attr('class', 'link')
+                    .attr('stroke', d => d.status === 'active' ? '#999' : '#f00')
+                    .attr('stroke-width', 2)
+                    .attr('stroke-opacity', 0.6);
+                
+                // Merge enter and update
+                const linkUpdate = linkEnter.merge(linkSelection);
+                
+                // Create D3.js nodes with drag - use enter/update/exit pattern
+                const nodeSelection = this.nodeGroup.selectAll('.node')
+                    .data(data.nodes, d => d.id);
+                
+                // Remove old nodes
+                nodeSelection.exit().remove();
+                
+                // Add new nodes
+                const nodeEnter = nodeSelection.enter()
+                    .append('g')
+                    .attr('class', 'node')
+                    .call(this.dragHandler());
+                
+                // Add circles for nodes (only on enter)
+                nodeEnter.append('circle')
+                    .attr('r', d => this.getNodeSize(d))
+                    .attr('fill', d => this.getNodeColor(d))
+                    .attr('stroke', d => this.getNodeColor(d))
+                    .attr('stroke-width', 2);
+                
+                // Add labels (only on enter, toggle visibility later)
+                const labels = nodeEnter.append('text')
+                    .attr('class', 'node-label')
+                    .attr('dy', d => this.getNodeSize(d) + 15)
+                    .attr('fill', d => this.getNodeColor(d))
+                    .text(d => d.name || d.id)
+                    .style('display', this.showLabels ? 'block' : 'none');
+                
+                // Add tooltips
+                nodeEnter
+                    .on('mouseover', (event, d) => this.showTooltip(event, d))
+                    .on('mousemove', (event) => this.moveTooltip(event))
+                    .on('mouseout', () => this.hideTooltip());
+                
+                // Merge enter and update, then update positions
+                const nodeUpdate = nodeEnter.merge(nodeSelection);
+                nodeUpdate.attr('transform', d => `translate(${d.x},${d.y})`);
+                
+                // Store selections for later updates
+                this.nodeSelection = nodeUpdate;
+                this.linkSelection = linkUpdate;
+                
+                // Update link positions
+                this.updateLinks();
+                
+                console.log(`✅ Rendered ${data.nodes.length} devices and ${data.links.length} connections with D3.js`);
+            }
+            
+            dragHandler() {
+                const self = this;
+                return d3.drag()
+                    .on('start', function(event, d) {
+                        if (!event.active) self.zoom.scaleBy(self.svg.transition().duration(0), 1);
+                        d3.select(this).raise().attr('stroke', '#000').attr('stroke-width', 3);
+                    })
+                    .on('drag', function(event, d) {
+                        d.x = event.x;
+                        d.y = event.y;
+                        d3.select(this).attr('transform', `translate(${d.x},${d.y})`);
+                        self.updateLinks();
+                    })
+                    .on('end', function(event, d) {
+                        d3.select(this).attr('stroke', null).attr('stroke-width', null);
+                    });
+            }
+            
+            updateLinks() {
+                if (!this.linkSelection || !this.nodeSelection) return;
+                
+                // Links now have node objects directly (from renderTopology)
+                // So we can access x and y directly from the node objects
+                this.linkSelection
+                    .attr('x1', d => {
+                        const source = typeof d.source === 'object' && d.source !== null ? d.source : null;
+                        return source && source.x !== undefined ? source.x : 0;
+                    })
+                    .attr('y1', d => {
+                        const source = typeof d.source === 'object' && d.source !== null ? d.source : null;
+                        return source && source.y !== undefined ? source.y : 0;
+                    })
+                    .attr('x2', d => {
+                        const target = typeof d.target === 'object' && d.target !== null ? d.target : null;
+                        return target && target.x !== undefined ? target.x : 0;
+                    })
+                    .attr('y2', d => {
+                        const target = typeof d.target === 'object' && d.target !== null ? d.target : null;
+                        return target && target.y !== undefined ? target.y : 0;
+                    });
+            }
+            
+            getNodeSize(node) {
+                const type = (node.type || '').toLowerCase();
+                if (type.includes('fortigate')) return 30;
+                if (type.includes('switch')) return 25;
+                if (type.includes('ap')) return 22;
+                return 20;
+            }
+            
+            getNodeColor(node) {
+                const type = (node.type || '').toLowerCase();
+                if (type.includes('fortigate')) return '#ff6b6b';
+                if (type.includes('switch')) return '#4ecdc4';
+                if (type.includes('ap')) return '#45b7d1';
+                if (type.includes('client') || type.includes('endpoint')) return '#95a5a6';
+                return '#9b59b6';
+            }
+            
+            showTooltip(event, node) {
+                const tooltipContent = `
+                    <strong>${node.name || node.id}</strong><br/>
+                    Type: ${node.type || 'Unknown'}<br/>
+                    ${node.ip ? `IP: ${node.ip}<br/>` : ''}
+                    ${node.model ? `Model: ${node.model}<br/>` : ''}
+                    ${node.status ? `Status: ${node.status}` : ''}
+                `;
+                this.tooltip
+                    .html(tooltipContent)
+                    .style('display', 'block')
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 10) + 'px');
+            }
+            
+            moveTooltip(event) {
+                this.tooltip
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 10) + 'px');
+            }
+            
+            hideTooltip() {
+                this.tooltip.style('display', 'none');
+            }
+            
+            calculateNetworkTreeLayout(nodes, links, width, height) {
+                const positions = {};
+                const nodeMap = {};
+                nodes.forEach(n => nodeMap[n.id] = n);
+                
+                // Spacing configuration for 2D SVG
+                const spacing = {
+                    vertical: height / 6,      // Vertical spacing between layers
+                    horizontal: width / 4,     // Horizontal spacing between branches
+                    device: width / 12,         // Spacing between devices in same group
+                };
+                
+                // Build parent-child relationships from actual links with port information
+                const childrenByParent = {};  // parent -> [{id, port, portNumber}]
+                const parentByChild = {};     // child -> parent
+                const portByConnection = {};  // child -> port number on parent
+                
+                // Helper to extract port number from port string (e.g., "port5" -> 5)
+                const extractPortNumber = (portStr) => {
+                    if (!portStr) return null;
+                    const match = portStr.toString().match(/(\d+)/);
+                    return match ? parseInt(match[1], 10) : null;
+                };
+                
+                links.forEach(link => {
+                    const source = link.from || link.source || link.source_id;
+                    const target = link.to || link.target || link.target_id;
+                    if (!source || !target || source === target) return;
                     
-                    if (fromDevice && toDevice) {
-                        this.createConnection(fromDevice, toDevice, link);
+                    const sourceNode = nodeMap[source];
+                    const targetNode = nodeMap[target];
+                    if (!sourceNode || !targetNode) return;
+                    
+                    // Extract port information
+                    const ports = link.ports || link.interfaces || [];
+                    const sourcePort = Array.isArray(ports) ? ports[0] : null;
+                    const targetPort = Array.isArray(ports) && ports.length > 1 ? ports[1] : null;
+                    
+                    const sourceType = ((sourceNode.type || sourceNode.role || '') + ' ' + (sourceNode.os || '')).toLowerCase();
+                    const targetType = ((targetNode.type || targetNode.role || '') + ' ' + (targetNode.os || '')).toLowerCase();
+                    
+                    // Determine hierarchy based on device types
+                    let parent = null;
+                    let child = null;
+                    let switchPort = null; // Port on the switch/AP that connects to the child
+                    
+                    // Internet → Fortigate
+                    if (sourceType.includes('internet') || sourceType.includes('wan')) {
+                        parent = source;
+                        child = target;
+                    } else if (targetType.includes('internet') || targetType.includes('wan')) {
+                        parent = target;
+                        child = source;
+                    }
+                    // Fortigate → Switch/AP
+                    else if (sourceType.includes('fortigate') || sourceType.includes('fortios') || sourceType.includes('firewall')) {
+                        if (targetType.includes('switch') || targetType.includes('ap') || targetType.includes('fortiswitch') || targetType.includes('fortiap')) {
+                            parent = source;
+                            child = target;
+                        }
+                    } else if (targetType.includes('fortigate') || targetType.includes('fortios') || targetType.includes('firewall')) {
+                        if (sourceType.includes('switch') || sourceType.includes('ap') || sourceType.includes('fortiswitch') || sourceType.includes('fortiap')) {
+                            parent = target;
+                            child = source;
+                        }
+                    }
+                    // Switch/AP → Clients/Endpoints
+                    else if (sourceType.includes('switch') || sourceType.includes('fortiswitch') || sourceType.includes('meraki') || sourceType.includes('ap') || sourceType.includes('fortiap')) {
+                        if (!targetType.includes('fortigate') && !targetType.includes('internet') && !targetType.includes('switch') && !targetType.includes('ap')) {
+                            parent = source;
+                            child = target;
+                            switchPort = sourcePort; // Port on the switch
+                        }
+                    } else if (targetType.includes('switch') || targetType.includes('fortiswitch') || targetType.includes('meraki') || targetType.includes('ap') || targetType.includes('fortiap')) {
+                        if (!sourceType.includes('fortigate') && !sourceType.includes('internet') && !sourceType.includes('switch') && !sourceType.includes('ap')) {
+                            parent = target;
+                            child = source;
+                            switchPort = targetPort; // Port on the switch
+                        }
+                    }
+                    
+                    if (parent && child) {
+                        if (!childrenByParent[parent]) {
+                            childrenByParent[parent] = [];
+                        }
+                        // Store child with port information
+                        const childInfo = { id: child, port: switchPort, portNumber: extractPortNumber(switchPort) };
+                        if (!childrenByParent[parent].find(c => c.id === child)) {
+                            childrenByParent[parent].push(childInfo);
+                        }
+                        parentByChild[child] = parent;
+                        if (switchPort) {
+                            portByConnection[child] = switchPort;
+                        }
                     }
                 });
                 
-                console.log(`✅ Rendered ${data.nodes.length} devices and ${data.links.length} connections`);
+                // Identify devices by type for initial positioning
+                const internetNodes = [];
+                const fortigateNodes = [];
+                const switchNodes = [];
+                const apNodes = [];
+                const clientNodes = [];
+                
+                nodes.forEach(node => {
+                    const type = ((node.type || node.role || '') + ' ' + (node.os || '')).toLowerCase();
+                    const connectionType = (node.connection_type || '').toLowerCase();
+                    
+                    if (type.includes('internet') || type.includes('wan')) {
+                        internetNodes.push(node.id);
+                    } else if (type.includes('fortigate') || type.includes('fortios') || type.includes('firewall') || type.includes('gateway')) {
+                        fortigateNodes.push(node.id);
+                    } else if (type.includes('fortiswitch') || (type.includes('switch') && !type.includes('ap'))) {
+                        switchNodes.push(node.id);
+                    } else if (type.includes('fortiap') || type.includes('ap') || type.includes('wireless') || type.includes('access_point')) {
+                        apNodes.push(node.id);
+                    } else if (!type.includes('fortigate') && !type.includes('switch') && !type.includes('ap')) {
+                        clientNodes.push(node.id);
+                    }
+                });
+                
+                const centerX = width / 2;
+                const startY = height / 10;
+                
+                // Layer 1: Internet (top center)
+                internetNodes.forEach(nodeId => {
+                    positions[nodeId] = { x: centerX, y: startY };
+                });
+                
+                // Layer 2: Fortigate (center, below Internet)
+                fortigateNodes.forEach(nodeId => {
+                    positions[nodeId] = { x: centerX, y: startY + spacing.vertical };
+                });
+                
+                // Layer 3: Switches and APs - position based on actual connections
+                const xLeft = centerX - spacing.horizontal;
+                const xRight = centerX + spacing.horizontal;
+                
+                // Group switches and APs by their connection to Fortigate
+                const leftSideDevices = [];
+                const rightSideDevices = [];
+                
+                [...switchNodes, ...apNodes].forEach(nodeId => {
+                    const node = nodeMap[nodeId];
+                    const type = ((node.type || node.role || '') + ' ' + (node.os || '')).toLowerCase();
+                    // Switches go left, APs go right
+                    if (type.includes('switch') || type.includes('meraki')) {
+                        leftSideDevices.push(nodeId);
+                    } else {
+                        rightSideDevices.push(nodeId);
+                    }
+                });
+                
+                // Position switches on left
+                leftSideDevices.forEach((nodeId, i) => {
+                    const offset = (i - (leftSideDevices.length - 1) / 2) * spacing.device * 1.5;
+                    positions[nodeId] = { x: xLeft + offset, y: startY + spacing.vertical * 2 };
+                });
+                
+                // Position APs on right
+                rightSideDevices.forEach((nodeId, i) => {
+                    const offset = (i - (rightSideDevices.length - 1) / 2) * spacing.device * 1.5;
+                    positions[nodeId] = { x: xRight + offset, y: startY + spacing.vertical * 2 };
+                });
+                
+                // Layer 4: Clients - position below their actual parent using port information
+                // Position each group of clients below their parent, sorted by port number
+                Object.keys(childrenByParent).forEach(parentId => {
+                    const parentPos = positions[parentId];
+                    if (!parentPos) return; // Parent not positioned yet
+                    
+                    const children = childrenByParent[parentId];
+                    // Filter to only client nodes
+                    const clients = children.filter(c => clientNodes.includes(c.id));
+                    
+                    if (clients.length === 0) return;
+                    
+                    // Sort clients by port number (if available)
+                    clients.sort((a, b) => {
+                        if (a.portNumber !== null && b.portNumber !== null) {
+                            return a.portNumber - b.portNumber;
+                        }
+                        if (a.portNumber !== null) return -1;
+                        if (b.portNumber !== null) return 1;
+                        // If no port numbers, maintain original order
+                        return 0;
+                    });
+                    
+                    // Calculate spacing - use port numbers if available, otherwise sequential
+                    const hasPortNumbers = clients.some(c => c.portNumber !== null);
+                    let clientSpacing;
+                    let maxPosition;
+                    
+                    if (hasPortNumbers) {
+                        // Use port numbers for positioning - map to sequential positions
+                        const portNumbers = clients.map(c => c.portNumber !== null ? c.portNumber : 0);
+                        const minPort = Math.min(...portNumbers.filter(p => p > 0));
+                        const maxPort = Math.max(...portNumbers);
+                        maxPosition = Math.max(maxPort - minPort + 1, clients.length);
+                        clientSpacing = Math.min(spacing.device * 1.2, (width * 0.4) / maxPosition);
+                    } else {
+                        // Sequential positioning when no port numbers
+                        maxPosition = Math.max(clients.length, 8);
+                        clientSpacing = Math.min(spacing.device * 1.2, (width * 0.3) / maxPosition);
+                    }
+                    
+                    clients.forEach((clientInfo, i) => {
+                        const clientId = clientInfo.id;
+                        let positionIndex;
+                        
+                        if (hasPortNumbers && clientInfo.portNumber !== null) {
+                            // Use port number relative to minimum port
+                            const minPort = Math.min(...clients.map(c => c.portNumber !== null ? c.portNumber : Infinity).filter(p => p !== Infinity));
+                            positionIndex = clientInfo.portNumber - minPort;
+                        } else {
+                            // Sequential index when no port numbers
+                            positionIndex = i;
+                        }
+                        
+                        const offset = (positionIndex - (maxPosition - 1) / 2) * clientSpacing;
+                        positions[clientId] = {
+                            x: parentPos.x + offset,
+                            y: startY + spacing.vertical * 3
+                        };
+                    });
+                });
+                
+                // Handle any remaining clients without a parent
+                clientNodes.forEach(clientId => {
+                    if (!positions[clientId]) {
+                        // Try to infer position from connection type
+                        const node = nodeMap[clientId];
+                        const connectionType = (node.connection_type || '').toLowerCase();
+                        const hasSSID = node.ssid || false;
+                        
+                        if (connectionType === 'wifi' || hasSSID) {
+                            // Wireless client - position on right side
+                            const rightClients = clientNodes.filter(id => 
+                                !positions[id] && (nodeMap[id].ssid || (nodeMap[id].connection_type || '').toLowerCase() === 'wifi')
+                            );
+                            const index = rightClients.indexOf(clientId);
+                            const offset = (index - (rightClients.length - 1) / 2) * spacing.device;
+                            positions[clientId] = { x: xRight + offset, y: startY + spacing.vertical * 3 };
+                        } else {
+                            // Wired client - position on left side
+                            const leftClients = clientNodes.filter(id => 
+                                !positions[id] && !nodeMap[id].ssid && (nodeMap[id].connection_type || '').toLowerCase() !== 'wifi'
+                            );
+                            const index = leftClients.indexOf(clientId);
+                            const offset = (index - (leftClients.length - 1) / 2) * spacing.device;
+                            positions[clientId] = { x: xLeft + offset, y: startY + spacing.vertical * 3 };
+                        }
+                    }
+                });
+                
+                // Handle any remaining nodes
+                nodes.forEach(node => {
+                    if (!positions[node.id]) {
+                        // Default position if not assigned
+                        positions[node.id] = { x: centerX, y: height / 2 };
+                    }
+                });
+                
+                return positions;
             }
             
             createDevice(nodeData, x, y) {
@@ -591,29 +1122,41 @@
             
             toggleDeviceLabels() {
                 this.showLabels = !this.showLabels;
-                const labels = this.svg.querySelectorAll('.device-label');
-                labels.forEach(label => {
-                    label.style.display = this.showLabels ? 'block' : 'none';
-                });
+                if (this.nodeGroup) {
+                    this.nodeGroup.selectAll('.node-label')
+                        .style('display', this.showLabels ? 'block' : 'none');
+                }
+                // Re-render if we have current data
+                if (this.currentData) {
+                    this.renderTopology(this.currentData);
+                }
             }
             
             toggleHealthStatus() {
                 this.showHealth = !this.showHealth;
-                const indicators = this.svg.querySelectorAll('.health-indicator');
-                indicators.forEach(indicator => {
-                    indicator.style.display = this.showHealth ? 'block' : 'none';
-                });
+                // Health indicators can be added as circles or other elements
+                // For now, we'll just toggle visibility if they exist
+                if (this.nodeGroup) {
+                    this.nodeGroup.selectAll('.health-indicator')
+                        .style('display', this.showHealth ? 'block' : 'none');
+                }
             }
             
             resetView() {
-                // Reset zoom and pan
-                this.topologyGroup.setAttribute('transform', 'translate(0,0) scale(1)');
+                // Reset zoom and pan using D3.js
+                if (this.svg && this.zoom) {
+                    this.svg.transition()
+                        .duration(750)
+                        .call(this.zoom.transform, d3.zoomIdentity);
+                }
             }
             
             clearTopology() {
+                // Clear existing topology
+                if (this.linkGroup) this.linkGroup.selectAll('.link').remove();
+                if (this.nodeGroup) this.nodeGroup.selectAll('.node').remove();
                 this.devices.clear();
                 this.connections = [];
-                this.topologyGroup.innerHTML = '';
             }
             
             updateStats(deviceCount, connectionCount) {
@@ -694,6 +1237,26 @@
         
         function resetView() {
             topology2D.resetView();
+        }
+        
+        function zoomIn() {
+            if (topology2D.svg && topology2D.zoom) {
+                topology2D.svg.transition().call(topology2D.zoom.scaleBy, 1.5);
+            }
+        }
+        
+        function zoomOut() {
+            if (topology2D.svg && topology2D.zoom) {
+                topology2D.svg.transition().call(topology2D.zoom.scaleBy, 1 / 1.5);
+            }
+        }
+        
+        function resetZoom() {
+            if (topology2D.svg && topology2D.zoom) {
+                topology2D.svg.transition()
+                    .duration(750)
+                    .call(topology2D.zoom.transform, d3.zoomIdentity);
+            }
         }
     </script>
 </body>

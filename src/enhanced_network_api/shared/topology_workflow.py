@@ -785,6 +785,86 @@ def _fetch_fortigate_payload(
             }
         )
 
+    # Fetch endpoint/asset devices (Assets dashboard data)
+    # This endpoint provides the device list shown in the Assets dashboard
+    # with OS, IP addresses, and status information
+    endpoint_devices_data = _get_json("/api/v2/monitor/user/device/select") or {}
+    endpoint_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
+    if isinstance(endpoint_devices, dict):
+        endpoint_devices = endpoint_devices.get("entries", [])
+    if not isinstance(endpoint_devices, list):
+        endpoint_devices = []
+    
+    # Try alternative endpoint if the first one doesn't work
+    if not endpoint_devices:
+        endpoint_devices_data = _get_json("/api/v2/monitor/user/device/query") or {}
+        endpoint_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
+        if isinstance(endpoint_devices, dict):
+            endpoint_devices = endpoint_devices.get("entries", [])
+        if not isinstance(endpoint_devices, list):
+            endpoint_devices = []
+    
+    # Add endpoint devices to the device list
+    for endpoint in endpoint_devices:
+        name = (
+            endpoint.get("name")
+            or endpoint.get("hostname")
+            or endpoint.get("mac")
+            or endpoint.get("id")
+        )
+        if not name:
+            continue
+        
+        # Determine device type from OS or other indicators
+        os_type = (endpoint.get("os") or endpoint.get("os-type") or endpoint.get("software_os") or "").lower()
+        device_type = "client"
+        if "fortiap" in os_type or "ap" in os_type:
+            device_type = "fortiap"
+        elif "fortiswitch" in os_type or "switch" in os_type:
+            device_type = "fortiswitch"
+        elif "fortios" in os_type or "fortigate" in os_type:
+            device_type = "fortigate"
+        
+        node_id = f"endpoint-{name.replace(' ', '-').replace(':', '-')}"
+        devices.append(
+            {
+                "id": node_id,
+                "name": name,
+                "type": device_type,
+                "os": endpoint.get("os") or endpoint.get("os-type") or endpoint.get("software_os"),
+                "ip": endpoint.get("ip") or endpoint.get("address"),
+                "mac": endpoint.get("mac"),
+                "status": endpoint.get("status") or "online",
+                "vulnerabilities": endpoint.get("vulnerabilities", 0),
+                "forticlient_user": endpoint.get("forticlient_user", 0),
+            }
+        )
+        
+        # Try to link endpoint to switch/AP based on connection info
+        connected_to = (
+            endpoint.get("switch")
+            or endpoint.get("fortiswitch")
+            or endpoint.get("ap")
+            or endpoint.get("fortiap")
+        )
+        if connected_to:
+            # Find the switch/AP device ID
+            switch_ap_id = None
+            for dev in devices:
+                if dev.get("name") == connected_to or dev.get("id") == f"switch-{connected_to}" or dev.get("id") == f"ap-{connected_to}":
+                    switch_ap_id = dev.get("id")
+                    break
+            
+            if switch_ap_id:
+                links.append(
+                    {
+                        "source": switch_ap_id,
+                        "target": node_id,
+                        "type": "wired" if "switch" in device_type else "wireless",
+                        "interfaces": [endpoint.get("port")] if endpoint.get("port") else [],
+                    }
+                )
+
     normalized_devices = [
         {k: v for k, v in device.items() if v not in (None, "", [])}
         for device in devices

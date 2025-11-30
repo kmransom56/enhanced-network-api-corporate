@@ -2320,6 +2320,71 @@ async def fortigate_firewall_policies_summary(request: FortiGateDirectRequest):
     return JSONResponse({"policy_count": count})
 
 
+@app.post("/api/fortigate/assets")
+async def fortigate_assets(request: FortiGateDirectRequest):
+    """Return endpoint/asset devices from FortiGate (Assets dashboard data).
+    
+    This endpoint provides the same data shown in the FortiGate Assets dashboard:
+    - Device list with OS, IP addresses, status
+    - Software OS distribution
+    - Vulnerability levels
+    - Online status
+    """
+    import requests
+    from urllib.parse import urljoin
+    
+    base_url = request.credentials.host
+    if "://" not in base_url:
+        base_url = f"https://{base_url}"
+    if not base_url.endswith("/api/v2"):
+        base_url = urljoin(base_url, "/api/v2")
+    
+    headers = {"Content-Type": "application/json"}
+    if request.credentials.token:
+        headers["Authorization"] = f"Bearer {request.credentials.token}"
+    
+    session = requests.Session()
+    session.verify = request.credentials.verify_ssl if hasattr(request.credentials, 'verify_ssl') else False
+    
+    # Try the primary endpoint for assets/endpoints
+    endpoints_to_try = [
+        "/monitor/user/device/select",
+        "/monitor/user/device/query",
+        "/monitor/endpoint-control/registered_ems",
+    ]
+    
+    assets_data = None
+    for endpoint in endpoints_to_try:
+        try:
+            url = urljoin(base_url, endpoint)
+            response = session.get(url, headers=headers, timeout=10)
+            if response.status_code == 200:
+                assets_data = response.json()
+                break
+        except Exception as e:
+            logger.debug(f"Failed to fetch from {endpoint}: {e}")
+            continue
+    
+    if not assets_data:
+        raise HTTPException(
+            status_code=404,
+            detail="Assets/endpoint data not available. Endpoints tried: " + ", ".join(endpoints_to_try)
+        )
+    
+    # Normalize the response format
+    results = assets_data.get("results") or assets_data.get("data") or []
+    if isinstance(results, dict):
+        results = results.get("entries", [])
+    if not isinstance(results, list):
+        results = []
+    
+    return JSONResponse({
+        "assets": results,
+        "count": len(results),
+        "endpoint_used": endpoint if assets_data else None
+    })
+
+
 @app.post("/api/topology/drawio-xml", response_class=PlainTextResponse)
 async def topology_drawio_xml(request: AutomatedDiagramRequest):
     """Generate a DrawIO XML diagram for the current Fortinet topology.
