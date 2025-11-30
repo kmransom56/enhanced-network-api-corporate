@@ -51,6 +51,7 @@ services:
       - enhanced-network
 
   # Nginx reverse proxy (optional, for SSL termination)
+  # Comment out this service if you don't need nginx
   nginx:
     image: nginx:alpine
     container_name: enhanced-network-proxy
@@ -65,6 +66,9 @@ services:
     restart: unless-stopped
     networks:
       - enhanced-network
+    # Uncomment to disable nginx if not needed:
+    # profiles:
+    #   - nginx
 
   # Grafana for additional monitoring dashboards (optional)
   grafana:
