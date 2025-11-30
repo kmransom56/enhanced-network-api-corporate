@@ -1328,17 +1328,24 @@
                 // Device type determines scale: larger for core devices, smaller for endpoints
                 let scale = 5.0; // Default scale for better visibility
                 
-                if (deviceTypeKey.includes('fortigate') || deviceTypeKey.includes('firewall')) {
+                // Check device type from multiple sources for better detection
+                const nodeType = (nodeData.type || '').toLowerCase();
+                const nodeRole = (nodeData.role || '').toLowerCase();
+                const combinedType = `${deviceTypeKey} ${nodeType} ${nodeRole}`;
+                
+                if (combinedType.includes('fortigate') || combinedType.includes('firewall') || combinedType.includes('gateway')) {
                     scale = 6.0; // Larger for core firewall
-                } else if (deviceTypeKey.includes('fortiswitch') || deviceTypeKey.includes('switch')) {
+                } else if (combinedType.includes('fortiswitch') || (combinedType.includes('switch') && !combinedType.includes('ap'))) {
                     scale = 5.5; // Medium-large for switches
-                } else if (deviceTypeKey.includes('fortiap') || deviceTypeKey.includes('ap')) {
+                } else if (combinedType.includes('fortiap') || combinedType.includes('access_point') || combinedType.includes('ap')) {
                     scale = 5.0; // Medium for access points
-                } else if (deviceTypeKey.includes('client') || deviceTypeKey.includes('endpoint') || deviceTypeKey.includes('device')) {
+                } else if (combinedType.includes('client') || combinedType.includes('endpoint') || combinedType.includes('device')) {
                     scale = 4.0; // Smaller for endpoints
                 }
                 
+                // Apply scaling - ensure it's set correctly
                 mesh.scaling = new BABYLON.Vector3(scale, scale, scale);
+                console.log(`📏 Applied scaling ${scale}x to ${nodeData.name || nodeData.id} (type: ${nodeType || deviceTypeKey})`);
                 
                 // Mark as SVG-based 3D mesh
                 if (!mesh.metadata) {
@@ -1455,21 +1462,116 @@
                     case 'C': // Cubic Bezier (absolute)
                     case 'c': // Cubic Bezier (relative)
                         if (coords.length >= 6) {
-                            const x1 = type === 'C' ? coords[0] : currentX + coords[0];
-                            const y1 = type === 'C' ? coords[1] : currentY + coords[1];
-                            const x2 = type === 'C' ? coords[2] : currentX + coords[2];
-                            const y2 = type === 'C' ? coords[3] : currentY + coords[3];
-                            const x3 = type === 'C' ? coords[4] : currentX + coords[4];
-                            const y3 = type === 'C' ? coords[5] : currentY + coords[5];
+                            const cp1x = type === 'C' ? coords[0] : currentX + coords[0];
+                            const cp1y = type === 'C' ? coords[1] : currentY + coords[1];
+                            const cp2x = type === 'C' ? coords[2] : currentX + coords[2];
+                            const cp2y = type === 'C' ? coords[3] : currentY + coords[3];
+                            const endX = type === 'C' ? coords[4] : currentX + coords[4];
+                            const endY = type === 'C' ? coords[5] : currentY + coords[5];
                             
-                            // Sample points along the curve
-                            for (let t = 0; t <= 1; t += 0.1) {
-                                const x = (1-t)**2 * currentX + 2*(1-t)*t * x2 + t**2 * x3;
-                                const y = (1-t)**2 * currentY + 2*(1-t)*t * y2 + t**2 * y3;
+                            // Sample points along the cubic bezier curve (correct formula)
+                            const samples = 20; // More samples for better detail
+                            for (let i = 0; i <= samples; i++) {
+                                const t = i / samples;
+                                const mt = 1 - t;
+                                // Cubic Bezier: B(t) = (1-t)³P₀ + 3(1-t)²tP₁ + 3(1-t)t²P₂ + t³P₃
+                                const x = mt*mt*mt * currentX + 3*mt*mt*t * cp1x + 3*mt*t*t * cp2x + t*t*t * endX;
+                                const y = mt*mt*mt * currentY + 3*mt*mt*t * cp1y + 3*mt*t*t * cp2y + t*t*t * endY;
                                 points.push({ x, y });
                             }
-                            currentX = x3;
-                            currentY = y3;
+                            currentX = endX;
+                            currentY = endY;
+                        }
+                        break;
+                    case 'S': // Smooth cubic Bezier (absolute)
+                    case 's': // Smooth cubic Bezier (relative)
+                        if (coords.length >= 4) {
+                            // S uses previous control point's reflection
+                            const cp2x = type === 'S' ? coords[0] : currentX + coords[0];
+                            const cp2y = type === 'S' ? coords[1] : currentY + coords[1];
+                            const endX = type === 'S' ? coords[2] : currentX + coords[2];
+                            const endY = type === 'S' ? coords[3] : currentY + coords[3];
+                            // Reflect previous control point (simplified - use current position as cp1)
+                            const cp1x = currentX;
+                            const cp1y = currentY;
+                            
+                            const samples = 20;
+                            for (let i = 0; i <= samples; i++) {
+                                const t = i / samples;
+                                const mt = 1 - t;
+                                const x = mt*mt*mt * currentX + 3*mt*mt*t * cp1x + 3*mt*t*t * cp2x + t*t*t * endX;
+                                const y = mt*mt*mt * currentY + 3*mt*mt*t * cp1y + 3*mt*t*t * cp2y + t*t*t * endY;
+                                points.push({ x, y });
+                            }
+                            currentX = endX;
+                            currentY = endY;
+                        }
+                        break;
+                    case 'Q': // Quadratic Bezier (absolute)
+                    case 'q': // Quadratic Bezier (relative)
+                        if (coords.length >= 4) {
+                            const cpx = type === 'Q' ? coords[0] : currentX + coords[0];
+                            const cpy = type === 'Q' ? coords[1] : currentY + coords[1];
+                            const endX = type === 'Q' ? coords[2] : currentX + coords[2];
+                            const endY = type === 'Q' ? coords[3] : currentY + coords[3];
+                            
+                            // Sample points along quadratic bezier: B(t) = (1-t)²P₀ + 2(1-t)tP₁ + t²P₂
+                            const samples = 15;
+                            for (let i = 0; i <= samples; i++) {
+                                const t = i / samples;
+                                const mt = 1 - t;
+                                const x = mt*mt * currentX + 2*mt*t * cpx + t*t * endX;
+                                const y = mt*mt * currentY + 2*mt*t * cpy + t*t * endY;
+                                points.push({ x, y });
+                            }
+                            currentX = endX;
+                            currentY = endY;
+                        }
+                        break;
+                    case 'T': // Smooth quadratic Bezier (absolute)
+                    case 't': // Smooth quadratic Bezier (relative)
+                        if (coords.length >= 2) {
+                            const endX = type === 'T' ? coords[0] : currentX + coords[0];
+                            const endY = type === 'T' ? coords[1] : currentY + coords[1];
+                            // Reflect previous control point (simplified - use current position)
+                            const cpx = currentX;
+                            const cpy = currentY;
+                            
+                            const samples = 15;
+                            for (let i = 0; i <= samples; i++) {
+                                const t = i / samples;
+                                const mt = 1 - t;
+                                const x = mt*mt * currentX + 2*mt*t * cpx + t*t * endX;
+                                const y = mt*mt * currentY + 2*mt*t * cpy + t*t * endY;
+                                points.push({ x, y });
+                            }
+                            currentX = endX;
+                            currentY = endY;
+                        }
+                        break;
+                    case 'A': // Arc (absolute)
+                    case 'a': // Arc (relative)
+                        if (coords.length >= 7) {
+                            const rx = Math.abs(coords[0]);
+                            const ry = Math.abs(coords[1]);
+                            const xAxisRotation = coords[2] * Math.PI / 180;
+                            const largeArcFlag = coords[3] !== 0;
+                            const sweepFlag = coords[4] !== 0;
+                            const endX = type === 'A' ? coords[5] : currentX + coords[5];
+                            const endY = type === 'A' ? coords[6] : currentY + coords[6];
+                            
+                            // Sample points along arc (simplified arc approximation)
+                            const samples = 20;
+                            for (let i = 0; i <= samples; i++) {
+                                const t = i / samples;
+                                // Approximate arc as bezier curve
+                                const angle = Math.atan2(endY - currentY, endX - currentX);
+                                const x = currentX + (endX - currentX) * t + rx * Math.cos(angle + xAxisRotation) * Math.sin(t * Math.PI);
+                                const y = currentY + (endY - currentY) * t + ry * Math.sin(angle + xAxisRotation) * Math.sin(t * Math.PI);
+                                points.push({ x, y });
+                            }
+                            currentX = endX;
+                            currentY = endY;
                         }
                         break;
                 }

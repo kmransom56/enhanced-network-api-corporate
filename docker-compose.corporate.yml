@@ -12,7 +12,7 @@ services:
       - LOG_LEVEL=INFO
       - DATABASE_URL=postgresql://appuser:${DB_PASSWORD}@postgres:5432/enhanced_network
     volumes:
-      - ./corporate.env:/app/.env:ro
+      - ./.env:/app/.env:ro  # Use .env file instead of corporate.env
       - ./data:/app/data
       - ./logs:/app/logs
       - ./troubleshooting_sessions:/app/troubleshooting_sessions
@@ -21,6 +21,8 @@ services:
       - ./realistic_device_svgs:/app/realistic_device_svgs:ro
       - ./realistic_3d_models:/app/realistic_3d_models:ro
       - ./vss_extraction:/app/vss_extraction:ro
+      - ./src:/app/src:ro  # Mount source code for live updates
+      - ./mcp_servers:/app/mcp_servers:ro  # Mount MCP servers for live updates
     restart: unless-stopped
     depends_on:
       - postgres

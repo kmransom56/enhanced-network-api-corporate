@@ -32,6 +32,29 @@ from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+# Load environment variables from .env file early
+try:
+    from dotenv import load_dotenv
+    # Try multiple locations for .env file
+    env_paths = [
+        Path("/app/.env"),  # Docker container location
+        Path(".env"),  # Current directory
+        Path(__file__).parent.parent.parent / ".env",  # Project root
+        Path(__file__).parent.parent.parent / "corporate.env",  # Alternative name
+    ]
+    for env_path in env_paths:
+        if env_path.exists():
+            load_dotenv(env_path, override=False)  # Don't override existing env vars
+            logger = logging.getLogger(__name__)
+            logger.info(f"✅ Loaded environment from {env_path}")
+            break
+    else:
+        logger = logging.getLogger(__name__)
+        logger.warning(f"⚠️  No .env file found in: {env_paths}")
+except ImportError:
+    logger = logging.getLogger(__name__)
+    logger.warning("python-dotenv not installed, using system environment only")
+
 # Import new API endpoints
 HERE = Path(__file__).resolve().parent
 sys.path.append(str(HERE))
@@ -232,35 +255,69 @@ def _create_fortigate_collector(
     additional configuration, while still allowing per-request overrides.
     """
 
-    host = (creds.host if creds and creds.host else os.getenv("FORTIMANAGER_HOST", "192.168.0.254"))
+    # Extract host from creds or environment (FIXED: was using FORTIMANAGER_HOST)
+    host = (
+        creds.host if creds and creds.host 
+        else os.getenv("FORTIGATE_HOST") or os.getenv("FORTIGATE_HOSTS", "192.168.0.254").split(",")[0].strip()
+    )
+    # Remove port if present (FortiGateTopologyCollector adds it)
+    if ":" in host:
+        host = host.split(":")[0]
+    
     username = (
         creds.username
         if creds and creds.username
-        else os.getenv("FORTIMANAGER_USERNAME", "admin")
+        else os.getenv("FORTIGATE_USERNAME") or os.getenv("FORTIGATE_USER", "admin")
     )
     password = (
         creds.password
         if creds and creds.password is not None
-        else os.getenv("FORTIMANAGER_PASSWORD", "")
+        else os.getenv("FORTIGATE_PASSWORD") or ""
     )
-    token = (
-        creds.token
-        if creds and creds.token
-        else os.getenv("FORTIMANAGER_TOKEN") or os.getenv("FORTIGATE_TOKEN")
-    )
+    # Get token - check host-specific token first, then generic token
+    token = None
+    if creds and creds.token:
+        token = creds.token
+    else:
+        # Try host-specific token first (e.g., FORTIGATE_192_168_0_254_TOKEN)
+        host_clean = host.replace(".", "_").replace("-", "_").replace(":", "_")
+        host_token_var = f"FORTIGATE_{host_clean}_TOKEN"
+        token = (
+            os.getenv(host_token_var) or
+            os.getenv("FORTIGATE_TOKEN") or
+            os.getenv("FORTIGATE_API_TOKEN")
+        )
     verify_ssl = (
         creds.verify_ssl
         if creds and creds.verify_ssl is not None
         else _env_bool("FORTIGATE_VERIFY_SSL", False)
     )
-
-    return FortiGateTopologyCollector(
-        host=host,
-        username=username,
-        password=None if token else password,
-        token=token,
-        verify_ssl=bool(verify_ssl),
+    wifi_host = (
+        creds.wifi_host if creds and creds.wifi_host 
+        else os.getenv("FORTIGATE_WIFI_HOST")
     )
+    wifi_token = (
+        creds.wifi_token if creds and creds.wifi_token
+        else os.getenv("FORTIGATE_WIFI_TOKEN")
+    )
+
+    # Build collector with only available parameters (wifi_host/wifi_token may not be supported in old code)
+    collector_kwargs = {
+        "host": host,
+        "username": username,
+        "password": None if token else password,
+        "token": token,
+        "verify_ssl": bool(verify_ssl),
+    }
+    # Only add wifi_host/wifi_token if the collector supports them (check by inspecting __init__ signature)
+    import inspect
+    init_sig = inspect.signature(FortiGateTopologyCollector.__init__)
+    if "wifi_host" in init_sig.parameters:
+        collector_kwargs["wifi_host"] = wifi_host
+    if "wifi_token" in init_sig.parameters:
+        collector_kwargs["wifi_token"] = wifi_token
+    
+    return FortiGateTopologyCollector(**collector_kwargs)
 
 
 AI_PLATFORM_ROOT = _path_from_env("AI_PLATFORM_ROOT", Path.home() / "cagent")
@@ -1396,6 +1453,11 @@ def _enhance_scene_with_models(scene: Dict[str, Any]) -> Dict[str, Any]:
             # Representative FortiAP SVG extracted from the stencil set
             node.setdefault("icon_svg", f"{icon_base}/shape_007_c__f.svg")
         
+        # Normalize device types - convert various client/endpoint types to "client"
+        if any(keyword in device_type_str for keyword in ["mobile device", "kitchen display", "randomized mac", "endpoint", "device"]) and not any(keyword in device_type_str for keyword in ["fortigate", "fortiswitch", "fortiap", "switch", "ap", "router"]):
+            node["type"] = "client"
+            device_type_str = "client"
+        
         # Add 3D models and SVG icons for endpoint/client devices
         if "client" in device_type_str or "endpoint" in device_type_str or "device" in device_type_str:
             connection_type = (node.get("connection_type") or "").lower()
@@ -1984,21 +2046,33 @@ async def _load_scene_with_fallback() -> Dict[str, Any]:
                                             
                                         # Match device to get type and model
                                         mac = dev.get("mac", "")
-                                        host = dev.get("host", "")
+                                        host = dev.get("host") or dev.get("hostname") or dev.get("name") or ""
                                         match_info = matcher.match_mac_to_model(mac, {"hostname": host})
                                         
-                                        nodes.append({
+                                        # Preserve all device fields, especially connection_type, ssid, ap_name, os
+                                        node_data = {
                                             "id": dev_id,
                                             "name": host or mac or "Unknown Device",
                                             "type": match_info.device_type,
                                             "ip": dev.get("ip"),
                                             "mac": mac,
                                             "vendor": match_info.vendor,
-                                            "os": dev.get("os_name"),
-                                            "status": "online",
+                                            "os": dev.get("os") or dev.get("os_name") or dev.get("software_os"),
+                                            "status": dev.get("status", "online"),
                                             "model_path": match_info.model_path,
-                                            "pos_system": match_info.pos_system
-                                        })
+                                            "pos_system": match_info.pos_system,
+                                            # Preserve connection metadata
+                                            "connection_type": dev.get("connection_type"),
+                                            "ssid": dev.get("ssid"),
+                                            "ap_name": dev.get("ap_name"),
+                                            "ap_sn": dev.get("ap_sn") or dev.get("wtp_id"),
+                                            "switch_sn": dev.get("switch_sn"),
+                                            "port": dev.get("port"),
+                                            "vlan": dev.get("vlan"),
+                                        }
+                                        # Remove None values to keep the data clean
+                                        node_data = {k: v for k, v in node_data.items() if v is not None}
+                                        nodes.append(node_data)
                                         links.append({
                                             "from": uplink_id,
                                             "to": dev_id,
@@ -2071,21 +2145,33 @@ async def _load_scene_with_fallback() -> Dict[str, Any]:
                                             
                                         # Match device to get type and model
                                         mac = dev.get("mac", "")
-                                        host = dev.get("host", "")
+                                        host = dev.get("host") or dev.get("hostname") or dev.get("name") or ""
                                         match_info = matcher.match_mac_to_model(mac, {"hostname": host})
                                         
-                                        nodes.append({
+                                        # Preserve all device fields, especially connection_type, ssid, ap_name, os
+                                        node_data = {
                                             "id": dev_id,
                                             "name": host or mac or "Unknown Device",
                                             "type": match_info.device_type,
                                             "ip": dev.get("ip"),
                                             "mac": mac,
                                             "vendor": match_info.vendor,
-                                            "os": dev.get("os_name"),
-                                            "status": "online",
+                                            "os": dev.get("os") or dev.get("os_name") or dev.get("software_os"),
+                                            "status": dev.get("status", "online"),
                                             "model_path": match_info.model_path,
-                                            "pos_system": match_info.pos_system
-                                        })
+                                            "pos_system": match_info.pos_system,
+                                            # Preserve connection metadata
+                                            "connection_type": dev.get("connection_type"),
+                                            "ssid": dev.get("ssid"),
+                                            "ap_name": dev.get("ap_name"),
+                                            "ap_sn": dev.get("ap_sn") or dev.get("wtp_id"),
+                                            "switch_sn": dev.get("switch_sn"),
+                                            "port": dev.get("port"),
+                                            "vlan": dev.get("vlan"),
+                                        }
+                                        # Remove None values to keep the data clean
+                                        node_data = {k: v for k, v in node_data.items() if v is not None}
+                                        nodes.append(node_data)
                                         links.append({
                                             "from": uplink_id,
                                             "to": dev_id,
@@ -2154,14 +2240,20 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
     for node in device_nodes:
         dtype = (node.get("type") or "").lower()
         model = (node.get("model") or "").lower()
+        role = (node.get("role") or "").lower()
         
-        if "fortigate" in dtype or "firewall" in dtype:
+        # Explicitly check for client/endpoint types
+        if "fortigate" in dtype or "firewall" in dtype or "gateway" in dtype:
             tier_1.append(node)
-        elif "fortiswitch" in dtype or "switch" in dtype:
+        elif "fortiswitch" in dtype or ("switch" in dtype and "ap" not in dtype):
             tier_2.append(node)
         elif "fortiap" in dtype or "access_point" in dtype or "ap" in dtype:
             tier_3.append(node)
+        elif "client" in dtype or "endpoint" in dtype or "device" in dtype or role in ("client", "endpoint"):
+            # Explicitly include client/endpoint devices in tier_4
+            tier_4.append(node)
         else:
+            # Default to tier_4 for unknown devices (likely endpoints)
             tier_4.append(node)
 
     # 3. Assign Positions (Hierarchical Layout)
@@ -2209,7 +2301,12 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
                 "ip": node.get("ip"),
                 "mac": node.get("mac"),
                 "serial": node.get("serial"),
-                "vendor": node.get("vendor")
+                "vendor": node.get("vendor"),
+                "os": node.get("os"),  # Operating system
+                "connection_type": node.get("connection_type"),  # wifi or ethernet
+                "ssid": node.get("ssid"),  # WiFi SSID if applicable
+                "ap_name": node.get("ap_name"),  # Associated AP name
+                "ap_sn": node.get("ap_sn"),  # Associated AP serial number
             }
             models.append(model_entry)
 
@@ -2363,8 +2460,9 @@ async def fortigate_assets(request: FortiGateDirectRequest):
     session = requests.Session()
     session.verify = request.credentials.verify_ssl if hasattr(request.credentials, 'verify_ssl') else False
     
-    # Try the primary endpoint for assets/endpoints
+    # Try endpoints in order: wireless clients, switch clients, then user device endpoints
     endpoints_to_try = [
+        "/monitor/wifi/client",  # Wireless clients (matches WiFi client table in web UI)
         "/monitor/user/device/select",
         "/monitor/user/device/query",
         "/monitor/endpoint-control/registered_ems",
@@ -2375,11 +2473,25 @@ async def fortigate_assets(request: FortiGateDirectRequest):
     for endpoint in endpoints_to_try:
         try:
             url = urljoin(base_url, endpoint)
-            response = session.get(url, headers=headers, timeout=10)
+            logger.info(f"Trying FortiGate endpoint: {endpoint}")
+            response = session.get(url, headers=headers, params={"vdom": "root"}, timeout=10)
+            logger.info(f"Response status for {endpoint}: {response.status_code}")
             if response.status_code == 200:
-                assets_data = response.json()
-                endpoint_used = endpoint  # Track which endpoint succeeded
-                break
+                try:
+                    assets_data = response.json()
+                    results = assets_data.get("results") or assets_data.get("data") or []
+                    if isinstance(results, dict):
+                        results = results.get("entries", [])
+                    if isinstance(results, list) and len(results) > 0:
+                        logger.info(f"✅ Successfully fetched {len(results)} devices from {endpoint}")
+                        endpoint_used = endpoint  # Track which endpoint succeeded
+                        break
+                    else:
+                        logger.debug(f"Endpoint {endpoint} returned empty results")
+                except Exception as json_err:
+                    logger.warning(f"Failed to parse JSON from {endpoint}: {json_err}")
+            else:
+                logger.debug(f"Endpoint {endpoint} returned HTTP {response.status_code}: {response.text[:200]}")
         except Exception as e:
             logger.debug(f"Failed to fetch from {endpoint}: {e}")
             continue

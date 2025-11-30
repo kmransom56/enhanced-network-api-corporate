@@ -54,6 +54,8 @@ class FortiGateTopologyCollector:
         token: Optional[str] = None,
         port: int = 10443,
         verify_ssl: bool = False,
+        wifi_host: Optional[str] = None,
+        wifi_token: Optional[str] = None,
     ):
         self.host = host
         self.username = username
@@ -61,10 +63,13 @@ class FortiGateTopologyCollector:
         self.api_token = token
         self.port = port
         self.verify_ssl = verify_ssl
+        self.wifi_host = wifi_host
+        self.wifi_token = wifi_token
         self.base_url = f"https://{host}:{port}/api/v2/"
         self.session = requests.Session()
         self.session.verify = verify_ssl
         self._warned_endpoints = set()
+        self._use_query_token = False  # Track if we need to use access_token query param
         
         # Disable SSL warnings for self-signed certs
         if not verify_ssl:
@@ -76,8 +81,9 @@ class FortiGateTopologyCollector:
         params = {'vdom': 'root'}
 
         try:
-            # Attempt API token authentication first (Bearer and X-API-Key)
+            # Attempt API token authentication first (try multiple formats)
             if self.api_token:
+                # Try 1: Standard Bearer token
                 bearer_headers = {
                     'Authorization': f'Bearer {self.api_token}',
                     'Content-Type': 'application/json',
@@ -93,6 +99,24 @@ class FortiGateTopologyCollector:
                     self.session.headers.update(bearer_headers)
                     return True
 
+                # Try 2: Bearer with FG_API_KEY= prefix
+                if not self.api_token.startswith('FG_API_KEY='):
+                    bearer_headers_fg = {
+                        'Authorization': f'Bearer FG_API_KEY={self.api_token}',
+                        'Content-Type': 'application/json',
+                    }
+                    response = self.session.get(
+                        status_url,
+                        headers=bearer_headers_fg,
+                        params=params,
+                        timeout=10,
+                    )
+                    if response.status_code == 200:
+                        logger.info("✅ Authenticated with FortiGate using Bearer FG_API_KEY token")
+                        self.session.headers.update(bearer_headers_fg)
+                        return True
+
+                # Try 3: X-API-Key header
                 alt_headers = {
                     'X-API-Key': self.api_token,
                     'Content-Type': 'application/json',
@@ -107,11 +131,35 @@ class FortiGateTopologyCollector:
                     logger.info("✅ Authenticated with FortiGate using X-API-Key header")
                     self.session.headers.update(alt_headers)
                     return True
+                
+                # Try 4: Access token as query parameter
+                params_with_token = params.copy()
+                params_with_token['access_token'] = self.api_token
+                response = self.session.get(
+                    status_url,
+                    headers={'Content-Type': 'application/json'},
+                    params=params_with_token,
+                    timeout=10,
+                )
+                if response.status_code == 200:
+                    logger.info("✅ Authenticated with FortiGate using access_token query parameter")
+                    # Store token for future requests
+                    self.session.headers.update({'Content-Type': 'application/json'})
+                    # Note: We'll need to add access_token to each request
+                    self._use_query_token = True
+                    return True
 
             # Fall back to session-based authentication if a password is provided
             if self.password:
                 if self._session_login():
-                    logger.info("✅ Authenticated with FortiGate using session login")
+                    # Even if CSRF token extraction failed, try to continue - some endpoints work without it
+                    csrf = self._extract_csrf()
+                    if csrf:
+                        self.session.headers.update({"X-CSRFTOKEN": csrf})
+                        logger.info("✅ Authenticated with FortiGate using session login (with CSRF token)")
+                    else:
+                        logger.warning("⚠️  Session login succeeded but CSRF token not found - continuing anyway")
+                        logger.info("✅ Authenticated with FortiGate using session login (no CSRF token)")
                     return True
 
             logger.error("❌ FortiGate authentication failed: token and session methods exhausted")
@@ -122,12 +170,26 @@ class FortiGateTopologyCollector:
             return False
     
     def _extract_csrf(self) -> Optional[str]:
+        """Extract CSRF token from cookies or response headers"""
+        # Try cookies first
         for cookie in self.session.cookies:
             name = cookie.name.lower()
-            if name.startswith("ccsrf") or name == "csrftoken":
-                value = cookie.value.strip('"')
+            if name.startswith("ccsrf") or name == "csrftoken" or "csrf" in name:
+                value = cookie.value.strip('"').strip("'")
                 if value:
+                    logger.debug(f"Found CSRF token in cookie: {name}")
                     return value
+        
+        # Try response headers if available
+        if hasattr(self.session, 'last_response') and self.session.last_response:
+            csrf_header = self.session.last_response.headers.get('X-CSRFTOKEN') or \
+                         self.session.last_response.headers.get('X-CSRFToken') or \
+                         self.session.last_response.headers.get('Csrf-Token')
+            if csrf_header:
+                logger.debug("Found CSRF token in response header")
+                return csrf_header
+        
+        logger.warning("CSRF token not found in cookies or headers")
         return None
 
     def _session_login(self) -> bool:
@@ -157,28 +219,35 @@ class FortiGateTopologyCollector:
             logger.error(f"Session authentication POST failed: {exc}")
             return False
 
+        # Store response for CSRF extraction
+        self.session.last_response = response
+        
         csrf = self._extract_csrf()
         if not csrf:
+            # Try Set-Cookie header as fallback
             set_cookie = response.headers.get("Set-Cookie", "")
             for part in set_cookie.split(";"):
-                if "ccsrf" in part.lower():
+                if "ccsrf" in part.lower() or "csrf" in part.lower():
                     _, _, value = part.partition("=")
-                    csrf = value.strip().strip('"')
+                    csrf = value.strip().strip('"').strip("'")
                     if csrf:
+                        logger.debug("Found CSRF token in Set-Cookie header")
                         break
 
-        if not csrf:
-            logger.error("Session authentication succeeded but CSRF token could not be determined")
-            return False
-
-        self.session.headers.update(
-            {
-                "X-CSRFTOKEN": csrf,
-                "X-Requested-With": "XMLHttpRequest",
-                "Accept": "application/json, text/plain, */*",
-            }
-        )
-        return True
+        # Update session headers - include CSRF if found, but continue even without it
+        headers_to_update = {
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        }
+        if csrf:
+            headers_to_update["X-CSRFTOKEN"] = csrf
+            logger.debug("CSRF token added to session headers")
+        else:
+            logger.warning("⚠️  CSRF token not found, but continuing - some endpoints may work without it")
+        
+        self.session.headers.update(headers_to_update)
+        return True  # Return True even without CSRF - let the API calls determine if it's needed
 
     def _log_warning_once(self, endpoint: str, message: str):
         """Log a warning only the first time it occurs for an endpoint."""
@@ -243,23 +312,225 @@ class FortiGateTopologyCollector:
             return []
 
     async def get_connected_devices(self) -> List[Dict[str, Any]]:
-        """Get list of connected devices (users/hosts)"""
+        """Get list of connected devices (users/hosts) from multiple API endpoints.
+        
+        Tries endpoints in this order:
+        1. Wireless clients: /api/v2/monitor/wifi/client (for devices connected to FortiAPs)
+        2. Switch clients: /api/v2/monitor/switch-controller/managed-switch/clients (for wired devices)
+        3. User device endpoints: /api/v2/monitor/user/device/query, /select, /registered_ems
+        """
+        # Ensure we're authenticated before making requests
+        if not await self.authenticate():
+            logger.error("Cannot fetch connected devices: authentication failed")
+            return []
+        
+        devices: List[Dict[str, Any]] = []
+        
+        logger.info("Fetching connected devices from FortiGate API endpoints...")
+        
+        # 1. Try wireless clients endpoint (matches the WiFi client table in web UI)
         try:
-            # Try user/device endpoint first (available in newer FortiOS)
-            url = urljoin(self.base_url, "monitor/user/device/query")
-            response = self.session.get(url, params={"vdom": "root"}, timeout=10)
+            url = urljoin(self.base_url, "monitor/wifi/client")
+            logger.info(f"Trying endpoint: /api/v2/monitor/wifi/client")
+            params = {"vdom": "root"}
+            # Add access_token to query if that's how we authenticated
+            if self._use_query_token and self.api_token:
+                params["access_token"] = self.api_token
+            response = self.session.get(url, params=params, timeout=10)
             
+            # If we get 401, try to re-authenticate and retry once
+            if response.status_code == 401:
+                logger.warning("Got 401 from wifi/client, attempting re-authentication...")
+                if await self.authenticate():
+                    response = self.session.get(url, params={"vdom": "root"}, timeout=10)
+                else:
+                    logger.error("Re-authentication failed, skipping wifi/client endpoint")
+            
+            logger.info(f"Response status: {response.status_code}")
             if response.status_code == 200:
-                data = response.json()
-                return data.get('results', [])
-            
-            # Fallback to firewall/paddress (older method or different permissions)
-            self._log_warning_once("connected_devices_fallback", f"Primary device query failed ({response.status_code}), trying fallback")
-            return []
-            
+                try:
+                    data = response.json()
+                    logger.debug(f"Response data keys: {list(data.keys()) if isinstance(data, dict) else 'not a dict'}")
+                    results = data.get('results') or data.get('data') or []
+                    if isinstance(results, dict):
+                        results = results.get("entries", [])
+                    if isinstance(results, list):
+                        logger.info(f"Found {len(results)} wireless clients from wifi/client endpoint")
+                        if len(results) > 0:
+                            logger.info(f"Sample client keys: {list(results[0].keys())[:10] if results else 'N/A'}")
+                            # Normalize wireless client data
+                            for client in results:
+                                # Extract name - prefer hostname, then host, then device, fallback to MAC
+                                client_name = (
+                                    client.get("hostname") or 
+                                    client.get("host") or 
+                                    client.get("device") or 
+                                    client.get("mac") or 
+                                    f"wifi-client-{len(devices)}"
+                                )
+                                devices.append({
+                                    "id": client.get("mac") or client.get("ip") or f"wifi-{len(devices)}",
+                                    "name": client_name,
+                                    "type": "client",
+                                    "os": client.get("os") or "Unknown",
+                                    "ip": client.get("ip"),
+                                    "mac": client.get("mac"),
+                                    "status": "online",
+                                    "connection_type": "wifi",
+                                    "ssid": client.get("ssid"),
+                                    "ap_sn": client.get("wtp_id") or client.get("ap_sn"),
+                                    "ap_name": client.get("wtp_name") or client.get("fortiap") or client.get("ap"),
+                                })
+                        else:
+                            logger.debug("wifi/client endpoint returned empty list")
+                    else:
+                        logger.debug(f"wifi/client endpoint returned non-list data: {type(results)}")
+                except Exception as json_err:
+                    logger.warning(f"Failed to parse JSON from wifi/client: {json_err}, response text: {response.text[:200]}")
+            else:
+                logger.warning(f"wifi/client endpoint returned HTTP {response.status_code}: {response.text[:200]}")
         except Exception as e:
-            self._log_warning_once("connected_devices_error", f"Error getting connected devices: {e}")
-            return []
+            logger.warning(f"❌ Failed to fetch from wifi/client: {e}")
+        
+        # 2. Try switch controller clients endpoint (for wired devices on FortiSwitch)
+        try:
+            # First get list of managed switches
+            switch_url = urljoin(self.base_url, "monitor/switch-controller/managed-switch/status")
+            switch_response = self.session.get(switch_url, params={"vdom": "root"}, timeout=10)
+            
+            if switch_response.status_code == 200:
+                switch_data = switch_response.json()
+                switches = switch_data.get('results') or switch_data.get('data') or []
+                if isinstance(switches, dict):
+                    switches = switches.get("entries", [])
+                
+                # For each switch, try to get connected clients
+                for switch in switches[:5]:  # Limit to first 5 switches to avoid too many requests
+                    switch_id = switch.get("switch-id") or switch.get("id") or switch.get("serial")
+                    if not switch_id:
+                        continue
+                    
+                    try:
+                        # Try switch clients endpoint
+                        clients_url = urljoin(self.base_url, f"monitor/switch-controller/managed-switch/clients")
+                        clients_response = self.session.get(clients_url, params={"switch_id": switch_id, "vdom": "root"}, timeout=10)
+                        
+                        if clients_response.status_code == 200:
+                            clients_data = clients_response.json()
+                            clients = clients_data.get('results') or clients_data.get('data') or []
+                            if isinstance(clients, dict):
+                                clients = clients.get("entries", [])
+                            if isinstance(clients, list) and len(clients) > 0:
+                                logger.info(f"✅ Found {len(clients)} wired clients on switch {switch_id}")
+                                for client in clients:
+                                    devices.append({
+                                        "id": client.get("mac") or client.get("ip") or f"switch-{len(devices)}",
+                                        "name": client.get("device") or client.get("hostname") or client.get("mac"),
+                                        "type": "client",
+                                        "os": client.get("os") or client.get("software_os") or "Unknown",
+                                        "ip": client.get("ip") or client.get("address"),
+                                        "mac": client.get("mac"),
+                                        "status": client.get("status") or "online",
+                                        "connection_type": "ethernet",
+                                        "switch_id": switch_id,
+                                        "switch_name": switch.get("name") or switch_id,
+                                        "port": client.get("port"),
+                                        "vlan": client.get("vlan"),
+                                    })
+                    except Exception as e:
+                        logger.debug(f"Could not get clients for switch {switch_id}: {e}")
+        except Exception as e:
+            logger.warning(f"❌ Failed to fetch from switch-controller: {e}")
+        
+        # 3. Try user device endpoints (Assets dashboard endpoints)
+        endpoints_to_try = [
+            ("monitor/user/device/query", "device/query"),
+            ("monitor/user/device/select", "device/select"),
+            ("monitor/endpoint-control/registered_ems", "registered_ems"),
+        ]
+        
+        for endpoint_path, endpoint_name in endpoints_to_try:
+            try:
+                url = urljoin(self.base_url, endpoint_path)
+                logger.info(f"Trying endpoint: /api/v2/{endpoint_path}")
+                params = {"vdom": "root"}
+                # Add access_token to query if that's how we authenticated
+                if self._use_query_token and self.api_token:
+                    params["access_token"] = self.api_token
+                response = self.session.get(url, params=params, timeout=10)
+                
+                logger.info(f"Response status for {endpoint_name}: {response.status_code}")
+                
+                # If we get 401, try to re-authenticate and retry once
+                if response.status_code == 401:
+                    logger.warning(f"Got 401 from {endpoint_name}, attempting re-authentication...")
+                    if await self.authenticate():
+                        response = self.session.get(url, params={"vdom": "root"}, timeout=10)
+                        logger.info(f"Retry response status for {endpoint_name}: {response.status_code}")
+                    else:
+                        logger.error(f"Re-authentication failed, skipping {endpoint_name}")
+                        continue
+                
+                if response.status_code == 200:
+                    try:
+                        data = response.json()
+                        logger.debug(f"Response from {endpoint_name} keys: {list(data.keys()) if isinstance(data, dict) else 'not a dict'}")
+                        results = data.get('results') or data.get('data') or []
+                        if isinstance(results, dict):
+                            results = results.get("entries", [])
+                        if isinstance(results, list):
+                            logger.info(f"Found {len(results)} devices from {endpoint_name} endpoint")
+                            if len(results) > 0:
+                                logger.info(f"Sample device keys: {list(results[0].keys())[:15] if results else 'N/A'}")
+                                # Normalize and add devices (avoid duplicates by MAC)
+                                existing_macs = {d.get("mac") for d in devices if d.get("mac")}
+                                for device in results:
+                                    mac = device.get("mac")
+                                    if mac and mac not in existing_macs:
+                                        # Extract name - prefer name, then hostname, then host, then device, fallback to MAC
+                                        device_name = (
+                                            device.get("name") or 
+                                            device.get("hostname") or 
+                                            device.get("host") or 
+                                            device.get("device") or 
+                                            mac or 
+                                            f"device-{len(devices)}"
+                                        )
+                                        devices.append({
+                                            "id": mac or device.get("ip") or device.get("name") or f"device-{len(devices)}",
+                                            "name": device_name,
+                                            "type": "client",
+                                            "os": device.get("os") or device.get("os-type") or device.get("software_os") or "Unknown",
+                                            "ip": device.get("ip") or device.get("address"),
+                                            "mac": mac,
+                                            "status": device.get("status") or "online",
+                                            "connection_type": "wifi" if device.get("ssid") else "ethernet",
+                                            "ssid": device.get("ssid"),
+                                            "ap_sn": device.get("ap_sn") or device.get("wtp_id"),
+                                            "ap_name": device.get("wtp_name") or device.get("ap"),
+                                            "switch_sn": device.get("switch_sn"),
+                                            "port": device.get("port"),
+                                            "vulnerabilities": device.get("vulnerabilities", 0),
+                                        })
+                                        existing_macs.add(mac)
+                            else:
+                                logger.debug(f"Endpoint {endpoint_name} returned empty list")
+                        else:
+                            logger.debug(f"Endpoint {endpoint_name} returned non-list data: {type(results)}")
+                    except Exception as json_err:
+                        logger.warning(f"Failed to parse JSON from {endpoint_name}: {json_err}, response: {response.text[:200]}")
+                else:
+                    logger.warning(f"Endpoint {endpoint_name} returned HTTP {response.status_code}: {response.text[:200]}")
+            except Exception as e:
+                logger.warning(f"Failed to fetch from {endpoint_name}: {e}")
+                continue
+        
+        if not devices:
+            logger.warning("⚠️  No connected devices found from any FortiGate endpoint")
+        else:
+            logger.info(f"✅ Total connected devices found: {len(devices)}")
+        
+        return devices
     
     async def get_vip_configuration(self) -> List[Dict[str, Any]]:
         """Get VIP (Virtual IP) configuration"""

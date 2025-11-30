@@ -785,24 +785,176 @@ def _fetch_fortigate_payload(
             }
         )
 
-    # Fetch endpoint/asset devices (Assets dashboard data)
-    # This endpoint provides the device list shown in the Assets dashboard
-    # with OS, IP addresses, and status information
-    endpoint_devices_data = _get_json("/api/v2/monitor/user/device/select") or {}
-    endpoint_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
-    if isinstance(endpoint_devices, dict):
-        endpoint_devices = endpoint_devices.get("entries", [])
-    if not isinstance(endpoint_devices, list):
-        endpoint_devices = []
+    # Fetch endpoint/asset devices from multiple sources
+    # 1. Wireless clients (from FortiAPs) - matches WiFi client table in web UI
+    # 2. Wired clients (from FortiSwitches) - matches switch client table in web UI
+    # 3. User device endpoints (Assets dashboard)
+    logger.info("Fetching connected devices from FortiGate API endpoints...")
+    endpoint_devices = []
+    existing_macs = set()  # Track MACs to avoid duplicates
     
-    # Try alternative endpoint if the first one doesn't work
+    # 1. Try wireless clients endpoint (matches the WiFi client table in web UI)
+    wifi_clients_data = _get_json("/api/v2/monitor/wifi/client")
+    if wifi_clients_data:
+        logger.info("✅ Successfully fetched from /api/v2/monitor/wifi/client")
+        wifi_clients = wifi_clients_data.get("results") or wifi_clients_data.get("data") or []
+        if isinstance(wifi_clients, dict):
+            wifi_clients = wifi_clients.get("entries", [])
+        if isinstance(wifi_clients, list) and len(wifi_clients) > 0:
+            logger.info(f"Found {len(wifi_clients)} wireless clients from wifi/client endpoint")
+            for client in wifi_clients:
+                mac = client.get("mac")
+                if mac and mac not in existing_macs:
+                    endpoint_devices.append({
+                        "name": client.get("device") or client.get("hostname") or mac,
+                        "mac": mac,
+                        "ip": client.get("ip"),
+                        "os": client.get("os") or "Unknown",
+                        "connection_type": "wifi",
+                        "ssid": client.get("ssid"),
+                        "ap_sn": client.get("ap_sn") or client.get("fortiap"),
+                        "ap_name": client.get("fortiap") or client.get("ap"),
+                        "status": "online",
+                    })
+                    existing_macs.add(mac)
+    else:
+        logger.debug("❌ Failed to fetch from /api/v2/monitor/wifi/client")
+    
+    # 2. Try switch controller clients (for wired devices on FortiSwitch)
+    # First get managed switches
+    switch_status_data = _get_json("/api/v2/monitor/switch-controller/managed-switch/status")
+    if switch_status_data:
+        switches = switch_status_data.get("results") or switch_status_data.get("data") or []
+        if isinstance(switches, dict):
+            switches = switches.get("entries", [])
+        if isinstance(switches, list):
+            # Try to get clients for each switch
+            for switch in switches[:5]:  # Limit to first 5 switches
+                switch_id = switch.get("switch-id") or switch.get("id") or switch.get("serial")
+                if not switch_id:
+                    continue
+                
+                # Try switch clients endpoint
+                switch_clients_data = _get_json(f"/api/v2/monitor/switch-controller/managed-switch/clients?switch_id={switch_id}")
+                if switch_clients_data:
+                    clients = switch_clients_data.get("results") or switch_clients_data.get("data") or []
+                    if isinstance(clients, dict):
+                        clients = clients.get("entries", [])
+                    if isinstance(clients, list) and len(clients) > 0:
+                        logger.info(f"Found {len(clients)} wired clients on switch {switch_id}")
+                        for client in clients:
+                            mac = client.get("mac")
+                            if mac and mac not in existing_macs:
+                                endpoint_devices.append({
+                                    "name": client.get("device") or client.get("hostname") or mac,
+                                    "mac": mac,
+                                    "ip": client.get("ip") or client.get("address"),
+                                    "os": client.get("os") or client.get("software_os") or "Unknown",
+                                    "connection_type": "ethernet",
+                                    "switch_id": switch_id,
+                                    "switch_name": switch.get("name") or switch_id,
+                                    "port": client.get("port"),
+                                    "vlan": client.get("vlan"),
+                                    "status": client.get("status") or "online",
+                                })
+                                existing_macs.add(mac)
+    
+    # 3. Try user device endpoints (Assets dashboard endpoints)
+    # Try first endpoint: /api/v2/monitor/user/device/select
+    endpoint_devices_data = _get_json("/api/v2/monitor/user/device/select")
+    if endpoint_devices_data:
+        logger.info("✅ Successfully fetched from /api/v2/monitor/user/device/select")
+        user_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
+        if isinstance(user_devices, dict):
+            user_devices = user_devices.get("entries", [])
+        if isinstance(user_devices, list) and len(user_devices) > 0:
+            logger.info(f"Found {len(user_devices)} devices from device/select endpoint")
+            for device in user_devices:
+                mac = device.get("mac")
+                if mac and mac not in existing_macs:
+                    endpoint_devices.append({
+                        "name": device.get("name") or device.get("hostname") or device.get("device") or mac,
+                        "mac": mac,
+                        "ip": device.get("ip") or device.get("address"),
+                        "os": device.get("os") or device.get("os-type") or device.get("software_os") or "Unknown",
+                        "connection_type": "wifi" if device.get("ssid") else "ethernet",
+                        "ssid": device.get("ssid"),
+                        "ap_sn": device.get("ap_sn"),
+                        "switch_sn": device.get("switch_sn"),
+                        "port": device.get("port"),
+                        "status": device.get("status") or "online",
+                        "vulnerabilities": device.get("vulnerabilities", 0),
+                    })
+                    existing_macs.add(mac)
+    else:
+        logger.debug("❌ Failed to fetch from /api/v2/monitor/user/device/select")
+    
+    # Try alternative endpoint if we still don't have many devices
+    if len(endpoint_devices) < 5:
+        logger.info("Trying alternative endpoint: /api/v2/monitor/user/device/query")
+        endpoint_devices_data = _get_json("/api/v2/monitor/user/device/query")
+        if endpoint_devices_data:
+            logger.info("✅ Successfully fetched from /api/v2/monitor/user/device/query")
+            user_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
+            if isinstance(user_devices, dict):
+                user_devices = user_devices.get("entries", [])
+            if isinstance(user_devices, list) and len(user_devices) > 0:
+                logger.info(f"Found {len(user_devices)} devices from device/query endpoint")
+                for device in user_devices:
+                    mac = device.get("mac")
+                    if mac and mac not in existing_macs:
+                        endpoint_devices.append({
+                            "name": device.get("name") or device.get("hostname") or device.get("device") or mac,
+                            "mac": mac,
+                            "ip": device.get("ip") or device.get("address"),
+                            "os": device.get("os") or device.get("os-type") or device.get("software_os") or "Unknown",
+                            "connection_type": "wifi" if device.get("ssid") else "ethernet",
+                            "ssid": device.get("ssid"),
+                            "ap_sn": device.get("ap_sn"),
+                            "switch_sn": device.get("switch_sn"),
+                            "port": device.get("port"),
+                            "status": device.get("status") or "online",
+                            "vulnerabilities": device.get("vulnerabilities", 0),
+                        })
+                        existing_macs.add(mac)
+        else:
+            logger.debug("❌ Failed to fetch from /api/v2/monitor/user/device/query")
+    
+    # Try third alternative endpoint if still no devices
+    if len(endpoint_devices) < 5:
+        logger.info("Trying third endpoint: /api/v2/monitor/endpoint-control/registered_ems")
+        endpoint_devices_data = _get_json("/api/v2/monitor/endpoint-control/registered_ems")
+        if endpoint_devices_data:
+            logger.info("✅ Successfully fetched from /api/v2/monitor/endpoint-control/registered_ems")
+            user_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
+            if isinstance(user_devices, dict):
+                user_devices = user_devices.get("entries", [])
+            if isinstance(user_devices, list) and len(user_devices) > 0:
+                logger.info(f"Found {len(user_devices)} devices from registered_ems endpoint")
+                for device in user_devices:
+                    mac = device.get("mac")
+                    if mac and mac not in existing_macs:
+                        endpoint_devices.append({
+                            "name": device.get("name") or device.get("hostname") or device.get("device") or mac,
+                            "mac": mac,
+                            "ip": device.get("ip") or device.get("address"),
+                            "os": device.get("os") or device.get("os-type") or device.get("software_os") or "Unknown",
+                            "connection_type": "wifi" if device.get("ssid") else "ethernet",
+                            "ssid": device.get("ssid"),
+                            "ap_sn": device.get("ap_sn"),
+                            "switch_sn": device.get("switch_sn"),
+                            "port": device.get("port"),
+                            "status": device.get("status") or "online",
+                            "vulnerabilities": device.get("vulnerabilities", 0),
+                        })
+                        existing_macs.add(mac)
+        else:
+            logger.debug("❌ Failed to fetch from /api/v2/monitor/endpoint-control/registered_ems")
+    
     if not endpoint_devices:
-        endpoint_devices_data = _get_json("/api/v2/monitor/user/device/query") or {}
-        endpoint_devices = endpoint_devices_data.get("results") or endpoint_devices_data.get("data") or []
-        if isinstance(endpoint_devices, dict):
-            endpoint_devices = endpoint_devices.get("entries", [])
-        if not isinstance(endpoint_devices, list):
-            endpoint_devices = []
+        logger.warning("⚠️  No connected devices found from any FortiGate endpoint. This may be normal if no devices are connected.")
+    else:
+        logger.info(f"✅ Total connected devices found: {len(endpoint_devices)}")
     
     # Add endpoint devices to the device list
     for endpoint in endpoint_devices:
