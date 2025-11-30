@@ -2354,12 +2354,14 @@ async def fortigate_assets(request: FortiGateDirectRequest):
     ]
     
     assets_data = None
+    endpoint_used = None
     for endpoint in endpoints_to_try:
         try:
             url = urljoin(base_url, endpoint)
             response = session.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
                 assets_data = response.json()
+                endpoint_used = endpoint  # Track which endpoint succeeded
                 break
         except Exception as e:
             logger.debug(f"Failed to fetch from {endpoint}: {e}")
@@ -2381,7 +2383,7 @@ async def fortigate_assets(request: FortiGateDirectRequest):
     return JSONResponse({
         "assets": results,
         "count": len(results),
-        "endpoint_used": endpoint if assets_data else None
+        "endpoint_used": endpoint_used
     })
 
 
