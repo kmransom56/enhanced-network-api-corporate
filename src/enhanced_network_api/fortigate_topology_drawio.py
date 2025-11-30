@@ -7,8 +7,9 @@ into a simple {nodes, links} topology plus DrawIO XML for diagrams.net.
 from __future__ import annotations
 
 import json
-from datetime import datetime
-from typing import Any, Dict, List
+import logging
+from datetime import UTC, datetime
+from typing import Any, Dict, List, Optional
 
 import fortiosapi
 import requests
@@ -16,9 +17,11 @@ import requests
 # Disable SSL warnings for self-signed certificates
 requests.packages.urllib3.disable_warnings()  # type: ignore[attr-defined]
 
+logger = logging.getLogger(__name__)
+
 
 FGT_HOST = "192.168.0.254:10443"
-FGT_TOKEN = "679Nf51c76p7z1Qq6sqhhz8nghmnpN"
+FGT_TOKEN = "199psNw33b8bq581dNmQqNpkGH53bm"
 VDOM_NAME = "root"
 
 
@@ -32,7 +35,7 @@ def fetch_fortigate_topology() -> Dict[str, Any]:
         "nodes": [],
         "links": [],
         "source": "fortiosapi",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(UTC).isoformat() + "Z",
     }
 
     fgt: fortiosapi.FortiOSAPI | None = None
@@ -94,6 +97,33 @@ def fetch_fortigate_topology() -> Dict[str, Any]:
                 }
             )
 
+        # Fetch connected devices/endpoints using new API endpoints
+        connected_devices = _fetch_connected_devices(fgt, VDOM_NAME)
+        for device in connected_devices:
+            topo["nodes"].append(device)
+            # Link device to FortiGate or to its parent switch/AP if available
+            parent_id = device.get("parent_device_id")
+            if parent_id:
+                topo["links"].append(
+                    {
+                        "source": parent_id,
+                        "target": device["id"],
+                        "type": device.get("connection_type", "ethernet"),
+                        "status": device.get("status", "online"),
+                        "interfaces": [device.get("port")] if device.get("port") else [],
+                    }
+                )
+            else:
+                # Link directly to FortiGate if no parent specified
+                topo["links"].append(
+                    {
+                        "source": fgt_node_id,
+                        "target": device["id"],
+                        "type": device.get("connection_type", "ethernet"),
+                        "status": device.get("status", "online"),
+                    }
+                )
+
         return topo
 
     finally:
@@ -135,7 +165,7 @@ def generate_drawio_xml_from_topology(topology_data: Dict[str, Any], layout: str
             "      </root>\n"
             "    </mxGraphModel>\n"
             "  </diagram>\n"
-            "</mxfile>".format(datetime.utcnow().isoformat(), datetime.utcnow().timestamp())
+            "</mxfile>".format(datetime.now(UTC).isoformat(), datetime.now(UTC).timestamp())
         )
 
     xml_template = (
@@ -155,7 +185,7 @@ def generate_drawio_xml_from_topology(topology_data: Dict[str, Any], layout: str
         "    </mxGraphModel>\n"
         "  </diagram>\n"
         "</mxfile>"
-    ).format(datetime.utcnow().isoformat(), datetime.utcnow().timestamp(), "")
+    ).format(datetime.now(UTC).isoformat(), datetime.now(UTC).timestamp(), "")
 
     cells: List[str] = []
     cell_id = 2
@@ -212,7 +242,7 @@ def _calculate_positions(nodes: List[Dict[str, Any]], layout: str) -> Dict[str, 
     positions: Dict[str, Dict[str, int]] = {}
 
     if layout == "hierarchical":
-        layers = {"fortigate": 0, "interface": 1}
+        layers = {"fortigate": 0, "interface": 1, "fortiswitch": 1, "fortiap": 1, "client": 2}
         layer_nodes: Dict[int, List[Dict[str, Any]]] = {}
 
         for n in nodes:
@@ -243,6 +273,9 @@ def _device_style(node: Dict[str, Any]) -> str:
     base_styles = {
         "fortigate": "shape=cloud;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;",
         "interface": "shape=rectangle;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;",
+        "client": "shape=ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;",
+        "fortiswitch": "shape=hexagon;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;",
+        "fortiap": "shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#000000;",
     }
 
     style = base_styles.get(ntype, base_styles["interface"])
@@ -256,5 +289,122 @@ def _link_style(link: Dict[str, Any]) -> str:
 
     styles = {
         "internal": "strokeColor=#6c757d;strokeWidth=2;endArrow=none;startArrow=none;",
+        "ethernet": "strokeColor=#0078d4;strokeWidth=2;endArrow=block;startArrow=none;",
+        "wifi": "strokeColor=#ff6b00;strokeWidth=2;endArrow=block;startArrow=none;dashed=1;",
+        "wireless": "strokeColor=#ff6b00;strokeWidth=2;endArrow=block;startArrow=none;dashed=1;",
     }
     return styles.get(ltype, styles["internal"])
+
+
+def _fetch_connected_devices(fgt: fortiosapi.FortiOSAPI, vdom: str) -> List[Dict[str, Any]]:
+    """Fetch connected devices/endpoints from FortiGate using multiple API endpoints.
+    
+    Tries endpoints in order:
+    1. /api/v2/monitor/user/device/query
+    2. /api/v2/monitor/user/device/select
+    3. /api/v2/monitor/endpoint-control/registered_ems
+    
+    Returns a list of normalized device dictionaries.
+    """
+    devices: List[Dict[str, Any]] = []
+    
+    # Endpoints to try in order of preference
+    endpoints_to_try = [
+        "/api/v2/monitor/user/device/query",
+        "/api/v2/monitor/user/device/select",
+        "/api/v2/monitor/endpoint-control/registered_ems",
+    ]
+    
+    assets_data = None
+    endpoint_used = None
+    
+    # Get the base URL and session from fortiosapi
+    # fortiosapi stores the session in fgt._session (private attribute)
+    base_url = f"https://{FGT_HOST}"
+    session = getattr(fgt, '_session', None)
+    if not session:
+        logger.warning("No session available from fortiosapi")
+        return devices
+    
+    # Get CSRF token if available
+    headers = {}
+    if hasattr(fgt, 'csrf_token') and fgt.csrf_token:
+        headers['X-CSRFTOKEN'] = fgt.csrf_token
+    
+    for endpoint in endpoints_to_try:
+        try:
+            url = f"{base_url}{endpoint}"
+            params = {"vdom": vdom} if vdom else {}
+            response = session.get(url, headers=headers, params=params, verify=False, timeout=10)
+            
+            if response.status_code == 200:
+                result = response.json()
+                # Check if this endpoint has data
+                results = result.get("results") or result.get("data") or []
+                if isinstance(results, dict):
+                    results = results.get("entries", [])
+                if isinstance(results, list) and len(results) > 0:
+                    assets_data = results
+                    endpoint_used = endpoint
+                    logger.info(f"Successfully fetched {len(assets_data)} devices from {endpoint_used}")
+                    break
+        except Exception as e:
+            logger.debug(f"Failed to fetch from {endpoint}: {e}")
+            continue
+    
+    if not assets_data:
+        logger.warning("No connected devices found from any endpoint")
+        return devices
+    
+    # Normalize device data
+    for asset in assets_data:
+        # Extract device identification
+        name = asset.get("name") or asset.get("hostname") or asset.get("host") or asset.get("mac") or asset.get("ip")
+        if not name:
+            continue
+        
+        # Determine device type
+        os_type = (asset.get("os") or asset.get("os-type") or asset.get("software_os") or "").lower()
+        device_type = "client"
+        if "fortiap" in os_type or "ap" in os_type:
+            device_type = "fortiap"
+        elif "fortiswitch" in os_type or "switch" in os_type:
+            device_type = "fortiswitch"
+        elif "fortios" in os_type or "fortigate" in os_type:
+            device_type = "fortigate"
+        
+        # Determine connection type
+        connection_type = "ethernet"
+        if asset.get("ssid") or asset.get("wireless") or "wifi" in os_type:
+            connection_type = "wifi"
+        
+        # Create device ID
+        device_id = f"device-{name.replace(' ', '-').replace(':', '-').replace('.', '-')}"
+        
+        # Find parent device (switch/AP) if available
+        parent_device_id = None
+        parent_serial = asset.get("ap_sn") or asset.get("switch_sn") or asset.get("switch") or asset.get("ap")
+        if parent_serial:
+            # Try to find parent in existing nodes (would need to be passed in, but for now we'll link to FortiGate)
+            # This will be handled in the calling function
+            pass
+        
+        device = {
+            "id": device_id,
+            "name": name,
+            "type": device_type,
+            "os": asset.get("os") or asset.get("os-type") or asset.get("software_os"),
+            "ip": asset.get("ip") or asset.get("address"),
+            "mac": asset.get("mac"),
+            "status": asset.get("status") or "online",
+            "connection_type": connection_type,
+            "ssid": asset.get("ssid"),
+            "port": asset.get("port") or asset.get("interface"),
+            "vulnerabilities": asset.get("vulnerabilities", 0),
+            "parent_device_id": parent_device_id,
+            "parent_serial": parent_serial,
+        }
+        
+        devices.append(device)
+    
+    return devices
