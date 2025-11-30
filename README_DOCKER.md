@@ -97,9 +97,10 @@ cp corporate.env.template .env
 
 Once started, services are available at:
 
-- **API**: http://localhost:8443
-- **Grafana**: http://localhost:3000
-- **Nginx** (if configured): http://localhost:80
+- **API**: http://localhost:11111
+- **Grafana**: http://localhost:11112
+- **Nginx HTTP** (if configured): http://localhost:11114
+- **Nginx HTTPS** (if configured): https://localhost:11113
 
 ## Viewing Logs
 

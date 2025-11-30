@@ -5,7 +5,7 @@ services:
     build: .
     container_name: enhanced-network-observability
     ports:
-      - "8443:11111"  # Corporate-friendly port
+      - "11111:11111"  # API port in 11000-12000 range
     environment:
       - API_HOST=0.0.0.0
       - API_PORT=11111
@@ -55,8 +55,8 @@ services:
     image: nginx:alpine
     container_name: enhanced-network-proxy
     ports:
-      - "443:443"
-      - "80:80"
+      - "11113:443"   # HTTPS port in 11000-12000 range
+      - "11114:80"    # HTTP port in 11000-12000 range
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
@@ -71,7 +71,7 @@ services:
     image: grafana/grafana:latest
     container_name: enhanced-network-grafana
     ports:
-      - "3000:3000"
+      - "11112:3000"  # Grafana port in 11000-12000 range
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
