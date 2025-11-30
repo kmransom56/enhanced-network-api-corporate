@@ -826,6 +826,11 @@ def _fetch_fortigate_payload(
             device_type = "fortigate"
         
         node_id = f"endpoint-{name.replace(' ', '-').replace(':', '-')}"
+        # Add connection_type to help with icon selection
+        connection_type = "ethernet"
+        if endpoint.get("ssid") or endpoint.get("wireless") or "wifi" in os_type:
+            connection_type = "wifi"
+        
         devices.append(
             {
                 "id": node_id,
@@ -837,6 +842,8 @@ def _fetch_fortigate_payload(
                 "status": endpoint.get("status") or "online",
                 "vulnerabilities": endpoint.get("vulnerabilities", 0),
                 "forticlient_user": endpoint.get("forticlient_user", 0),
+                "connection_type": connection_type,  # Add connection type for icon selection
+                "ssid": endpoint.get("ssid"),  # Add SSID for wireless devices
             }
         )
         

@@ -1940,8 +1940,14 @@ async def _load_scene_with_fallback() -> Dict[str, Any]:
                 # Attempt to enrich with live connected devices from FortiGate
                 try:
                     # Collect credentials from environment
-                    creds = _fortinet_credentials()
-                    collector = await _create_fortigate_collector(creds)
+                    creds_dict = _fortinet_credentials()
+                    # Convert dict to FortiGateCredentialsModel
+                    creds = FortiGateCredentialsModel(
+                        host=f"{creds_dict.get('device_ip', '192.168.0.254')}:10443",
+                        username=creds_dict.get('username', 'admin'),
+                        password=creds_dict.get('password'),  # May contain token
+                    )
+                    collector = _create_fortigate_collector(creds)
                     if collector:
                         logger.info("Fetching live connected devices from FortiGate...")
                         if await collector.authenticate():
@@ -2021,8 +2027,14 @@ async def _load_scene_with_fallback() -> Dict[str, Any]:
                 # Attempt to enrich with live connected devices from FortiGate
                 try:
                     # Collect credentials from environment
-                    creds = _fortinet_credentials()
-                    collector = await _create_fortigate_collector(creds)
+                    creds_dict = _fortinet_credentials()
+                    # Convert dict to FortiGateCredentialsModel
+                    creds = FortiGateCredentialsModel(
+                        host=f"{creds_dict.get('device_ip', '192.168.0.254')}:10443",
+                        username=creds_dict.get('username', 'admin'),
+                        password=creds_dict.get('password'),  # May contain token
+                    )
+                    collector = _create_fortigate_collector(creds)
                     if collector:
                         logger.info("Fetching live connected devices from FortiGate...")
                         if await collector.authenticate():

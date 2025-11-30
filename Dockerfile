@@ -25,10 +25,15 @@ COPY src/ ./src/
 COPY mcp_servers/ ./mcp_servers/
 COPY .env.template .env.template
 
+# Copy static assets (SVG icons, 3D models, etc.)
+COPY extracted_icons/ ./extracted_icons/
+COPY lab_3d_models/ ./lab_3d_models/
+COPY realistic_device_svgs/ ./realistic_device_svgs/
+COPY realistic_3d_models/ ./realistic_3d_models/
+COPY vss_extraction/ ./vss_extraction/
+
 # Create necessary directories
-RUN mkdir -p /app/logs /app/data /app/troubleshooting_sessions \
-    /app/extracted_icons /app/vss_extraction /app/lab_3d_models \
-    /app/realistic_device_svgs /app/realistic_3d_models
+RUN mkdir -p /app/logs /app/data /app/troubleshooting_sessions
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \

@@ -16,6 +16,11 @@ services:
       - ./data:/app/data
       - ./logs:/app/logs
       - ./troubleshooting_sessions:/app/troubleshooting_sessions
+      - ./extracted_icons:/app/extracted_icons:ro
+      - ./lab_3d_models:/app/lab_3d_models:ro
+      - ./realistic_device_svgs:/app/realistic_device_svgs:ro
+      - ./realistic_3d_models:/app/realistic_3d_models:ro
+      - ./vss_extraction:/app/vss_extraction:ro
     restart: unless-stopped
     depends_on:
       - postgres
