@@ -354,12 +354,6 @@
     <main class="main-canvas">
         <canvas id="renderCanvas"></canvas>
 
-        <!-- Debug Log -->
-        <div id="debugLog"
-            style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: lime; font-family: monospace; padding: 10px; max-height: 300px; overflow-y: auto; z-index: 3000; pointer-events: none; width: 400px;">
-            <div>Debug Log:</div>
-        </div>
-
         <!-- Loading Overlay -->
         <div id="loading" class="hidden">
             <div>🔄 Loading topology...</div>
@@ -504,14 +498,8 @@
         }
 
         function logDebug(msg) {
+            // Only log to console, no debug window
             console.log(msg);
-            const log = document.getElementById('debugLog');
-            if (log) {
-                const line = document.createElement('div');
-                line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-                log.appendChild(line);
-                log.scrollTop = log.scrollHeight;
-            }
         }
 
         // Initialize Babylon.js
@@ -554,92 +542,10 @@
                 logDebug('✅ Babylon.js scene created');
 
                 // Set background
-                const manager = new BABYLON.GUI.GUI3DManager(scene);
-
-                // 3D GUI – Topology Control Panel (floating in the scene)
-                // Position it to the LEFT side of the scene, visible from default camera angle
-                // ------------------------------------------------------------
-                const topoPanel = new BABYLON.GUI.StackPanel3D();
-                topoPanel.isVertical = true;
-                topoPanel.margin = 0.05;
-                manager.addControl(topoPanel);
-                topoPanel.position = new BABYLON.Vector3(-6, 3, 0); // Left side, elevated
-                topoPanel.scaling = new BABYLON.Vector3(2, 2, 2); // Make it bigger
-
-                logDebug('✅ 3D GUI panel created');
-
-                // Helper to create a 3D button
-                function make3DButton(name, label, onClick) {
-                    const btn = new BABYLON.GUI.HolographicButton(name);
-                    btn.text = label;
-                    btn.onPointerUpObservable.add(onClick);
-                    return btn;
-                }
-
-                // Reset View button
-                topoPanel.addControl(make3DButton('reset3d', '📷 Reset View', () => {
-                    if (camera) {
-                        camera.alpha = 0;
-                        camera.beta = Math.PI / 3;
-                        camera.radius = 30;
-                        logDebug('🔁 Camera reset');
-                    }
-                }));
-
-                // Auto‑rotate toggle
-                topoPanel.addControl(make3DButton('autoRotate', '🔄 Auto‑Rotate', () => {
-                    autoRotate = !autoRotate;
-                    logDebug(`🔄 Auto‑rotate ${autoRotate ? 'ON' : 'OFF'}`);
-                }));
-
-                // Labels toggle button (simplified - RadioGroup/CheckboxGroup don't exist in 3D GUI)
-                topoPanel.addControl(make3DButton('toggleLabels', '🏷️ Toggle Labels', () => {
-                    labelsVisible = !labelsVisible;
-                    deviceLabels.forEach(l => l.isVisible = labelsVisible);
-                    logDebug(`🏷️ Labels ${labelsVisible ? 'shown' : 'hidden'}`);
-                }));
-
-                // Device filters as buttons (simplified until we implement proper 3D GUI controls)
-                topoPanel.addControl(make3DButton('filterAll', '🌐 Show All', () => filterDevices('all')));
-                topoPanel.addControl(make3DButton('filterSwitch', '🔌 Switches', () => filterDevices('switch')));
-                topoPanel.addControl(make3DButton('filterRouter', '🌐 Routers', () => filterDevices('router')));
-
-                logDebug('✅ 3D GUI buttons added');
-
-                /* COMMENTED OUT - These classes don't exist in Babylon.js 3D GUI and cause crashes
-                // Device‑type filter (radio group)
-                const typeGroup = new BABYLON.GUI.RadioGroup('typeFilter');
-                typeGroup.addRadio('All', () => filterDevices('all'), true);
-                typeGroup.addRadio('Switches', () => filterDevices('switch'));
-                typeGroup.addRadio('Routers', () => filterDevices('router'));
-                typeGroup.addRadio('Servers', () => filterDevices('server'));
-                const typePanel = new BABYLON.GUI.StackPanel3D();
-                typePanel.isVertical = true;
-                const typeHeader = new BABYLON.GUI.TextBlock();
-                typeHeader.text = 'Device Type';
-                typeHeader.color = 'white';
-                typePanel.addControl(typeHeader);
-                typePanel.addControl(typeGroup);
-                topoPanel.addControl(typePanel);
-
-                // Vendor filter (checkbox group)
-                const vendorGroup = new BABYLON.GUI.CheckboxGroup('Vendor');
-                vendorGroup.addCheckbox('Cisco', v => filterVendor('cisco', v));
-                vendorGroup.addCheckbox('Fortinet', v => filterVendor('fortinet', v));
-                vendorGroup.addCheckbox('Juniper', v => filterVendor('juniper', v));
-                const vendorPanel = new BABYLON.GUI.StackPanel3D();
-                vendorPanel.isVertical = true;
-                const vendorHeader = new BABYLON.GUI.TextBlock();
-                vendorHeader.text = 'Vendor';
-                vendorHeader.color = 'white';
-                vendorPanel.addControl(vendorHeader);
-                vendorPanel.addControl(vendorGroup);
-                topoPanel.addControl(vendorPanel);
-                */
+                // 3D GUI panel removed - controls are available in the top toolbar instead
 
                 // ------------------------------------------------------------
                 // Device Details - Using HTML Side Panel
-                // (HolographicSlate is incompatible with GUI3DManager)
                 // ------------------------------------------------------------
                 function showDeviceInfo(node) {
                     if (!node) return;
