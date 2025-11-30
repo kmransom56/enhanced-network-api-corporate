@@ -2,123 +2,167 @@ INFO:shared.config_manager:Loaded environment from .env
 INFO:shared.config_manager:FORTIGATE_HOSTS env var: 192.168.0.254
 INFO:shared.config_manager:Returning hosts: ['192.168.0.254']
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     Started server process [184279]
+INFO:     Started server process [1163441]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:11111 (Press CTRL+C to quit)
-INFO:     127.0.0.1:44382 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44392 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:44388 - "GET /static/babylon_topology.html HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:44392 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:33440 - "GET /static/babylon_topology.html HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:33442 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33442 - "GET /static/babylon_topology.html HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:33442 - "GET /static/babylon_topology.html HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:33450 - "GET /static/babylon_topology.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33450 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33450 - "GET /static/js/babylon.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35230 - "GET /static/js/babylonjs.loaders.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36570 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36580 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36576 - "GET /static/babylon_topology.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36580 - "GET /static/js/babylonjs.loaders.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /static/js/babylon.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36590 - "GET /static/js/babylon.gui.min.js HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:33450 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33450 - "GET /lab_3d_models/manifest.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /extracted_icons/lab_vss_svgs/shape_001___PF.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /extracted_icons/lab_vss_svgs/shape_004_SE_W_7.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36576 - "GET /extracted_icons/lab_vss_svgs/shape_007_c__f.svg HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:59556 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60418 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:60418 - "GET /static/js/babylon.js.map HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:60422 - "GET /static/js/babylonjs.loaders.min.js.map HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52028 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52028 - "GET /static/js/babylon.js.map HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52028 - "GET /static/js/babylonjs.loaders.min.js.map HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48954 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37680 - "GET /2d-topology-enhanced HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37680 - "GET /static/2d_topology_enhanced.css HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:37680 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37680 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764499329730 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37684 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499329731 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37712 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764499329733 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37700 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499329733 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37694 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499329732 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37724 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764499329733 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37732 - "GET /smart-tools HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37732 - "GET /static/style.min.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37742 - "GET /static/visualization.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37742 - "GET /api/topology/automated/artifacts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33314 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33318 - "GET / HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:52028 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56584 - "GET /static/babylon_lab_view.htm HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:56590 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:56592 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56592 - "GET /static/js/babylon.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /static/js/babylonjs.loaders.min.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33318 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34182 - "GET /docs/automated-topology HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38802 - "GET /static/2d_topology_enhanced.html HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:38802 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38802 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764499392579 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56542 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499392580 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56556 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499392582 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56580 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764499392583 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56584 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764499392583 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38802 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499392581 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56564 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499392583 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40850 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:38834 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38834 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764499662030 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38850 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662031 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38834 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662034 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38876 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662036 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662033 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38874 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662035 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38886 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662037 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38850 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662038 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38874 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662040 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38834 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662039 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499662041 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38876 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764499662042 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38886 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764499662042 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38874 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764499662043 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/2d_topology_enhanced.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/2d_topology_enhanced.html HTTP/1.1" 304 Not Modified
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:38862 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764499667061 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38874 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667062 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667063 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38874 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667064 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38834 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667067 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38886 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667065 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38876 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764499667066 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764499667067 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37438 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764499667067 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50490 - "GET /static/2d_topology_enhanced.html HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:50490 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50490 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764500378905 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50494 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500378905 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50490 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500378906 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50500 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500378907 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50506 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500378908 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50508 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764500378908 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50514 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764500378908 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50494 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764500378909 HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:58736 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58736 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764500395390 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58748 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500395390 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58756 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500395391 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764500395391 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58736 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764500395391 HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:48614 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48614 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764500519433 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48630 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500519434 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48634 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500519435 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48644 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764500519435 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48642 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764500519435 HTTP/1.1" 200 OK
+INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
+WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
+INFO:     127.0.0.1:48642 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48642 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764500520352 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48614 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500520356 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48630 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500520354 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48634 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500520353 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48646 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764500520356 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48644 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764500520352 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48630 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764500520356 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38036 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43874 - "GET / HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:56594 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /lab_3d_models/manifest.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /lab_3d_models/models/temp_FortiGate_Series_R22_2025Q2_generic.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /extracted_icons/lab_vss_svgs/shape_001___PF.svg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /vss_extraction/vss_exports/FortiSwitch_148E.gltf HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /static/3d-models/FortiSwitch.glb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /static/3d-models/generic_device.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /lab_3d_models/models/shape_027__-3_.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56592 - "GET /extracted_icons/lab_vss_svgs/shape_004_SE_W_7.svg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56594 - "GET /extracted_icons/lab_vss_svgs/shape_007_c__f.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43874 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43878 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43894 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:41862 - "GET / HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:36276 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60406 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60406 - "GET /static/js/babylon.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60414 - "GET /static/js/babylonjs.loaders.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41862 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41868 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49852 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51480 - "GET /static/babylon_lab_view.html HTTP/1.1" 304 Not Modified
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
 WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:60406 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60406 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:39396 - "GET /static/babylon_lab_view.html HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51480 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51480 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51486 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43416 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43416 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43416 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43416 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43416 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48880 - "GET /static/topology_working.html HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48880 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59584 - "GET /2d-topology-enhanced HTTP/1.1" 200 OK
 INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
 WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
-WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:39396 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44366 - "GET /static/2d_topology_enhanced.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44366 - "GET /static/2d_topology_enhanced.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44382 - "GET /static/model-specific-icons/FortiGate_600E.svg?t=1764377570683 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46416 - "GET /static/fortinet-icons-extracted/FortiAnalyzer.svg?t=1764377570683 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46404 - "GET /static/fortinet-icons-extracted/FortiManager.svg?t=1764377570683 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46418 - "GET /static/model-specific-icons/FortiSwitch_148E.svg?t=1764377570683 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46422 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764377570684 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46424 - "GET /static/model-specific-icons/FortiAP_432F.svg?t=1764377570684 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46404 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764377570684 HTTP/1.1" 200 OK
-INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
-WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
-INFO:     127.0.0.1:34450 - "GET /api/topology/scene HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34450 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764377580234 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34486 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764377580238 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34484 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764377580237 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34464 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764377580235 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34480 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764377580236 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34450 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764377580237 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39606 - "GET /static/js/babylonjs.loaders.min.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /static/js/babylon.js HTTP/1.1" 200 OK
-INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
-WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
-WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:39602 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:39602 - "GET /lab_3d_models/manifest.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /lab_3d_models/models/temp_FortiGate_Series_R22_2025Q2_generic.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /extracted_icons/lab_vss_svgs/shape_001___PF.svg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /vss_extraction/vss_exports/FortiSwitch_148E.gltf HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /static/3d-models/FortiSwitch.glb HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /static/3d-models/generic_device.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /extracted_icons/lab_vss_svgs/shape_004_SE_W_7.svg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /lab_3d_models/models/shape_027__-3_.obj HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39602 - "GET /extracted_icons/lab_vss_svgs/shape_007_c__f.svg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45990 - "GET /static/babylon_lab_view.html HTTP/1.1" 200 OK
-INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
-WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
-WARNING:device_mac_matcher:OUI database not found, using built-in vendor mappings
-INFO:     127.0.0.1:45990 - "GET /api/topology/babylon-lab-format HTTP/1.1" 200 OK
-INFO:src.enhanced_network_api.platform_web_api_fastapi:Loading topology from GraphML: /home/keith/enhanced-network-api-corporate/data/generated/combined_topology.graphml
-WARNING:src.enhanced_network_api.platform_web_api_fastapi:Failed to enrich topology with live devices: 'dict' object has no attribute 'host'
-INFO:     127.0.0.1:60704 - "GET /api/topology/scene HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60704 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764379664717 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60718 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764379664717 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60728 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764379664718 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60744 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764379664719 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60746 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764379664719 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60752 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764379664719 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59584 - "GET /api/topology/scene HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59584 - "GET /static/fortinet-icons-extracted/FortiGate.svg?t=1764501194923 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59588 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764501194923 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59594 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764501194924 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59614 - "GET /static/fortinet-icons-extracted/FortiSwitch.svg?t=1764501194925 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59602 - "GET /static/fortinet-icons-extracted/Virtual.svg?t=1764501194925 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59628 - "GET /static/fortinet-icons-extracted/FortiAP.svg?t=1764501194925 HTTP/1.1" 200 OK

@@ -1400,14 +1400,14 @@
                 
                 // Create material with device-appropriate color
                 const material = new BABYLON.StandardMaterial(`${nodeData.id}_svg3d_mat`, scene);
-                const typeKey = (nodeData.type || '').toLowerCase();
+                const deviceTypeKey = (nodeData.type || '').toLowerCase();
                 
                 // Color based on device type (matching Visio style)
-                if (typeKey.includes('fortigate')) {
+                if (deviceTypeKey.includes('fortigate')) {
                     material.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2); // Red
-                } else if (typeKey.includes('fortiswitch')) {
+                } else if (deviceTypeKey.includes('fortiswitch')) {
                     material.diffuseColor = new BABYLON.Color3(0.2, 0.6, 0.8); // Cyan
-                } else if (typeKey.includes('fortiap')) {
+                } else if (deviceTypeKey.includes('fortiap')) {
                     material.diffuseColor = new BABYLON.Color3(0.2, 0.5, 0.9); // Blue
                 } else {
                     material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Gray
@@ -1417,8 +1417,21 @@
                 material.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
                 mesh.material = material;
                 
-                // Scale to appropriate size (Visio icons are typically small)
-                const scale = 2.0; // Adjust based on your scene scale
+                // Scale to appropriate size - make devices more visible
+                // SVG icons are normalized to unit size, so we need larger scale
+                // Device type determines scale: larger for core devices, smaller for endpoints
+                let scale = 5.0; // Default scale for better visibility
+                
+                if (deviceTypeKey.includes('fortigate') || deviceTypeKey.includes('firewall')) {
+                    scale = 6.0; // Larger for core firewall
+                } else if (deviceTypeKey.includes('fortiswitch') || deviceTypeKey.includes('switch')) {
+                    scale = 5.5; // Medium-large for switches
+                } else if (deviceTypeKey.includes('fortiap') || deviceTypeKey.includes('ap')) {
+                    scale = 5.0; // Medium for access points
+                } else if (deviceTypeKey.includes('client') || deviceTypeKey.includes('endpoint') || deviceTypeKey.includes('device')) {
+                    scale = 4.0; // Smaller for endpoints
+                }
+                
                 mesh.scaling = new BABYLON.Vector3(scale, scale, scale);
                 
                 // Mark as SVG-based 3D mesh
@@ -1582,8 +1595,10 @@
             const centerY = (minY + maxY) / 2;
             
             // Normalize to unit size and center at origin
+            // Use a larger base scale to make SVG icons more visible
             const maxDim = Math.max(width, height) || 1;
-            const scale = 1.0 / maxDim;
+            const baseScale = 0.8; // Keep icons at reasonable size (not too small)
+            const scale = baseScale / maxDim;
             
             return points.map(p => ({
                 x: (p.x - centerX) * scale,
@@ -1592,13 +1607,20 @@
         }
 
         async function loadDeviceModel(nodeData, position) {
-            // Try to create 3D mesh from SVG icon first (Visio-like appearance)
+            // ALWAYS try to create 3D mesh from SVG icon first (Visio-like appearance)
+            // This ensures we use the actual VSS-extracted SVG icons
             const svgPath = nodeData.icon_svg;
             if (svgPath) {
+                console.log(`🎨 Attempting to create 3D from SVG: ${svgPath} for ${nodeData.name || nodeData.id}`);
                 const svgMesh = await create3DFromSVG(svgPath, nodeData, position);
                 if (svgMesh) {
+                    console.log(`✅ Successfully created 3D mesh from SVG: ${svgPath}`);
                     return svgMesh;
+                } else {
+                    console.log(`⚠️ Failed to create 3D from SVG: ${svgPath}, trying fallbacks...`);
                 }
+            } else {
+                console.log(`⚠️ No icon_svg provided for ${nodeData.name || nodeData.id}, trying fallbacks...`);
             }
 
             const modelLoadErrors = [];

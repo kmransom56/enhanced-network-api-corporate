@@ -1396,17 +1396,22 @@ def _enhance_scene_with_models(scene: Dict[str, Any]) -> Dict[str, Any]:
             # Representative FortiAP SVG extracted from the stencil set
             node.setdefault("icon_svg", f"{icon_base}/shape_007_c__f.svg")
         
-        # Add 3D models for endpoint/client devices
+        # Add 3D models and SVG icons for endpoint/client devices
         if "client" in device_type_str or "endpoint" in device_type_str or "device" in device_type_str:
             connection_type = (node.get("connection_type") or "").lower()
-            # Use appropriate model based on device type
+            # Use appropriate model and SVG icon based on device type
             if "laptop" in device_type_str or "computer" in device_type_str or connection_type == "ethernet":
                 node.setdefault("device_model", "/realistic_3d_models/models/Laptop.obj")
+                # Use laptop SVG icon from VSS if available, otherwise fallback
+                node.setdefault("icon_svg", f"{icon_base}/shape_027__-3_.svg")  # Laptop icon
             elif "phone" in device_type_str or "mobile" in device_type_str or connection_type == "wifi":
                 node.setdefault("device_model", "/realistic_3d_models/models/Smartphone.obj")
+                # Use smartphone/mobile SVG icon from VSS if available
+                node.setdefault("icon_svg", f"{icon_base}/shape_027__-3_.svg")  # Mobile device icon
             else:
                 # Default endpoint model
                 node.setdefault("device_model", "/realistic_3d_models/models/Laptop.obj")
+                node.setdefault("icon_svg", f"{icon_base}/shape_027__-3_.svg")  # Generic endpoint icon
         
         # Add fallback model paths based on device type when no specific model is known
         if "device_model" not in node:
@@ -2186,6 +2191,7 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
                 "name": node.get("name") or node.get("hostname") or node_id,
                 "type": device_type,
                 "model": node.get("model_path") or node.get("device_model") or node.get("model"),
+                "icon_svg": node.get("icon_svg"),  # Include SVG icon path for 3D extrusion
                 "position": {"x": x, "y": y, "z": z},
                 "status": node.get("status", "online"),
                 "ip": node.get("ip"),
