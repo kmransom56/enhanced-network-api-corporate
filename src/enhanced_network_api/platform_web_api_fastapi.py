@@ -83,6 +83,15 @@ from mcp_servers.drawio_fortinet_meraki.fortinet_integration import (
     DrawIOFortinetIntegration,
 )
 from graphml_parser import parse_graphml_topology
+try:
+    from enhanced_network_api.fortigate_monitor import FortiGateMonitor
+except ImportError:
+    # Fallback for different import paths
+    try:
+        from .fortigate_monitor import FortiGateMonitor
+    except ImportError:
+        logger.warning("FortiGateMonitor not available - monitoring endpoints will be disabled")
+        FortiGateMonitor = None
 
 
 class PerformanceRecorder:
@@ -318,6 +327,66 @@ def _create_fortigate_collector(
         collector_kwargs["wifi_token"] = wifi_token
     
     return FortiGateTopologyCollector(**collector_kwargs)
+
+
+def _create_fortigate_monitor(
+    creds: Optional[FortiGateCredentialsModel],
+) -> FortiGateMonitor:
+    """Instantiate a FortiGateMonitor from request credentials or environment.
+    
+    This provides a simple interface to FortiGate monitoring endpoints.
+    Uses the same credential resolution logic as _create_fortigate_collector.
+    """
+    if FortiGateMonitor is None:
+        raise HTTPException(
+            status_code=503,
+            detail="FortiGateMonitor is not available. Check module imports."
+        )
+    # Extract host from creds or environment
+    host = (
+        creds.host if creds and creds.host 
+        else os.getenv("FORTIGATE_HOST") or os.getenv("FORTIGATE_HOSTS", "192.168.0.254").split(",")[0].strip()
+    )
+    # Remove port if present (FortiGateMonitor handles port separately)
+    port = 10443
+    if ":" in host:
+        host, port_str = host.split(":", 1)
+        try:
+            port = int(port_str)
+        except ValueError:
+            port = 10443
+    
+    # Get token - check host-specific token first, then generic token
+    token = None
+    if creds and creds.token:
+        token = creds.token
+    else:
+        # Try host-specific token first (e.g., FORTIGATE_192_168_0_254_TOKEN)
+        host_clean = host.replace(".", "_").replace("-", "_").replace(":", "_")
+        host_token_var = f"FORTIGATE_{host_clean}_TOKEN"
+        token = (
+            os.getenv(host_token_var) or
+            os.getenv("FORTIGATE_TOKEN") or
+            os.getenv("FORTIGATE_API_TOKEN")
+        )
+    
+    if not token:
+        raise ValueError("FortiGate API token is required for monitoring. Set FORTIGATE_TOKEN or provide in request.")
+    
+    verify_ssl = (
+        creds.verify_ssl
+        if creds and creds.verify_ssl is not None
+        else _env_bool("FORTIGATE_VERIFY_SSL", False)
+    )
+    
+    # Get CA cert path if available
+    ca_cert_path = os.getenv("CA_CERT_PATH")
+    if ca_cert_path and verify_ssl:
+        ca_bundle = ca_cert_path
+    else:
+        ca_bundle = verify_ssl
+    
+    return FortiGateMonitor(host=host, token=token, ca_bundle=ca_bundle, port=port)
 
 
 AI_PLATFORM_ROOT = _path_from_env("AI_PLATFORM_ROOT", Path.home() / "cagent")
@@ -2518,6 +2587,99 @@ async def fortigate_assets(request: FortiGateDirectRequest):
         "count": len(results),
         "endpoint_used": endpoint_used
     })
+
+
+@app.post("/api/fortigate/monitor/wifi/clients")
+async def fortigate_monitor_wifi_clients(request: FortiGateDirectRequest):
+    """Return WiFi clients from FortiGate using FortiGateMonitor."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.wifi_clients()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/wifi/ssids")
+async def fortigate_monitor_wifi_ssids(request: FortiGateDirectRequest):
+    """Return WiFi SSIDs from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.wifi_ssids()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/switch/clients")
+async def fortigate_monitor_switch_clients(request: FortiGateDirectRequest):
+    """Return switch clients from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.switch_clients()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/switch/status")
+async def fortigate_monitor_switch_status(request: FortiGateDirectRequest):
+    """Return switch status from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.switch_status()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/system/cpu")
+async def fortigate_monitor_cpu(request: FortiGateDirectRequest):
+    """Return CPU usage from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.cpu()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/system/memory")
+async def fortigate_monitor_memory(request: FortiGateDirectRequest):
+    """Return memory usage from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.memory()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/system/sessions")
+async def fortigate_monitor_sessions(request: FortiGateDirectRequest):
+    """Return active sessions from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.sessions()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/routing/arp")
+async def fortigate_monitor_arp(request: FortiGateDirectRequest):
+    """Return ARP table from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.arp_table()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/routing/dhcp")
+async def fortigate_monitor_dhcp(request: FortiGateDirectRequest):
+    """Return DHCP leases from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.dhcp()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/interfaces")
+async def fortigate_monitor_interfaces(request: FortiGateDirectRequest):
+    """Return system interfaces from FortiGate."""
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.interfaces()
+    return JSONResponse(data)
+
+
+@app.post("/api/fortigate/monitor/full-dataset")
+async def fortigate_monitor_full_dataset(request: FortiGateDirectRequest):
+    """Return complete monitoring dataset from FortiGate.
+    
+    This endpoint collects data from all available monitoring endpoints
+    and returns a comprehensive snapshot. Use with caution as it may
+    take significant time to complete.
+    """
+    monitor = _create_fortigate_monitor(request.credentials)
+    data = monitor.build_dataset()
+    return JSONResponse(data)
 
 
 @app.post("/api/topology/drawio-xml", response_class=PlainTextResponse)
