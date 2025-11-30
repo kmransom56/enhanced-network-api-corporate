@@ -1130,9 +1130,15 @@
                     mesh.metadata = { ...nodeData };
                 }
                 mesh.metadata.mesh = mesh; // Add mesh reference for GUI
-
-                // Add 2D SVG overlay/sprite
-                await addSVGOverlay(nodeData, mesh);
+                
+                // Check if this is an SVG-based 3D mesh (set by create3DFromSVG)
+                const isSVG3D = mesh.metadata.isSVG3D === true;
+                
+                // Skip 2D SVG overlay since we're using SVG as the 3D mesh itself
+                // Only add overlay if we fell back to a box (not SVG-based)
+                if (!isSVG3D) {
+                    await addSVGOverlay(nodeData, mesh);
+                }
 
                 // Add label with device name and IP under the icon
                 createDeviceLabel(nodeData, mesh);
@@ -1258,9 +1264,342 @@
         }
 
 
+        /**
+         * Convert SVG path to 3D extruded mesh
+         * Creates a realistic 3D icon from SVG files (like Visio drawings)
+         */
+        async function create3DFromSVG(svgPath, nodeData, position) {
+            try {
+                // Fetch SVG content
+                const response = await fetch(svgPath);
+                if (!response.ok) {
+                    console.log(`SVG not found: ${svgPath}`);
+                    return null;
+                }
+                const svgText = await response.text();
+                
+                // Parse SVG to extract paths
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                
+                // Check for parse errors
+                const parserError = svgDoc.querySelector('parsererror');
+                if (parserError) {
+                    console.log(`SVG parse error for ${svgPath}:`, parserError.textContent);
+                    return null;
+                }
+                
+                // Try to find paths (most common) or polygons/rects
+                let paths = Array.from(svgDoc.querySelectorAll('path'));
+                
+                // If no paths, try polygons or rects
+                if (paths.length === 0) {
+                    const polygons = svgDoc.querySelectorAll('polygon');
+                    const rects = svgDoc.querySelectorAll('rect');
+                    
+                    // Convert polygons to paths
+                    polygons.forEach(poly => {
+                        const points = poly.getAttribute('points');
+                        if (points) {
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            const coords = points.trim().split(/[\s,]+/).map(Number);
+                            let pathData = `M ${coords[0]} ${coords[1]}`;
+                            for (let i = 2; i < coords.length; i += 2) {
+                                pathData += ` L ${coords[i]} ${coords[i+1]}`;
+                            }
+                            pathData += ' Z';
+                            path.setAttribute('d', pathData);
+                            paths.push(path);
+                        }
+                    });
+                    
+                    // Convert rects to paths (create filled rectangle for 3D extrusion)
+                    rects.forEach(rect => {
+                        const x = parseFloat(rect.getAttribute('x') || 0);
+                        const y = parseFloat(rect.getAttribute('y') || 0);
+                        const w = parseFloat(rect.getAttribute('width') || 0);
+                        const h = parseFloat(rect.getAttribute('height') || 0);
+                        
+                        // Get stroke width to create inner filled area
+                        const strokeWidth = parseFloat(rect.getAttribute('stroke-width') || 2);
+                        const inset = strokeWidth / 2;
+                        
+                        // Create filled rectangle path (inset by stroke width for better appearance)
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', `M ${x+inset} ${y+inset} L ${x+w-inset} ${y+inset} L ${x+w-inset} ${y+h-inset} L ${x+inset} ${y+h-inset} Z`);
+                        paths.push(path);
+                    });
+                }
+                
+                if (paths.length === 0) {
+                    console.log(`No paths/polygons/rects found in SVG: ${svgPath}`);
+                    return null;
+                }
+                
+                // Combine all paths into one shape (or use the largest one)
+                let allPoints = [];
+                let largestPath = null;
+                let largestPointCount = 0;
+                
+                paths.forEach((pathElement, idx) => {
+                    const pathData = pathElement.getAttribute('d');
+                    if (pathData) {
+                        const points = parseSVGPathToPoints(pathData);
+                        if (points.length > largestPointCount) {
+                            largestPointCount = points.length;
+                            largestPath = pathData;
+                        }
+                        allPoints = allPoints.concat(points);
+                    }
+                });
+                
+                // Use the largest path for better detail
+                const pathData = largestPath || paths[0].getAttribute('d');
+                if (!pathData) {
+                    console.log(`No path data in SVG: ${svgPath}`);
+                    return null;
+                }
+                
+                // Parse SVG path commands to points
+                const points = parseSVGPathToPoints(pathData);
+                
+                if (points.length < 3) {
+                    console.log(`Not enough points in SVG path: ${svgPath} (${points.length} points)`);
+                    return null;
+                }
+                
+                // Normalize and center the points
+                const normalizedPoints = normalizeSVGPoints(points);
+                
+                // Create extrusion path (straight line for depth)
+                const depth = 0.3; // Thin extrusion for Visio-like appearance
+                const extrusionPath = [
+                    new BABYLON.Vector3(0, 0, 0),
+                    new BABYLON.Vector3(0, 0, depth)
+                ];
+                
+                // Convert to Babylon.js Vector2 for Path2
+                const shape = normalizedPoints.map(p => new BABYLON.Vector2(p.x, p.y));
+                
+                // Ensure the shape is closed
+                if (shape.length > 0 && 
+                    (shape[0].x !== shape[shape.length-1].x || shape[0].y !== shape[shape.length-1].y)) {
+                    shape.push(new BABYLON.Vector2(shape[0].x, shape[0].y));
+                }
+                
+                // Extrude the shape to create 3D mesh
+                const mesh = BABYLON.MeshBuilder.ExtrudeShape(`${nodeData.id}_svg3d`, {
+                    shape: shape,
+                    path: extrusionPath,
+                    cap: BABYLON.Mesh.CAP_ALL,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                
+                // Position the mesh
+                mesh.position = position.clone();
+                
+                // Create material with device-appropriate color
+                const material = new BABYLON.StandardMaterial(`${nodeData.id}_svg3d_mat`, scene);
+                const typeKey = (nodeData.type || '').toLowerCase();
+                
+                // Color based on device type (matching Visio style)
+                if (typeKey.includes('fortigate')) {
+                    material.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2); // Red
+                } else if (typeKey.includes('fortiswitch')) {
+                    material.diffuseColor = new BABYLON.Color3(0.2, 0.6, 0.8); // Cyan
+                } else if (typeKey.includes('fortiap')) {
+                    material.diffuseColor = new BABYLON.Color3(0.2, 0.5, 0.9); // Blue
+                } else {
+                    material.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Gray
+                }
+                
+                material.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                material.emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                mesh.material = material;
+                
+                // Scale to appropriate size (Visio icons are typically small)
+                const scale = 2.0; // Adjust based on your scene scale
+                mesh.scaling = new BABYLON.Vector3(scale, scale, scale);
+                
+                // Mark as SVG-based 3D mesh
+                if (!mesh.metadata) {
+                    mesh.metadata = {};
+                }
+                mesh.metadata.isSVG3D = true;
+                mesh.metadata.svgPath = svgPath;
+                
+                console.log(`✅ Created 3D mesh from SVG: ${svgPath} (${points.length} points)`);
+                return mesh;
+                
+            } catch (error) {
+                console.log(`Failed to create 3D from SVG ${svgPath}:`, error);
+                // Fallback: Create a plane with SVG as texture (Visio-like flat icon)
+                try {
+                    return createSVGPlane(svgPath, nodeData, position);
+                } catch (fallbackError) {
+                    console.log(`SVG plane fallback also failed:`, fallbackError);
+                    return null;
+                }
+            }
+        }
+        
+        /**
+         * Fallback: Create a plane with SVG as texture (Visio-like flat appearance)
+         */
+        function createSVGPlane(svgPath, nodeData, position) {
+            // Create a thin plane for the SVG texture
+            const plane = BABYLON.MeshBuilder.CreatePlane(`${nodeData.id}_svg_plane`, {
+                width: 3,
+                height: 3
+            }, scene);
+            
+            plane.position = position.clone();
+            
+            // Create material with SVG texture
+            const material = new BABYLON.StandardMaterial(`${nodeData.id}_svg_plane_mat`, scene);
+            const texture = new BABYLON.Texture(svgPath, scene);
+            material.diffuseTexture = texture;
+            material.emissiveTexture = texture;
+            material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+            material.backFaceCulling = false;
+            
+            // Make it face the camera (billboard mode)
+            plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+            
+            plane.material = material;
+            
+            // Mark as SVG-based
+            if (!plane.metadata) {
+                plane.metadata = {};
+            }
+            plane.metadata.isSVG3D = true;
+            plane.metadata.svgPath = svgPath;
+            plane.metadata.isPlane = true; // Mark as plane (not extruded)
+            
+            console.log(`✅ Created SVG plane from: ${svgPath}`);
+            return plane;
+        }
+        
+        /**
+         * Parse SVG path data to Vector3 points
+         */
+        function parseSVGPathToPoints(pathData) {
+            const points = [];
+            const commands = pathData.match(/[MmLlHhVvCcSsQqTtAaZz][^MmLlHhVvCcSsQqTtAaZz]*/g) || [];
+            
+            let currentX = 0;
+            let currentY = 0;
+            
+            commands.forEach(cmd => {
+                const type = cmd[0];
+                const coords = cmd.slice(1).trim().split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+                
+                switch (type) {
+                    case 'M': // Move to (absolute)
+                    case 'm': // Move to (relative)
+                        if (coords.length >= 2) {
+                            currentX = type === 'M' ? coords[0] : currentX + coords[0];
+                            currentY = type === 'M' ? coords[1] : currentY + coords[1];
+                            points.push({ x: currentX, y: currentY });
+                        }
+                        break;
+                    case 'L': // Line to (absolute)
+                    case 'l': // Line to (relative)
+                        if (coords.length >= 2) {
+                            currentX = type === 'L' ? coords[0] : currentX + coords[0];
+                            currentY = type === 'L' ? coords[1] : currentY + coords[1];
+                            points.push({ x: currentX, y: currentY });
+                        }
+                        break;
+                    case 'H': // Horizontal line (absolute)
+                    case 'h': // Horizontal line (relative)
+                        if (coords.length >= 1) {
+                            currentX = type === 'H' ? coords[0] : currentX + coords[0];
+                            points.push({ x: currentX, y: currentY });
+                        }
+                        break;
+                    case 'V': // Vertical line (absolute)
+                    case 'v': // Vertical line (relative)
+                        if (coords.length >= 1) {
+                            currentY = type === 'V' ? coords[0] : currentY + coords[0];
+                            points.push({ x: currentX, y: currentY });
+                        }
+                        break;
+                    case 'Z': // Close path
+                    case 'z':
+                        // Close the path by connecting to first point
+                        if (points.length > 0) {
+                            points.push({ x: points[0].x, y: points[0].y });
+                        }
+                        break;
+                    // For curves (C, S, Q, T), sample points along the curve
+                    case 'C': // Cubic Bezier (absolute)
+                    case 'c': // Cubic Bezier (relative)
+                        if (coords.length >= 6) {
+                            const x1 = type === 'C' ? coords[0] : currentX + coords[0];
+                            const y1 = type === 'C' ? coords[1] : currentY + coords[1];
+                            const x2 = type === 'C' ? coords[2] : currentX + coords[2];
+                            const y2 = type === 'C' ? coords[3] : currentY + coords[3];
+                            const x3 = type === 'C' ? coords[4] : currentX + coords[4];
+                            const y3 = type === 'C' ? coords[5] : currentY + coords[5];
+                            
+                            // Sample points along the curve
+                            for (let t = 0; t <= 1; t += 0.1) {
+                                const x = (1-t)**2 * currentX + 2*(1-t)*t * x2 + t**2 * x3;
+                                const y = (1-t)**2 * currentY + 2*(1-t)*t * y2 + t**2 * y3;
+                                points.push({ x, y });
+                            }
+                            currentX = x3;
+                            currentY = y3;
+                        }
+                        break;
+                }
+            });
+            
+            return points;
+        }
+        
+        /**
+         * Normalize SVG points to center and scale appropriately
+         */
+        function normalizeSVGPoints(points) {
+            if (points.length === 0) return [];
+            
+            // Find bounding box
+            let minX = Infinity, maxX = -Infinity;
+            let minY = Infinity, maxY = -Infinity;
+            
+            points.forEach(p => {
+                minX = Math.min(minX, p.x);
+                maxX = Math.max(maxX, p.x);
+                minY = Math.min(minY, p.y);
+                maxY = Math.max(maxY, p.y);
+            });
+            
+            const width = maxX - minX;
+            const height = maxY - minY;
+            const centerX = (minX + maxX) / 2;
+            const centerY = (minY + maxY) / 2;
+            
+            // Normalize to unit size and center at origin
+            const maxDim = Math.max(width, height) || 1;
+            const scale = 1.0 / maxDim;
+            
+            return points.map(p => ({
+                x: (p.x - centerX) * scale,
+                y: (p.y - centerY) * scale
+            }));
+        }
+
         async function loadDeviceModel(nodeData, position) {
-            // FORCE FALLBACK TO COLORED BOXES - skip all 3D model loading
-            return null;
+            // Try to create 3D mesh from SVG icon first (Visio-like appearance)
+            const svgPath = nodeData.icon_svg;
+            if (svgPath) {
+                const svgMesh = await create3DFromSVG(svgPath, nodeData, position);
+                if (svgMesh) {
+                    return svgMesh;
+                }
+            }
 
             const modelLoadErrors = [];
             const MAX_LOAD_TIMEOUT = 10000; // 10 seconds per model

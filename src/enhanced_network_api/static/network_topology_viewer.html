@@ -579,11 +579,10 @@
                 return nodes;
             },
             
-            // Hierarchical layout (legacy, uses network_tree)
+            // Hierarchical layout (legacy, root-based level assignment)
             hierarchical: function (nodes, links) {
-                return LayoutAlgorithms.network_tree(nodes, links);
                 // Find root nodes (no incoming edges)
-                const hasIncoming = new Set(links.map(l => l.to));
+                const hasIncoming = new Set(links.map(l => l.to || l.target || l.target_id));
                 const roots = nodes.filter(n => !hasIncoming.has(n.id));
 
                 if (roots.length === 0 && nodes.length > 0) {
@@ -603,7 +602,9 @@
                     levels.get(level).push(nodeId);
 
                     // Find children
-                    const children = links.filter(l => l.from === nodeId).map(l => l.to);
+                    const children = links
+                        .filter(l => (l.from || l.source || l.source_id) === nodeId)
+                        .map(l => l.to || l.target || l.target_id);
                     children.forEach(child => assignLevel(child, level + 1));
                 }
 
@@ -632,6 +633,8 @@
                     node.x = index * nodeSpacing - offset;
                     node.z = (level - maxLevel / 2) * levelSpacing;
                 });
+                
+                return nodes;
 
                 return nodes;
             },
