@@ -1,4 +1,8 @@
 requests
+httpx>=0.24.1
 fortigate-api
 beautifulsoup4
 orjson
+fastapi
+uvicorn[standard]
+python-multipart
