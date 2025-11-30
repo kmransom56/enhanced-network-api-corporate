@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewall Dashboard - Network Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+        .error {
+            background: #7f1d1d;
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .json-display {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+    <div class="container">
+        <h1>Firewall Overview</h1>
+        
+        <div id="error-container"></div>
+        <div id="loading" class="loading">Loading...</div>
+        
+        <div id="content" style="display: none;">
+            <h2>Policy Hit Counts</h2>
+            <div class="json-display" id="policy-hits">Loading...</div>
+            
+            <h2>Active Sessions</h2>
+            <div class="json-display" id="fw-sessions">Loading...</div>
+            
+            <h2>Event Logs</h2>
+            <div class="json-display" id="event-logs">Loading...</div>
+            
+            <h2>Traffic Logs</h2>
+            <div class="json-display" id="traffic-logs">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation
+        fetch('/static/dashboard_nav.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('nav-placeholder').innerHTML = html;
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+            })
+            .catch(err => console.error('Failed to load navigation:', err));
+
+        // Fetch and display firewall data
+        async function loadFirewallData() {
+            try {
+                const response = await fetch('/api/dataset');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                document.getElementById('policy-hits').textContent = 
+                    JSON.stringify(data.fw_policy_hits, null, 2);
+                document.getElementById('fw-sessions').textContent = 
+                    JSON.stringify(data.fw_sessions, null, 2);
+                document.getElementById('event-logs').textContent = 
+                    JSON.stringify(data.event_logs, null, 2);
+                document.getElementById('traffic-logs').textContent = 
+                    JSON.stringify(data.traffic_logs, null, 2);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-container').innerHTML = 
+                    `<div class="error">Error loading firewall data: ${error.message}</div>`;
+                console.error('Firewall data load error:', error);
+            }
+        }
+
+        loadFirewallData();
+        setInterval(loadFirewallData, 30000); // Auto-refresh every 30 seconds
+    </script>
+</body>
+</html>
+

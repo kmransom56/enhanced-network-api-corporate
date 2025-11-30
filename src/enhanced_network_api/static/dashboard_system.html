@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status - Network Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+        .error {
+            background: #7f1d1d;
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+        .card pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+        }
+        .card-wide {
+            grid-column: span 3;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+    <div class="container">
+        <h1>System Status</h1>
+        
+        <div id="error-container"></div>
+        <div id="loading" class="loading">Loading...</div>
+        
+        <div id="dashboard-content" style="display: none;">
+            <div class="grid">
+                <div class="card">
+                    <h2>CPU</h2>
+                    <pre id="cpu-data">Loading...</pre>
+                </div>
+                
+                <div class="card">
+                    <h2>Memory</h2>
+                    <pre id="memory-data">Loading...</pre>
+                </div>
+                
+                <div class="card">
+                    <h2>Disk</h2>
+                    <pre id="disk-data">Loading...</pre>
+                </div>
+                
+                <div class="card card-wide">
+                    <h2>Performance</h2>
+                    <pre id="performance-data">Loading...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation
+        fetch('/static/dashboard_nav.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('nav-placeholder').innerHTML = html;
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+            })
+            .catch(err => console.error('Failed to load navigation:', err));
+
+        // Fetch and display system data
+        async function loadSystemData() {
+            try {
+                const response = await fetch('/api/dataset');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                document.getElementById('cpu-data').textContent = 
+                    JSON.stringify(data.cpu, null, 2);
+                document.getElementById('memory-data').textContent = 
+                    JSON.stringify(data.memory, null, 2);
+                document.getElementById('disk-data').textContent = 
+                    JSON.stringify(data.disk, null, 2);
+                document.getElementById('performance-data').textContent = 
+                    JSON.stringify(data.performance, null, 2);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-container').innerHTML = 
+                    `<div class="error">Error loading system data: ${error.message}</div>`;
+                console.error('System data load error:', error);
+            }
+        }
+
+        loadSystemData();
+        setInterval(loadSystemData, 30000); // Auto-refresh every 30 seconds
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<!-- Shared Navigation Component for Dashboard Pages -->
+<nav class="dashboard-nav">
+    <div class="nav-container">
+        <a href="/dashboard" class="nav-logo">📊 Network Dashboard</a>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Overview</a>
+            <a href="/dashboard/wifi" class="nav-link">WiFi</a>
+            <a href="/dashboard/switches" class="nav-link">Switches</a>
+            <a href="/dashboard/system" class="nav-link">System</a>
+            <a href="/dashboard/firewall" class="nav-link">Firewall</a>
+            <a href="/3d-lab" class="nav-link">3D Map</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+.dashboard-nav {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+.nav-link {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.nav-link:hover {
+    background: #333;
+    color: #fff;
+}
+.nav-link.active {
+    background: #4a5568;
+    color: #fff;
+}
+</style>
+

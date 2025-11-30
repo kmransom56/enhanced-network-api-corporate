@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Clients - Network Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+        .error {
+            background: #7f1d1d;
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        thead {
+            background: #334155;
+        }
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        td {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #334155;
+        }
+        tbody tr:hover {
+            background: #334155;
+        }
+        .empty {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+    <div class="container">
+        <h1>WiFi Clients</h1>
+        
+        <div id="error-container"></div>
+        <div id="loading" class="loading">Loading...</div>
+        
+        <div id="table-container" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>MAC Address</th>
+                        <th>IP Address</th>
+                        <th>Hostname</th>
+                        <th>SNR</th>
+                        <th>Signal</th>
+                        <th>SSID</th>
+                    </tr>
+                </thead>
+                <tbody id="wifi-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation
+        fetch('/static/dashboard_nav.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('nav-placeholder').innerHTML = html;
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+            })
+            .catch(err => console.error('Failed to load navigation:', err));
+
+        // Fetch and display WiFi clients
+        async function loadWiFiClients() {
+            try {
+                const response = await fetch('/api/dataset');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                
+                const clients = data.wifi_clients?.results || [];
+                const tbody = document.getElementById('wifi-table-body');
+                
+                if (clients.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="empty">No WiFi clients found</td></tr>';
+                } else {
+                    tbody.innerHTML = clients.map(client => `
+                        <tr>
+                            <td>${client.mac || 'N/A'}</td>
+                            <td>${client.ip || 'N/A'}</td>
+                            <td>${client.hostname || client.host || 'N/A'}</td>
+                            <td>${client.snr || 'N/A'}</td>
+                            <td>${client.signal || 'N/A'}</td>
+                            <td>${client.ssid || 'N/A'}</td>
+                        </tr>
+                    `).join('');
+                }
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('table-container').style.display = 'block';
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-container').innerHTML = 
+                    `<div class="error">Error loading WiFi clients: ${error.message}</div>`;
+                console.error('WiFi clients load error:', error);
+            }
+        }
+
+        loadWiFiClients();
+        setInterval(loadWiFiClients, 30000); // Auto-refresh every 30 seconds
+    </script>
+</body>
+</html>
+

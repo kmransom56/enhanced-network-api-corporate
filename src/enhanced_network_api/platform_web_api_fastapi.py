@@ -1193,6 +1193,66 @@ async def topology_2d_enhanced():
         missing_message="Test file not found. Check static files.",
     )
 
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_overview():
+    """Serve the main dashboard overview page."""
+    return _serve_static_html(
+        "dashboard_overview.html",
+        missing_title="Dashboard Overview",
+        missing_message="Dashboard overview page not found.",
+    )
+
+
+@app.get("/dashboard/wifi", response_class=HTMLResponse)
+async def dashboard_wifi():
+    """Serve the WiFi clients dashboard page."""
+    return _serve_static_html(
+        "dashboard_wifi.html",
+        missing_title="WiFi Dashboard",
+        missing_message="WiFi dashboard page not found.",
+    )
+
+
+@app.get("/dashboard/switches", response_class=HTMLResponse)
+async def dashboard_switches():
+    """Serve the switches dashboard page."""
+    return _serve_static_html(
+        "dashboard_switches.html",
+        missing_title="Switches Dashboard",
+        missing_message="Switches dashboard page not found.",
+    )
+
+
+@app.get("/dashboard/system", response_class=HTMLResponse)
+async def dashboard_system():
+    """Serve the system status dashboard page."""
+    return _serve_static_html(
+        "dashboard_system.html",
+        missing_title="System Dashboard",
+        missing_message="System dashboard page not found.",
+    )
+
+
+@app.get("/dashboard/firewall", response_class=HTMLResponse)
+async def dashboard_firewall():
+    """Serve the firewall dashboard page."""
+    return _serve_static_html(
+        "dashboard_firewall.html",
+        missing_title="Firewall Dashboard",
+        missing_message="Firewall dashboard page not found.",
+    )
+
+
+@app.get("/3d-map", response_class=HTMLResponse)
+async def three_d_map():
+    """Serve the 3D network topology map (redirects to 3D lab viewer)."""
+    return _serve_static_html(
+        "babylon_lab_view.html",
+        missing_title="3D Network Map",
+        missing_message="3D network map viewer not found.",
+    )
+
 _SAMPLE_SCENE = {
     "nodes": [
         {
@@ -2680,6 +2740,34 @@ async def fortigate_monitor_full_dataset(request: FortiGateDirectRequest):
     monitor = _create_fortigate_monitor(request.credentials)
     data = monitor.build_dataset()
     return JSONResponse(data)
+
+
+@app.get("/api/dataset")
+async def get_dataset():
+    """Return complete FortiGate monitoring dataset for dashboard.
+    
+    Uses environment variables for authentication (no request body required).
+    Returns data in format expected by dashboard pages.
+    This is a convenience endpoint for dashboard consumption.
+    """
+    try:
+        # Use empty credentials to rely on environment variables
+        creds = FortiGateCredentialsModel()
+        monitor = _create_fortigate_monitor(creds)
+        data = monitor.build_dataset()
+        return JSONResponse(data)
+    except ValueError as e:
+        # Token not available
+        raise HTTPException(
+            status_code=503,
+            detail=f"FortiGate monitoring not configured: {str(e)}. Set FORTIGATE_TOKEN environment variable."
+        )
+    except Exception as e:
+        logger.error(f"Failed to build dataset: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to collect monitoring data: {str(e)}"
+        )
 
 
 @app.post("/api/topology/drawio-xml", response_class=PlainTextResponse)

@@ -1,0 +1,241 @@
+/dashboard — Overall Overview Dashboard
+
+📌 pages/dashboard/index.tsx
+
+import useSWR from "swr"
+import Layout from "../../components/Layout"
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+export default function Dashboard() {
+    const { data } = useSWR("/api/dataset", fetcher)
+
+    return (
+        <Layout title="Dashboard Overview">
+            <h1 className="text-2xl font-bold mb-4">Network Overview</h1>
+
+            {!data && <p>Loading...</p>}
+
+            {data && (
+                <div className="grid grid-cols-3 gap-6">
+                    <div className="p-4 bg-gray-800 rounded shadow">
+                        <h2 className="text-xl font-bold">WiFi Clients</h2>
+                        <p className="text-4xl">{data.wifi_clients?.results?.length || 0}</p>
+                    </div>
+
+                    <div className="p-4 bg-gray-800 rounded shadow">
+                        <h2 className="text-xl font-bold">Switch Clients</h2>
+                        <p className="text-4xl">{data.switch_clients?.results?.length || 0}</p>
+                    </div>
+
+                    <div className="p-4 bg-gray-800 rounded shadow">
+                        <h2 className="text-xl font-bold">Total Devices</h2>
+                        <p className="text-4xl">{data.device_inventory?.results?.length || 0}</p>
+                    </div>
+
+                    <div className="p-4 bg-gray-800 rounded shadow col-span-3">
+                        <h2 className="text-xl font-bold">System Status</h2>
+                        <pre className="text-sm whitespace-pre-wrap">
+                            {JSON.stringify(data.system_status, null, 2)}
+                        </pre>
+                    </div>
+                </div>
+            )}
+        </Layout>
+    )
+}
+
+🟧 /dashboard/wifi — WiFi Clients
+
+📌 pages/dashboard/wifi.tsx
+
+import useSWR from "swr"
+import Layout from "../../components/Layout"
+
+export default function WifiDashboard() {
+    const { data } = useSWR("/api/dataset", url => fetch(url).then(r => r.json()))
+
+    return (
+        <Layout title="WiFi Clients">
+            <h1 className="text-2xl font-bold mb-4">WiFi Clients</h1>
+
+            <table className="table-auto w-full text-left">
+                <thead>
+                    <tr>
+                        <th className="p-2">MAC</th>
+                        <th className="p-2">IP</th>
+                        <th className="p-2">Hostname</th>
+                        <th className="p-2">SNR</th>
+                        <th className="p-2">Signal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data?.wifi_clients?.results?.map((c: any) => (
+                        <tr key={c.mac} className="border-t border-gray-700">
+                            <td className="p-2">{c.mac}</td>
+                            <td className="p-2">{c.ip}</td>
+                            <td className="p-2">{c.hostname}</td>
+                            <td className="p-2">{c.snr}</td>
+                            <td className="p-2">{c.signal}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </Layout>
+    )
+}
+
+🟨 /dashboard/switches — Switch Clients + Switch Port Status
+
+📌 pages/dashboard/switches.tsx
+
+import useSWR from "swr"
+import Layout from "../../components/Layout"
+
+const fetcher = (u: string) => fetch(u).then(r => r.json())
+
+export default function SwitchDashboard() {
+    const { data } = useSWR("/api/dataset", fetcher)
+
+    return (
+        <Layout title="Switch Dashboard">
+            <h1 className="text-2xl font-bold mb-4">Switches & Wired Clients</h1>
+
+            <h2 className="text-xl font-bold mt-6 mb-2">Wired Clients</h2>
+            <table className="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th className="p-2">MAC</th>
+                        <th className="p-2">IP</th>
+                        <th className="p-2">Hostname</th>
+                        <th className="p-2">Switch</th>
+                        <th className="p-2">VLAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data?.switch_clients?.results?.map((c: any) => (
+                        <tr key={c.mac} className="border-t border-gray-700">
+                            <td className="p-2">{c.mac}</td>
+                            <td className="p-2">{c.ip}</td>
+                            <td className="p-2">{c.hostname}</td>
+                            <td className="p-2">{c.switch_id}</td>
+                            <td className="p-2">{c.vlan || 0}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <h2 className="text-xl font-bold mt-8 mb-2">Switch Ports</h2>
+            <pre className="bg-gray-900 p-4 text-sm rounded">
+                {JSON.stringify(data.switch_ports, null, 2)}
+            </pre>
+        </Layout>
+    )
+}
+
+🟩 /dashboard/system — System Status (CPU/MEM/DISK/Performance)
+
+📌 pages/dashboard/system.tsx
+
+import useSWR from "swr"
+import Layout from "../../components/Layout"
+
+export default function SystemDashboard() {
+    const { data } = useSWR("/api/dataset", url => fetch(url).then(r => r.json()))
+
+    return (
+        <Layout title="System Status">
+            <h1 className="text-2xl font-bold mb-4">System Status</h1>
+
+            <div className="grid grid-cols-3 gap-6">
+                <div className="p-4 bg-gray-800 rounded shadow">
+                    <h2 className="text-xl font-bold">CPU</h2>
+                    <pre className="text-sm">
+                        {JSON.stringify(data?.cpu, null, 2)}
+                    </pre>
+                </div>
+
+                <div className="p-4 bg-gray-800 rounded shadow">
+                    <h2 className="text-xl font-bold">Memory</h2>
+                    <pre className="text-sm">
+                        {JSON.stringify(data?.memory, null, 2)}
+                    </pre>
+                </div>
+
+                <div className="p-4 bg-gray-800 rounded shadow">
+                    <h2 className="text-xl font-bold">Disk</h2>
+                    <pre className="text-sm">
+                        {JSON.stringify(data?.disk, null, 2)}
+                    </pre>
+                </div>
+
+                <div className="p-4 bg-gray-800 rounded shadow col-span-3">
+                    <h2 className="text-xl font-bold">Performance</h2>
+                    <pre className="text-sm">
+                        {JSON.stringify(data?.performance, null, 2)}
+                    </pre>
+                </div>
+            </div>
+        </Layout>
+    )
+}
+
+🟫 /dashboard/firewall — Firewall Sessions / Policy Hits / Logs
+
+📌 pages/dashboard/firewall.tsx
+
+import useSWR from "swr"
+import Layout from "../../components/Layout"
+
+export default function FirewallDashboard() {
+    const { data } = useSWR("/api/dataset", url => fetch(url).then(r => r.json()))
+
+    return (
+        <Layout title="Firewall Dashboard">
+            <h1 className="text-2xl font-bold mb-4">Firewall Overview</h1>
+
+            <h2 className="text-xl font-bold mt-4 mb-2">Policy Hit Counts</h2>
+            <pre className="bg-gray-900 p-4 text-sm rounded">
+                {JSON.stringify(data?.fw_policy_hits, null, 2)}
+            </pre>
+
+            <h2 className="text-xl font-bold mt-6 mb-2">Active Sessions</h2>
+            <pre className="bg-gray-900 p-4 text-sm rounded">
+                {JSON.stringify(data?.fw_sessions, null, 2)}
+            </pre>
+
+            <h2 className="text-xl font-bold mt-6 mb-2">Event Logs</h2>
+            <pre className="bg-gray-900 p-4 text-sm rounded">
+                {JSON.stringify(data?.event_logs, null, 2)}
+            </pre>
+
+            <h2 className="text-xl font-bold mt-6 mb-2">Traffic Logs</h2>
+            <pre className="bg-gray-900 p-4 text-sm rounded">
+                {JSON.stringify(data?.traffic_logs, null, 2)}
+            </pre>
+        </Layout>
+    )
+}
+
+🟦 /3d-map — BabylonJS 3D Topology Map Page
+
+📌 pages/3d-map.tsx
+
+import dynamic from "next/dynamic"
+import Layout from "../components/Layout"
+
+const TopologyScene = dynamic(() => import("../components/TopologyScene"), {
+    ssr: false
+})
+
+export default function ThreeDMap() {
+    return (
+        <Layout title="3D Network Map">
+            <h1 className="text-2xl font-bold mb-4">3D Network Topology</h1>
+
+            <div className="w-full h-[80vh] bg-black rounded">
+                <TopologyScene />
+            </div>
+        </Layout>
+    )
+}
