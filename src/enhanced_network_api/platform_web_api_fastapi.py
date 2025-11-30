@@ -2469,7 +2469,7 @@ async def fortigate_assets(request: FortiGateDirectRequest):
     ]
     
     assets_data = None
-    endpoint_used = None
+    endpoint_used = None  # Track which endpoint succeeded (set inside try block, not loop variable)
     for endpoint in endpoints_to_try:
         try:
             url = urljoin(base_url, endpoint)
@@ -2479,17 +2479,21 @@ async def fortigate_assets(request: FortiGateDirectRequest):
             if response.status_code == 200:
                 try:
                     assets_data = response.json()
+                    # Track which endpoint provided the data, even if results are empty
+                    endpoint_used = endpoint
                     results = assets_data.get("results") or assets_data.get("data") or []
                     if isinstance(results, dict):
                         results = results.get("entries", [])
                     if isinstance(results, list) and len(results) > 0:
                         logger.info(f"✅ Successfully fetched {len(results)} devices from {endpoint}")
-                        endpoint_used = endpoint  # Track which endpoint succeeded
                         break
                     else:
-                        logger.debug(f"Endpoint {endpoint} returned empty results")
+                        logger.debug(f"Endpoint {endpoint} returned empty results, trying next endpoint")
                 except Exception as json_err:
                     logger.warning(f"Failed to parse JSON from {endpoint}: {json_err}")
+                    # Clear assets_data if JSON parsing failed
+                    assets_data = None
+                    endpoint_used = None
             else:
                 logger.debug(f"Endpoint {endpoint} returned HTTP {response.status_code}: {response.text[:200]}")
         except Exception as e:
