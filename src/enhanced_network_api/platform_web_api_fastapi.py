@@ -2197,8 +2197,7 @@ def _scene_to_lab_format(scene: Dict[str, Any]) -> Dict[str, Any]:
                 "ip": node.get("ip"),
                 "mac": node.get("mac"),
                 "serial": node.get("serial"),
-                "vendor": node.get("vendor"),
-                "icon_svg": node.get("icon_svg")
+                "vendor": node.get("vendor")
             }
             models.append(model_entry)
 
