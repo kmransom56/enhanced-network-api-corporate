@@ -26,7 +26,9 @@ COPY mcp_servers/ ./mcp_servers/
 COPY .env.template .env.template
 
 # Create necessary directories
-RUN mkdir -p /app/logs /app/data /app/troubleshooting_sessions /app/extracted_icons /app/vss_extraction
+RUN mkdir -p /app/logs /app/data /app/troubleshooting_sessions \
+    /app/extracted_icons /app/vss_extraction /app/lab_3d_models \
+    /app/realistic_device_svgs /app/realistic_3d_models
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
