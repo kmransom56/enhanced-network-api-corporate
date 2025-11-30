@@ -51,10 +51,30 @@ prompt_password() {
 # Check for .env file
 if [ -f "$ENV_FILE" ]; then
     echo -e "${GREEN}✓ Found $ENV_FILE file${NC}"
-    # Source .env file to load variables
-    set -a
-    source "$ENV_FILE"
-    set +a
+    # Parse .env file safely - only extract simple KEY=VALUE pairs
+    # This avoids shell syntax errors from special characters
+    while IFS= read -r line || [ -n "$line" ]; do
+        # Skip empty lines and comments
+        line_trimmed=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        [[ -z "$line_trimmed" || "$line_trimmed" =~ ^# ]] && continue
+        
+        # Only process lines that match simple KEY=VALUE pattern (no special chars in key)
+        # This regex matches: KEY=VALUE where KEY is alphanumeric/underscore only
+        if [[ "$line_trimmed" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            # Remove leading/trailing whitespace from value
+            value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            # Remove surrounding quotes if present
+            if [[ "$value" =~ ^\".*\"$ ]] || [[ "$value" =~ ^\'.*\'$ ]]; then
+                value="${value:1:-1}"
+            fi
+            # Export the variable (only if key is valid)
+            if [ -n "$key" ]; then
+                export "$key=$value"
+            fi
+        fi
+    done < "$ENV_FILE"
 else
     echo -e "${YELLOW}⚠️  $ENV_FILE file not found${NC}"
     echo -e "${YELLOW}   Creating one from template...${NC}"
