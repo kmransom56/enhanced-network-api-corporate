@@ -50,6 +50,7 @@ from device_mac_matcher import create_device_matching_api, DeviceModelMatcher
 from visio_icon_extractor import create_icon_extraction_api
 from restaurant_icon_downloader import create_restaurant_icon_api
 from src.enhanced_network_api.shared import topology_workflow
+from src.enhanced_network_api.layout_network_tree import calculate_network_tree_layout
 from fortigate_docs_search import search_docs, warm_index
 from mcp_servers.drawio_fortinet_meraki.fortigate_collector import (
     FortiGateTopologyCollector,
@@ -1432,7 +1433,6 @@ def _apply_hierarchical_layout(scene: Dict[str, Any], layout_type: str = "networ
         layout_type: Layout algorithm to use ("network_tree" or "hierarchical")
     """
     if layout_type == "network_tree":
-        from .layout_network_tree import calculate_network_tree_layout
         nodes = scene.get("nodes", [])
         links = scene.get("links", [])
         if nodes:
