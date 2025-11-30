@@ -52,7 +52,7 @@ def fetch_fortigate_topology() -> Dict[str, Any]:
         status = fgt.monitor("system", "status", vdom=VDOM_NAME) or {}
         status_results = status.get("results", {})
 
-        fgt_node_id = f"fgt-{FGT_HOST.split(":")[0].replace('.', '-') }"
+        fgt_node_id = f"fgt-{FGT_HOST.split(':')[0].replace('.', '-')}"
         fgt_node = {
             "id": fgt_node_id,
             "name": status_results.get("hostname", "FortiGate"),
